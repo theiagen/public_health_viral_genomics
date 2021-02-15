@@ -1,1 +1,1 @@
-# terra_resources
+# WDL scripts for genomic analyses

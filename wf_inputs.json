@@ -1,0 +1,18 @@
+{"refbased_viral_assembly.inputSamples": [
+    {"left": ["Sample1","submissionID-00912","2020-10-31"],
+    "right": {
+        "left": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample1_S00_L001_R1_001.fastq.gz",
+        "right": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample1_S00_L001_R2_001.fastq.gz"}},
+    {"left": ["Sample2","submissionID-00913","2020-11-01"],
+    "right": {
+        "left": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample2_S00_L001_R1_001.fastq.gz",
+        "right": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample2_S00_L001_R2_001.fastq.gz"}},
+    {"left": ["Sample3","submissionID-00914","2020-11-01"],
+    "right": {
+        "left": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample3_S00_L001_R1_001.fastq.gz",
+        "right": "/home/alang/Desktop/COVID19/ncov_pipe_MA/refbased_assembly_wdl/reads/Sample3_S00_L001_R2_001.fastq.gz"}}
+    ],
+"refbased_viral_assembly.inputConfig": [
+    ["seqyclean","/Adapters_plus_PhiX_174.fasta"],
+    ]
+}
