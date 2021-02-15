@@ -3,21 +3,33 @@ workflows:
  - name: viral_refbased_assembly
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_viral_refbased_assembly.wdl
+   testParameterFiles:
+    - empty.json
  - name: sc2_pubRepo_submission
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_sc2_pubRepo_submission.wdl
+   testParameterFiles:
+    - empty.json
  - name: clearlabs_viral_refbased_assembly
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_clearlabs_viral_refbased_assembly.wdl
+   testParameterFiles:
+    - empty.json
  - name: ont_sc2_pubRepo_submission
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_ont_sc2_pubRepo_submission.wdl
+   testParameterFiles:
+    - empty.json
  - name: genomic_cluster_analysis
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_genomic_cluster_analysis.wdl
+   testParameterFiles:
+    - empty.json
  - name: sc2_batch_submission
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_sc2_batch_submission.wdl
+   testParameterFiles:
+    - empty.json
 
 
 
