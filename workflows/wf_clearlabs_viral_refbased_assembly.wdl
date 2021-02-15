@@ -96,8 +96,7 @@ workflow viral_refbased_assembly {
       genome_fasta = consensus.consensus_seq,
       samplename = samplename
   }
-  if (vadr.vadr_result) {
-  call submission.SC2_submission_files as vadr_passed_submissions{
+  call submission.SC2_submission_files {
   	input:
       samplename = samplename,
 		 	submission_id = submission_id,
@@ -131,44 +130,6 @@ workflow viral_refbased_assembly {
       outbreak = outbreak,
       last_vaccinated = last_vaccinated,
       treatment = treatment
-  }
-  }
-  if (! vadr.vadr_result) {
-  call submission.SC2_submission_files as vadr_warning_submissions{
-  	input:
-      samplename = samplename,
-		 	submission_id = submission_id,
-		  collection_date = collection_date,
-      sequence = consensus.consensus_seq,
- 		  reads = clear_lab_fastq,
-
-	  	organism = organism,
-	  	iso_org = iso_org,
-	  	iso_host = iso_host,
-	  	iso_country = iso_country,
-	  	assembly_or_consensus = assembly_or_consensus,
-
-		 	gisaid_submitter = gisaid_submitter,
-     	iso_state = iso_state,
-     	iso_continent = iso_continent,
-     	seq_platform = seq_platform,
-     	artic_pipeline_version = consensus.artic_pipeline_version,
-    	originating_lab = originating_lab,
-    	origLab_address = origLab_address,
-      BioProject = BioProject,
-    	submitting_lab = submitting_lab,
-    	subLab_address = subLab_address,
-    	Authors = Authors,
-
-      passage_details = passage_details,
-      gender = gender,
-      patient_age = patient_age,
-      patient_status = patient_status,
-      specimen_source = specimen_source,
-      outbreak = outbreak,
-      last_vaccinated = last_vaccinated,
-      treatment = treatment
-  }
   }
 
   output {
@@ -221,17 +182,11 @@ workflow viral_refbased_assembly {
     File vadr_alterts_list = vadr.alerts_list
     Int vadr_num_alerts = vadr.num_alerts
 
-    File?      vadr_passed_deID_assembly      = vadr_passed_submissions.deID_assembly
-    File?     vadr_passed_genbank_assembly   = vadr_passed_submissions.genbank_assembly
-    File?     vadr_passed_genbank_metadata   = vadr_passed_submissions.genbank_metadata
-    File?     vadr_passed_gisaid_assembly    = vadr_passed_submissions.gisaid_assembly
-    File?     vadr_passed_gisaid_metadata    = vadr_passed_submissions.gisaid_metadata
-
-    File?      vadr_warning_deID_assembly      = vadr_warning_submissions.deID_assembly
-    File?     vadr_warning_genbank_assembly   = vadr_warning_submissions.genbank_assembly
-    File?     vadr_warning_genbank_metadata   = vadr_warning_submissions.genbank_metadata
-    File?     vadr_warning_gisaid_assembly    = vadr_warning_submissions.gisaid_assembly
-    File?     vadr_warning_gisaid_metadata    = vadr_warning_submissions.gisaid_metadata
+    File?      deID_assembly      = SC2_submission_files.deID_assembly
+    File?     genbank_assembly   = SC2_submission_files.genbank_assembly
+    File?     genbank_metadata   = SC2_submission_files.genbank_metadata
+    File?     gisaid_assembly    = SC2_submission_files.gisaid_assembly
+    File?     gisaid_metadata    = SC2_submission_files.gisaid_metadata
 
   }
 }
