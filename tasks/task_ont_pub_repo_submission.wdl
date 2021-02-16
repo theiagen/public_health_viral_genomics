@@ -221,8 +221,8 @@ task compile {
     vadr=${vadr_array[$index]}
 
     if ${vadr} > ~{vadr_threshold}; then
-      ${assembly_array}=( "${assembly_array[@]}/${assembly}" )
-      ${meta_array}=( "${meta_array[@]}/${assembly}" )
+      ${assembly_array}=( "${assembly_array[@]/$assembly}" )
+      ${meta_array}=( "${meta_array[@]/$assembly}" )
     fi
   done
 
