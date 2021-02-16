@@ -201,7 +201,7 @@ task compile {
     Array[Int]  vadr_num_alerts
     Int         vadr_threshold=0
     String       repository
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "theiagen/utility:1.0"
     Int       mem_size_gb = 1
     Int       CPUs = 1
     Int       disk_size = 25
@@ -220,23 +220,25 @@ task compile {
     meta=${meta_array[$index]}
     vadr=${vadr_array[$index]}
 
-    if ${vadr} > ~{vadr_threshold}; then
+    if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$assembly}" )
     fi
-  done
+    done
 
-  head -n -1 ${meta_array[1]} > ${repository}_upload_meta.csv
+
+  head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
   for i in ${metta_array}; do
-      tail -n1 $i >> ${repository}_upload_meta.csv
+      tail -n1 $i >> ~{repository}_upload_meta.csv
   done
 
-  cat ${asembly_array} > ${repository}_upload.fasta
+  cat ${assembly_array[*]} > ~{repository}_upload.fasta
+
   >>>
 
   output {
-    File    upload_meta   = "${repository}_upload_meta.csv"
-    File    upload_fasta  = "${repository}_upload.fasta"
+    File?    upload_meta   = "${repository}_upload_meta.csv"
+    File?    upload_fasta  = "${repository}_upload.fasta"
 
   }
 

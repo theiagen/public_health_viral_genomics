@@ -29,10 +29,10 @@ workflow batch_fasta_repo_submission {
 
 
 	output {
-	    File      GenBank_upload_meta  = genbank_compile.upload_meta
-	    File      GenBank_upload_fasta = genbank_compile.upload_fasta
-	    File      GISIAD_upload_meta  = gisaid_compile.upload_meta
-	    File      GISAID_upload_fasta = gisaid_compile.upload_fasta
+	    File?      GenBank_upload_meta  = genbank_compile.upload_meta
+	    File?      GenBank_upload_fasta = genbank_compile.upload_fasta
+	    File?      GISIAD_upload_meta  = gisaid_compile.upload_meta
+	    File?      GISAID_upload_fasta = gisaid_compile.upload_fasta
 
 	}
 }
