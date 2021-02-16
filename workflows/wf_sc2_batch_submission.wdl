@@ -8,6 +8,7 @@ workflow batch_fasta_repo_submission {
 		Array[File] genbank_single_submission_meta
 		Array[File] gisaid_single_submission_fasta
 		Array[File] gisaid_single_submission_meta
+		Array[Int] vadr_num_alerts
 
 	}
 
@@ -15,12 +16,14 @@ workflow batch_fasta_repo_submission {
 		input:
 			single_submission_fasta=genbank_single_submission_fasta,
 	    		single_submission_meta=genbank_single_submission_meta,
+					vadr_num_alerts=vadr_num_alerts,
 	    		repository="GenBank"
 	}
 	call submission.compile as gisaid_compile{
 		input:
 			single_submission_fasta=gisaid_single_submission_fasta,
 	  	single_submission_meta=gisaid_single_submission_meta,
+			vadr_num_alerts=vadr_num_alerts,
 	    repository="GISAID"
 	}
 
