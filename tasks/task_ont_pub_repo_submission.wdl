@@ -228,7 +228,7 @@ task compile {
 
 
   head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
-  for i in ${metta_array}; do
+  for i in ${meta_array[*]}; do
       tail -n1 $i >> ~{repository}_upload_meta.csv
   done
 
