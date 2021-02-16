@@ -44,7 +44,7 @@ workflow SC2_submission_files {
 		Int 		number_N_threshold = 15000
 		Int 		number_Total_threshold = 25000
 		Int 		number_ATCG_gisaid = 25000
-		Int 		number_ATCG_genbank = 15000
+		Int 		number_ATCG_genbank = 25000
 	}
 
 	call submission.sra {
