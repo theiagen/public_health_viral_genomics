@@ -73,7 +73,7 @@ workflow SC2_submission_files {
 							iso_host         				= iso_host,
 							iso_country 				    = iso_country,
 					    gisaid_submitter 				= gisaid_submitter,
-					    iso_state        				= gisaid_submitter,
+					    iso_state        				= iso_state,
 					    iso_continent 					= iso_continent,
 					    seq_platform   					= seq_platform,
 					    artic_pipeline_version	= artic_pipeline_version,
