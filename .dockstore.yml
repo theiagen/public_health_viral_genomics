@@ -40,8 +40,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_ont.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Illumina
+ - name: Titan_Illumina_pe
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_illumina.wdl
+   primaryDescriptorPath: /workflows/wf_titan_illumina_pe.wdl
    testParameterFiles:
     - empty.json
