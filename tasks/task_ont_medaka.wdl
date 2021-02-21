@@ -32,20 +32,25 @@ task read_filtering {
 
   input {
     File demultiplexed_reads
+    String      samplename
     String?     run_prefix="artic_ncov2019"
-    Int?        normalise=200
+    Int?        min_length=400
+    Int?        max_length=700
     Int?        cpu=8
   }
 
   command{
     # date and version control
-
-    artic guppyplex --min-length 400 --max-length 700 --directory . --prefix ${run_prefix}
+    mkdir ~{samplename}
+    cp ~{demultiplexed_reads} ~{samplename}/
+    echo "DIRNAME: $(dirname)"
+    artic guppyplex --min-length ${min_length} --max-length ${max_length} --directory ~{samplename} --prefix ${run_prefix}
+    echo $(ls )
 
   }
 
   output {
-    File       filtered_reads = "${run_prefix}_.fastq"
+    File       filtered_reads = "${run_prefix}_~{samplename}.fastq"
   }
 
   runtime {
