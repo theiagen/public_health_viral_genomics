@@ -7,7 +7,7 @@ import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 
-workflow titan_clearlabs {
+workflow Titan_ClearLabs {
   meta {
     description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on the Clear Labs platform."
   }
@@ -27,6 +27,14 @@ workflow titan_clearlabs {
       artic_primer_version = artic_primer_version,
       normalise = normalise
 
+  }
+
+  call medaka.consensus {
+    input:
+      samplename = samplename,
+      filtered_reads = clear_lab_fastq,
+      artic_primer_version = artic_primer_version,
+      normalise = normalise
 
   }
   call consensus_call.variant_call {
