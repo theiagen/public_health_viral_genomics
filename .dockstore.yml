@@ -37,6 +37,11 @@ workflows:
     - empty.json
  - name: Titan_ONT
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_clearlabs.wdl
+   primaryDescriptorPath: /workflows/wf_titan_ont.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Titan_Illumina
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_illumina.wdl
    testParameterFiles:
     - empty.json
