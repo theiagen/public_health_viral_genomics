@@ -30,6 +30,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_sc2_batch_submission.wdl
    testParameterFiles:
     - empty.json
-
-
-
+ - name: titan_clearlabs
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_clearlabs.wdl
+   testParameterFiles:
+    - empty.json  
