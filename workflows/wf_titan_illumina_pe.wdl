@@ -6,6 +6,8 @@ import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
+import "../tasks/task_ncbi.wdl" as ncbi
+
 
 workflow titan_illumina_pe {
   meta {
@@ -69,6 +71,11 @@ workflow titan_illumina_pe {
     input:
       bamfile = bwa.sorted_bam,
       baifile = bwa.sorted_bai
+  }
+  call ncbi.vadr {
+    input:
+      genome_fasta = consensus.consensus_seq,
+      samplename = samplename
   }
   output {
 
@@ -144,5 +151,8 @@ workflow titan_illumina_pe {
     Int     amp_fail               = bedtools_cov.amp_fail
     File    amp_coverage           = bedtools_cov.amp_coverage
     String  bedtools_version       = bedtools_cov.version
+
+    File vadr_alterts_list = vadr.alerts_list
+    Int vadr_num_alerts = vadr.num_alerts
   }
 }
