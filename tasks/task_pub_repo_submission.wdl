@@ -103,7 +103,7 @@ task gisaid {
 
   output {
     File     gisaid_assembly = "${submission_id}.gisaid.fa"
-    File     gisaid_metadata = "${samplename}.gisaidMeta.csv"
+    File     gisaid_metadata = "${submission_id}.gisaidMeta.csv"
   }
 
   runtime {
@@ -143,15 +143,15 @@ task genbank {
     echo ">${submission_id} [organism=${organism}][isolate=${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year)][host=${iso_host}][country=${iso_country}][collection_date=${collection_date}]" > ${submission_id}.genbank.fa
     grep -v ">" ${sequence} | sed 's/^N*N//g' | fold -w 75 >> ${submission_id}.genbank.fa
 
-    echo Sequence_ID,Organism,collection-date,country,host,isolate,isolation-source,BioProject,notes > ${samplename}.genbankMeta.csv
+    echo Sequence_ID,Organism,collection-date,country,host,isolate,isolation-source,BioProject,notes > ${submission_id}.genbankMeta.csv
 
-    echo "\"${submission_id}\",\"Severe acute respiratory syndrome coronavirus 2\",\"${collection_date}\",\"${iso_country}\",\"${iso_host}\",\"${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year\",\"${specimen_source}\",\"${BioProject}\"," >> ${samplename}.genbankMeta.csv
+    echo "\"${submission_id}\",\"Severe acute respiratory syndrome coronavirus 2\",\"${collection_date}\",\"${iso_country}\",\"${iso_host}\",\"${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year\",\"${specimen_source}\",\"${BioProject}\"," >> ${submission_id}.genbankMeta.csv
 
   }
 
   output {
     File     genbank_assembly = "${submission_id}.genbank.fa"
-    File     genbank_metadata = "${samplename}.genbankMeta.csv"
+    File     genbank_metadata = "${submission_id}.genbankMeta.csv"
   }
 
   runtime {
