@@ -37,6 +37,7 @@ workflow sc2_pubRepo_prep_se {
 		String    outbreak=""
 		String    last_vaccinated=""
 		String    treatment=""
+		String 		iso_county=""
 
 	  # Optional inputs/user-defined thresholds for generating submission files
 		Float		coverage = 100.00
@@ -75,6 +76,7 @@ workflow sc2_pubRepo_prep_se {
 					    gisaid_submitter 				= gisaid_submitter,
 					    iso_state        				= iso_state,
 					    iso_continent 					= iso_continent,
+							iso_county							= iso_county,
 					    seq_platform   					= seq_platform,
 					    assembly_method	= assembly_method,
 					    originating_lab 				= originating_lab,
