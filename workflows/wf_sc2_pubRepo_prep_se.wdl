@@ -21,7 +21,7 @@ workflow SC2_submission_files {
     String    	iso_state
     String    	iso_continent
     String    	seq_platform
-    String    	artic_pipeline_version = ""
+    String    	assembly_method
     String    	originating_lab
     String    	origLab_address
     String      BioProject
@@ -76,7 +76,7 @@ workflow SC2_submission_files {
 					    iso_state        				= iso_state,
 					    iso_continent 					= iso_continent,
 					    seq_platform   					= seq_platform,
-					    artic_pipeline_version	= artic_pipeline_version,
+					    assembly_method	= assembly_method,
 					    originating_lab 				= originating_lab,
 					    origLab_address  				= origLab_address,
 					    submitting_lab  				= submitting_lab,
@@ -91,8 +91,6 @@ workflow SC2_submission_files {
 				      outbreak = outbreak,
 				      last_vaccinated = last_vaccinated,
 				      treatment = treatment
-
-
 
 					}
 				}

@@ -88,7 +88,7 @@ workflow titan_ont {
     Int     number_ATCG                = consensus.number_ATCG
     Int     number_Degenerate          = consensus.number_Degenerate
     Int     number_Total               = consensus.number_Total
-    String  artic_pipeline_version     = consensus.artic_pipeline_version
+    String  assembly_method     = consensus.artic_pipeline_version
 
     Int     variant_num                = variant_call.variant_num
 
