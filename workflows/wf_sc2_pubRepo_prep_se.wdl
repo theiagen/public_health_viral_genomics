@@ -14,11 +14,11 @@ workflow sc2_pubRepo_prep_se {
 	  String    	organism = "Severe acute respiratory syndrome coronavirus 2"
 	  String    	iso_org = "SARS-CoV-2"
 	  String    	iso_host = "Human"
-	  String    	iso_country = "USA"
 	  String    	assembly_or_consensus = "consensus"
 
 		String    	gisaid_submitter
     String    	iso_state
+	  String    	iso_country 
     String    	iso_continent
     String    	seq_platform
     String    	assembly_method
