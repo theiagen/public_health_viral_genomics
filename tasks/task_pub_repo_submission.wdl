@@ -97,7 +97,7 @@ task gisaid {
 
     echo Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors Comment,Comment Icon >> ${submission_id}.gisaidMeta.csv
 
-    echo "\"${gisaid_submitter}\",\"gisaid_upload.fasta\",\"hCoV-19/${iso_country}/${submission_id}/$year\",\"betacoronavirus\",\"${passage_details}\",\"${collection_date}\",\"${iso_continent} \ ${iso_country} \ ${iso_state}\ ${iso_county}\" ,,\"${iso_host}\",,\"${gender}\",\"${patient_age}\",\"${patient_status}\",\"${specimen_source}\",\"${outbreak}\",\"${last_vaccinated}\",\"${treatment}\",\"${seq_platform}\",\"${assembly_method}\",,\"${originating_lab}\",\"${origLab_address}\",,\"${submitting_lab}\",\"${subLab_address}\",,\"${Authors}\"" >> ${submission_id}.gisaidMeta.csv
+    echo "\"${gisaid_submitter}\",\"${submission_id}.gisaid.fa\",\"hCoV-19/${iso_country}/${submission_id}/$year\",\"betacoronavirus\",\"${passage_details}\",\"${collection_date}\",\"${iso_continent} \ ${iso_country} \ ${iso_state}\ ${iso_county}\" ,,\"${iso_host}\",,\"${gender}\",\"${patient_age}\",\"${patient_status}\",\"${specimen_source}\",\"${outbreak}\",\"${last_vaccinated}\",\"${treatment}\",\"${seq_platform}\",\"${assembly_method}\",,\"${originating_lab}\",\"${origLab_address}\",,\"${submitting_lab}\",\"${subLab_address}\",,\"${Authors}\"" >> ${submission_id}.gisaidMeta.csv
 
   }
 
@@ -203,26 +203,47 @@ task sra {
 
 
 task compile {
+input {
+  Array[File] single_submission_fasta
+  Array[File] single_submission_meta
+  Array[Int]  vadr_num_alerts
+  Int         vadr_threshold=0
+  String       repository
+  String    docker_image = "theiagen/utility:1.0"
+  Int       mem_size_gb = 1
+  Int       CPUs = 1
+  Int       disk_size = 25
+  Int       preemptible_tries = 0
+}
 
-  input {
-    Array[File] single_submission_fasta
-    Array[File] single_submission_meta
-    String       repository
-    String    docker_image = "staphb/seqyclean:1.10.09"
-    Int       mem_size_gb = 1
-    Int       CPUs = 1
-    Int       disk_size = 25
-    Int       preemptible_tries = 0
-  }
+  command <<<
 
-  command {
-  head -n -1 ~{single_submission_meta[1]} > ${repository}_upload_meta.csv
-  for i in ~{sep=" " single_submission_meta}; do
-      tail -n1 $i >> ${repository}_upload_meta.csv
+  assembly_array=(~{sep=' ' single_submission_fasta})
+  meta_array=(~{sep=' ' single_submission_meta})
+  vadr_array=(~{sep=' ' vadr_num_alerts})
+
+  # remove samples that excede vadr threshold
+  for index in ${!assembly_array[@]}; do
+    assembly=${assembly_array[$index]}
+    meta=${meta_array[$index]}
+    vadr=${vadr_array[$index]}
+
+    if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
+      assembly_array=( "${assembly_array[@]/$assembly}" )
+      meta_array=( "${meta_array[@]/$meta}" )
+    fi
+    done
+
+
+  head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
+  for i in ${meta_array[*]}; do
+      echo $i
+      tail -n1 $i >> ~{repository}_upload_meta.csv
   done
 
-  cat ~{sep=" " single_submission_fasta} > ${repository}_upload.fasta
-  }
+  cat ${assembly_array[*]} > ~{repository}_upload.fasta
+
+  >>>
 
   output {
     File    upload_meta   = "${repository}_upload_meta.csv"

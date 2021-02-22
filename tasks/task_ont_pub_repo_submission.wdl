@@ -97,7 +97,7 @@ task gisaid {
 
     echo Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors Comment,Comment Icon >> ${submission_id}.gisaidMeta.csv
 
-    echo "\"${gisaid_submitter}\",\"gisaid_upload.fasta\",\"hCoV-19/${iso_country}/${submission_id}/$year\",\"betacoronavirus\",\"${passage_details}\",\"${collection_date}\",\"${iso_continent} \ ${iso_county} \ ${iso_state}\ ${iso_country}\" ,,\"${iso_host}\",,\"${gender}\",\"${patient_age}\",\"${patient_status}\",\"${specimen_source}\",\"${outbreak}\",\"${last_vaccinated}\",\"${treatment}\",\"${seq_platform}\",\"${assembly_method}\",,\"${originating_lab}\",\"${origLab_address}\",,\"${submitting_lab}\",\"${subLab_address}\",,\"${Authors}\"" >> ${submission_id}.gisaidMeta.csv
+    echo "\"${gisaid_submitter}\",\"${submission_id}.gisaid.fa\",\"hCoV-19/${iso_country}/${submission_id}/$year\",\"betacoronavirus\",\"${passage_details}\",\"${collection_date}\",\"${iso_continent} \ ${iso_county} \ ${iso_state}\ ${iso_country}\" ,,\"${iso_host}\",,\"${gender}\",\"${patient_age}\",\"${patient_status}\",\"${specimen_source}\",\"${outbreak}\",\"${last_vaccinated}\",\"${treatment}\",\"${seq_platform}\",\"${assembly_method}\",,\"${originating_lab}\",\"${origLab_address}\",,\"${submitting_lab}\",\"${subLab_address}\",,\"${Authors}\"" >> ${submission_id}.gisaidMeta.csv
 
   }
 
@@ -223,13 +223,14 @@ task compile {
 
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
-      meta_array=( "${meta_array[@]/$assembly}" )
+      meta_array=( "${meta_array[@]/$meta}" )
     fi
     done
 
 
   head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
   for i in ${meta_array[*]}; do
+      echo $i
       tail -n1 $i >> ~{repository}_upload_meta.csv
   done
 
