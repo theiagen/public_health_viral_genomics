@@ -45,7 +45,7 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_illumina_pe.wdl
    testParameterFiles:
     - empty.json
- - name: SC2_pubRepo_prep_se
+ - name: sc2_pubRepo_prep_se
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_se.wdl
    testParameterFiles:

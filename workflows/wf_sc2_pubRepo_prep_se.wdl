@@ -2,7 +2,7 @@ version 1.0
 
 import "../tasks/task_ont_pub_repo_submission.wdl" as submission
 
-workflow SC2_submission_files {
+workflow sc2_pubRepo_prep_se {
 	input {
 		String 		samplename
 		String		submission_id
