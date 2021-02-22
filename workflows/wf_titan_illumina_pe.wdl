@@ -14,6 +14,7 @@ workflow titan_illumina_pe {
 
   input {
     String  samplename
+    String  seq_method="Illumina paired-end"
     File    read1_raw
     File    read2_raw
   }
@@ -70,6 +71,9 @@ workflow titan_illumina_pe {
       baifile = bwa.sorted_bai
   }
   output {
+
+    String  seq_platform = seq_method
+
     File    read1_clean        = read_QC_trim.read1_clean
     File    read2_clean        = read_QC_trim.read2_clean
     Int     fastqc_raw1        = read_QC_trim.fastqc_raw1

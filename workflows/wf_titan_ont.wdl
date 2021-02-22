@@ -15,6 +15,7 @@ workflow titan_ont {
 
   input {
     String  samplename
+    String  seq_method="ONT via Clear Labs WGS"
     String? artic_primer_version="V3"
     File  demultiplexed_reads
     Int?  normalise=200
@@ -74,6 +75,8 @@ workflow titan_ont {
   }
 
   output {
+
+    String  seq_platform = seq_method
 
     Float   kraken_human       = kraken2.percent_human
     Float   kraken_sc2         = kraken2.percent_sc2

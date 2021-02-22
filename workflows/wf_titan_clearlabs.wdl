@@ -14,7 +14,7 @@ workflow titan_clearlabs {
 
   input {
     String  samplename
-    String  seq_platform="ONT via Clear Labs WGS "
+    String  seq_method="ONT via Clear Labs WGS"
     String? artic_primer_version="V3"
     File  clear_lab_fastq
     Int?  normalise=20000
@@ -70,6 +70,8 @@ workflow titan_clearlabs {
   }
 
   output {
+
+    String  seq_platform = seq_method
 
     Float   kraken_human       = kraken2.percent_human
     Float   kraken_sc2         = kraken2.percent_sc2
