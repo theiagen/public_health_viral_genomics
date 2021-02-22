@@ -71,8 +71,6 @@ workflow titan_clearlabs {
 
   output {
 
-    String  seq_platform       = seq_platform 
-
     Float   kraken_human       = kraken2.percent_human
     Float   kraken_sc2         = kraken2.percent_sc2
     String  kraken_version     = kraken2.version
