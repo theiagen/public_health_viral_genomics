@@ -97,6 +97,7 @@ workflow titan_illumina_pe {
     File    sorted_bai         = bwa.sorted_bai
     String  bwa_version        = bwa.bwa_version
     String  sam_version        = bwa.sam_version
+    String assembly_method     = bwa.bwa_version
 
     File    trim_sorted_bam            = primer_trim.trim_sorted_bam
     File    trim_sorted_bai            = primer_trim.trim_sorted_bai
