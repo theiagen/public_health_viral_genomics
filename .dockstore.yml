@@ -50,3 +50,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_se.wdl
    testParameterFiles:
     - empty.json
+ - name: sc2_pubRepo_prep_pe
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_pe.wdl
+   testParameterFiles:
+    - empty.json
