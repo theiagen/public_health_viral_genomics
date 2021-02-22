@@ -790,7 +790,7 @@ task vadr {
   input {
     File   genome_fasta
     String samplename
-    String vadr_opts="-s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf"
+    String vadr_opts="--noseqnamemax -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf"
 
     String  docker="staphb/vadr:1.1.2"
   }
