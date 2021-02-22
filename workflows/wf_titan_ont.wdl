@@ -6,7 +6,6 @@ import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
-import "wf_ont_sc2_pubRepo_submission.wdl" as submission
 
 workflow titan_ont {
   meta {

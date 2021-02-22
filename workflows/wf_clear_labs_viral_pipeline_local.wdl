@@ -3,8 +3,6 @@ version 1.0
 import "wf_titan_ont.wdl" as assembly
 import "../tasks/task_amplicon_metrics.wdl" as assembly_metrics
 import "../tasks/task_clear_labs_sample_metrics.wdl" as summary
-import "wf_ont_sc2_pubRepo_submission.wdl" as submission
-
 
 workflow nCoV19_pipeline {
   input {
