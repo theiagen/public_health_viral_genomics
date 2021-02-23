@@ -55,3 +55,18 @@ workflows:
    primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_pe.wdl
    testParameterFiles:
     - empty.json
+ - name: Mercury_PE_Prep
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_mercury_pe_prep.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Mercury_SE_Prep
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_mercury_se_prep.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Mercury_Batch
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_mercury_batch.wdl
+   testParameterFiles:
+    - empty.json

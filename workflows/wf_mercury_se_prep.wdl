@@ -1,17 +1,17 @@
 version 1.0
 
-import "../tasks/task_pub_repo_submission.wdl" as submission
+import "../tasks/task_se_pub_repo_submission.wdl" as submission
 
-workflow SC2_submission_files {
+workflow mercury_se_prep {
 	input {
 		String 		samplename
 		String		submission_id
 		String 		collection_date
-		File 		sequence
-		File 		read1
-		File? 		read2
+		File 			sequence
+		File 			reads
 
-		String    	organism = "Severe acute respiratory syndrome coronavirus 2"
+
+	  String    	organism = "Severe acute respiratory syndrome coronavirus 2"
 	  String    	iso_org = "SARS-CoV-2"
 	  String    	iso_host = "Human"
 	  String    	assembly_or_consensus = "consensus"
@@ -51,8 +51,7 @@ workflow SC2_submission_files {
 	call submission.sra {
 		input:
 			submission_id = submission_id,
-			read1 = read1,
-			read2 = read2
+			reads = reads
 	}
 
 	call submission.deidentify {
@@ -74,26 +73,26 @@ workflow SC2_submission_files {
 							sequence        				= sequence,
 							iso_host         				= iso_host,
 							iso_country 				    = iso_country,
-							gisaid_submitter 				= gisaid_submitter,
-							iso_state        				= iso_state,
-							iso_continent 					= iso_continent,
+					    gisaid_submitter 				= gisaid_submitter,
+					    iso_state        				= iso_state,
+					    iso_continent 					= iso_continent,
 							iso_county							= iso_county,
-							seq_platform   					= seq_platform,
-							assembly_method	= assembly_method,
-							originating_lab 				= originating_lab,
-							origLab_address  				= origLab_address,
-							submitting_lab  				= submitting_lab,
-							subLab_address 					= subLab_address,
-							Authors          				= Authors,
+					    seq_platform   					= seq_platform,
+					    assembly_method	= assembly_method,
+					    originating_lab 				= originating_lab,
+					    origLab_address  				= origLab_address,
+					    submitting_lab  				= submitting_lab,
+					    subLab_address 					= subLab_address,
+					    Authors          				= Authors,
 
 							passage_details = passage_details,
 							gender = gender,
 							patient_age = patient_age,
 							patient_status = patient_status,
-							specimen_source = specimen_source,
-							outbreak = outbreak,
-							last_vaccinated = last_vaccinated,
-							treatment = treatment
+				      specimen_source = specimen_source,
+				      outbreak = outbreak,
+				      last_vaccinated = last_vaccinated,
+				      treatment = treatment
 
 					}
 				}
@@ -108,8 +107,8 @@ workflow SC2_submission_files {
 							iso_org	        = iso_org,
 							iso_host        = iso_host,
 							iso_country     = iso_country,
-							specimen_source = specimen_source,
-							BioProject      = BioProject
+							specimen_source   = specimen_source,
+					        BioProject      = BioProject
 					}
 				}
 			}
@@ -117,9 +116,7 @@ workflow SC2_submission_files {
 	}
 
 	output {
-	    File?     read1_submission   = sra.read1_submission
-	    File?     read2_submission   = sra.read2_submission
-	    File?     SE_read_submission = sra.SE_read_submission
+	    File?     reads_submission   = sra.reads_submission
 	    File      deID_assembly      = deidentify.deID_assembly
 	    File?     genbank_assembly   = genbank.genbank_assembly
 	    File?     genbank_metadata   = genbank.genbank_metadata
@@ -127,6 +124,3 @@ workflow SC2_submission_files {
 	    File?     gisaid_metadata    = gisaid.gisaid_metadata
 	}
 }
-
-
-#coverage >= coverage_gisaid && number_N <= number_N_gisaid &&

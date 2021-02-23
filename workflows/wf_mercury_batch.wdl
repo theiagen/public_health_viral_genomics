@@ -1,8 +1,8 @@
 version 1.0
 
-import "../tasks/task_ont_pub_repo_submission.wdl" as submission
+import "../tasks/task_se_pub_repo_submission.wdl" as submission
 
-workflow batch_fasta_repo_submission {
+workflow mercury_batch {
 	input {
 		Array[File] genbank_single_submission_fasta
 		Array[File] genbank_single_submission_meta
