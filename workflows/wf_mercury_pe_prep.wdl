@@ -9,7 +9,7 @@ workflow mercury_pe_prep {
 		String 		collection_date
 		File 		sequence
 		File 		read1
-		File? 		read2
+		File 		read2
 
 		String    	organism = "Severe acute respiratory syndrome coronavirus 2"
 	  String    	iso_org = "SARS-CoV-2"
