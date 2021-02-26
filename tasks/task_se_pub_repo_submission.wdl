@@ -225,12 +225,12 @@ task compile {
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
     fi
-    done
-
+  done
 
   head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
+  echo "Header:   "
+  cat ~{repository}_upload_meta.csv
   for i in ${meta_array[*]}; do
-      echo $i
       sed 's+",\".*\.gisaid\.fa+\",\"GISAID_upload.fasta+g' $i | tail -n1  >> ~{repository}_upload_meta.csv
   done
 
