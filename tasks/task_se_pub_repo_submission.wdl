@@ -236,9 +236,10 @@ task compile {
     fi
   done
 
+  count=0
   for i in ${meta_array[*]}; do
       # grab header from first sample in meta_array
-      while [ $count -lt 1 ]; do
+      while [ "$count" -lt 1 ]; do
         head -n -1 $i > ~{repository}_upload_meta.csv
         count+=1
         echo "Header:   "
