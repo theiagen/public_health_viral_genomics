@@ -221,7 +221,14 @@ task compile {
     meta=${meta_array[$index]}
     vadr=${vadr_array[$index]}
 
+    # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
+      assembly_array=( "${assembly_array[@]/$assembly}" )
+      meta_array=( "${meta_array[@]/$meta}" )
+    fi
+
+    # remove samples from array if meta file not present
+    if [ ! -s "${meta}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
     fi
