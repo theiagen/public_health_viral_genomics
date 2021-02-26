@@ -242,8 +242,6 @@ task compile {
       while [ "$count" -lt 1 ]; do
         head -n -1 $i > ~{repository}_upload_meta.csv
         count+=1
-        echo "Header:   "
-        cat ~{repository}_upload_meta.csv
       done
       #populate csv with each samples metadata
       sed 's+",\".*\.gisaid\.fa+\",\"GISAID_upload.fasta+g' $i | tail -n1  >> ~{repository}_upload_meta.csv
