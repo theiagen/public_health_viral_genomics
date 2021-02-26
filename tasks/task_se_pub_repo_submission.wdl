@@ -228,16 +228,23 @@ task compile {
     fi
 
     # remove samples from array if meta file not present
-    if [ ! -s "${meta}" ]; then
+    if [ ! -s "${assembly}" ]; then
+      echo "empty file: "
+      echo ${assembly}
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
     fi
   done
 
-  head -n -1 ${meta_array[1]} > ~{repository}_upload_meta.csv
-  echo "Header:   "
-  cat ~{repository}_upload_meta.csv
   for i in ${meta_array[*]}; do
+      # grab header from first sample in meta_array
+      while [ $count -lt 1 ]; do
+        head -n -1 $i > ~{repository}_upload_meta.csv
+        count+=1
+        echo "Header:   "
+        cat ~{repository}_upload_meta.csv
+      done
+      #populate csv with each samples metadata
       sed 's+",\".*\.gisaid\.fa+\",\"GISAID_upload.fasta+g' $i | tail -n1  >> ~{repository}_upload_meta.csv
   done
 
