@@ -93,8 +93,8 @@ task consensus {
     if [ -z "$num_total" ] ; then num_total="0" ; fi
     echo $num_total | tee NUM_TOTAL
 
-    count_pool_1=$(samtools view Sample1.primertrimmed.nCoV-2019_1.sorted.bam | wc -l)
-    count_pool_2=$(samtools view Sample1.primertrimmed.nCoV-2019_2.sorted.bam | wc -l)
+    count_pool_1=$(samtools view ~{samplename}.primertrimmed.nCoV-2019_1.sorted.bam | wc -l)
+    count_pool_2=$(samtools view ~{samplename}.primertrimmed.nCoV-2019_2.sorted.bam | wc -l)
     count_total=$(( $count_pool_1 + $count_pool_2 ))
 
     echo Python stuffs:
