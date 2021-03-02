@@ -95,8 +95,6 @@ workflow mercury_se_prep {
 				      treatment = treatment
 
 					}
-				}
-				if (deidentify.number_ATCG >= number_ATCG_genbank) {
 					call submission.genbank {
 						input:
 							samplename      = samplename,
