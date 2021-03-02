@@ -225,7 +225,7 @@ task compile {
     if [ ! -s "${assembly}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
-      vadr_array=( "${vadr_array[@]/$meta}" )
+      vadr_array=( "${vadr_array[@]/$vadr}" )
       echo "$assembly removed: no ~{repository} assembly available)"
     fi
 
@@ -233,7 +233,7 @@ task compile {
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
-      vadr_array=( "${vadr_array[@]/$meta}" )
+      vadr_array=( "${vadr_array[@]/$vadr}" )
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold}) "
     fi
 
