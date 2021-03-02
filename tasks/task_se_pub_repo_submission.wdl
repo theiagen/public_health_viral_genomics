@@ -218,15 +218,11 @@ task compile {
   vadr_array=(~{sep=' ' vadr_num_alerts})
   vadr_array_len=$(echo "${#vadr_array[@]}")
 
-  echo "Assembly array length: $assembly_array_len"
-  echo "Meta array length: $meta_array_len"
-  echo "VADR array length: $vadr_array_len"
-
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
     echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length."
     exit 1
-  elif ["$assembly_array_len" -ne "$vadr_array_len" ]; then
+  elif [ "$assembly_array_len" -ne "$vadr_array_len" ]; then
     echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length."
     exit 1
   fi
