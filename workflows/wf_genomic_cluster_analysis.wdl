@@ -40,5 +40,7 @@ workflow genomic_cluster_analysis {
   output {
     File      analysis_doc = cluster_render.analysis_doc
     File      snp_list     = cluster_render.snp_list
+    File      ml_tree      = iqtree.ml_tree
+    File      snp_matrix   = snp_dists.snp_matrix
   }
 }
