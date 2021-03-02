@@ -225,14 +225,15 @@ task compile {
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
+      echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold}) "
     fi
 
     # remove samples from array if meta file not present
     if [ ! -s "${assembly}" ]; then
-      echo "empty file: "
-      echo ${assembly}
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
+      echo "$assembly removed: no ~{repository} assembly available)"
+
     fi
   done
 
