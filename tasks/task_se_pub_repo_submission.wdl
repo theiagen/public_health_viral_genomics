@@ -212,8 +212,20 @@ task compile {
   command <<<
 
   assembly_array=(~{sep=' ' single_submission_fasta})
+  assembly_array_len=$(echo "${#assembly_array[@]}")
   meta_array=(~{sep=' ' single_submission_meta})
+  meta_array_len=$(echo "${#meta_array[@]}")
   vadr_array=(~{sep=' ' vadr_num_alerts})
+  vadr_array_len=$(echo "${#vadr_array[@]}")
+
+  # Ensure assembly, meta, and vadr arrays are of equal length 
+  if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
+    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length."
+    exit 1
+  elif ["$assembly_array_len" -ne "$vadr_array_len" ]; then
+    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length."
+    exit 1
+  fi
 
   # remove samples that excede vadr threshold
   for index in ${!assembly_array[@]}; do
