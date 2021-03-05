@@ -220,10 +220,10 @@ task compile {
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
-    >&2 echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length."
+    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length." >&2
     exit 1
   elif [ "$assembly_array_len" -ne "$vadr_array_len" ]; then
-    >&2 echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length."
+    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length." >&2
     exit 1
   fi
 
@@ -233,14 +233,6 @@ task compile {
     meta=${meta_array[$index]}
     vadr=${vadr_array[$index]}
 
-    # remove samples from array if meta file not present
-    if [ ! -s "${assembly}" ]; then
-      assembly_array=( "${assembly_array[@]/$assembly}" )
-      meta_array=( "${meta_array[@]/$meta}" )
-      vadr_array=( "${vadr_array[@]/$vadr}" )
-      echo "$assembly removed: no ~{repository} assembly available)"
-    fi
-
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       assembly_array=( "${assembly_array[@]/$assembly}" )
@@ -248,7 +240,7 @@ task compile {
       vadr_array=( "${vadr_array[@]/$vadr}" )
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
     else
-      echo "$assembly added to bash:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
+      echo "$assembly added to batch:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
     fi
 
   done
