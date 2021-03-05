@@ -220,10 +220,10 @@ task compile {
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
-    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length."
+    >&2 echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length."
     exit 1
   elif [ "$assembly_array_len" -ne "$vadr_array_len" ]; then
-    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length."
+    >&2 echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length."
     exit 1
   fi
 
@@ -246,7 +246,9 @@ task compile {
       assembly_array=( "${assembly_array[@]/$assembly}" )
       meta_array=( "${meta_array[@]/$meta}" )
       vadr_array=( "${vadr_array[@]/$vadr}" )
-      echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold}) "
+      echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
+    else
+      echo "$assembly added to bash:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
     fi
 
   done
