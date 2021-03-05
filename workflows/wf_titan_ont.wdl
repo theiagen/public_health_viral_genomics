@@ -1,7 +1,6 @@
 version 1.0
 
 import "../tasks/task_ont_medaka.wdl" as medaka
-import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
@@ -32,11 +31,6 @@ workflow titan_ont {
       filtered_reads = read_filtering.filtered_reads,
       artic_primer_version = artic_primer_version,
       normalise = normalise
-  }
-  call consensus_call.variant_call {
-    input:
-      samplename = samplename,
-      bamfile = consensus.trim_sorted_bam
   }
   call assembly_metrics.stats_n_coverage {
     input:
@@ -93,8 +87,6 @@ workflow titan_ont {
     Float   pool1_percent              = consensus.pool1_percent
     Float   pool2_percent              = consensus.pool2_percent
     String  assembly_method     = consensus.artic_pipeline_version
-
-    Int     variant_num                = variant_call.variant_num
 
     File    consensus_stats        = stats_n_coverage.stats
     File    cov_hist               = stats_n_coverage.cov_hist

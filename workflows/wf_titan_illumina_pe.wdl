@@ -111,10 +111,6 @@ workflow titan_illumina_pe {
     String  ivar_version_primtrim      = primer_trim.ivar_version
     String  samtools_version_primtrim  = primer_trim.samtools_version
 
-    Int     variant_num                = variant_call.variant_num
-    String  ivar_version_variants      = variant_call.ivar_version
-    String  samtools_version_variants  = variant_call.samtools_version
-
     File    consensus_seq              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
     Int     number_ATCG                = consensus.number_ATCG
