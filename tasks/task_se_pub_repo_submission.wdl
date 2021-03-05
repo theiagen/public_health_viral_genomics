@@ -235,15 +235,6 @@ task compile {
     meta=${meta_array[$index]}
     vadr=${vadr_array[$index]}
 
-    echo Assembly: $assembly, vadr_num: $vadr, meta: $meta
-
-  done
-  for index in ${!assembly_array[@]}; do
-    assembly=${assembly_array[$index]}
-    meta=${meta_array[$index]}
-    vadr=${vadr_array[$index]}
-
-
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
