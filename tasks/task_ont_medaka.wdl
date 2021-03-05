@@ -97,7 +97,6 @@ task consensus {
     count_pool_2=$(samtools view ~{samplename}.primertrimmed.nCoV-2019_2.sorted.bam | wc -l)
     count_total=$(( $count_pool_1 + $count_pool_2 ))
 
-    echo Python stuffs:
     python -c "print ( round(($count_pool_1 / $count_total ) * 100, 2) )" | tee POOL1_PERCENT
     python -c "print ( round(($count_pool_2 / $count_total ) * 100, 2) )" | tee POOL2_PERCENT
 
