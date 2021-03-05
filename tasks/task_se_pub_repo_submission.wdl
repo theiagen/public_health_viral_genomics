@@ -217,6 +217,8 @@ task compile {
   meta_array_len=$(echo "${#meta_array[@]}")
   vadr_array=(~{sep=' ' vadr_num_alerts})
   vadr_array_len=$(echo "${#vadr_array[@]}")
+  passed_assemblies=""
+  passed_meta=""
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
@@ -241,20 +243,20 @@ task compile {
     meta=${meta_array[$index]}
     vadr=${vadr_array[$index]}
 
+
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
-      assembly_array=( "${assembly_array[@]/$assembly}" )
-      meta_array=( "${meta_array[@]/$meta}" )
-      vadr_array=( "${vadr_array[@]/$vadr}" )
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
     else
+      passed_assemblies=( "${passed_assemblies[@]}" "$assembly")
+      passed_meta=( "${passed_meta[@]}" "$meta")
       echo "$assembly added to batch:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
     fi
 
   done
 
   count=0
-  for i in ${meta_array[*]}; do
+  for i in ${passed_meta[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
         head -n -1 $i > ~{repository}_upload_meta.csv
@@ -264,7 +266,7 @@ task compile {
       sed 's+",\".*\.gisaid\.fa+\",\"GISAID_upload.fasta+g' $i | tail -n1  >> ~{repository}_upload_meta.csv
   done
 
-  cat ${assembly_array[*]} > ~{repository}_upload.fasta
+  cat ${passed_assemblies[*]} > ~{repository}_upload.fasta
 
   >>>
 
