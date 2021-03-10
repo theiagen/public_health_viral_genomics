@@ -18,7 +18,7 @@ task cluster_render {
     cp ${snp_matrix} snp_matrix.tsv
     cp ${ml_tree} ml_tree.tree
     if ! [[ -z "${render_template}" ]]; then cp ${render_template} render_template.Rmd;
-    else cp /reports-1.1/report_template.Rmd render_template.Rmd; fi
+    else cp /reports/report_template.Rmd render_template.Rmd; fi
 
     R --no-save <<CODE
     library(rmarkdown)
@@ -52,7 +52,7 @@ task cluster_render {
   }
 
   runtime {
-    docker:       "theiagen/cluster-report-env:1.1.1"
+    docker:       "theiagen/cluster-report-env:1.2"
     memory:       "2 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
