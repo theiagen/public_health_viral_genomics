@@ -1449,9 +1449,9 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > ${submission_id}.augur_metadata.csv
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > ${submission_id}.augur_metadata.tsv
 
-    echo -e "\"hCoV-19/${iso_country}/${submission_id}/$year\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}" >> ${submission_id}.augur_metadata.tsv
+    echo -e "\"hCoV-19/${iso_country}/${submission_id}/$year\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}"" >> ${submission_id}.augur_metadata.tsv
 
   }
 
