@@ -1435,7 +1435,7 @@ task prep_augur_metadata {
     String    iso_continent
     String    pangolin_lineage
 
-    String iso_county=""
+    String? iso_county=""
 
 
     String    docker_image = "staphb/seqyclean:1.10.09"
@@ -1449,14 +1449,14 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo strain,virus,date,region,country,division,location > ${submission_id}.augur_metadata.csv
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation" > ${submission_id}.augur_metadata.csv
 
-    echo "\"hCoV-19/${iso_country}/${submission_id}/$year\",\"ncov\",\"${collection_date}\",\"${iso_continent}\" ,\"${iso_country}\",\"${iso_state}\",\"${iso_county}\"" >> ${submission_id}.augur_metadata.csv
+    echo -e "\"hCoV-19/${iso_country}/${submission_id}/$year\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"" >> ${submission_id}.augur_metadata.tsv
 
   }
 
   output {
-    File     augur_metadata = "${submission_id}.augur_metadata.csv"
+    File     augur_metadata = "${submission_id}.augur_metadata.tsv"
   }
 
   runtime {
