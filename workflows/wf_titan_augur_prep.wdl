@@ -2,7 +2,7 @@ version 1.0
 
 import "../tasks/tasks_nextstrain.wdl" as nextstrain
 
-workflow mercury_se_prep {
+workflow titan_augur_prep {
 	input {
 		String    submission_id
 		String    collection_date
