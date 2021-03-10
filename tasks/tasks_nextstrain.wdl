@@ -1449,7 +1449,7 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo strain,virus,date,region,country,division,location
+    echo strain,virus,date,region,country,division,location > ${submission_id}.augur_metadata.csv
 
     echo "\"hCoV-19/${iso_country}/${submission_id}/$year\",\"ncov\",\"${collection_date}\",\"${iso_continent}\" ,\"${iso_country}\",\"${iso_state}\",\"${iso_county}\"" >> ${submission_id}.augur_metadata.csv
 
