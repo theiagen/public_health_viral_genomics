@@ -80,3 +80,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_augur_prep.wdl
    testParameterFiles:
     - empty.json
+ - name: Titan_Augur_Run
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_augur_run.wdl
+   testParameterFiles:
+    - empty.json
