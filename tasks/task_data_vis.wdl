@@ -18,7 +18,7 @@ task cluster_render {
     cp ${snp_matrix} snp_matrix.tsv
     cp ${ml_tree} ml_tree.tree
     if ! [[ -z "${render_template}" ]]; then cp ${render_template} render_template.Rmd;
-    else cp /reports/report_template.Rmd render_template.Rmd; fi
+    else cp /reports/sc2_report_template.Rmd render_template.Rmd; fi
 
     R --no-save <<CODE
     library(rmarkdown)

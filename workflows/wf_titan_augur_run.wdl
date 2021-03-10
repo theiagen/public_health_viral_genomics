@@ -26,7 +26,7 @@ workflow sarscov2_nextstrain {
         File?           ref_fasta
         File?           clades_tsv
         File?           lat_longs_tsv
-        File?           render_template="/reports/sc2_report_template.Rmd"
+        File?           render_template
 
         Int             min_unambig_genome = 27000
     }
