@@ -1451,7 +1451,7 @@ task prep_augur_metadata {
 
     echo strain,virus,date,region,country,division,location
 
-    echo \"hCoV-19/${iso_country}/${submission_id}/$year\",\"ncov\",\"${collection_date}\",\"${iso_continent}\" ,\"${iso_country}\",\"${iso_state}\",\"${iso_county}\"" >> ${submission_id}.augur_metadata.csv
+    echo \"hCoV-19/${iso_country}/${submission_id}/$year\",\"ncov\",\"${collection_date}\",\"${iso_continent}\" ,\"${iso_country}\",\"${iso_state}\",\"${iso_county}\" >> ${submission_id}.augur_metadata.csv
 
   }
 
