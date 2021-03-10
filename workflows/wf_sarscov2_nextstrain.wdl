@@ -184,7 +184,7 @@ workflow sarscov2_nextstrain {
       File  unmasked_snps         = snp_sites.snps_vcf
 
       File  metadata_merged       = derived_cols.derived_metadata
-      File  keep_list             = fasta_to_ids.ids_txt
+#      File  keep_list             = fasta_to_ids.ids_txt
       File  subsampled_sequences  = mafft.aligned_sequences
 #      Int   sequences_kept        = subsample.sequences_out
 #      Map[String, Int] counts_by_group = subsample.counts_by_group
