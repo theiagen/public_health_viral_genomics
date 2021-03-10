@@ -186,8 +186,8 @@ workflow sarscov2_nextstrain {
       File  metadata_merged       = derived_cols.derived_metadata
       File  keep_list             = fasta_to_ids.ids_txt
       File  subsampled_sequences  = mafft.aligned_sequences
-      Int   sequences_kept        = subsample.sequences_out
-      Map[String, Int] counts_by_group = subsample.counts_by_group
+#      Int   sequences_kept        = subsample.sequences_out
+#      Map[String, Int] counts_by_group = subsample.counts_by_group
 
       File  ml_tree               = draft_augur_tree.aligned_tree
       File  time_tree             = refine_augur_tree.tree_refined
