@@ -70,3 +70,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_mercury_batch.wdl
    testParameterFiles:
     - empty.json
+ - name: SC2_nextstrain
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_sarscov2_nextstrain.wdl
+   testParameterFiles:
+    - empty.json
