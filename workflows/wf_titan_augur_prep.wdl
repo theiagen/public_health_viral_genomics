@@ -9,6 +9,7 @@ workflow mercury_se_prep {
 		String    iso_country
 		String    iso_state
 		String    iso_continent
+		String?    iso_county
 		String    pangolin_lineage
 
 	}
@@ -20,11 +21,12 @@ workflow mercury_se_prep {
 			iso_country = iso_country,
 			iso_state = iso_state,
 			iso_continent = iso_continent,
+			iso_county = iso_county,
 			pangolin_lineage = pangolin_lineage
 	}
 
 	output {
-			File     augur_metadata = "${submission_id}.augur_metadata.csv"
+			File     augur_metadata = prep_augur_metadata.augur_metadata
 
 	}
 }
