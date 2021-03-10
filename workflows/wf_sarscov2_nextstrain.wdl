@@ -16,7 +16,7 @@ workflow sarscov2_nextstrain {
         Array[File]+    sample_metadata_tsvs
 
         String          build_name
-        File            builds_yaml
+#        File            builds_yaml
 
         Array[String]?  ancestral_traits_to_infer
 
@@ -95,24 +95,24 @@ workflow sarscov2_nextstrain {
 
 
     #### subsample sequences with nextstrain yaml file
-    call nextstrain.nextstrain_build_subsample as subsample {
-        input:
-            alignment_msa_fasta = mafft.aligned_sequences,
-            sample_metadata_tsv = derived_cols.derived_metadata,
-            build_name = build_name,
-            builds_yaml = builds_yaml
-    }
-    call nextstrain.fasta_to_ids {
-        input:
-            sequences_fasta = subsample.subsampled_msa
-    }
+#    call nextstrain.nextstrain_build_subsample as subsample {
+#        input:
+#            alignment_msa_fasta = mafft.aligned_sequences,
+#            sample_metadata_tsv = derived_cols.derived_metadata,
+#            build_name = build_name,
+#            builds_yaml = builds_yaml
+#    }
+#    call nextstrain.fasta_to_ids {
+#        input:
+#            sequences_fasta = mafft.aligned_sequences
+#    }
 
 
     #### augur_from_msa
 
     call nextstrain.augur_mask_sites {
         input:
-            sequences = subsample.subsampled_msa
+            sequences = mafft.aligned_sequences
     }
     call nextstrain.draft_augur_tree {
         input:
@@ -122,7 +122,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.refine_augur_tree {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
-            msa_or_vcf  = subsample.subsampled_msa,
+            msa_or_vcf  = mafft.aligned_sequences,
             metadata    = derived_cols.derived_metadata
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
@@ -147,7 +147,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.ancestral_tree {
         input:
             tree        = refine_augur_tree.tree_refined,
-            msa_or_vcf  = subsample.subsampled_msa
+            msa_or_vcf  = mafft.aligned_sequences
     }
     call nextstrain.translate_augur_tree {
         input:
@@ -185,7 +185,7 @@ workflow sarscov2_nextstrain {
 
       File  metadata_merged       = derived_cols.derived_metadata
       File  keep_list             = fasta_to_ids.ids_txt
-      File  subsampled_sequences  = subsample.subsampled_msa
+      File  subsampled_sequences  = mafft.aligned_sequences
       Int   sequences_kept        = subsample.sequences_out
       Map[String, Int] counts_by_group = subsample.counts_by_group
 
