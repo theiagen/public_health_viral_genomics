@@ -6,7 +6,6 @@ workflow mercury_se_prep {
 	input {
 		String    submission_id
 		String    collection_date
-		String    iso_host
 		String    iso_country
 		String    iso_state
 		String    iso_continent
@@ -18,7 +17,6 @@ workflow mercury_se_prep {
 		input:
 			submission_id = submission_id,
 			collection_date = collection_date,
-			iso_host = iso_host,
 			iso_country = iso_country,
 			iso_state = iso_state,
 			iso_continent = iso_continent,

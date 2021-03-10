@@ -1430,7 +1430,6 @@ task prep_augur_metadata {
   input {
     String    submission_id
     String    collection_date
-    String    iso_host
     String    iso_country
     String    iso_state
     String    iso_continent
