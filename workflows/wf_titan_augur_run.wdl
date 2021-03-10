@@ -215,5 +215,9 @@ workflow sarscov2_nextstrain {
       File  tip_frequencies_json  =                     tip_frequencies.node_data_json
       File  root_sequence_json    = export_auspice_json.root_sequence_json
       File  auspice_input_json    = export_auspice_json.virus_json
+      File      analysis_doc = cluster_render.analysis_doc
+      File      snp_list     = cluster_render.snp_list
+      File      ml_tree      = iqtree.ml_tree
+      File      snp_matrix   = snp_dists.snp_matrix
     }
 }
