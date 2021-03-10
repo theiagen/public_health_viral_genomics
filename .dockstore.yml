@@ -75,3 +75,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_sarscov2_nextstrain.wdl
    testParameterFiles:
     - empty.json
+ - name: Titan_Augur_Prep
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_augur_prep.wdl
+   testParameterFiles:
+    - empty.json

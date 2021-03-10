@@ -1350,7 +1350,7 @@ task export_auspice_json {
 
         String docker = "nextstrain/base:build-20210127T135203Z"
     }
-    
+
     command {
         set -e -o pipefail
         augur version > VERSION
@@ -1423,4 +1423,48 @@ task export_auspice_json {
         String cpu_load = read_string("CPU_LOAD")
         String augur_version = read_string("VERSION")
     }
+}
+
+task prep_augur_metadata {
+
+  input {
+    String    submission_id
+    String    collection_date
+    String    iso_host
+    String    iso_country
+    String    iso_state
+    String    iso_continent
+    String    pangolin_lineage
+
+    String iso_county=""
+
+
+    String    docker_image = "staphb/seqyclean:1.10.09"
+    Int       mem_size_gb = 3
+    Int       CPUs = 1
+    Int       disk_size = 10
+    Int       preemptible_tries = 0
+  }
+
+  command {
+    # de-identified consensus/assembly sequence
+    year=$(echo ${collection_date} | cut -f 1 -d '-')
+
+    echo strain,virus,date,region,country,division,location
+
+    echo \"hCoV-19/${iso_country}/${submission_id}/$year\",\"ncov\",\"${collection_date}\",\"${iso_continent}\" ,\"${iso_country}\",\"${iso_state}\",\"${iso_county}\"" >> ${submission_id}.augur_metadata.csv
+
+  }
+
+  output {
+    File     augur_metadata = "${submission_id}.augur_metadata.csv"
+  }
+
+  runtime {
+      docker:       docker_image
+      memory:       "~{mem_size_gb} GB"
+      cpu:          CPUs
+      disks:        "local-disk ~{disk_size} SSD"
+      preemptible:  preemptible_tries
+  }
 }
