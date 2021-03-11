@@ -13,7 +13,7 @@ workflow titan_ont {
 
   input {
     String  samplename
-    String  seq_method="ONT via Clear Labs WGS"
+    String  seq_method="ONT"
     String? artic_primer_version="V3"
     File  demultiplexed_reads
     Int?  normalise=200
