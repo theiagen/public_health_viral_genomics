@@ -129,7 +129,7 @@ workflow sarscov2_nextstrain {
             metadata    = derived_cols.derived_metadata,
             clock_rate  = 0.0008,
             root = "MN908947",
-            clock_filter_iqd = 4
+            clock_filter_iqd = 12
 
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
