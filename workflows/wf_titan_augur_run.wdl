@@ -6,7 +6,7 @@ import "../tasks/tasks_intrahost.wdl" as intrahost
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_data_vis.wdl" as vis
 
-workflow sarscov2_nextstrain {
+workflow titan_augur_run {
     meta {
         description: "Align assemblies, build trees, and convert to json representation suitable for Nextstrain visualization. See https://nextstrain.org/docs/getting-started/ and https://nextstrain-augur.readthedocs.io/en/stable/"
         author: "Broad Viral Genomics"
