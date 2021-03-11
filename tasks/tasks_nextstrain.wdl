@@ -958,7 +958,7 @@ task refine_augur_tree {
         String?  date_inference = "marginal"
         String?  branch_length_inference
         String?  coalescent
-        Int?     clock_filter_iqd = 4
+        Int?     clock_filter_iqd 
         String?  divergence_units = "mutations"
         File?    vcf_reference
 

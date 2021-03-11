@@ -126,10 +126,7 @@ workflow sarscov2_nextstrain {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
             msa_or_vcf  = mafft.aligned_sequences,
-            metadata    = derived_cols.derived_metadata,
-            clock_rate  = 0.0008,
-            root = "MN908947",
-            clock_filter_iqd = 12
+            metadata    = derived_cols.derived_metadata
 
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
