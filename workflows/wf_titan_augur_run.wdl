@@ -122,24 +122,23 @@ workflow titan_augur_run {
             msa_or_vcf = augur_mask_sites.masked_sequences
     }
 
-#    call nextstrain.refine_augur_tree {
-#        input:
-#            raw_tree    = draft_augur_tree.aligned_tree,
-#            msa_or_vcf  = mafft.aligned_sequences,
-#            metadata    = derived_cols.derived_metadata
-#
-#    }
+    call nextstrain.refine_augur_tree {
+        input:
+            raw_tree    = draft_augur_tree.aligned_tree,
+            msa_or_vcf  = mafft.aligned_sequences,
+            metadata    = derived_cols.derived_metadata
+    }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
         call nextstrain.ancestral_traits {
             input:
-                tree           = draft_augur_tree.aligned_tree,
+                tree           = refine_augur_tree.tree_refined,
                 metadata       = derived_cols.derived_metadata,
                 columns        = select_first([ancestral_traits_to_infer,[]])
         }
     }
     call nextstrain.tip_frequencies {
         input:
-            tree        = draft_augur_tree.aligned_tree,
+            tree        = refine_augur_tree.tree_refined,
             metadata    = derived_cols.derived_metadata,
             min_date = 2020.0,
             pivot_interval = 1,
@@ -150,18 +149,18 @@ workflow titan_augur_run {
     }
     call nextstrain.ancestral_tree {
         input:
-            tree        = draft_augur_tree.aligned_tree,
+            tree        = refine_augur_tree.tree_refined,
             msa_or_vcf  = mafft.aligned_sequences
     }
     call nextstrain.translate_augur_tree {
         input:
-            tree        = draft_augur_tree.aligned_tree,
+            tree        = refine_augur_tree.tree_refined,
             nt_muts     = ancestral_tree.nt_muts_json,
             genbank_gb  = nextstrain_ncov_defaults.reference_gb
     }
     call nextstrain.assign_clades_to_nodes {
         input:
-            tree_nwk     = draft_augur_tree.aligned_tree,
+            tree_nwk     = refine_augur_tree.tree_refined,
             nt_muts_json = ancestral_tree.nt_muts_json,
             aa_muts_json = translate_augur_tree.aa_muts_json,
             ref_fasta    = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
@@ -169,11 +168,11 @@ workflow titan_augur_run {
     }
     call nextstrain.export_auspice_json {
         input:
-            tree            = draft_augur_tree.aligned_tree,
+            tree            = refine_augur_tree.tree_refined,
             sample_metadata = derived_cols.derived_metadata,
             lat_longs_tsv   = select_first([lat_longs_tsv, nextstrain_ncov_defaults.lat_longs_tsv]),
             node_data_jsons = select_all([
-#                                refine_augur_tree.branch_lengths,
+                                refine_augur_tree.branch_lengths,
                                 ancestral_traits.node_data_json,
                                 ancestral_tree.nt_muts_json,
                                 translate_augur_tree.aa_muts_json,
@@ -190,7 +189,7 @@ workflow titan_augur_run {
       input:
         cluster_name = build_name,
         snp_matrix = snp_dists.snp_matrix,
-        ml_tree = draft_augur_tree.aligned_tree,
+        ml_tree = refine_augur_tree.tree_refined,
         render_template = render_template
     }
 
@@ -206,9 +205,9 @@ workflow titan_augur_run {
 #      Map[String, Int] counts_by_group = subsample.counts_by_group
 
       File  ml_tree               = draft_augur_tree.aligned_tree
-      File  time_tree             = draft_augur_tree.aligned_tree
+      File  time_tree             = refine_augur_tree.tree_refined
       Array[File] node_data_jsons = select_all([
-#                    refine_augur_tree.branch_lengths,
+                    refine_augur_tree.branch_lengths,
                     ancestral_traits.node_data_json,
                     ancestral_tree.nt_muts_json,
                     translate_augur_tree.aa_muts_json,
