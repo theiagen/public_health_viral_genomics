@@ -212,7 +212,7 @@ task derived_cols {
         table_map = list(x for x in "~{sep='*' table_map}".split('*') if x)
         tsv_derived_cols(
             "~{metadata_tsv}",
-            "~{basename}.derived_cols.txt",
+            "~{basename}.derived_cols.tsv",
             table_map = table_map,
             lab_highlight_loc = lab_highlight_loc if lab_highlight_loc else None
         )
@@ -227,7 +227,7 @@ task derived_cols {
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
-        File derived_metadata = "~{basename}.derived_cols.txt"
+        File derived_metadata = "~{basename}.derived_cols.tsv"
     }
 }
 
