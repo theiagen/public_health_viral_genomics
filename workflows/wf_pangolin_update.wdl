@@ -47,4 +47,11 @@ task check_version {
 	output {
 		Boolean update_pangolin = read_boolean("update_pangolin")
 	}
+	runtime {
+		docker:       "theiagen/utility:1.0"
+		memory:       "1 GB"
+    cpu:          1
+    disks:        "local-disk 10 SSD"
+    preemptible:  0
+}
 }
