@@ -40,7 +40,7 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_ont.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Illumina_pe
+ - name: Titan_Illumina_PE
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_titan_illumina_pe.wdl
    testParameterFiles:
@@ -83,5 +83,10 @@ workflows:
  - name: Titan_Augur_Run
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_titan_augur_run.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Pangolin_Update
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_pangolin_update.wdl
    testParameterFiles:
     - empty.json
