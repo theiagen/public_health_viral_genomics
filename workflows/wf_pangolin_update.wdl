@@ -43,6 +43,7 @@ task check_version {
 			echo true > update_pangolin
 		else
 			echo false > update_pangolin
+		fi
 	>>>
 	output {
 		Boolean update_pangolin = read_boolean("update_pangolin")
