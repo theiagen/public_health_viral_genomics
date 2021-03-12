@@ -15,6 +15,7 @@ workflow titan_clearlabs {
     String  samplename
     String  seq_method="ONT via Clear Labs WGS"
     String? artic_primer_version="V3"
+    String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
     File  clear_lab_fastq
     Int?  normalise=20000
 
@@ -41,7 +42,7 @@ workflow titan_clearlabs {
   call taxon_ID.pangolin2 {
     input:
       samplename = samplename,
-      fasta = consensus.consensus_seq
+      fasta = consensus.consensus_seq,
   }
   call taxon_ID.kraken2 {
     input:
@@ -99,7 +100,7 @@ workflow titan_clearlabs {
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
     File    pango_lineage_report   = pangolin2.pango_lineage_report
     String  pangolin_version       = pangolin2.version
-    String  pangolin_docker       = pangolin2.pangolin_docker
+    String  pangolin_docker       = pangolin_docker_image
 
     File    nextclade_json         = nextclade_one_sample.nextclade_json
     File    auspice_json           = nextclade_one_sample.auspice_json
