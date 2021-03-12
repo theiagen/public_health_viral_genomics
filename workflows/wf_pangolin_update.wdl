@@ -9,11 +9,7 @@ workflow pangolin_update {
 		String    updated_pangolin_docker
 	}
 
-	call check_version {
-		input:
-			updated_pangolin_docker = updated_pangolin_docker
-	}
-call taxon_ID.pangolin2 {
+	call taxon_ID.pangolin2 {
     input:
       samplename = samplename,
       fasta = assembly,
@@ -27,3 +23,4 @@ call taxon_ID.pangolin2 {
 			String  pangolin_version       = pangolin2.version
 			String	pangolin_docker 			 = pangolin2.pangolin_docker
 	}
+}
