@@ -12,7 +12,7 @@ task plot_coverage {
 
     String   docker="quay.io/broadinstitute/viral-core:2.1.19"
   }
-  
+
   command {
     set -ex -o pipefail
 
@@ -26,7 +26,7 @@ task plot_coverage {
       if [[ "${skip_mark_dupes}" != "true" ]]; then
         PLOT_DUPE_OPTION="${true='--plotOnlyNonDuplicates' false="" plot_only_non_duplicates}"
       fi
-      
+
       BINNING_OPTION="${true='--binLargePlots' false="" bin_large_plots}"
 
       # plot coverage
@@ -248,7 +248,7 @@ task align_and_count_summary {
 
 task aggregate_metagenomics_reports {
   input {
-    Array[File]+ kraken_summary_reports 
+    Array[File]+ kraken_summary_reports
     String       aggregate_taxon_heading_space_separated  = "Viruses"
     String       aggregate_taxlevel_focus                 = "species"
     Int          aggregate_top_N_hits                     = 5
@@ -437,7 +437,7 @@ task tsv_join {
     out_ids = list(collections.OrderedDict(((i,0) for i in out_ids)).keys())
 
     # write output
-    with open(out_basename+'.txt', 'w', newline='') as outf:
+    with open(out_basename+'.tsv', 'w', newline='') as outf:
         writer = csv.DictWriter(outf, header, delimiter='\t', dialect=csv.unix_dialect, quoting=csv.QUOTE_MINIMAL)
         writer.writeheader()
         writer.writerows(out_row_by_id[row_id] for row_id in out_ids)
@@ -445,7 +445,7 @@ task tsv_join {
   >>>
 
   output {
-    File   out_tsv = "${out_basename}.txt"
+    File   out_tsv = "${out_basename}.tsv"
   }
 
   runtime {
@@ -520,5 +520,3 @@ task compare_two_genomes {
     preemptible: 1
   }
 }
-
-
