@@ -98,7 +98,7 @@ task pangolin2 {
   input {
     File        fasta
     String      samplename
-    String      docker="staphb/pangolin:2.3.0-pangolearn-2021-02-21"
+    String      docker
 
 
   }
@@ -106,7 +106,7 @@ task pangolin2 {
   command{
     # date and version control
     date | tee DATE
-    pangolin --version | head -n1 | tee VERSION
+    echo "$(pangolin -v); $(pangolin -pv)" | tee VERSION
     set -e
 
     pangolin "~{fasta}" \
@@ -127,6 +127,7 @@ task pangolin2 {
     String     version              = read_string("VERSION")
     String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
     String     pangolin_aLRT        = read_string("PANGOLIN_PROBABILITY")
+    String     pangolin_docker      = docker
     File       pango_lineage_report = "${samplename}_pango2_lineage.csv"
   }
 
