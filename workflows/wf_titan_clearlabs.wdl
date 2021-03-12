@@ -99,6 +99,7 @@ workflow titan_clearlabs {
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
     File    pango_lineage_report   = pangolin2.pango_lineage_report
     String  pangolin_version       = pangolin2.version
+    String  pangolin_docker       = pangolin2.pangolin_docker
 
     File    nextclade_json         = nextclade_one_sample.nextclade_json
     File    auspice_json           = nextclade_one_sample.auspice_json
