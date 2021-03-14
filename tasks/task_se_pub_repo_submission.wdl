@@ -199,6 +199,7 @@ task compile {
   input {
     Array[File] single_submission_fasta
     Array[File] single_submission_meta
+    Array[String] samplename
     Array[Int]  vadr_num_alerts
     Int         vadr_threshold=0
     String       repository
@@ -217,8 +218,13 @@ task compile {
   meta_array_len=$(echo "${#meta_array[@]}")
   vadr_array=(~{sep=' ' vadr_num_alerts})
   vadr_array_len=$(echo "${#vadr_array[@]}")
+  samplename_array=(~{sep=' ' samplename})
+  vadr_array_len=$(echo "${#vadr_array[@]}")
   passed_assemblies=""
   passed_meta=""
+
+  echo "GISAID Virus Name, Samplename" > batched_samples.tsv
+  echo "GISAID Virus Name, Samplename" > excluded_samples.tsv
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
@@ -232,16 +238,21 @@ task compile {
   # remove samples that excede vadr threshold
   for index in ${!assembly_array[@]}; do
     assembly=${assembly_array[$index]}
+    assembly_header=$(grep -e ">" $assembly | sed 's/\s.*$//')
+    echo $assembly_header
     meta=${meta_array[$index]}
+    samplename=${samplename_array[$index]}
     vadr=${vadr_array[$index]}
 
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
+      echo "$assembly_header,$samplename" >> batched_samples.tsv
     else
       passed_assemblies=( "${passed_assemblies[@]}" "$assembly")
       passed_meta=( "${passed_meta[@]}" "$meta")
       echo "$assembly added to batch:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
+      echo "$assembly_header,$samplename" >> excluded_samples.tsv
     fi
 
   done
@@ -264,6 +275,8 @@ task compile {
   output {
     File?    upload_meta   = "${repository}_upload_meta.csv"
     File?    upload_fasta  = "${repository}_upload.fasta"
+    File    batched_samples = "batched_samples.tsv"
+    File    excluded_samples = "excluded_samples.tsv"
 
   }
 
