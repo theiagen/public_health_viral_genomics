@@ -4,19 +4,19 @@ import "../tasks/tasks_nextstrain.wdl" as nextstrain
 
 workflow titan_augur_prep {
 	input {
-		String    submission_id
+		String 		assembly
 		String    collection_date
 		String    iso_country
 		String    iso_state
 		String    iso_continent
-		String?    iso_county
+		String?   iso_county
 		String    pangolin_lineage
 
 	}
 
 	call nextstrain.prep_augur_metadata {
 		input:
-			submission_id = submission_id,
+			assembly=assembly,
 			collection_date = collection_date,
 			iso_country = iso_country,
 			iso_state = iso_state,
