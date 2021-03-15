@@ -6,27 +6,16 @@ import "../tasks/task_data_vis.wdl" as vis
 
 workflow titan_augur_run {
     meta {
-        description: "Align assemblies, build trees, and convert to json representation suitable for Nextstrain visualization. See https://nextstrain.org/docs/getting-started/ and https://nextstrain-augur.readthedocs.io/en/stable/"
+        description: "Meant for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of the Braod's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
         author: "Broad Viral Genomics"
-        email:  "viral-ngs@broadinstitute.org"
+        email:  "kevin.libuit@theiagen.com"
     }
 
     input {
         Array[File]+    assembly_fastas
         Array[File]+    sample_metadata_tsvs
-
         String          build_name
-#        File            builds_yaml
 
-        Array[String]?  ancestral_traits_to_infer
-
-        File?           auspice_config
-        File?           ref_fasta
-        File?           clades_tsv
-        File?           lat_longs_tsv
-        File?           render_template
-
-        Int             min_unambig_genome = 27000
     }
 
     parameter_meta {
@@ -37,20 +26,6 @@ workflow titan_augur_run {
         sample_metadata_tsvs: {
             description: "Tab-separated metadata file that contain binning variables and values. Must contain all samples: output will be filtered to the IDs present in this file.",
             patterns: ["*.txt", "*.tsv"]
-        }
-        ref_fasta: {
-          description: "A reference assembly (not included in assembly_fastas) to align assembly_fastas against. Typically from NCBI RefSeq or similar.",
-          patterns: ["*.fasta", "*.fa"]
-        }
-        min_unambig_genome: {
-          description: "Minimum number of called bases in genome to pass prefilter."
-        }
-        ancestral_traits_to_infer: {
-          description: "A list of metadata traits to use for ancestral node inference (see https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/traits.html). Multiple traits may be specified; must correspond exactly to column headers in metadata file. Omitting these values will skip ancestral trait inference, and ancestral nodes will not have estimated values for metadata."
-        }
-        clades_tsv: {
-          description: "A TSV file containing clade mutation positions in four columns: [clade  gene    site    alt]; see: https://nextstrain.org/docs/tutorials/defining-clades",
-          patterns: ["*.tsv", "*.txt"]
         }
     }
 
