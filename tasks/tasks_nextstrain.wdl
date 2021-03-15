@@ -1449,20 +1449,19 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > augur_metadata.tsv
+
+    # Set strain name by assembly header
     assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//'| sed 's/>//g' )
-    echo "AH: $assembly_header"
-    echo "File: $assembly_header.augur_metadata.tsv"
 
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > $assembly_header.augur_metadata.tsv
-
-    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}"" >> $assembly_header.augur_metadata.tsv
+    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}"" >> augur_metadata.tsv
 
     echo $(ls )
 
   }
 
   output {
-    File     augur_metadata = "*.augur_metadata.tsv"
+    File     augur_metadata = "augur_metadata.tsv"
   }
 
   runtime {
