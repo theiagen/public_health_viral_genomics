@@ -238,7 +238,7 @@ task compile {
   # remove samples that excede vadr threshold
   for index in ${!assembly_array[@]}; do
     assembly=${assembly_array[$index]}
-    assembly_header=$(grep -e ">" $assembly | sed 's/\s.*$//')
+    assembly_header=$(grep -e ">" $assembly | sed 's/\s.*$//' | sed 's/>//g' )
     echo $assembly_header
     meta=${meta_array[$index]}
     samplename=${samplename_array[$index]}

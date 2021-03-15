@@ -1449,7 +1449,7 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//')
+    assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//'| sed 's/>//g' )
 
     echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > $assembly_header.augur_metadata.tsv
 
