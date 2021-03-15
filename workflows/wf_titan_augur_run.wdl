@@ -1,13 +1,13 @@
 version 1.0
 
-import "wf_sarscov2_nextstrain_noSub.wdl" as augur_noSub
+import "wf_sarscov2_nextstrain_modified.wdl" as augur
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_data_vis.wdl" as vis
 
 workflow titan_augur_run {
     meta {
-        description: "Meant for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of the Braod's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
-        author: "Broad Viral Genomics"
+        description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of the Braod's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
+        author: "Kevin G Libuit"
         email:  "kevin.libuit@theiagen.com"
     }
 
@@ -29,7 +29,7 @@ workflow titan_augur_run {
         }
     }
 
-    call augur_noSub.sarscov2_nextstrain_noSub {
+    call augur.sarscov2_nextstrain {
     input:
         assembly_fastas=assembly_fastas,
         sample_metadata_tsvs=sample_metadata_tsvs,
@@ -39,25 +39,25 @@ workflow titan_augur_run {
     call phylo.snp_dists {
       input:
         cluster_name = build_name,
-        alignment = sarscov2_nextstrain_noSub.mafft_alignment
+        alignment = sarscov2_nextstrain.mafft_alignment
     }
     call vis.cluster_render {
       input:
         cluster_name = build_name,
         snp_matrix = snp_dists.snp_matrix,
-        ml_tree = sarscov2_nextstrain_noSub.ml_tree,
+        ml_tree = sarscov2_nextstrain.ml_tree,
     }
 
     output {
-      File  combined_assemblies   = sarscov2_nextstrain_noSub.combined_assemblies
-      File  MAFFT_alignment    = sarscov2_nextstrain_noSub.mafft_alignment
-      File  unmasked_snps         = sarscov2_nextstrain_noSub.unmasked_snps
+      File  combined_assemblies   = sarscov2_nextstrain.combined_assemblies
+      File  MAFFT_alignment    = sarscov2_nextstrain.mafft_alignment
+      File  unmasked_snps         = sarscov2_nextstrain.unmasked_snps
 
-      File  metadata_merged       = sarscov2_nextstrain_noSub.metadata_merged
-      File  keep_list             = sarscov2_nextstrain_noSub.keep_list
-      File  time_tree             = sarscov2_nextstrain_noSub.time_tree
+      File  metadata_merged       = sarscov2_nextstrain.metadata_merged
+      File  keep_list             = sarscov2_nextstrain.keep_list
+      File  time_tree             = sarscov2_nextstrain.time_tree
 
-      File  auspice_input_json    = sarscov2_nextstrain_noSub.auspice_input_json
+      File  auspice_input_json    = sarscov2_nextstrain.auspice_input_json
       File      analysis_doc = cluster_render.analysis_doc
       File      snp_list     = cluster_render.snp_list
       File      snp_matrix   = snp_dists.snp_matrix

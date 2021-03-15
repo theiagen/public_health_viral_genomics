@@ -4,11 +4,11 @@ import "../tasks/tasks_nextstrain.wdl" as nextstrain
 import "../tasks/tasks_reports.wdl" as reports
 import "../tasks/tasks_intrahost.wdl" as intrahost
 
-workflow sarscov2_nextstrain_noSub {
+workflow sarscov2_nextstrain {
     meta {
-        description: "Align assemblies, build trees, and convert to json representation suitable for Nextstrain visualization. See https://nextstrain.org/docs/getting-started/ and https://nextstrain-augur.readthedocs.io/en/stable/"
-        author: "Broad Viral Genomics"
-        email:  "viral-ngs@broadinstitute.org"
+        description: "Modified version of the Broad's sars_cov2_nextstrain WDL Worfklow to align assemblies, build trees, and convert to json representation suitable for Nextstrain visualization. See https://nextstrain.org/docs/getting-started/ and https://nextstrain-augur.readthedocs.io/en/stable/"
+        author: "Kevin Libuit"
+        email:  "kevin.libuit@theiagen.com"
     }
 
     input {
