@@ -46,7 +46,6 @@ workflow titan_augur_run {
         cluster_name = build_name,
         snp_matrix = snp_dists.snp_matrix,
         ml_tree = sarscov2_nextstrain_noSub.ml_tree,
-        render_template = render_template
     }
 
     output {
