@@ -1452,7 +1452,7 @@ task prep_augur_metadata {
     echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > augur_metadata.tsv
 
     # Set strain name by assembly header
-    assembly_header=$(grep -e ">" ~{assembly} sed 's/>//g' )
+    assembly_header=$(grep -e ">" ~{assembly} | sed 's/>//g' )
 
     echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}"" >> augur_metadata.tsv
 
