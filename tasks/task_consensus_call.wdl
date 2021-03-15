@@ -1,4 +1,4 @@
-version 1.0 
+version 1.0
 
 task primer_trim {
 
@@ -25,7 +25,7 @@ task primer_trim {
     # sorting and indexing the trimmed bams
     samtools sort \
     ${samplename}.primertrim.bam \
-    -o ${samplename}.primertrim.sorted.bam 
+    -o ${samplename}.primertrim.sorted.bam
 
     samtools index ${samplename}.primertrim.sorted.bam
   }
@@ -34,7 +34,7 @@ task primer_trim {
     File      trimmed_bam = "${samplename}.primertrim.bam"
     File 	  trim_sorted_bam = "${samplename}.primertrim.sorted.bam"
     File 	  trim_sorted_bai = "${samplename}.primertrim.sorted.bam.bai"
-    String    ivar_version = read_string("IVAR_VERSION") 
+    String    ivar_version = read_string("IVAR_VERSION")
     String 	  samtools_version = read_string("SAMTOOLS_VERSION")
     String    pipeline_date = read_string("DATE")
   }
@@ -44,7 +44,7 @@ task primer_trim {
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
   }
 }
 
@@ -85,7 +85,7 @@ task variant_call {
     -m ${min_depth} \
     -r ${ref_genome} \
     -g ${ref_gff}
- 
+
     variants_num=$(grep "TRUE" ${samplename}.variants.tsv | wc -l)
     if [ -z "$variants_num" ] ; then variants_num="0" ; fi
     echo $variants_num | tee VARIANT_NUM
@@ -94,9 +94,9 @@ task variant_call {
   output {
  	Int       variant_num = read_string("VARIANT_NUM")
  	File  	  sample_variants = "${samplename}.variants.tsv"
-    String    ivar_version = read_string("IVAR_VERSION") 
+    String    ivar_version = read_string("IVAR_VERSION")
     String    samtools_version = read_string("SAMTOOLS_VERSION")
-    String    pipeline_date = read_string("DATE")	
+    String    pipeline_date = read_string("DATE")
   }
 
   runtime {
@@ -104,12 +104,12 @@ task variant_call {
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
   }
 }
 
 task consensus {
-    
+
   input {
     File        bamfile
     String      samplename
@@ -124,7 +124,7 @@ task consensus {
     Int?        min_depth = "10"
     String?     char_unknown = "N"
   }
-  
+
   command {
     # date and version control
     date | tee DATE
@@ -161,15 +161,19 @@ task consensus {
     num_total=$( grep -v ">" ${samplename}.consensus.fa | grep -o -E '[A-Z]' | wc -l )
     if [ -z "$num_total" ] ; then num_total="0" ; fi
     echo $num_total | tee NUM_TOTAL
+
+    # clean up fasta header
+    echo ">${samplename}" > ${samplename}.ivar.consensus.fasta
+    grep -v ">" ~{samplename}.consensus.fa >> ${samplename}.ivar.consensus.fasta
   }
 
   output {
-    File      consensus_seq = "${samplename}.consensus.fa"
+    File      consensus_seq = "${samplename}.ivar.consensus.fasta"
     Int       number_N = read_string("NUM_N")
     Int       number_ATCG = read_string("NUM_ACTG")
     Int       number_Degenerate = read_string("NUM_DEGENERATE")
     Int       number_Total = read_string("NUM_TOTAL")
-    String    ivar_version = read_string("IVAR_VERSION") 
+    String    ivar_version = read_string("IVAR_VERSION")
     String    samtools_version = read_string("SAMTOOLS_VERSION")
     String    pipeline_date = read_string("DATE")
   }
@@ -179,8 +183,6 @@ task consensus {
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
   }
 }
-
-

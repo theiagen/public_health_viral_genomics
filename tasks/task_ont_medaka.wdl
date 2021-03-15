@@ -77,19 +77,19 @@ task consensus {
     echo "Medaka via $(artic -v)" | tee VERSION
     artic minion --medaka --normalise ${normalise} --threads ${cpu} --scheme-directory /artic-ncov2019/primer_schemes --read-file ${filtered_reads} nCoV-2019/${artic_primer_version} ${samplename}
 
-    num_N=$( grep -v ">" *.consensus.fasta | grep -o 'N' | wc -l )
+    num_N=$( grep -v ">" ${samplename}.consensus.fasta | grep -o 'N' | wc -l )
     if [ -z "$num_N" ] ; then num_N="0" ; fi
     echo $num_N | tee NUM_N
 
-    num_ACTG=$( grep -v ">" *.consensus.fasta | grep -o -E "C|A|T|G" | wc -l )
+    num_ACTG=$( grep -v ">" ${samplename}.consensus.fasta | grep -o -E "C|A|T|G" | wc -l )
     if [ -z "$num_ACTG" ] ; then num_ACTG="0" ; fi
     echo $num_ACTG | tee NUM_ACTG
 
-    num_degenerate=$( grep -v ">" *.consensus.fasta | grep -o -E "B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|U|V|W|X|Y|Z" | wc -l )
+    num_degenerate=$( grep -v ">" ${samplename}.consensus.fasta | grep -o -E "B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|U|V|W|X|Y|Z" | wc -l )
     if [ -z "$num_degenerate" ] ; then num_degenerate="0" ; fi
     echo $num_degenerate | tee NUM_DEGENERATE
 
-    num_total=$( grep -v ">" *.consensus.fasta | grep -o -E '[A-Z]' | wc -l )
+    num_total=$( grep -v ">" ${samplename}.consensus.fasta | grep -o -E '[A-Z]' | wc -l )
     if [ -z "$num_total" ] ; then num_total="0" ; fi
     echo $num_total | tee NUM_TOTAL
 
@@ -100,10 +100,14 @@ task consensus {
     python -c "print ( round(($count_pool_1 / $count_total ) * 100, 2) )" | tee POOL1_PERCENT
     python -c "print ( round(($count_pool_2 / $count_total ) * 100, 2) )" | tee POOL2_PERCENT
 
+    # clean up fasta header
+    echo ">${samplename}" > ${samplename}.medaka.consensus.fasta
+    grep -v ">" ${samplename}.consensus.fasta >> ${samplename}.medaka.consensus.fasta
+
   }
 
   output {
-    File    consensus_seq = "${samplename}.consensus.fasta"
+    File    consensus_seq = "${samplename}.medaka.consensus.fasta"
     File    sorted_bam = "${samplename}.trimmed.rg.sorted.bam"
     File    trim_sorted_bam = "${samplename}.primertrimmed.rg.sorted.bam"
     File    trim_sorted_bai = "${samplename}.primertrimmed.rg.sorted.bam.bai"
