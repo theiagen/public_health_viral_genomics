@@ -10,7 +10,6 @@ task sample_metrics_v1 {
     String    pangolin_aLRT
     String?    kraken_human
     String?    kraken_sc2
-    String    variant_num
     String    number_N
     String    number_ATCG
     String    number_Degenerate
@@ -31,7 +30,7 @@ task sample_metrics_v1 {
     echo "sample_id,deidentified_id,collection_date,\
     pangolin_lineage,pangolin_probability,\
     depth,coverage,\
-    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,num_variants,\
+    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,\
     num_N,num_degenerate,num_ACTG,num_total,meanbaseq_trim,meanmapq_trim,assembly_status"
 
     # Determining assembly status based upon coverage & mapping quality provided
@@ -53,7 +52,7 @@ task sample_metrics_v1 {
     echo "${samplename},${submission_id},${collection_date},\
     ${pangolin_lineage},${pangolin_aLRT},\
     ${depth_trim},${coverage_trim},\
-    ${kraken_human},${kraken_sc2},${amp_fail},${variant_num},\
+    ${kraken_human},${kraken_sc2},${amp_fail},\
     ${number_N},${number_Degenerate},${number_ATCG},${number_Total},\
     ${meanbaseq_trim},${meanmapq_trim},$(assembly_status)" | tee SAMPLE_METRICS
   }
@@ -84,7 +83,6 @@ task sample_metrics {
     String    nextclade_aa_dels
     Float?     kraken_human
     Float?     kraken_sc2
-    Int       variant_num
     Int       number_N
     Int       number_ATCG
     Int       number_Degenerate
@@ -120,7 +118,7 @@ task sample_metrics {
   ~{pangolin_lineage},~{pangolin_aLRT},\
   ~{nextclade_clade},~{nextclade_aa_subs},~{nextclade_aa_dels},\
   ~{depth_trim},~{coverage_trim},\
-  ~{kraken_human},~{kraken_sc2},~{amp_fail},~{variant_num},\
+  ~{kraken_human},~{kraken_sc2},~{amp_fail},\
   ~{number_N},~{number_Degenerate},~{number_ATCG},~{number_Total},\
   ~{meanbaseq_trim},~{meanmapq_trim}," + assembly_status
 
@@ -154,7 +152,7 @@ task merge_metrics {
     pangolin_lineage,pangolin_probability,\
     nextclade_lineage,nextclade_aaSubstitutions,nextclade_aaDeletions,\
     depth,coverage,\
-    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,num_variants,\
+    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,\
     num_N,num_degenerate,num_ACTG,num_total,\
     meanbaseq_trim,meanmapq_trim,assembly_status" >> run_results.csv
 

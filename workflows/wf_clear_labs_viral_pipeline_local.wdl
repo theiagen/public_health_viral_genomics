@@ -29,7 +29,6 @@ workflow nCoV19_pipeline {
         nextclade_aa_dels = titan_clearlabs.nextclade_aa_dels,
         kraken_human      = titan_clearlabs.kraken_human,
         kraken_sc2        = titan_clearlabs.kraken_sc2,
-        variant_num       = titan_clearlabs.variant_num,
         number_N          = titan_clearlabs.number_N,
         number_ATCG       = titan_clearlabs.number_ATCG,
         number_Degenerate = titan_clearlabs.number_Degenerate,
