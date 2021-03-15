@@ -4,7 +4,7 @@ import "../tasks/tasks_nextstrain.wdl" as nextstrain
 import "../tasks/tasks_reports.wdl" as reports
 import "../tasks/tasks_intrahost.wdl" as intrahost
 
-workflow sarscov2_nextstrain {
+workflow sarscov2_nextstrain_noSub {
     meta {
         description: "Align assemblies, build trees, and convert to json representation suitable for Nextstrain visualization. See https://nextstrain.org/docs/getting-started/ and https://nextstrain-augur.readthedocs.io/en/stable/"
         author: "Broad Viral Genomics"
@@ -102,10 +102,10 @@ workflow sarscov2_nextstrain {
 #            build_name = build_name,
 #            builds_yaml = builds_yaml
 #    }
-#    call nextstrain.fasta_to_ids {
-#        input:
-#            sequences_fasta = mafft.aligned_sequences
-#    }
+    call nextstrain.fasta_to_ids {
+        input:
+            sequences_fasta = mafft.aligned_sequences
+    }
 
 
     #### augur_from_msa
@@ -184,8 +184,8 @@ workflow sarscov2_nextstrain {
       File  unmasked_snps         = snp_sites.snps_vcf
 
       File  metadata_merged       = derived_cols.derived_metadata
-#      File  keep_list             = fasta_to_ids.ids_txt
-      File  subsampled_sequences  = mafft.aligned_sequences
+      File  keep_list             = fasta_to_ids.ids_txt
+      File  mafft_alignment  = mafft.aligned_sequences
 #      Int   sequences_kept        = subsample.sequences_out
 #      Map[String, Int] counts_by_group = subsample.counts_by_group
 

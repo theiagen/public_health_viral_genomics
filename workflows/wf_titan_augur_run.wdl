@@ -1,8 +1,6 @@
 version 1.0
 
-import "../tasks/tasks_nextstrain.wdl" as nextstrain
-import "../tasks/tasks_reports.wdl" as reports
-import "../tasks/tasks_intrahost.wdl" as intrahost
+import "wf_sarscov2_nextstrain_noSub.wdl" as augur_noSub
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_data_vis.wdl" as vis
 
@@ -56,165 +54,36 @@ workflow titan_augur_run {
         }
     }
 
-    call nextstrain.nextstrain_ncov_defaults
-
-    #### mafft_and_snp
-
-    call nextstrain.gzcat {
-        input:
-            infiles     = assembly_fastas,
-            output_name = "all_samples_combined_assembly.fasta"
-    }
-    call nextstrain.filter_sequences_by_length {
-        input:
-            sequences_fasta = gzcat.combined,
-            min_non_N = min_unambig_genome
-    }
-    call nextstrain.mafft_one_chr as mafft {
-        input:
-            sequences = filter_sequences_by_length.filtered_fasta,
-            ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
-            basename  = "all_samples_aligned.fasta"
-    }
-    call nextstrain.snp_sites {
-        input:
-            msa_fasta = mafft.aligned_sequences
+    call augur_noSub.sarscov2_nextstrain_noSub {
+    input:
+        assembly_fastas=assembly_fastas,
+        sample_metadata_tsvs=sample_metadata_tsvs,
+        build_name=build_name
     }
 
-
-    #### merge metadata, compute derived cols
-    if(length(sample_metadata_tsvs)>1) {
-        call reports.tsv_join {
-            input:
-                input_tsvs = sample_metadata_tsvs,
-                id_col = 'strain',
-                out_basename = "metadata-merged"
-        }
-    }
-    call nextstrain.derived_cols {
-        input:
-            metadata_tsv = select_first(flatten([[tsv_join.out_tsv], sample_metadata_tsvs]))
-    }
-
-
-    #### subsample sequences with nextstrain yaml file
-#    call nextstrain.nextstrain_build_subsample as subsample {
-#        input:
-#            alignment_msa_fasta = mafft.aligned_sequences,
-#            sample_metadata_tsv = derived_cols.derived_metadata,
-#            build_name = build_name,
-#            builds_yaml = builds_yaml
-#    }
-    call nextstrain.fasta_to_ids {
-        input:
-            sequences_fasta = mafft.aligned_sequences
-    }
-
-
-    #### augur_from_msa
-
-    call nextstrain.augur_mask_sites {
-        input:
-            sequences = mafft.aligned_sequences
-    }
-    call nextstrain.draft_augur_tree {
-        input:
-            msa_or_vcf = augur_mask_sites.masked_sequences
-    }
-
-    call nextstrain.refine_augur_tree {
-        input:
-            raw_tree    = draft_augur_tree.aligned_tree,
-            msa_or_vcf  = mafft.aligned_sequences,
-            metadata    = derived_cols.derived_metadata
-    }
-    if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
-        call nextstrain.ancestral_traits {
-            input:
-                tree           = refine_augur_tree.tree_refined,
-                metadata       = derived_cols.derived_metadata,
-                columns        = select_first([ancestral_traits_to_infer,[]])
-        }
-    }
-    call nextstrain.tip_frequencies {
-        input:
-            tree        = refine_augur_tree.tree_refined,
-            metadata    = derived_cols.derived_metadata,
-            min_date = 2020.0,
-            pivot_interval = 1,
-            pivot_interval_units = "weeks",
-            narrow_bandwidth = 0.05,
-            proportion_wide = 0.0,
-            out_basename = "auspice-~{build_name}"
-    }
-    call nextstrain.ancestral_tree {
-        input:
-            tree        = refine_augur_tree.tree_refined,
-            msa_or_vcf  = mafft.aligned_sequences
-    }
-    call nextstrain.translate_augur_tree {
-        input:
-            tree        = refine_augur_tree.tree_refined,
-            nt_muts     = ancestral_tree.nt_muts_json,
-            genbank_gb  = nextstrain_ncov_defaults.reference_gb
-    }
-    call nextstrain.assign_clades_to_nodes {
-        input:
-            tree_nwk     = refine_augur_tree.tree_refined,
-            nt_muts_json = ancestral_tree.nt_muts_json,
-            aa_muts_json = translate_augur_tree.aa_muts_json,
-            ref_fasta    = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
-            clades_tsv   = select_first([clades_tsv, nextstrain_ncov_defaults.clades_tsv])
-    }
-    call nextstrain.export_auspice_json {
-        input:
-            tree            = refine_augur_tree.tree_refined,
-            sample_metadata = derived_cols.derived_metadata,
-            lat_longs_tsv   = select_first([lat_longs_tsv, nextstrain_ncov_defaults.lat_longs_tsv]),
-            node_data_jsons = select_all([
-                                refine_augur_tree.branch_lengths,
-                                ancestral_traits.node_data_json,
-                                ancestral_tree.nt_muts_json,
-                                translate_augur_tree.aa_muts_json,
-                                assign_clades_to_nodes.node_clade_data_json]),
-            auspice_config = select_first([auspice_config, nextstrain_ncov_defaults.auspice_config]),
-            out_basename = "auspice-~{build_name}"
-    }
     call phylo.snp_dists {
       input:
         cluster_name = build_name,
-        alignment = mafft.aligned_sequences
+        alignment = sarscov2_nextstrain_noSub.mafft_alignment
     }
     call vis.cluster_render {
       input:
         cluster_name = build_name,
         snp_matrix = snp_dists.snp_matrix,
-        ml_tree = refine_augur_tree.tree_refined,
+        ml_tree = sarscov2_nextstrain_noSub.ml_tree,
         render_template = render_template
     }
 
     output {
-      File  combined_assemblies   = filter_sequences_by_length.filtered_fasta
-      File  multiple_alignment    = mafft.aligned_sequences
-      File  unmasked_snps         = snp_sites.snps_vcf
+      File  combined_assemblies   = sarscov2_nextstrain_noSub.combined_assemblies
+      File  MAFFT_alignment    = sarscov2_nextstrain_noSub.mafft_alignment
+      File  unmasked_snps         = sarscov2_nextstrain_noSub.unmasked_snps
 
-      File  metadata_merged       = derived_cols.derived_metadata
-      File  keep_list             = fasta_to_ids.ids_txt
-      File  subsampled_sequences  = mafft.aligned_sequences
-#      Int   sequences_kept        = subsample.sequences_out
-#      Map[String, Int] counts_by_group = subsample.counts_by_group
+      File  metadata_merged       = sarscov2_nextstrain_noSub.metadata_merged
+      File  keep_list             = sarscov2_nextstrain_noSub.keep_list
+      File  time_tree             = sarscov2_nextstrain_noSub.time_tree
 
-      File  ml_tree               = draft_augur_tree.aligned_tree
-      File  time_tree             = refine_augur_tree.tree_refined
-      Array[File] node_data_jsons = select_all([
-                    refine_augur_tree.branch_lengths,
-                    ancestral_traits.node_data_json,
-                    ancestral_tree.nt_muts_json,
-                    translate_augur_tree.aa_muts_json,
-                    assign_clades_to_nodes.node_clade_data_json])
-      File  tip_frequencies_json  =                     tip_frequencies.node_data_json
-      File  root_sequence_json    = export_auspice_json.root_sequence_json
-      File  auspice_input_json    = export_auspice_json.virus_json
+      File  auspice_input_json    = sarscov2_nextstrain_noSub.auspice_input_json
       File      analysis_doc = cluster_render.analysis_doc
       File      snp_list     = cluster_render.snp_list
       File      snp_matrix   = snp_dists.snp_matrix
