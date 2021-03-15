@@ -1457,6 +1457,8 @@ task prep_augur_metadata {
 
     echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pangolin_lineage}"" >> $assembly_header.augur_metadata.tsv
 
+    echo $(ls )
+
   }
 
   output {
