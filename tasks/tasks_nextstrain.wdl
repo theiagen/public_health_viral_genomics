@@ -1450,6 +1450,8 @@ task prep_augur_metadata {
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
     assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//'| sed 's/>//g' )
+    echo "AH: $assembly_header"
+    echo "File: $assembly_header.augur_metadata.tsv"
 
     echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > $assembly_header.augur_metadata.tsv
 
