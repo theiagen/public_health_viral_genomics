@@ -247,12 +247,12 @@ task compile {
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
-      echo "$assembly_header,$samplename" >> batched_samples.tsv
+      echo "$assembly_header,$samplename" >> ~{repository}_excluded_samples.tsv
     else
       passed_assemblies=( "${passed_assemblies[@]}" "$assembly")
       passed_meta=( "${passed_meta[@]}" "$meta")
       echo "$assembly added to batch:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
-      echo "$assembly_header,$samplename" >> excluded_samples.tsv
+      echo "$assembly_header,$samplename" >> ~{repository}_batched_samples.tsv
     fi
 
   done
