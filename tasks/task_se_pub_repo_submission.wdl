@@ -224,8 +224,8 @@ task compile {
   passed_meta=""
 
   #Create files to capture batched and excluded samples
-  echo -e "GISAID Virus Name\tSamplename" > ~{repository}_batched_samples.tsv
-  echo -e "GISAID Virus Name\tSamplename\tVadr Alerts" > ~{repository}_excluded_samples.tsv
+  echo -e "GISAID Virus Name\tSamplename\tNumber of Vadr Alerts" > ~{repository}_batched_samples.tsv
+  echo -e "GISAID Virus Name\tSamplename\tNumber of Vadr Alerts" > ~{repository}_excluded_samples.tsv
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
@@ -248,7 +248,7 @@ task compile {
     # remove samples from array if vadr_num exceedes threshold
     if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
-      echo -e "$assembly_header\t$samplename" >> ~{repository}_excluded_samples.tsv
+      echo -e "$assembly_header\t$samplename\t$vadr" >> ~{repository}_excluded_samples.tsv
     else
       passed_assemblies=( "${passed_assemblies[@]}" "$assembly")
       passed_meta=( "${passed_meta[@]}" "$meta")
