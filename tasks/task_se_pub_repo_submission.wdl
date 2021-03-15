@@ -223,8 +223,9 @@ task compile {
   passed_assemblies=""
   passed_meta=""
 
-  echo "GISAID Virus Name, Samplename" > batched_samples.tsv
-  echo "GISAID Virus Name, Samplename" > excluded_samples.tsv
+  #Create files to capture batched and excluded samples
+  echo "GISAID Virus Name, Samplename" > ~{repository}_batched_samples.tsv
+  echo "GISAID Virus Name, Samplename" > ~{repository}_excluded_samples.tsv
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
@@ -275,8 +276,8 @@ task compile {
   output {
     File?    upload_meta   = "${repository}_upload_meta.csv"
     File?    upload_fasta  = "${repository}_upload.fasta"
-    File    batched_samples = "batched_samples.tsv"
-    File    excluded_samples = "excluded_samples.tsv"
+    File    batched_samples = "${repository}_batched_samples.tsv"
+    File    excluded_samples = "${repository}_excluded_samples.tsv"
 
   }
 
