@@ -16,7 +16,6 @@ workflow sarscov2_nextstrain {
         Array[File]+    sample_metadata_tsvs
 
         String          build_name
-#        File            builds_yaml
 
         Array[String]?  ancestral_traits_to_infer
 
@@ -94,14 +93,6 @@ workflow sarscov2_nextstrain {
     }
 
 
-    #### subsample sequences with nextstrain yaml file
-#    call nextstrain.nextstrain_build_subsample as subsample {
-#        input:
-#            alignment_msa_fasta = mafft.aligned_sequences,
-#            sample_metadata_tsv = derived_cols.derived_metadata,
-#            build_name = build_name,
-#            builds_yaml = builds_yaml
-#    }
     call nextstrain.fasta_to_ids {
         input:
             sequences_fasta = mafft.aligned_sequences
@@ -186,8 +177,7 @@ workflow sarscov2_nextstrain {
       File  metadata_merged       = derived_cols.derived_metadata
       File  keep_list             = fasta_to_ids.ids_txt
       File  mafft_alignment  = mafft.aligned_sequences
-#      Int   sequences_kept        = subsample.sequences_out
-#      Map[String, Int] counts_by_group = subsample.counts_by_group
+
 
       File  ml_tree               = draft_augur_tree.aligned_tree
       File  time_tree             = refine_augur_tree.tree_refined
