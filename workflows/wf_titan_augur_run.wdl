@@ -6,7 +6,7 @@ import "../tasks/task_data_vis.wdl" as vis
 
 workflow titan_augur_run {
     meta {
-        description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of the Braod's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
+        description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
         author: "Kevin G Libuit"
         email:  "kevin.libuit@theiagen.com"
     }
