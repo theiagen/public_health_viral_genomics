@@ -13,7 +13,6 @@ task sample_metrics_v1 {
     String?    seqy_percent
     String?    kraken_human
     String?    kraken_sc2
-    String    variant_num
     String    number_N
     String    number_ATCG
     String    number_Degenerate
@@ -35,7 +34,7 @@ task sample_metrics_v1 {
     pangolin_lineage,pangolin_probability,\
     fastqc_raw_pairs,pairs_after_cleaning,percent_kept_after_cleaning,\
     depth_before_trimming,depth_after_trimming,coverage_before_trimming,coverage_after_trimming,\
-    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,num_variants,\
+    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,\
     num_N,num_degenerate,num_ACTG,num_total,meanbaseq_trim,meanmapq_trim,assembly_status"
 
     # Determining assembly status based upon coverage & mapping quality provided
@@ -58,7 +57,7 @@ task sample_metrics_v1 {
     ${pangolin_lineage},${pangolin_aLRT},\
     ${fastqc_raw_pairs},${seqy_pairs},${seqy_percent},\
     ${depth},${depth_trim},${coverage},${coverage_trim},\
-    ${kraken_human},${kraken_sc2},${amp_fail},${variant_num},\
+    ${kraken_human},${kraken_sc2},${amp_fail},\
     ${number_N},${number_Degenerate},${number_ATCG},${number_Total},\
     ${meanbaseq_trim},${meanmapq_trim},$(assembly_status)" | tee SAMPLE_METRICS
   }
@@ -92,7 +91,6 @@ task sample_metrics {
     Float?     seqy_percent
     Float?     kraken_human
     Float?     kraken_sc2
-    Int       variant_num
     Int       number_N
     Int       number_ATCG
     Int       number_Degenerate
@@ -129,7 +127,7 @@ task sample_metrics {
   ~{nextclade_clade},~{nextclade_aa_subs},~{nextclade_aa_dels},\
   ~{fastqc_raw_pairs},~{seqy_pairs},~{seqy_percent},\
   ~{depth},~{depth_trim},~{coverage},~{coverage_trim},\
-  ~{kraken_human},~{kraken_sc2},~{amp_fail},~{variant_num},\
+  ~{kraken_human},~{kraken_sc2},~{amp_fail},\
   ~{number_N},~{number_Degenerate},~{number_ATCG},~{number_Total},\
   ~{meanbaseq_trim},~{meanmapq_trim}," + assembly_status
 
@@ -164,7 +162,7 @@ task merge_metrics {
     nextclade_lineage,nextclade_aaSubstitutions,nextclade_aaDeletions,\
     raw_pairs,pairs_after_cleaning,percent_kept_after_cleaning,\
     depth_before_trimming,depth_after_trimming,coverage_before_trimming,coverage_after_trimming,\
-    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,num_variants,\
+    %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,\
     num_N,num_degenerate,num_ACTG,num_total,\
     meanbaseq_trim,meanmapq_trim,assembly_status" >> run_results.csv
 

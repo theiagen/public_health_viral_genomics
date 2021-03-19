@@ -9,12 +9,14 @@ workflow nCoV19_pipeline {
   input {
     Array[Pair[Array[String], Pair[File,File]]] inputSamples
     Array[Array[String]] inputConfig
+    File primer_bed
   }
 
   scatter (sample in inputSamples) {
     call assembly.titan_illumina_pe {
       input:
         samplename = sample.left[0],
+        primer_bed = primer_bed,
         read1_raw  = sample.right.left,
         read2_raw  = sample.right.right
     }
@@ -34,7 +36,6 @@ workflow nCoV19_pipeline {
         seqy_percent      = titan_illumina_pe.seqy_percent,
         kraken_human      = titan_illumina_pe.kraken_human,
         kraken_sc2        = titan_illumina_pe.kraken_sc2,
-        variant_num       = titan_illumina_pe.variant_num,
         number_N          = titan_illumina_pe.number_N,
         number_ATCG       = titan_illumina_pe.number_ATCG,
         number_Degenerate = titan_illumina_pe.number_Degenerate,
