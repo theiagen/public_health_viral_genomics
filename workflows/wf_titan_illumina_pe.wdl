@@ -19,6 +19,7 @@ workflow titan_illumina_pe {
     String  seq_method="Illumina paired-end"
     File    read1_raw
     File    read2_raw
+    File    primer_bed
     String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
 
   }
@@ -38,6 +39,7 @@ workflow titan_illumina_pe {
   call consensus_call.primer_trim {
     input:
       samplename = samplename,
+      primer_bed = primer_bed,
       bamfile = bwa.sorted_bam
   }
   call consensus_call.variant_call {

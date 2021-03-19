@@ -5,7 +5,7 @@ task primer_trim {
   input {
     File        bamfile
     String      samplename
-    String?     primer_bed = "/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.bed"
+    File     primer_bed 
     Boolean?    keep_noprimer_reads=true
   }
 
@@ -40,7 +40,7 @@ task primer_trim {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.2.2_artic20200528"
+    docker:       "staphb/ivar:1.3.1"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
