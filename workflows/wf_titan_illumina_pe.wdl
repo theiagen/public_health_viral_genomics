@@ -111,6 +111,10 @@ workflow titan_illumina_pe {
     String  sam_version        = bwa.sam_version
     String assembly_method     = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
 
+    Int     variant_num                = variant_call.variant_num
+    String  ivar_version_variants      = variant_call.ivar_version
+    String  samtools_version_variants  = variant_call.samtools_version
+
     File    trim_sorted_bam            = primer_trim.trim_sorted_bam
     File    trim_sorted_bai            = primer_trim.trim_sorted_bai
     String  ivar_version_primtrim      = primer_trim.ivar_version
