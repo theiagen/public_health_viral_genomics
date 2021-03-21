@@ -115,6 +115,8 @@ workflow titan_illumina_pe {
     File    trim_sorted_bai            = primer_trim.trim_sorted_bai
     String  ivar_version_primtrim      = primer_trim.ivar_version
     String  samtools_version_primtrim  = primer_trim.samtools_version
+    Float   primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
+
 
     File    consensus_seq              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N

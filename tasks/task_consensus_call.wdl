@@ -5,7 +5,7 @@ task primer_trim {
   input {
     File        bamfile
     String      samplename
-    File     primer_bed 
+    File     primer_bed
     Boolean?    keep_noprimer_reads=true
   }
 
@@ -28,6 +28,10 @@ task primer_trim {
     -o ${samplename}.primertrim.sorted.bam
 
     samtools index ${samplename}.primertrim.sorted.bam
+
+    PCT=$(grep "Trimmed primers from" IVAR_OUT | perl -lape 's/Trimmed primers from (\S+)%.*/$1/')
+    if [[ $PCT = -* ]]; then echo 0; else echo $PCT; fi > IVAR_TRIM_PCT
+    grep "Trimmed primers from" IVAR_OUT | perl -lape 's/Trimmed primers from \S+% \((\d+)\).*/$1/' > IVAR_TRIM_COUNT
   }
 
   output {
@@ -37,6 +41,8 @@ task primer_trim {
     String    ivar_version = read_string("IVAR_VERSION")
     String 	  samtools_version = read_string("SAMTOOLS_VERSION")
     String    pipeline_date = read_string("DATE")
+    Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
+    Int    primer_trimmed_read_count   = read_int("IVAR_TRIM_COUNT")
   }
 
   runtime {
