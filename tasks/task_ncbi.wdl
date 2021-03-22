@@ -792,7 +792,7 @@ task vadr {
     String samplename
     String vadr_opts="--noseqnamemax -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf"
 
-    String  docker="staphb/vadr:1.1.2"
+    String  docker="staphb/vadr:1.1.3"
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
@@ -830,6 +830,7 @@ task vadr {
     Array[Array[String]] alerts = read_tsv("~{out_base}.vadr.alerts.tsv")
     File outputs_tgz = "~{out_base}.vadr.tar.gz"
     Boolean vadr_result = read_boolean("vadr.result")
+    String vadr_docker = docker
   }
   runtime {
     docker: "~{docker}"
