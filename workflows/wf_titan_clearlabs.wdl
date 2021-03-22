@@ -74,7 +74,7 @@ workflow titan_clearlabs {
 
     File    aligned_bam         = consensus.trim_sorted_bam
     File    aligned_bai         = consensus.trim_sorted_bai
-    File    medaka_vcf          = consensus.medaka_pass_vcf
+    File    variants_from_ref_vcf          = consensus.medaka_pass_vcf
     String  artic_version           = consensus.artic_pipeline_version
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
@@ -89,7 +89,7 @@ workflow titan_clearlabs {
     File    consensus_flagstat     = stats_n_coverage.flagstat
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   coverage_trim          = stats_n_coverage_primtrim.coverage
+    Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
     Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
     String samtools_version         = stats_n_coverage.samtools_version
 

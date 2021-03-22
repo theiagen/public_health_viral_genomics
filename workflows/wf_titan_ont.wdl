@@ -78,12 +78,13 @@ workflow titan_ont {
     String  kraken_version     = kraken2.version
     String  kraken_report      = kraken2.kraken_report
 
-    File    trim_sorted_bam         = consensus.trim_sorted_bam
-    File    trim_sorted_bai         = consensus.trim_sorted_bai
+    File    aligned_bam         = consensus.trim_sorted_bam
+    File    aligned_bai         = consensus.trim_sorted_bai
+    File    variants_from_ref_vcf          = consensus.medaka_pass_vcf
     String  artic_version           = consensus.artic_pipeline_version
-    File    consensus_seq              = consensus.consensus_seq
+    File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
-    Int     number_ATCG                = consensus.number_ATCG
+    Int     assembly_length_unambiguous                = consensus.number_ATCG
     Int     number_Degenerate          = consensus.number_Degenerate
     Int     number_Total               = consensus.number_Total
     Float   pool1_percent              = consensus.pool1_percent
@@ -91,17 +92,14 @@ workflow titan_ont {
     String  assembly_method     = consensus.artic_pipeline_version
 
     File    consensus_stats        = stats_n_coverage.stats
-    File    cov_hist               = stats_n_coverage.cov_hist
-    File    cov_stats              = stats_n_coverage.cov_stats
     File    consensus_flagstat     = stats_n_coverage.flagstat
-    Float   coverage               = stats_n_coverage.coverage
-    Float   depth                  = stats_n_coverage.depth
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   coverage_trim          = stats_n_coverage_primtrim.coverage
-    Float   depth_trim             = stats_n_coverage_primtrim.depth
+    Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
+    Float   mean_assembly_coverage    = stats_n_coverage_primtrim.depth
+    String samtools_version         = stats_n_coverage.samtools_version
 
-    String  pangolin_lineage       = pangolin2.pangolin_lineage
+    String  pango_lineage       = pangolin2.pangolin_lineage
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
     File    pango_lineage_report   = pangolin2.pango_lineage_report
     String  pangolin_version       = pangolin2.version
@@ -121,6 +119,7 @@ workflow titan_ont {
 
     File vadr_alterts_list = vadr.alerts_list
     Int vadr_num_alerts = vadr.num_alerts
+    String vadr_docker = vadr.vadr_docker
 
   }
 }

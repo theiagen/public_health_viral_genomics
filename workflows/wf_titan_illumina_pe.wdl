@@ -105,22 +105,14 @@ workflow titan_illumina_pe {
     String  kraken_version     = read_QC_trim.kraken_version
     String  kraken_report      = read_QC_trim.kraken_report
 
-    File    sorted_bam         = bwa.sorted_bam
-    File    sorted_bai         = bwa.sorted_bai
     String  bwa_version        = bwa.bwa_version
     String  sam_version        = bwa.sam_version
     String assembly_method     = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
 
-    Int     variant_num                = variant_call.variant_num
-    String  ivar_version_variants      = variant_call.ivar_version
-    String  samtools_version_variants  = variant_call.samtools_version
-
-    File    trim_sorted_bam            = primer_trim.trim_sorted_bam
-    File    trim_sorted_bai            = primer_trim.trim_sorted_bai
+    File    aligned_bam            = primer_trim.trim_sorted_bam
+    File    aligned_bai            = primer_trim.trim_sorted_bai
     String  ivar_version_primtrim      = primer_trim.ivar_version
     String  samtools_version_primtrim  = primer_trim.samtools_version
-    Float   primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
-
 
     File    consensus_seq              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
@@ -131,23 +123,17 @@ workflow titan_illumina_pe {
     String  samtools_version_consensus = consensus.samtools_version
 
     File    consensus_stats        = stats_n_coverage.stats
-    File    cov_hist               = stats_n_coverage.cov_hist
-    File    cov_stats              = stats_n_coverage.cov_stats
     File    consensus_flagstat     = stats_n_coverage.flagstat
-    Float   coverage               = stats_n_coverage.coverage
-    Float   depth                  = stats_n_coverage.depth
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   coverage_trim          = stats_n_coverage_primtrim.coverage
-    Float   depth_trim             = stats_n_coverage_primtrim.depth
+    Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
+    Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
     String  samtools_version_stats = stats_n_coverage.samtools_version
 
     String  pangolin_lineage       = pangolin2.pangolin_lineage
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
-    File    pango_lineage_report   = pangolin2.pango_lineage_report
     String  pangolin_version       = pangolin2.version
     String  pangolin_docker       = pangolin2.pangolin_docker
-
 
     File    nextclade_json         = nextclade_one_sample.nextclade_json
     File    auspice_json           = nextclade_one_sample.auspice_json
@@ -157,11 +143,9 @@ workflow titan_illumina_pe {
     String  nextclade_aa_dels      = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version      = nextclade_one_sample.nextclade_version
 
-    Int     amp_fail               = bedtools_cov.amp_fail
-    File    amp_coverage           = bedtools_cov.amp_coverage
-    String  bedtools_version       = bedtools_cov.version
+    File ivar_tsv  = variant_call.sample_variants
+    Int variant_from_ref_tsv = variant_call.ivar_version
+    String vadr_docker = vadr.vadr_docker
 
-    File vadr_alterts_list = vadr.alerts_list
-    Int vadr_num_alerts = vadr.num_alerts
   }
 }
