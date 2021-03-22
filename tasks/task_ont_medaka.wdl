@@ -111,6 +111,7 @@ task consensus {
     File    sorted_bam = "${samplename}.trimmed.rg.sorted.bam"
     File    trim_sorted_bam = "${samplename}.primertrimmed.rg.sorted.bam"
     File    trim_sorted_bai = "${samplename}.primertrimmed.rg.sorted.bam.bai"
+    File    medaka_pass_vcf = "${samplename}.pass.vcf.gz"
     Int     number_N = read_string("NUM_N")
     Int     number_ATCG = read_string("NUM_ACTG")
     Int     number_Degenerate = read_string("NUM_DEGENERATE")

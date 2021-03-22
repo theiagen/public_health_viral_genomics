@@ -1,7 +1,6 @@
 version 1.0
 
 import "../tasks/task_ont_medaka.wdl" as medaka
-import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
@@ -27,11 +26,6 @@ workflow titan_clearlabs {
       filtered_reads = clear_lab_fastq,
       artic_primer_version = artic_primer_version,
       normalise = normalise
-  }
-  call consensus_call.variant_call {
-    input:
-      samplename = samplename,
-      bamfile = consensus.trim_sorted_bam
   }
   call assembly_metrics.stats_n_coverage {
     input:
@@ -80,6 +74,7 @@ workflow titan_clearlabs {
 
     File    aligned_bam         = consensus.trim_sorted_bam
     File    aligned_bai         = consensus.trim_sorted_bai
+    File    medaka_vcf          = consensus.medaka_pass_vcf
     String  artic_version           = consensus.artic_pipeline_version
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
@@ -111,8 +106,6 @@ workflow titan_clearlabs {
     String  nextclade_aa_dels      = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version      = nextclade_one_sample.nextclade_version
 
-    File ivar_tsv  = variant_call.sample_variants
-    Int ivar_variant_version = variant_call.ivar_version
 
     File vadr_alterts_list = vadr.alerts_list
     Int vadr_num_alerts = vadr.num_alerts
