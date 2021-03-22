@@ -22,9 +22,9 @@ workflow mercury_pe_prep {
     String    	iso_continent
     String    	seq_platform
     String    	assembly_method
-    String    	originating_lab
-    String    	origLab_address
-    String      BioProject
+    String    	collecting_lab
+    String    	collecting_lab_address
+    String      bioproject_accession
     String    	submitting_lab
     String    	subLab_address
     String    	Authors
@@ -80,8 +80,8 @@ workflow mercury_pe_prep {
 							iso_county							= iso_county,
 							seq_platform   					= seq_platform,
 							assembly_method	= assembly_method,
-							originating_lab 				= originating_lab,
-							origLab_address  				= origLab_address,
+							originating_lab 				= collecting_lab,
+							origLab_address  				= collecting_lab_address,
 							submitting_lab  				= submitting_lab,
 							subLab_address 					= subLab_address,
 							Authors          				= Authors,
@@ -107,7 +107,7 @@ workflow mercury_pe_prep {
 							iso_host        = iso_host,
 							iso_country     = iso_country,
 							specimen_source = specimen_source,
-							BioProject      = BioProject
+							BioProject      = bioproject_accession
 					}
 				}
 			}
