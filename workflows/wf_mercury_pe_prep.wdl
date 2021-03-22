@@ -115,9 +115,9 @@ workflow mercury_pe_prep {
 	}
 
 	output {
-	    File?     read1_submission   = sra.read1_submission
-	    File?     read2_submission   = sra.read2_submission
-	    File?     SE_read_submission = sra.SE_read_submission
+#	    File?     read1_submission   = sra.read1_submission
+#	    File?     read2_submission   = sra.read2_submission
+#	    File?     SE_read_submission = sra.SE_read_submission
 	    File      deID_assembly      = deidentify.deID_assembly
 	    File?     genbank_assembly   = genbank.genbank_assembly
 	    File?     genbank_metadata   = genbank.genbank_metadata
