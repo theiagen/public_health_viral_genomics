@@ -145,6 +145,9 @@ workflow titan_illumina_pe {
 
     File ivar_tsv  = variant_call.sample_variants
     String ivar_variant_version = variant_call.ivar_version
+
+    File vadr_alterts_list = vadr.alerts_list
+    Int vadr_num_alerts = vadr.num_alerts
     String vadr_docker = vadr.vadr_docker
 
   }
