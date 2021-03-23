@@ -144,7 +144,7 @@ workflow titan_illumina_pe {
     String  nextclade_version      = nextclade_one_sample.nextclade_version
 
     File ivar_tsv  = variant_call.sample_variants
-    Int variant_from_ref_tsv = variant_call.ivar_version
+    String ivar_variant_version = variant_call.ivar_version
     String vadr_docker = vadr.vadr_docker
 
   }
