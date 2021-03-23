@@ -126,7 +126,7 @@ task derived_cols {
         String?       lab_highlight_loc
         Array[File]   table_map=[]
 
-        String        docker="quay.io/broadinstitute/viral-core:2.1.19"
+        String        docker="quay.io/broadinstitute/viral-core:2.1.19-rc2"
     }
     parameter_meta {
         lab_highlight_loc: {
