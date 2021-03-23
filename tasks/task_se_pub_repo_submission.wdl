@@ -232,7 +232,7 @@ task compile {
     echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length." >&2
     exit 1
   elif [ "$assembly_array_len" -ne "$vadr_array_len" ]; then
-    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $vadr_array_len) are of unequal length." >&2
+    echo "Assembly array (length: $assembly_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
     exit 1
   fi
 
