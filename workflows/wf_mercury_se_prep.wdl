@@ -23,7 +23,7 @@ workflow mercury_se_prep {
     String    	seq_platform
     String    	assembly_method
     String    	collecting_lab
-    String    	origLab_address
+    String    	collecting_lab_address
     String      bioproject_accession
     String    	submitting_lab
     String    	subLab_address
@@ -80,7 +80,7 @@ workflow mercury_se_prep {
 					    seq_platform   					= seq_platform,
 					    assembly_method	= assembly_method,
 					    originating_lab 				= collecting_lab,
-					    origLab_address  				= origLab_address,
+					    origLab_address  				= collecting_lab_address,
 					    submitting_lab  				= submitting_lab,
 					    subLab_address 					= subLab_address,
 					    Authors          				= Authors,
