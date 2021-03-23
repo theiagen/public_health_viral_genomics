@@ -107,7 +107,7 @@ workflow titan_clearlabs {
     String  nextclade_version      = nextclade_one_sample.nextclade_version
 
 
-    File vadr_alterts_list = vadr.alerts_list
+    File vadr_alerts_list = vadr.alerts_list
     Int vadr_num_alerts = vadr.num_alerts
     String vadr_docker = vadr.vadr_docker
 
