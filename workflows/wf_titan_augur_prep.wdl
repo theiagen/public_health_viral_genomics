@@ -10,7 +10,7 @@ workflow titan_augur_prep {
 		String    iso_state
 		String    iso_continent
 		String?   iso_county
-		String    pangolin_lineage
+		String    pango_lineage
 
 	}
 
@@ -22,7 +22,7 @@ workflow titan_augur_prep {
 			iso_state = iso_state,
 			iso_continent = iso_continent,
 			iso_county = iso_county,
-			pangolin_lineage = pangolin_lineage
+			pango_lineage = pango_lineage
 	}
 
 	output {
