@@ -116,7 +116,7 @@ workflow titan_illumina_pe {
 
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                   = consensus.number_N
-    Int     number_ATCG                = consensus.number_ATCG
+    Int     assembly_length_unambiguous  = consensus.number_ATCG
     Int     number_Degenerate          = consensus.number_Degenerate
     Int     number_Total               = consensus.number_Total
     String  ivar_version_consensus     = consensus.ivar_version
@@ -130,7 +130,7 @@ workflow titan_illumina_pe {
     Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
     String  samtools_version_stats = stats_n_coverage.samtools_version
 
-    String  pangolin_lineage       = pangolin2.pangolin_lineage
+    String  pango_lineage       = pangolin2.pangolin_lineage
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
     String  pangolin_version       = pangolin2.version
     String  pangolin_docker       = pangolin2.pangolin_docker
