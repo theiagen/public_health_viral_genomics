@@ -96,7 +96,7 @@ workflow titan_ont {
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
     Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
-    Float   mean_assembly_coverage    = stats_n_coverage_primtrim.depth
+    Float   assembly_mean_coverage    = stats_n_coverage_primtrim.depth
     String samtools_version         = stats_n_coverage.samtools_version
 
     String  pango_lineage       = pangolin2.pangolin_lineage
