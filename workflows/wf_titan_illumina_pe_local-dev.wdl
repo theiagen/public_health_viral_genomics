@@ -8,7 +8,6 @@ import "../tasks/task_sample_metrics.wdl" as summary
 workflow nCoV19_pipeline {
   input {
     Array[Pair[Array[String], Pair[File,File]]] inputSamples
-    Array[Array[String]] inputConfig
     File primer_bed
   }
 
