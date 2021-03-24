@@ -95,13 +95,10 @@ task sample_metrics {
     Int       number_ATCG
     Int       number_Degenerate
     Int       number_Total
-    Float     coverage
-    Float     depth
     Float     meanbaseq_trim
     Float     meanmapq_trim
     Float     coverage_trim
     Float     depth_trim
-    Int       amp_fail
     Float?    coverage_threshold = 95.00
     Float?    meanbaseq_threshold = 30.00
     Float?    meanmapq_threshold = 30.00
@@ -126,8 +123,8 @@ task sample_metrics {
   ~{pangolin_lineage},~{pangolin_aLRT},\
   ~{nextclade_clade},~{nextclade_aa_subs},~{nextclade_aa_dels},\
   ~{fastqc_raw_pairs},~{seqy_pairs},~{seqy_percent},\
-  ~{depth},~{depth_trim},~{coverage},~{coverage_trim},\
-  ~{kraken_human},~{kraken_sc2},~{amp_fail},\
+  {depth_trim},~{coverage_trim},\
+  ~{kraken_human},~{kraken_sc2},\
   ~{number_N},~{number_Degenerate},~{number_ATCG},~{number_Total},\
   ~{meanbaseq_trim},~{meanmapq_trim}," + assembly_status
 
@@ -158,12 +155,12 @@ task merge_metrics {
 
   command {
     echo "sample_id,deidentified_id,collection_date,\
-    pangolin_lineage,pangolin_probability,\
+    pango_lineage,pangolin_probability,\
     nextclade_lineage,nextclade_aaSubstitutions,nextclade_aaDeletions,\
     raw_pairs,pairs_after_cleaning,percent_kept_after_cleaning,\
-    depth_before_trimming,depth_after_trimming,coverage_before_trimming,coverage_after_trimming,\
+    assembly_mean_coverage,percent_reference_coverage,\
     %_human_reads,%_SARS-COV-2_reads,num_failed_amplicons,\
-    num_N,num_degenerate,num_ACTG,num_total,\
+    num_N,num_degenerate,assembly_length_unambiguous,num_total,\
     meanbaseq_trim,meanmapq_trim,assembly_status" >> run_results.csv
 
     echo "${sep="END" all_metrics}" >> run_results.csv
