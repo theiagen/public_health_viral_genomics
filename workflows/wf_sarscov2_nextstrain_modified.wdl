@@ -23,6 +23,7 @@ workflow sarscov2_nextstrain {
         File?           ref_fasta
         File?           clades_tsv
         File?           lat_longs_tsv
+        Float?          clock_rate
 
         Int             min_unambig_genome = 27000
     }
@@ -114,7 +115,8 @@ workflow sarscov2_nextstrain {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
             msa_or_vcf  = mafft.aligned_sequences,
-            metadata    = derived_cols.derived_metadata
+            metadata    = derived_cols.derived_metadata,
+            clock_rate  = clock_rate
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
         call nextstrain.ancestral_traits {
