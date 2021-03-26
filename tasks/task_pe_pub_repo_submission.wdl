@@ -136,8 +136,9 @@ task genbank {
     Int       preemptible_tries = 0
   }
 
-  command {
-    year=$(echo ${collection_date} | cut -f 1 -d '-')
+  command <<<
+    year=$(echo ~{collection_date} | cut -f 1 -d '-')
+    isolate=$(echo ~{submission_id} | awk 'BEGIN { FS = "-" } ; {$1=$2=""; print $0}' | sed 's/^ *//g')
 
     # removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
     echo ">${submission_id} [organism=${organism}][isolate=${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year)][host=${iso_host}][country=${iso_country}][collection_date=${collection_date}]" > ${submission_id}.genbank.fa
@@ -145,9 +146,9 @@ task genbank {
 
     echo Sequence_ID,Country,Host,Isolate,Collection Date > ${submission_id}.genbankMeta.csv
 
-    echo "\"${submission_id}\",\"${iso_country}\",\"${iso_host}\", \"${samplename}\",\"${collection_date}\"" >> ${submission_id}.genbankMeta.csv
+    echo "\"${submission_id}\",\"${iso_country}\",\"${iso_host}\", \"$isolate\",\"${collection_date}\"" >> ${submission_id}.genbankMeta.csv
 
-  }
+  >>>
 
   output {
     File     genbank_assembly = "${submission_id}.genbank.fa"
