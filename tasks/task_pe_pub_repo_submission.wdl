@@ -129,7 +129,7 @@ task genbank {
     String    specimen_source
     String    BioProject
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "theiagen/utility:1.0"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10
@@ -143,9 +143,9 @@ task genbank {
     echo ">${submission_id} [organism=${organism}][isolate=${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year)][host=${iso_host}][country=${iso_country}][collection_date=${collection_date}]" > ${submission_id}.genbank.fa
     grep -v ">" ${sequence} | sed 's/^N*N//g' | fold -w 75 >> ${submission_id}.genbank.fa
 
-    echo Sequence_ID,Organism,collection-date,country,host,isolate,isolation-source,BioProject,notes > ${submission_id}.genbankMeta.csv
+    echo Sequence_ID,Country,Host,Isolate,Collection Date > ${submission_id}.genbankMeta.csv
 
-    echo "\"${submission_id}\",\"Severe acute respiratory syndrome coronavirus 2\",\"${collection_date}\",\"${iso_country}\",\"${iso_host}\",\"${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year\",\"${specimen_source}\",\"${BioProject}\"," >> ${submission_id}.genbankMeta.csv
+    echo "\"${submission_id}\",\"${iso_country}\",\"${iso_host}\", \"${samplename}\",\"${collection_date}\"" >> ${submission_id}.genbankMeta.csv
 
   }
 
