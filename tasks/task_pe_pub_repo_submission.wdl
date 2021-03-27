@@ -146,7 +146,7 @@ task genbank {
 
     echo Sequence_ID,Country,Host,Isolate,Collection Date > ~{submission_id}.genbankMeta.csv
 
-    echo "\"~{submission_id}\",\"~{iso_country}\",\"~{iso_host}\", \"${isolate}\",\"~{collection_date}\"" >> ~{submission_id}.genbankMeta.csv
+    echo "\"~{submission_id}\",\"~{iso_country}\",\"~{iso_host}\",\"${isolate}\",\"~{collection_date}\"" >> ~{submission_id}.genbankMeta.csv
 
   >>>
 
