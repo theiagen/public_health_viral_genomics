@@ -141,18 +141,18 @@ task genbank {
     isolate=$(echo ~{submission_id} | awk 'BEGIN { FS = "-" } ; {$1=$2=""; print $0}' | sed 's/^ *//g')
 
     # removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">${submission_id} [organism=${organism}][isolate=${iso_org}/${iso_host}/${iso_country}/${submission_id}/$year)][host=${iso_host}][country=${iso_country}][collection_date=${collection_date}]" > ${submission_id}.genbank.fa
-    grep -v ">" ${sequence} | sed 's/^N*N//g' | fold -w 75 >> ${submission_id}.genbank.fa
+    echo ">~{submission_id} [organism=~{organism}][isolate=~{iso_org}/~{iso_host}/~{iso_country}/~{submission_id}/~year)][host=~{iso_host}][country=~{iso_country}][collection_date=~{collection_date}]" > ~{submission_id}.genbank.fa
+    grep -v ">" ~{sequence} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}.genbank.fa
 
-    echo Sequence_ID,Country,Host,Isolate,Collection Date > ${submission_id}.genbankMeta.csv
+    echo Sequence_ID,Country,Host,Isolate,Collection Date > ~{submission_id}.genbankMeta.csv
 
-    echo "\"${submission_id}\",\"${iso_country}\",\"${iso_host}\", \"$isolate\",\"${collection_date}\"" >> ${submission_id}.genbankMeta.csv
+    echo "\"~{submission_id}\",\"~{iso_country}\",\"~{iso_host}\", \"~isolate\",\"~{collection_date}\"" >> ~{submission_id}.genbankMeta.csv
 
   >>>
 
   output {
-    File     genbank_assembly = "${submission_id}.genbank.fa"
-    File     genbank_metadata = "${submission_id}.genbankMeta.csv"
+    File     genbank_assembly = "~{submission_id}.genbank.fa"
+    File     genbank_metadata = "~{submission_id}.genbankMeta.csv"
   }
 
   runtime {
