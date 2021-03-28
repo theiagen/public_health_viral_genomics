@@ -88,7 +88,7 @@ task pangolin {
   runtime {
     docker:       "staphb/pangolin:1.1.14"
     memory:       "8 GB"
-    cpu:          40
+    cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
   }
@@ -134,7 +134,7 @@ task pangolin2 {
   runtime {
     docker:     "~{docker}"
     memory:       "8 GB"
-    cpu:          40
+    cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
   }
