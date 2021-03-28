@@ -85,6 +85,9 @@ task consensus {
     if [ -z "$num_ACTG" ] ; then num_ACTG="0" ; fi
     echo $num_ACTG | tee NUM_ACTG
 
+    # calculate percent coverage (Wu Han-1 genome length: 29903bp)
+    python -c "print ( round( ($num_ACTG / 29903 ) * 100, 2 ) )" | tee PERCENT_REF_COVERAGE
+
     num_degenerate=$( grep -v ">" ${samplename}.consensus.fasta | grep -o -E "B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|U|V|W|X|Y|Z" | wc -l )
     if [ -z "$num_degenerate" ] ; then num_degenerate="0" ; fi
     echo $num_degenerate | tee NUM_DEGENERATE
@@ -118,6 +121,7 @@ task consensus {
     Int     number_Total = read_string("NUM_TOTAL")
     Float     pool1_percent = read_string("POOL1_PERCENT")
     Float     pool2_percent = read_string("POOL2_PERCENT")
+    Float     percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
     String  artic_pipeline_version = read_string("VERSION")
   }
 

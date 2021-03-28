@@ -83,13 +83,13 @@ workflow titan_clearlabs {
     Int     number_Total               = consensus.number_Total
     Float   pool1_percent              = consensus.pool1_percent
     Float   pool2_percent              = consensus.pool2_percent
+    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  assembly_method     = consensus.artic_pipeline_version
 
     File    consensus_stats        = stats_n_coverage.stats
     File    consensus_flagstat     = stats_n_coverage.flagstat
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
     Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
     String samtools_version         = stats_n_coverage.samtools_version
 
