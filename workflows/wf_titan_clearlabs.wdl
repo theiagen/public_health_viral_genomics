@@ -96,6 +96,7 @@ workflow titan_clearlabs {
     String  pango_lineage       = pangolin2.pangolin_lineage
     Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
     String  pangolin_version       = pangolin2.version
+    File    pango_lineage_report   = pangolin2.pango_lineage_report
     String  pangolin_docker       = pangolin2.pangolin_docker
 
     File    nextclade_json         = nextclade_one_sample.nextclade_json
