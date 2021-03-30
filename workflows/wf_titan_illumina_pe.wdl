@@ -111,6 +111,7 @@ workflow titan_illumina_pe {
 
     File    aligned_bam            = primer_trim.trim_sorted_bam
     File    aligned_bai            = primer_trim.trim_sorted_bai
+    Float  primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String  ivar_version_primtrim      = primer_trim.ivar_version
     String  samtools_version_primtrim  = primer_trim.samtools_version
 
@@ -119,6 +120,7 @@ workflow titan_illumina_pe {
     Int     assembly_length_unambiguous  = consensus.number_ATCG
     Int     number_Degenerate          = consensus.number_Degenerate
     Int     number_Total               = consensus.number_Total
+    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  ivar_version_consensus     = consensus.ivar_version
     String  samtools_version_consensus = consensus.samtools_version
 
@@ -126,7 +128,6 @@ workflow titan_illumina_pe {
     File    consensus_flagstat     = stats_n_coverage.flagstat
     Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   percent_reference_coverage          = stats_n_coverage_primtrim.coverage
     Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
     String  samtools_version_stats = stats_n_coverage.samtools_version
 
