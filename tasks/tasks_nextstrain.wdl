@@ -126,7 +126,7 @@ task derived_cols {
         String?       lab_highlight_loc
         Array[File]   table_map=[]
 
-        String        docker="quay.io/broadinstitute/viral-core:2.1.19-rc2"
+        String        docker="quay.io/broadinstitute/viral-core:2.1.19"
     }
     parameter_meta {
         lab_highlight_loc: {
@@ -541,7 +541,7 @@ task filter_sequences_by_length {
         File    sequences_fasta
         Int     min_non_N = 1
 
-        String  docker="quay.io/broadinstitute/viral-core:2.1.19-rc2"
+        String  docker="quay.io/broadinstitute/viral-core:2.1.19"
     }
     parameter_meta {
         sequences_fasta: {
@@ -1449,7 +1449,7 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpango_lineage" > augur_metadata.tsv
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > augur_metadata.tsv
 
     # Set strain name by assembly header
     assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//' |  sed 's/>//g' )
