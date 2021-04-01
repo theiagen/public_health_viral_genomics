@@ -6,14 +6,14 @@ task seqyclean {
     File        read2
     String      samplename
     String?     adapters = "/Adapters_plus_PhiX_174.fasta"
-    Int?        seqyclean_minlen = 25
+    Int?        seqyclean_minlen = 15
     String?     seqyclean_qual = "20 20"
     Boolean?    compress = true
     Boolean?    seqyclean_dup = false
     Boolean?    seqyclean_no_adapter_trim = false
     Int?        cpus = 16
   }
-  
+
   command {
     # date and version control
     date | tee DATE
