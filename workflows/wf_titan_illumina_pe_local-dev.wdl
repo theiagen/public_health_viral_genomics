@@ -31,8 +31,6 @@ workflow nCoV19_pipeline {
         nextclade_aa_subs = titan_illumina_pe.nextclade_aa_subs,
         nextclade_aa_dels = titan_illumina_pe.nextclade_aa_dels,
         fastqc_raw_pairs  = titan_illumina_pe.fastqc_raw_pairs,
-        seqy_pairs        = titan_illumina_pe.seqy_pairs,
-        seqy_percent      = titan_illumina_pe.seqy_percent,
         kraken_human      = titan_illumina_pe.kraken_human,
         kraken_sc2        = titan_illumina_pe.kraken_sc2,
         number_N          = titan_illumina_pe.number_N,

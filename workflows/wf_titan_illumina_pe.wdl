@@ -93,12 +93,11 @@ workflow titan_illumina_pe {
     Int     fastqc_raw_pairs   = read_QC_trim.fastqc_raw_pairs
     String  fastqc_version     = read_QC_trim.fastqc_version
 
-    Int     seqy_pairs         = read_QC_trim.seqy_pairs
-    Float   seqy_percent       = read_QC_trim.seqy_percent
     Int     fastqc_clean1      = read_QC_trim.fastqc_clean1
     Int     fastqc_clean2      = read_QC_trim.fastqc_clean2
     Int     fastqc_clean_pairs = read_QC_trim.fastqc_clean_pairs
-    String  seqyclean_version  = read_QC_trim.seqyclean_version
+    String  trimmomatic_version  = read_QC_trim.trimmomatic_version
+    String  bbduk_docker         = read_QC_trim.bbduk_docker
 
     Float   kraken_human       = read_QC_trim.kraken_human
     Float   kraken_sc2         = read_QC_trim.kraken_sc2
