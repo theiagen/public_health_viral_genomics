@@ -41,12 +41,6 @@ workflow titan_augur_run {
         cluster_name = build_name,
         alignment = sarscov2_nextstrain.mafft_alignment
     }
-    call vis.cluster_render {
-      input:
-        cluster_name = build_name,
-        snp_matrix = snp_dists.snp_matrix,
-        ml_tree = sarscov2_nextstrain.ml_tree,
-    }
 
     output {
       File  combined_assemblies   = sarscov2_nextstrain.combined_assemblies
