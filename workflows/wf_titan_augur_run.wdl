@@ -52,14 +52,11 @@ workflow titan_augur_run {
       File  combined_assemblies   = sarscov2_nextstrain.combined_assemblies
       File  MAFFT_alignment    = sarscov2_nextstrain.mafft_alignment
       File  unmasked_snps         = sarscov2_nextstrain.unmasked_snps
-
       File  metadata_merged       = sarscov2_nextstrain.metadata_merged
       File  keep_list             = sarscov2_nextstrain.keep_list
       File  time_tree             = sarscov2_nextstrain.time_tree
-
       File  auspice_input_json    = sarscov2_nextstrain.auspice_input_json
-      File?      analysis_doc = cluster_render.analysis_doc
-      File?      snp_list     = cluster_render.snp_list
-      File?      snp_matrix   = snp_dists.snp_matrix
+
+      File  snp_matrix            = snp_dists.snp_matrix
     }
 }
