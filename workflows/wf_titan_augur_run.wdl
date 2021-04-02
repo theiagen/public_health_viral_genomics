@@ -58,8 +58,8 @@ workflow titan_augur_run {
       File  time_tree             = sarscov2_nextstrain.time_tree
 
       File  auspice_input_json    = sarscov2_nextstrain.auspice_input_json
-      File      analysis_doc = cluster_render.analysis_doc
-      File      snp_list     = cluster_render.snp_list
-      File      snp_matrix   = snp_dists.snp_matrix
+      File?      analysis_doc = cluster_render.analysis_doc
+      File?      snp_list     = cluster_render.snp_list
+      File?      snp_matrix   = snp_dists.snp_matrix
     }
 }
