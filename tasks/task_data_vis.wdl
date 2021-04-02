@@ -37,18 +37,20 @@ task cluster_render {
     #render(report, output_dir=location, output_file='report.pdf', knit_root_dir=location, intermediates_dir=location)
     render(report, output_file='report.pdf')
     CODE
-    cp report.pdf ${cluster_name}_cluster_analysis.pdf
-    cp SNP_heatmap.png ${cluster_name}_SNP_heatmap.png
-    cp pairwise_snp_list.csv ${cluster_name}_pairwise_snp_list.csv
+    if [ -f "report.pdf" ]; then
+      cp report.pdf ${cluster_name}_cluster_analysis.pdf
+      cp SNP_heatmap.png ${cluster_name}_SNP_heatmap.png
+      cp pairwise_snp_list.csv ${cluster_name}_pairwise_snp_list.csv
+    fi
 }
 
   output {
     String     date = read_string("DATE")
     String     rscript_version = read_string("RSCRIPT_VERSION")
     String     r_version = read_string("R_VERSION")
-    File       analysis_doc = "${cluster_name}_cluster_analysis.pdf"
-    File       snp_heatmap = "${cluster_name}_SNP_heatmap.png"
-    File       snp_list = "${cluster_name}_pairwise_snp_list.csv"
+    File?       analysis_doc = "${cluster_name}_cluster_analysis.pdf"
+    File?       snp_heatmap = "${cluster_name}_SNP_heatmap.png"
+    File?       snp_list = "${cluster_name}_pairwise_snp_list.csv"
   }
 
   runtime {
