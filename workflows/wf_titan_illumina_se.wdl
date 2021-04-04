@@ -9,7 +9,7 @@ import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 
 
-workflow titan_illumina_pe {
+workflow titan_illumina_se {
   meta {
     description: "Reference-based consensus calling for viral amplicon sequencing data"
   }
