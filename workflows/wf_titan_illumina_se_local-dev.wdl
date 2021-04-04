@@ -6,17 +6,17 @@ import "../tasks/task_sample_metrics.wdl" as summary
 
 
 workflow nCoV19_pipeline {
-  input {
-    Array[Pair[Array[String], Pair[File,File]]] inputSamples
-    File primer_bed
-  }
+input {
+  Array[Pair[Array[String], File]] inputSamples
+  File primer_bed
+}
 
   scatter (sample in inputSamples) {
     call assembly.titan_illumina_pe {
       input:
         samplename = sample.left[0],
         primer_bed = primer_bed,
-        read1_raw  = sample.right.left
+        read1_raw  = sample.right
     }
 
     call summary.sample_metrics {
