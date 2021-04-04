@@ -76,7 +76,7 @@ task fastqc_se {
   output {
     File       fastqc_html = "${read1_name}_fastqc.html"
     File       fastqc_zip = "${read1_name}_fastqc.zip"
-    Int        number_reads = read_string("READ_SEQS")
+    Int        number_reads = read_string("READ1_SEQS")
     String     version = read_string("VERSION")
     String     pipeline_date = read_string("DATE")
   }
