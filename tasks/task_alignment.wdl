@@ -1,10 +1,10 @@
-version 1.0 
+version 1.0
 
 task bwa {
 
   input {
     File        read1
-    File        read2
+    File?        read2
     String      samplename
     String?     reference_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
     Int?        cpus=6
@@ -21,7 +21,7 @@ task bwa {
     -t ${cpus} \
     ${reference_genome} \
     ${read1} ${read2} |\
-      samtools sort | samtools view -F 4 -o ${samplename}.sorted.bam 
+    samtools sort | samtools view -F 4 -o ${samplename}.sorted.bam
 
     # index BAMs
     samtools index ${samplename}.sorted.bam
@@ -39,17 +39,17 @@ task bwa {
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
   }
 }
 
 task mafft {
-  
+
   input {
     Array[File]   genomes
     String?       cpus = 16
   }
-  
+
   command{
     # date and version control
     date | tee DATE
@@ -71,7 +71,6 @@ task mafft {
     memory:       "32 GB"
     cpu:          16
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
   }
 }
-
