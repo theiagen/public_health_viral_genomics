@@ -40,9 +40,7 @@ workflow mercury_pe_prep {
 		String 		iso_county=""
 
 	  # Optional inputs/user-defined thresholds for generating submission files
-		Float		coverage = 100.00
-		Float		coverage_threshold = 85.00
-		Int 		number_N_threshold = 15000
+		Int 		number_N_threshold = 5000
 		Int 		number_Total_threshold = 25000
 		Int 		number_ATCG_gisaid = 25000
 		Int 		number_ATCG_genbank = 25000
@@ -62,57 +60,56 @@ workflow mercury_pe_prep {
 			sequence      = sequence
 	}
 
-	if (coverage >= coverage_threshold) {
-		if (deidentify.number_N <= number_N_threshold) {
-			if (deidentify.number_Total >= number_Total_threshold) {
-				if (deidentify.number_ATCG >= number_ATCG_gisaid) {
-					call submission.gisaid {
-						input:
-							samplename      				= samplename,
-							submission_id   				= submission_id,
-							collection_date 				= collection_date,
-							sequence        				= sequence,
-							iso_host         				= iso_host,
-							iso_country 				    = iso_country,
-							gisaid_submitter 				= gisaid_submitter,
-							iso_state        				= iso_state,
-							iso_continent 					= iso_continent,
-							iso_county							= iso_county,
-							seq_platform   					= seq_platform,
-							assembly_method	= assembly_method,
-							originating_lab 				= collecting_lab,
-							origLab_address  				= collecting_lab_address,
-							submitting_lab  				= submitting_lab,
-							subLab_address 					= subLab_address,
-							Authors          				= Authors,
+	if (deidentify.number_N <= number_N_threshold) {
+		if (deidentify.number_Total >= number_Total_threshold) {
+			if (deidentify.number_ATCG >= number_ATCG_gisaid) {
+				call submission.gisaid {
+					input:
+						samplename      				= samplename,
+						submission_id   				= submission_id,
+						collection_date 				= collection_date,
+						sequence        				= sequence,
+						iso_host         				= iso_host,
+						iso_country 				    = iso_country,
+						gisaid_submitter 				= gisaid_submitter,
+						iso_state        				= iso_state,
+						iso_continent 					= iso_continent,
+						iso_county							= iso_county,
+						seq_platform   					= seq_platform,
+						assembly_method	= assembly_method,
+						originating_lab 				= collecting_lab,
+						origLab_address  				= collecting_lab_address,
+						submitting_lab  				= submitting_lab,
+						subLab_address 					= subLab_address,
+						Authors          				= Authors,
 
-							passage_details = passage_details,
-							gender = gender,
-							patient_age = patient_age,
-							patient_status = patient_status,
-							specimen_source = specimen_source,
-							outbreak = outbreak,
-							last_vaccinated = last_vaccinated,
-							treatment = treatment
+						passage_details = passage_details,
+						gender = gender,
+						patient_age = patient_age,
+						patient_status = patient_status,
+						specimen_source = specimen_source,
+						outbreak = outbreak,
+						last_vaccinated = last_vaccinated,
+						treatment = treatment
 
-					}
-					call submission.genbank {
-						input:
-							samplename      = samplename,
-							submission_id   = submission_id,
-							collection_date = collection_date,
-							sequence        = sequence,
-							organism        = organism,
-							iso_org	        = iso_org,
-							iso_host        = iso_host,
-							iso_country     = iso_country,
-							specimen_source = specimen_source,
-							BioProject      = bioproject_accession
-					}
+				}
+				call submission.genbank {
+					input:
+						samplename      = samplename,
+						submission_id   = submission_id,
+						collection_date = collection_date,
+						sequence        = sequence,
+						organism        = organism,
+						iso_org	        = iso_org,
+						iso_host        = iso_host,
+						iso_country     = iso_country,
+						specimen_source = specimen_source,
+						BioProject      = bioproject_accession
 				}
 			}
 		}
 	}
+
 
 	output {
 #	    File?     read1_submission   = sra.read1_submission
