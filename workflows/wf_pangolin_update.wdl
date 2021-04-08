@@ -5,7 +5,7 @@ import "../tasks/task_taxonID.wdl" as taxon_ID
 workflow pangolin_update {
 	input {
 		String    samplename
-		String 		assembly
+		File 		assembly
 		String    updated_pangolin_docker
 	}
 
