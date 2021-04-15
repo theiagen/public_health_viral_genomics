@@ -790,23 +790,29 @@ task vadr {
   input {
     File   genome_fasta
     String samplename
-    String vadr_opts="--noseqnamemax -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf"
+    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --lowsim5term 2 --lowsim3term 2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 
-    String  docker="staphb/vadr:1.1.3"
+    String  docker="staphb/vadr:1.2"
+    Int minlen=50
+    Int maxlen=30000
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
     set -e
 
-    # find available RAM
-    RAM_MB=$(free -m | head -2 | tail -1 | awk '{print $2}')
+    # remove terminal ambiguous nucleotides
+    /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
+      "~{genome_fasta}" \
+      --minlen ~{minlen} \
+      --maxlen ~{maxlen} \
+      > "~{out_base}_trimmed.fasta"
 
     # run VADR
     v-annotate.pl \
       ~{vadr_opts} \
-      --mxsize $RAM_MB \
-      "~{genome_fasta}" \
+      "~{out_base}_trimmed.fasta" \
       "~{out_base}"
+
 
     # package everything for output
     tar -C "~{out_base}" -czvf "~{out_base}.vadr.tar.gz" .
@@ -834,7 +840,7 @@ task vadr {
   }
   runtime {
     docker: "~{docker}"
-    memory: "64 GB"
+    memory: "2 GB"
     cpu: 8
     dx_instance_type: "mem3_ssd1_v2_x8"
   }
