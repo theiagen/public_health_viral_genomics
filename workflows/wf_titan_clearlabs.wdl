@@ -5,6 +5,7 @@ import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
+import "../tasks/task_read_clean.wdl" as read_clean
 
 workflow titan_clearlabs {
   meta {
@@ -20,10 +21,16 @@ workflow titan_clearlabs {
     Int?  normalise=20000
 
   }
+
+  call read_clean.ncbi_scrub {
+    input:
+      samplename = samplename,
+      read1 = clear_lab_fastq
+  }
   call medaka.consensus {
     input:
       samplename = samplename,
-      filtered_reads = clear_lab_fastq,
+      filtered_reads = ncbi_scrub.read1_dehosted,
       artic_primer_version = artic_primer_version,
       normalise = normalise
   }
@@ -43,10 +50,15 @@ workflow titan_clearlabs {
       fasta = consensus.consensus_seq,
       docker = pangolin_docker_image
   }
-  call taxon_ID.kraken2 {
+  call taxon_ID.kraken2 as kraken2_raw {
     input:
       samplename = samplename,
       read1 = clear_lab_fastq
+  }
+  call taxon_ID.kraken2 as kraken2_dehosted {
+    input:
+      samplename = samplename,
+      read1 = ncbi_scrub.read1_dehosted
   }
   call taxon_ID.nextclade_one_sample {
     input:
@@ -67,10 +79,16 @@ workflow titan_clearlabs {
 
     String  seq_platform = seq_method
 
-    Float   kraken_human       = kraken2.percent_human
-    Float   kraken_sc2         = kraken2.percent_sc2
-    String  kraken_version     = kraken2.version
-    String  kraken_report      = kraken2.kraken_report
+    File dehosted_reads = ncbi_scrub.read1_dehosted
+
+    String  kraken_version     = kraken2_raw.version
+    Float   kraken_human_raw       = kraken2_raw.percent_human
+    Float   kraken_sc2_raw         = kraken2_raw.percent_sc2
+    String  kraken_report_raw      = kraken2_raw.kraken_report
+    Float   kraken_human_dehosted = kraken2_dehosted.percent_human
+    Float   kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
+    String  kraken_report_dehosted = kraken2_dehosted.kraken_report
+
 
     File    aligned_bam         = consensus.trim_sorted_bam
     File    aligned_bai         = consensus.trim_sorted_bai
