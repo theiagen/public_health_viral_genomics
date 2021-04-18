@@ -810,7 +810,7 @@ task vadr {
 
     # run VADR
     v-annotate.pl \
-      --split ~{cpu} \
+      --split --cpu ~{cpu} \
       ~{vadr_opts} \
       "~{out_base}_trimmed.fasta" \
       "~{out_base}"
@@ -842,7 +842,7 @@ task vadr {
   }
   runtime {
     docker: "~{docker}"
-    memory: "2 GB"
+    memory: "16 GB"
     cpu: "~{cpu}"
     dx_instance_type: "mem3_ssd1_v2_x8"
   }
