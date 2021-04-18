@@ -95,3 +95,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_pangolin_update.wdl
    testParameterFiles:
     - empty.json
+ - name: VADR_Update
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_vadr_update.wdl
+   testParameterFiles:
+    - empty.json
