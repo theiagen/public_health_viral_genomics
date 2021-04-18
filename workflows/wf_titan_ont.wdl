@@ -25,15 +25,15 @@ workflow titan_ont {
     input:
       read1 = demultiplexed_reads
   }
+  call medaka.read_filtering {
+    input:
+      demultiplexed_reads = demultiplexed_reads,
+      samplename = samplename
+  }
   call read_clean.ncbi_scrub_se {
     input:
       samplename = samplename,
       read1 = demultiplexed_reads
-  }
-  call medaka.read_filtering {
-    input:
-      demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
-      samplename = samplename
   }
   call medaka.consensus {
     input:
