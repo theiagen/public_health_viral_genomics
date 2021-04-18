@@ -795,6 +795,7 @@ task vadr {
     String  docker="staphb/vadr:1.2"
     Int minlen=50
     Int maxlen=30000
+    Int cpu=8
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
@@ -841,7 +842,7 @@ task vadr {
   runtime {
     docker: "~{docker}"
     memory: "2 GB"
-    cpu: 8
+    cpu: "~{cpu}"
     dx_instance_type: "mem3_ssd1_v2_x8"
   }
 }
