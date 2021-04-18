@@ -1,2 +1,4 @@
 workflows/wf_test.wdl
+workflows/wf_test_se.wdl
 tasks/task_test.wdl
+tasks/task_test_se.qdl
