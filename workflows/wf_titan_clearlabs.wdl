@@ -13,16 +13,14 @@ workflow titan_clearlabs {
   }
 
   input {
-    String  samplename
-    String  seq_method="ONT via Clear Labs WGS"
+    String samplename
+    File clear_lab_fastq
+    String seq_method="ONT via Clear Labs WGS"
     String? artic_primer_version="V3"
-    String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
-    File  clear_lab_fastq
-    Int?  normalise=20000
-
+    String pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
+    Int? normalise=20000
   }
-
-  call read_clean.ncbi_scrub {
+  call read_clean.ncbi_scrub_se {
     input:
       samplename = samplename,
       read1 = clear_lab_fastq
@@ -30,7 +28,7 @@ workflow titan_clearlabs {
   call medaka.consensus {
     input:
       samplename = samplename,
-      filtered_reads = ncbi_scrub.read1_dehosted,
+      filtered_reads = ncbi_scrub_se.read1_dehosted,
       artic_primer_version = artic_primer_version,
       normalise = normalise
   }
@@ -58,7 +56,7 @@ workflow titan_clearlabs {
   call taxon_ID.kraken2 as kraken2_dehosted {
     input:
       samplename = samplename,
-      read1 = ncbi_scrub.read1_dehosted
+      read1 = ncbi_scrub_se.read1_dehosted
   }
   call taxon_ID.nextclade_one_sample {
     input:
@@ -74,61 +72,57 @@ workflow titan_clearlabs {
       genome_fasta = consensus.consensus_seq,
       samplename = samplename
   }
-
   output {
+    String	seq_platform	=	seq_method
 
-    String  seq_platform = seq_method
+  	File	dehosted_reads	=	ncbi_scrub_se.read1_dehosted
 
-    File dehosted_reads = ncbi_scrub.read1_dehosted
-
-    String  kraken_version     = kraken2_raw.version
-    Float   kraken_human_raw       = kraken2_raw.percent_human
-    Float   kraken_sc2_raw         = kraken2_raw.percent_sc2
-    String  kraken_report_raw      = kraken2_raw.kraken_report
-    Float   kraken_human_dehosted = kraken2_dehosted.percent_human
-    Float   kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
-    String  kraken_report_dehosted = kraken2_dehosted.kraken_report
-
-
-    File    aligned_bam         = consensus.trim_sorted_bam
-    File    aligned_bai         = consensus.trim_sorted_bai
-    File    variants_from_ref_vcf          = consensus.medaka_pass_vcf
-    String  artic_version           = consensus.artic_pipeline_version
-    File    assembly_fasta              = consensus.consensus_seq
-    Int     number_N                   = consensus.number_N
-    Int     assembly_length_unambiguous                = consensus.number_ATCG
-    Int     number_Degenerate          = consensus.number_Degenerate
-    Int     number_Total               = consensus.number_Total
-    Float   pool1_percent              = consensus.pool1_percent
-    Float   pool2_percent              = consensus.pool2_percent
-    Float   percent_reference_coverage  = consensus.percent_reference_coverage
-    String  assembly_method     = consensus.artic_pipeline_version
-
-    File    consensus_stats        = stats_n_coverage.stats
-    File    consensus_flagstat     = stats_n_coverage.flagstat
-    Float   meanbaseq_trim         = stats_n_coverage_primtrim.meanbaseq
-    Float   meanmapq_trim          = stats_n_coverage_primtrim.meanmapq
-    Float   assembly_mean_coverage             = stats_n_coverage_primtrim.depth
-    String samtools_version         = stats_n_coverage.samtools_version
-
-    String  pango_lineage       = pangolin2.pangolin_lineage
-    Float   pangolin_aLRT          = pangolin2.pangolin_aLRT
-    String  pangolin_version       = pangolin2.version
-    File    pango_lineage_report   = pangolin2.pango_lineage_report
-    String  pangolin_docker       = pangolin2.pangolin_docker
-
-    File    nextclade_json         = nextclade_one_sample.nextclade_json
-    File    auspice_json           = nextclade_one_sample.auspice_json
-    File    nextclade_tsv          = nextclade_one_sample.nextclade_tsv
-    String  nextclade_clade        = nextclade_one_sample.nextclade_clade
-    String  nextclade_aa_subs      = nextclade_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels      = nextclade_one_sample.nextclade_aa_dels
-    String  nextclade_version      = nextclade_one_sample.nextclade_version
+  	String	kraken_version	=	kraken2_raw.version
+  	Float	kraken_human	=	kraken2_raw.percent_human
+  	Float	kraken_sc2	=	kraken2_raw.percent_sc2
+  	String	kraken_report	=	kraken2_raw.kraken_report
+  	Float	kraken_human_dehosted	=	kraken2_dehosted.percent_human
+  	Float	kraken_sc2_dehosted	=	kraken2_dehosted.percent_sc2
+  	String	kraken_report_dehosted	=	kraken2_dehosted.kraken_report
 
 
-    File vadr_alerts_list = vadr.alerts_list
-    Int vadr_num_alerts = vadr.num_alerts
-    String vadr_docker = vadr.vadr_docker
+  	File	aligned_bam	=	consensus.trim_sorted_bam
+  	File	aligned_bai	=	consensus.trim_sorted_bai
+  	File	variants_from_ref_vcf	=	consensus.medaka_pass_vcf
+  	String	artic_version	=	consensus.artic_pipeline_version
+  	File	assembly_fasta	=	consensus.consensus_seq
+  	Int	number_N	=	consensus.number_N
+  	Int	assembly_length_unambiguous	=	consensus.number_ATCG
+  	Int	number_Degenerate	=	consensus.number_Degenerate
+  	Int	number_Total	=	consensus.number_Total
+  	Float	pool1_percent	=	consensus.pool1_percent
+  	Float	pool2_percent	=	consensus.pool2_percent
+  	Float	percent_reference_coverage	=	consensus.percent_reference_coverage
+  	String	assembly_method	=	consensus.artic_pipeline_version
 
+  	File	consensus_stats	=	stats_n_coverage.stats
+  	File	consensus_flagstat	=	stats_n_coverage.flagstat
+  	Float	meanbaseq_trim	=	stats_n_coverage_primtrim.meanbaseq
+  	Float	meanmapq_trim	=	stats_n_coverage_primtrim.meanmapq
+  	Float	assembly_mean_coverage	=	stats_n_coverage_primtrim.depth
+  	String	samtools_version	=	stats_n_coverage.samtools_version
+
+  	String	pango_lineage	=	pangolin2.pangolin_lineage
+  	Float	pangolin_aLRT	=	pangolin2.pangolin_aLRT
+  	String	pangolin_version	=	pangolin2.version
+  	File	pango_lineage_report	=	pangolin2.pango_lineage_report
+  	String	pangolin_docker	=	pangolin2.pangolin_docker
+
+  	File	nextclade_json	=	nextclade_one_sample.nextclade_json
+  	File	auspice_json	=	nextclade_one_sample.auspice_json
+  	File	nextclade_tsv	=	nextclade_one_sample.nextclade_tsv
+  	String	nextclade_clade	=	nextclade_one_sample.nextclade_clade
+  	String	nextclade_aa_subs	=	nextclade_one_sample.nextclade_aa_subs
+  	String	nextclade_aa_dels	=	nextclade_one_sample.nextclade_aa_dels
+  	String	nextclade_version	=	nextclade_one_sample.nextclade_version
+
+  	File	vadr_alerts_list	=	vadr.alerts_list
+  	Int	vadr_num_alerts	=	vadr.num_alerts
+  	String	vadr_docker	=	vadr.vadr_docker
   }
 }
