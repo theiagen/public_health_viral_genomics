@@ -810,6 +810,7 @@ task vadr {
 
     # run VADR
     v-annotate.pl \
+      --split ~{cpu} \
       ~{vadr_opts} \
       "~{out_base}_trimmed.fasta" \
       "~{out_base}"
