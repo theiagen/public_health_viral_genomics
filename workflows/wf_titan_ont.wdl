@@ -6,7 +6,7 @@ import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
-
+import "../tasks/task_qc_utils.wdl" as qc_utils
 
 workflow titan_ont {
   meta {
@@ -15,12 +15,15 @@ workflow titan_ont {
 
   input {
     String  samplename
-    String  seq_method="ONT"
-    String? artic_primer_version="V3"
+    String  seq_method  = "ONT"
+    String? artic_primer_version  = "V3"
     File  demultiplexed_reads
-    Int?  normalise=200
+    Int?  normalise = 200
     String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
-
+  }
+  call qc_utils.fastqc_se {
+    input:
+      read1 = demultiplexed_reads
   }
   call read_clean.ncbi_scrub_se {
     input:
@@ -85,6 +88,8 @@ workflow titan_ont {
     String	seq_platform	=	seq_method
 
     File	dehosted_reads	=	ncbi_scrub_se.read1_dehosted
+
+    Int fastqc_number_reads = fastqc_se.number_reads
 
     String	kraken_version	=	kraken2_raw.version
     Float	kraken_human	=	kraken2_raw.percent_human
