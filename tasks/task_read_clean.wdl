@@ -3,13 +3,13 @@ version 1.0
 task ncbi_scrub {
   input {
     File        read1
-    File?        read2
+    File        read2
     String      samplename
     String      docker = "us.gcr.io/ncbi-research-sra-dataload/test-scrub:latest"
 
   }
   String r1_filename = basename(read1)
-  String? r2_filename = basename(read2)
+  String r2_filename = basename(read2)
 
   command <<<
     # date and version control
@@ -33,32 +33,75 @@ task ncbi_scrub {
     # gzip dehosted reads
     gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
 
-    # do the same on read 2 if provided
-    if ! [ -z ~{read2} ]
+    # do the same on read
+    # unzip file if necessary
+    if [[ "~{read2}" == *.gz ]]
     then
-
-      # unzip file if necessary
-      if [[ "~{read2}" == *.gz ]]
-      then
-        gunzip -c ~{read2} > ${r2_noext}.fastq
-        read2_unzip=${r2_noext}.fastq
-      else
-        read2_unzip=~{read2}
-      fi
-
-      # dehost reads
-      /opt/scrubber/scripts/scrub.sh ${read2_unzip}
-
-      # gzip dehosted reads
-      gzip ${read2_unzip}.clean -c > ~{samplename}_R2_dehosted.fastq.gz
-
+      gunzip -c ~{read2} > ${r2_noext}.fastq
+      read2_unzip=${r2_noext}.fastq
+    else
+      read2_unzip=~{read2}
     fi
+
+    # dehost reads
+    /opt/scrubber/scripts/scrub.sh ${read2_unzip}
+
+    # gzip dehosted reads
+    gzip ${read2_unzip}.clean -c > ~{samplename}_R2_dehosted.fastq.gz
+
+
+  >>>
+
+  output {
+    File read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
+    File read2_dehosted = "~{samplename}_R2_dehosted.fastq.gz"
+    String ncbi_scrub_docker = docker
+  }
+
+  runtime {
+      docker:       "~{docker}"
+      memory:       "8 GB"
+      cpu:          2
+      disks:        "local-disk 100 SSD"
+      preemptible:  0
+  }
+}
+
+task ncbi_scrub_se {
+  input {
+    File        read1
+    String      samplename
+    String      docker = "us.gcr.io/ncbi-research-sra-dataload/test-scrub:latest"
+
+  }
+  String r1_filename = basename(read1)
+
+  command <<<
+    # date and version control
+    date | tee DATE
+
+    # grab filename without extention as read inputs may or may not be zipped
+    r1_noext=$(echo ~{r1_filename} | awk -F ".fastq|.fq" '{print $1}')
+
+    # unzip fwd file as scrub tool does not take in .gz fastq files
+    if [[ "~{read1}" == *.gz ]]
+    then
+      gunzip -c ~{read1} > ${r1_noext}.fastq
+      read1_unzip=${r1_noext}.fastq
+    else
+      read1_unzip=~{read1}
+    fi
+
+    # dehost reads
+    /opt/scrubber/scripts/scrub.sh ${read1_unzip}
+
+    # gzip dehosted reads
+    gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
 
   >>>
 
   output {
     File       read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
-    File?      read2_dehosted = "~{samplename}_R2_dehosted.fastq.g2"
     String     ncbi_scrub_docker    = docker
   }
 
