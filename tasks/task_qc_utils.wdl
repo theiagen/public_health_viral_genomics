@@ -38,7 +38,7 @@ task fastqc {
     File       fastqc2_zip = "${read2_name}_fastqc.zip"
     Int        read1_seq = read_string("READ1_SEQS")
     Int        read2_seq = read_string("READ2_SEQS")
-    Int        read_pairs = read_string("READ_PAIRS")
+    String        read_pairs = read_string("READ_PAIRS")
     String     version = read_string("VERSION")
     String     pipeline_date = read_string("DATE")
   }

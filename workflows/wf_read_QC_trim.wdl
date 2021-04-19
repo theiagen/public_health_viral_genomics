@@ -56,11 +56,11 @@ workflow read_QC_trim {
 
     Int	fastqc_raw1	=	fastqc_raw.read1_seq
     Int	fastqc_raw2	=	fastqc_raw.read2_seq
-    Int	fastqc_raw_pairs	=	fastqc_raw.read_pairs
+    String	fastqc_raw_pairs	=	fastqc_raw.read_pairs
 
     Int	fastqc_clean1	=	fastqc_clean.read1_seq
     Int	fastqc_clean2	=	fastqc_clean.read2_seq
-    Int	fastqc_clean_pairs	=	fastqc_clean.read_pairs
+    String	fastqc_clean_pairs	=	fastqc_clean.read_pairs
 
     String	kraken_version	=	kraken2_raw.version
     Float	kraken_human	=	kraken2_raw.percent_human
