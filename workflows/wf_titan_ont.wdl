@@ -119,7 +119,6 @@ workflow titan_ont {
     String	nextclade_aa_dels	=	nextclade_one_sample.nextclade_aa_dels
     String	nextclade_version	=	nextclade_one_sample.nextclade_version
 
-    Int	amp_fail	=	bedtools_cov.amp_fail
     File	amp_coverage	=	bedtools_cov.amp_coverage
     String	bedtools_version	=	bedtools_cov.version
 
