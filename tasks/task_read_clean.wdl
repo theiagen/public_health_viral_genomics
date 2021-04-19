@@ -5,7 +5,7 @@ task ncbi_scrub {
     File        read1
     File        read2
     String      samplename
-    String      docker = "us.gcr.io/ncbi-research-sra-dataload/test-scrub:latest"
+    String      docker = "ncbi/sra-human-scrubber:1.0.2021-04-19"
 
   }
   String r1_filename = basename(read1)
