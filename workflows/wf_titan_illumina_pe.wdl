@@ -103,9 +103,6 @@ workflow titan_illumina_pe {
   Float	kraken_human	=	read_QC_trim.kraken_human
   Float	kraken_sc2	=	read_QC_trim.kraken_sc2
   String	kraken_report	=	read_QC_trim.kraken_report
-  Float	kraken_human_dehosted	=	read_QC_trim.kraken_human_dehosted
-  Float	kraken_sc2_dehosted	=	read_QC_trim.kraken_sc2_dehosted
-  String	kraken_report_dehosted	=	read_QC_trim.kraken_report_dehosted
 
   String	bwa_version	=	bwa.bwa_version
   String	sam_version	=	bwa.sam_version

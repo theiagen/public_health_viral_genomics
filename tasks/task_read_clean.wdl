@@ -196,7 +196,7 @@ task trimmomatic {
 
   output {
     File       read1_trimmed = "${samplename}_1P.fastq.gz"
-    File       read2_trimmed = "${samplename}_2P.fastq.gz"
+    File          read2_trimmed = "${samplename}_2P.fastq.gz"
     File       trimmomatic_stats = "${samplename}.trim.stats.txt"
     String     version = read_string("VERSION")
     String     pipeline_date = read_string("DATE")
