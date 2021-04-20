@@ -100,3 +100,13 @@ workflows:
    primaryDescriptorPath: /workflows/wf_vadr_update.wdl
    testParameterFiles:
     - empty.json
+ - name: NCBI_Scrub_SE
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_ncbi_scrub_se.wdl
+   testParameterFiles:
+    - empty.json
+ - name: NCBI_Scrub_PE
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_ncbi_scrub_pe.wdl
+   testParameterFiles:
+    - empty.json
