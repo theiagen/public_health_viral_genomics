@@ -82,10 +82,10 @@ workflow titan_illumina_se {
     String  seq_platform = seq_method
 
     File    read1_clean        = read_QC_trim.read1_clean
-    Int     fastqc_number_reads = read_QC_trim.fastqc_number_reads
+    Int     fastqc_raw = read_QC_trim.fastqc_number_reads
     String  fastqc_version     = read_QC_trim.fastqc_version
 
-    Int     fastqc_clean_number_reads = read_QC_trim.fastqc_clean_number_reads
+    Int     fastqc_clean = read_QC_trim.fastqc_clean_number_reads
     String  trimmomatic_version  = read_QC_trim.trimmomatic_version
     String  bbduk_docker         = read_QC_trim.bbduk_docker
 
