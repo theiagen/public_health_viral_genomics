@@ -85,6 +85,8 @@ workflow titan_illumina_pe {
 
   String	seq_platform	=	seq_method
 
+  File  read1_dehosted  = read_QC_trim.read1_dehosted
+  File  read2_dehosted  = read_QC_trim.read2_dehosted
   File	read1_clean	=	read_QC_trim.read1_clean
   File	read2_clean	=	read_QC_trim.read2_clean
   Int	fastqc_raw1	=	read_QC_trim.fastqc_raw1

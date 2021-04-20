@@ -62,6 +62,8 @@ workflow read_QC_trim {
   }
 
   output {
+    File  read1_dehosted  = ncbi_scrub.read1_dehosted
+    File  read2_dehosted  = ncbi_scrub.read2_dehosted
     File	read1_clean	=	bbduk.read1_clean
     File	read2_clean	=	bbduk.read2_clean
 
