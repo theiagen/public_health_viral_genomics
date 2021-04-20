@@ -842,6 +842,6 @@ task vadr {
     docker: "~{docker}"
     memory: "2 GB"
     cpu: 1
-    dx_instance_type: "mem2_ssd1_v2_x82
+    dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
