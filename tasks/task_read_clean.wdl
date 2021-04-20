@@ -15,14 +15,11 @@ task ncbi_scrub {
     # date and version control
     date | tee DATE
 
-    # grab filename without extention as read inputs may or may not be zipped
-    r1_noext=$(echo ~{r1_filename} | awk -F ".fastq|.fq" '{print $1}')
-
     # unzip fwd file as scrub tool does not take in .gz fastq files
     if [[ "~{read1}" == *.gz ]]
     then
-      gunzip -c ~{read1} > ${r1_noext}.fastq
-      read1_unzip=${r1_noext}.fastq
+      gunzip -c ~{read1} > r1.fastq
+      read1_unzip=r1.fastq
     else
       read1_unzip=~{read1}
     fi
@@ -37,8 +34,8 @@ task ncbi_scrub {
     # unzip file if necessary
     if [[ "~{read2}" == *.gz ]]
     then
-      gunzip -c ~{read2} > ${r2_noext}.fastq
-      read2_unzip=${r2_noext}.fastq
+      gunzip -c ~{read2} > r2.fastq
+      read2_unzip=r2.fastq
     else
       read2_unzip=~{read2}
     fi
@@ -80,14 +77,11 @@ task ncbi_scrub_se {
     # date and version control
     date | tee DATE
 
-    # grab filename without extention as read inputs may or may not be zipped
-    r1_noext=$(echo ~{r1_filename} | awk -F ".fastq|.fq" '{print $1}')
-
     # unzip fwd file as scrub tool does not take in .gz fastq files
     if [[ "~{read1}" == *.gz ]]
     then
-      gunzip -c ~{read1} > ${r1_noext}.fastq
-      read1_unzip=${r1_noext}.fastq
+      gunzip -c ~{read1} > r1.fastq
+      read1_unzip=r1.fastq
     else
       read1_unzip=~{read1}
     fi
