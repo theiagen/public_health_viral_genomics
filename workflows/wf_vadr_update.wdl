@@ -5,14 +5,12 @@ import "../tasks/task_ncbi.wdl" as ncbi
 workflow vadr_update {
 	input {
 		File genome_fasta
-		String samplename
 		String docker
 	}
 
 	call ncbi.vadr {
     input:
       genome_fasta = genome_fasta,
-      samplename = samplename,
 			docker = docker
 	}
 
