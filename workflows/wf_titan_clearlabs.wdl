@@ -75,7 +75,6 @@ workflow titan_clearlabs {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      samplename = samplename
   }
   output {
     String	seq_platform	=	seq_method

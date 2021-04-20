@@ -76,7 +76,6 @@ workflow titan_illumina_se {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      samplename = samplename
   }
   output {
 

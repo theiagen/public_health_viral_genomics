@@ -789,7 +789,6 @@ task vadr {
   }
   input {
     File   genome_fasta
-    String samplename
     String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 
     String  docker="staphb/vadr:1.2"
