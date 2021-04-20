@@ -790,12 +790,11 @@ task vadr {
   input {
     File   genome_fasta
     String samplename
-    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --lowsim5term 2 --lowsim3term 2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 
     String  docker="staphb/vadr:1.2"
     Int minlen=50
     Int maxlen=30000
-    Int cpu=8
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
@@ -810,7 +809,6 @@ task vadr {
 
     # run VADR
     v-annotate.pl \
-      --split --cpu ~{cpu} \
       ~{vadr_opts} \
       "~{out_base}_trimmed.fasta" \
       "~{out_base}"
@@ -842,8 +840,8 @@ task vadr {
   }
   runtime {
     docker: "~{docker}"
-    memory: "16 GB"
-    cpu: "~{cpu}"
-    dx_instance_type: "mem3_ssd1_v2_x8"
+    memory: "2 GB"
+    cpu: 1
+    dx_instance_type: "mem2_ssd1_v2_x82
   }
 }
