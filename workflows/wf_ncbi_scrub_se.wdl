@@ -8,14 +8,23 @@ workflow dehost_se {
 		File 		reads
 	}
 
-	call read_clean.ncbi_scrub_pe {
+	call read_clean.ncbi_scrub_se {
     input:
       samplename = samplename,
       read1 = reads
   }
-
+	call taxonID.kraken2 {
+		input:
+			samplename = samplename,
+			read1 = ncbi_scrub_pe.read1_dehosted
+	}
 	output {
 			File	reads_dehosted	=	ncbi_scrub_pe.read1_dehosted
 			String	ncbi_scrub_docker	=	ncbi_scrub_pe.ncbi_scrub_docker
+			Float	kraken_human_dehosted	=	kraken2.percent_human
+			Float	kraken_sc2_dehosted	=	kraken2.percent_sc2
+			String	kraken_report_dehosted	=	kraken2.kraken_report
+			String	kraken_version_dehosted	=	kraken2.version
+			String	kraken_report_dehosted	=	kraken2.kraken_report
 	}
 }
