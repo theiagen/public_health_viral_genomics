@@ -1,6 +1,6 @@
 version 1.0
 
-task ncbi_scrub {
+task ncbi_scrub_pe {
   input {
     File        read1
     File        read2
