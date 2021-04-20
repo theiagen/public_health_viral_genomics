@@ -21,7 +21,7 @@ workflow titan_ont {
     Int?  normalise = 200
     String  pangolin_docker_image = "staphb/pangolin:2.3.8-pangolearn-2021-04-14"
   }
-  call qc_utils.fastqc_se {
+  call qc_utils.fastqc_se as fastqc_se_raw {
     input:
       read1 = demultiplexed_reads
   }
@@ -34,6 +34,10 @@ workflow titan_ont {
     input:
       samplename = samplename,
       read1 = demultiplexed_reads
+  }
+  call qc_utils.fastqc_se as fastqc_se_clean {
+    input:
+      read1 = read_filtering.filtered_reads
   }
   call medaka.consensus {
     input:
@@ -88,7 +92,8 @@ workflow titan_ont {
 
     File	dehosted_reads	=	ncbi_scrub_se.read1_dehosted
 
-    Int fastqc_number_reads = fastqc_se.number_reads
+    Int fastqc_raw = fastqc_se_raw.number_reads
+    Int fastqc_clean = fastqc_se_clean.number_reads
 
     String	kraken_version	=	kraken2_raw.version
     Float	kraken_human	=	kraken2_raw.percent_human

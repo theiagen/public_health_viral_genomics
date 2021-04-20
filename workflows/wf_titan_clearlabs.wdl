@@ -21,7 +21,7 @@ workflow titan_clearlabs {
     String  pangolin_docker_image = "staphb/pangolin:2.3.8-pangolearn-2021-04-14"
     Int?  normalise  = 20000
   }
-  call qc_utils.fastqc_se {
+  call qc_utils.fastqc_se as fastqc_se_raw {
     input:
       read1 = clear_lab_fastq
   }
@@ -29,6 +29,10 @@ workflow titan_clearlabs {
     input:
       samplename = samplename,
       read1 = clear_lab_fastq
+  }
+  call qc_utils.fastqc_se as fastqc_se_clean {
+    input:
+      read1 = ncbi_scrub_se.read1_dehosted
   }
   call medaka.consensus {
     input:
@@ -80,6 +84,9 @@ workflow titan_clearlabs {
     String	seq_platform	=	seq_method
 
   	File	dehosted_reads	=	ncbi_scrub_se.read1_dehosted
+
+    Int fastqc_raw = fastqc_se_raw.number_reads
+    Int fastqc_clean = fastqc_se_clean.number_reads
 
   	String	kraken_version	=	kraken2_raw.version
   	Float	kraken_human	=	kraken2_raw.percent_human
