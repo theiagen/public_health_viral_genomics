@@ -7,7 +7,7 @@ The Theiagen Public Health Viral Genomics repository hosts a collection of WDL w
 Getting Started
 ---------------
 
-A series of introductory training videos that provide conceptual overviews of methodologies and walkthrough tutorials on how to utilize our WDL workflows through Terra are available through the Theiagen Genomics YouTube page:
+A series of introductory training videos that provide conceptual overviews of methodologies and walkthrough tutorials on how to utilize our WDL workflows through Terra are available on the Theiagen Genomics YouTube page:
 
 .. raw:: html
 
