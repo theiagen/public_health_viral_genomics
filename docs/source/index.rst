@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Theiagen's Public Health Viral Genomics Repository 
+Theiagen's Public Health Viral Genomics Repository
 ==================================================
 
 Contents
@@ -14,7 +14,7 @@ Contents
 
    readme
    license
-   help
+   support
 
 
 
