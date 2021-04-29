@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Public Health Viral Genomics (Theiagen)'
-copyright = '2021, Kevin G. Libuit'
+copyright = '2021, Theiagen Genomics, LLC'
 author = 'Kevin G. Libuit'
 
 # The full version, including alpha/beta/rc tags
