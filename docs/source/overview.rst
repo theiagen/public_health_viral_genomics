@@ -2,7 +2,7 @@
 Public Health Viral Genomics
 ============================
 
-The Theiagen Public Health Viral Genomics repository hosts a collection of WDL workflows for genomic characterization, submission preparation, and genomic epidemiology of the SARS-CoV-2 virus. While these workflows can be run locally or on an HPC system at the command-line with Cromwell or miniWDL, we strongly recommend use through `Terra, a bioinformatics web application developed by Broad Institute of MIT and Harvard in collaboration with Microsoft and Verily Life Sciences <https://app.terra.bio/>`_.
+The Theiagen Public Health Viral Genomics repository hosts a collection of WDL workflows for genomic characterization, submission preparation, and genomic epidemiology of the SARS-CoV-2 virus. While these workflows can be run locally or on an HPC system at the command-line with Cromwell or miniWDL, we strongly recommend use through `Terra <https://app.terra.bio/>`_, a bioinformatics web application developed by the Broad Institute of MIT and Harvard in collaboration with Microsoft and Verily Life Sciences .
 
 Getting Started
 ---------------
