@@ -1,0 +1,7 @@
+Sphinx
+sphinx-argparse
+sphinx_rtd_theme
+PyYAML
+mock
+recommonmark
+wdl-aid
