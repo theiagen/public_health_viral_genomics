@@ -1,4 +1,4 @@
-lisence
+Lisence
 =================================
 
 GNU AFFERO GENERAL PUBLIC LICENSE
