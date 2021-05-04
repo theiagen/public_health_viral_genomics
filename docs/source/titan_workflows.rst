@@ -25,12 +25,16 @@ A series of introductory training videos that provide conceptual overviews of me
 
 Titan_Illumina_PE
 =================
+{technical content coming soon}
 
 Titan_Illumina_SE
 =================
+{technical content coming soon}
 
 Titan_ClearLabs
 =================
+{technical content coming soon}
 
 Titan_ONT
 =========
+{technical content coming soon}
