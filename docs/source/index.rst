@@ -17,12 +17,3 @@ Contents
    mercury_workflows
    terra_resources
    license
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
