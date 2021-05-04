@@ -99,8 +99,6 @@ task pangolin2 {
     File        fasta
     String      samplename
     String      docker
-
-
   }
 
   command{
@@ -114,19 +112,21 @@ task pangolin2 {
        --verbose
 
     pangolin_lineage=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 2 -d "," | grep -v "lineage")
-
-    pangolin_probability=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 3 -d "," )
+    pangolin_conflicts=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 3 -d "," )
+    pangolin_notes=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 7 -d "," )
     mv ${samplename}.pangolin_report.csv ${samplename}_pango2_lineage.csv
 
     echo $pangolin_lineage | tee PANGOLIN_LINEAGE
-    echo $pangolin_probability | tee PANGOLIN_PROBABILITY
+    echo $pangolin_conflicts | tee PANGOLIN_CONFLICTS
+    echo $pangolin_notes | tee PANGOLIN_NOTES
   }
 
   output {
     String     date                 = read_string("DATE")
     String     version              = read_string("VERSION")
     String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    String     pangolin_aLRT        = read_string("PANGOLIN_PROBABILITY")
+    Float     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
+    String     pangolin_notes       = read_string("PANGOLIN_NOTES")
     String     pangolin_docker      = docker
     File       pango_lineage_report = "${samplename}_pango2_lineage.csv"
   }
