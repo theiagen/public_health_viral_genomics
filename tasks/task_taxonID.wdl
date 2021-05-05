@@ -116,7 +116,6 @@ task pangolin2 {
 
     python3 <<CODE
     import csv
-    print("PYTHON STUFF: ")
     #grab output values by column header
     with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
       csv_reader = list(csv.DictReader(csv_file, delimiter=","))
@@ -165,6 +164,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
+        String docker = "neherlab/nextclade:0.14.2"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -193,7 +193,7 @@ task nextclade_one_sample {
         grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
     }
     runtime {
-        docker: "neherlab/nextclade:latest"
+        docker: "~{docker}"
         memory: "3 GB"
         cpu:    2
         disks: "local-disk 50 HDD"
