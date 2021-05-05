@@ -18,7 +18,7 @@ workflow pangolin_update {
 
 	output {
 		String	pango_lineage	=	pangolin2.pangolin_lineage
-    Float	pangolin_conflicts	=	pangolin2.pangolin_conflicts
+    String	pangolin_conflicts	=	pangolin2.pangolin_conflicts
     String pangolin_notes = pangolin2.pangolin_notes
   	String	pangolin_version	=	pangolin2.version
   	File	pango_lineage_report	=	pangolin2.pango_lineage_report

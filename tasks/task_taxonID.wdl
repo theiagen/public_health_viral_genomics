@@ -138,7 +138,7 @@ task pangolin2 {
     String     date                 = read_string("DATE")
     String     version              = read_string("VERSION")
     String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    Float     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
+    String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
     String     pangolin_notes       = read_string("PANGOLIN_NOTES")
     String     pangolin_docker      = docker
     File       pango_lineage_report = "${samplename}.pangolin_report.csv"
