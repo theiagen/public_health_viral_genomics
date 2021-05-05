@@ -98,28 +98,42 @@ task pangolin2 {
   input {
     File        fasta
     String      samplename
+    Int         min_length=10000
+    Float       max_ambig=0.5
     String      docker
   }
 
-  command{
+  command <<<
     # date and version control
     date | tee DATE
-    echo "$(pangolin -v); $(pangolin -pv)" | tee VERSION
     set -e
 
     pangolin "~{fasta}" \
        --outfile "~{samplename}.pangolin_report.csv" \
+       --min-length ~{min_length} \
+       --max-ambig ~{max_ambig} \
        --verbose
 
-    pangolin_lineage=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 2 -d "," | grep -v "lineage")
-    pangolin_conflicts=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 3 -d "," )
-    pangolin_notes=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 7 -d "," )
-    mv ${samplename}.pangolin_report.csv ${samplename}_pango2_lineage.csv
+    python3 <<CODE
+    import csv
+    print("PYTHON STUFF: ")
+    #grab output values by column header
+    with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
+      csv_reader = list(csv.DictReader(csv_file, delimiter=","))
+      for line in csv_reader:
+        with open("VERSION", 'wt') as lineage:
+          pangolin_version=line["pangolin_version"]
+          pangoLEARN_version=line["pangoLEARN_version"]
+          lineage.write(f"pangolin {pangolin_version}; pangoLEARN {pangoLEARN_version}")
+        with open("PANGOLIN_LINEAGE", 'wt') as lineage:
+          lineage.write(line["lineage"])
+        with open("PANGOLIN_CONFLICTS", 'wt') as lineage:
+          lineage.write(line["conflict"])
+        with open("PANGOLIN_NOTES", 'wt') as lineage:
+          lineage.write(line["note"])
+    CODE
 
-    echo $pangolin_lineage | tee PANGOLIN_LINEAGE
-    echo $pangolin_conflicts | tee PANGOLIN_CONFLICTS
-    echo $pangolin_notes | tee PANGOLIN_NOTES
-  }
+  >>>
 
   output {
     String     date                 = read_string("DATE")
@@ -128,7 +142,7 @@ task pangolin2 {
     Float     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
     String     pangolin_notes       = read_string("PANGOLIN_NOTES")
     String     pangolin_docker      = docker
-    File       pango_lineage_report = "${samplename}_pango2_lineage.csv"
+    File       pango_lineage_report = "${samplename}.pangolin_report.csv"
   }
 
   runtime {
