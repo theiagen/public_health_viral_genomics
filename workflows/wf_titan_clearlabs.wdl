@@ -18,7 +18,7 @@ workflow titan_clearlabs {
     File  clear_lab_fastq
     String  seq_method  = "ONT via Clear Labs WGS"
     String? artic_primer_version  = "V3"
-    String  pangolin_docker_image = "staphb/pangolin:2.3.8-pangolearn-2021-04-14"
+    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-04-28"
     Int?  normalise  = 20000
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
@@ -97,8 +97,9 @@ workflow titan_clearlabs {
   	Float	assembly_mean_coverage	=	stats_n_coverage_primtrim.depth
   	String	samtools_version	=	stats_n_coverage.samtools_version
 
-  	String	pango_lineage	=	pangolin2.pangolin_lineage
-  	Float	pangolin_aLRT	=	pangolin2.pangolin_aLRT
+    String	pango_lineage	=	pangolin2.pangolin_lineage
+    String	pangolin_conflicts	=	pangolin2.pangolin_conflicts
+    String pangolin_notes = pangolin2.pangolin_notes
   	String	pangolin_version	=	pangolin2.version
   	File	pango_lineage_report	=	pangolin2.pango_lineage_report
   	String	pangolin_docker	=	pangolin2.pangolin_docker

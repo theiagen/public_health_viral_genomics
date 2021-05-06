@@ -19,7 +19,7 @@ workflow titan_ont {
     String? artic_primer_version  = "V3"
     File  demultiplexed_reads
     Int?  normalise = 200
-    String  pangolin_docker_image = "staphb/pangolin:2.3.8-pangolearn-2021-04-14"
+    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-04-28"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -109,9 +109,10 @@ workflow titan_ont {
     String	samtools_version	=	stats_n_coverage.samtools_version
 
     String	pango_lineage	=	pangolin2.pangolin_lineage
-    Float	pangolin_aLRT	=	pangolin2.pangolin_aLRT
-    File	pango_lineage_report	=	pangolin2.pango_lineage_report
+    String	pangolin_conflicts	=	pangolin2.pangolin_conflicts
+    String pangolin_notes = pangolin2.pangolin_notes
     String	pangolin_version	=	pangolin2.version
+    File	pango_lineage_report	=	pangolin2.pango_lineage_report
     String	pangolin_docker	=	pangolin2.pangolin_docker
 
     File	nextclade_json	=	nextclade_one_sample.nextclade_json

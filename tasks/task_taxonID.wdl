@@ -98,37 +98,50 @@ task pangolin2 {
   input {
     File        fasta
     String      samplename
+    Int         min_length=10000
+    Float       max_ambig=0.5
     String      docker
-
-
   }
 
-  command{
+  command <<<
     # date and version control
     date | tee DATE
-    echo "$(pangolin -v); $(pangolin -pv)" | tee VERSION
     set -e
 
     pangolin "~{fasta}" \
        --outfile "~{samplename}.pangolin_report.csv" \
+       --min-length ~{min_length} \
+       --max-ambig ~{max_ambig} \
        --verbose
 
-    pangolin_lineage=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 2 -d "," | grep -v "lineage")
+    python3 <<CODE
+    import csv
+    #grab output values by column header
+    with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
+      csv_reader = list(csv.DictReader(csv_file, delimiter=","))
+      for line in csv_reader:
+        with open("VERSION", 'wt') as lineage:
+          pangolin_version=line["pangolin_version"]
+          pangoLEARN_version=line["pangoLEARN_version"]
+          lineage.write(f"pangolin {pangolin_version}; pangoLEARN {pangoLEARN_version}")
+        with open("PANGOLIN_LINEAGE", 'wt') as lineage:
+          lineage.write(line["lineage"])
+        with open("PANGOLIN_CONFLICTS", 'wt') as lineage:
+          lineage.write(line["conflict"])
+        with open("PANGOLIN_NOTES", 'wt') as lineage:
+          lineage.write(line["note"])
+    CODE
 
-    pangolin_probability=$(tail -n 1 ${samplename}.pangolin_report.csv | cut -f 3 -d "," )
-    mv ${samplename}.pangolin_report.csv ${samplename}_pango2_lineage.csv
-
-    echo $pangolin_lineage | tee PANGOLIN_LINEAGE
-    echo $pangolin_probability | tee PANGOLIN_PROBABILITY
-  }
+  >>>
 
   output {
     String     date                 = read_string("DATE")
     String     version              = read_string("VERSION")
     String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    String     pangolin_aLRT        = read_string("PANGOLIN_PROBABILITY")
+    String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
+    String     pangolin_notes       = read_string("PANGOLIN_NOTES")
     String     pangolin_docker      = docker
-    File       pango_lineage_report = "${samplename}_pango2_lineage.csv"
+    File       pango_lineage_report = "${samplename}.pangolin_report.csv"
   }
 
   runtime {
@@ -151,6 +164,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
+        String docker = "neherlab/nextclade:0.14.2"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -179,7 +193,7 @@ task nextclade_one_sample {
         grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
     }
     runtime {
-        docker: "neherlab/nextclade:latest"
+        docker: "~{docker}"
         memory: "3 GB"
         cpu:    2
         disks: "local-disk 50 HDD"
