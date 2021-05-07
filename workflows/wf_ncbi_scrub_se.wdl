@@ -22,6 +22,7 @@ workflow dehost_se {
 	output {
 			File	reads_dehosted	=	ncbi_scrub_se.read1_dehosted
 			String	ncbi_scrub_docker	=	ncbi_scrub_se.ncbi_scrub_docker
+			Int		human_sports_removed = ncbi_scrub_se.read1_human_spots_removed
 
 			Float	kraken_human_dehosted	=	kraken2.percent_human
 			Float	kraken_sc2_dehosted	=	kraken2.percent_sc2
