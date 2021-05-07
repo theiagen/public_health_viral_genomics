@@ -61,7 +61,7 @@ task ncbi_scrub_pe {
   runtime {
       docker:       "~{docker}"
       memory:       "8 GB"
-      cpu:          2
+      cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
   }
@@ -107,7 +107,7 @@ task ncbi_scrub_se {
   runtime {
       docker:       "~{docker}"
       memory:       "8 GB"
-      cpu:          2
+      cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
   }
