@@ -25,7 +25,7 @@ task ncbi_scrub_pe {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
+    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} |& tail -n1 | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
 
     # gzip dehosted reads
     gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
@@ -41,7 +41,7 @@ task ncbi_scrub_pe {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh -n ${read2_unzip} | awk -F" " '{print $1}' > REV_SPOTS_REMOVED
+    /opt/scrubber/scripts/scrub.sh -n ${read2_unzip} |& tail -n1 | awk -F" " '{print $1}' > REV_SPOTS_REMOVED
 
     # gzip dehosted reads
     gzip ${read2_unzip}.clean -c > ~{samplename}_R2_dehosted.fastq.gz 
@@ -53,7 +53,7 @@ task ncbi_scrub_pe {
     File read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
     File read2_dehosted = "~{samplename}_R2_dehosted.fastq.gz"
     Int read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
-    Int read2_human_spots_removed = read_int("REF_SPORTS_REMOVED")
+    Int read2_human_spots_removed = read_int("REV_SPOTS_REMOVED")
     String ncbi_scrub_docker = docker
 
   }
@@ -90,7 +90,7 @@ task ncbi_scrub_se {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
+    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} |& tail -n1 | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
 
     # gzip dehosted reads
     gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
