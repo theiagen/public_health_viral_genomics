@@ -25,16 +25,33 @@ A series of introductory training videos that provide conceptual overviews of me
 
 Titan_Illumina_PE
 =================
+.. image:: images/Titan_Illumina_PE.png
+   :width: 400
+   :alt: Titan_Illumina_PE workflow
+   
 {technical content coming soon}
 
 Titan_Illumina_SE
 =================
+.. image:: images/Titan_Illumina_SE.png
+   :width: 400
+   :alt: Titan_Illumina_PE workflow
+
 {technical content coming soon}
 
 Titan_ClearLabs
 =================
+.. image:: images/Titan_ClearLabs.png
+   :width: 400
+   :alt: Titan_Illumina_PE workflow
+
 {technical content coming soon}
 
 Titan_ONT
 =========
+.. image:: images/Titan_ONT.png
+   :width: 400
+   :alt: Titan_Illumina_PE workflow
+
 {technical content coming soon}
+
