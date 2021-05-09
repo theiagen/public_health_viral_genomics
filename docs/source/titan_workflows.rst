@@ -25,33 +25,45 @@ A series of introductory training videos that provide conceptual overviews of me
 
 Titan_Illumina_PE
 =================
-.. image:: images/Titan_Illumina_PE.png
-   :width: 400
+.. figure:: images/Titan_Illumina_PE.png
+   :width: 800
    :alt: Titan_Illumina_PE workflow
+   :figclass: align-center
+   
+   **Titan_Illumina_PE v1.4.2 Data Workflow**
    
 {technical content coming soon}
 
 Titan_Illumina_SE
 =================
-.. image:: images/Titan_Illumina_SE.png
-   :width: 400
-   :alt: Titan_Illumina_PE workflow
-
+.. figure:: images/Titan_Illumina_SE.png
+   :width: 800
+   :alt: Titan_Illumina_SE workflow
+   :figclass: align-center
+   
+   **Titan_Illumina_SE v1.4.2 Data Workflow**
+   
 {technical content coming soon}
 
 Titan_ClearLabs
 =================
-.. image:: images/Titan_ClearLabs.png
-   :width: 400
-   :alt: Titan_Illumina_PE workflow
-
+.. figure:: images/Titan_ClearLabs.png
+   :width: 800
+   :alt: Titan_ClearLabs workflow
+   :figclass: align-center
+   
+   **Titan_ClearLabs v1.4.2 Data Workflow**
+   
 {technical content coming soon}
 
 Titan_ONT
 =========
-.. image:: images/Titan_ONT.png
-   :width: 400
-   :alt: Titan_Illumina_PE workflow
-
+.. figure:: images/Titan_ONT.png
+   :width: 800
+   :alt: Titan_ONT workflow
+   :figclass: align-center
+   
+   **Titan_ONT v1.4.2 Data Workflow**
+   
 {technical content coming soon}
 
