@@ -58,12 +58,12 @@ Download CSV: :download:`Titan_Illumina_PE_required_inputs.csv <tables/titan_wor
 Optional User Inputs
 ********************
 
- Download CSV: :download:`Titan_Illumina_PE_optional_inputs.csv <tables/titan_workflows/titan_illumina_pe_optional_inputs.csv>`
+Download CSV: :download:`Titan_Illumina_PE_optional_inputs.csv <tables/titan_workflows/titan_illumina_pe_optional_inputs.csv>`
 
- .. csv-table::
-    :file: tables/titan_workflows/titan_illumina_pe_optional_inputs.csv
-    :widths: 10, 10, 10, 10, 20
-    :header-rows: 1
+.. csv-table::
+  :file: tables/titan_workflows/titan_illumina_pe_optional_inputs.csv
+  :widths: 10, 10, 10, 10, 20
+  :header-rows: 1
           
 |
 
@@ -112,12 +112,12 @@ Download CSV: :download:`Titan_Illumina_SE_required_inputs.csv <tables/titan_wor
 Optional User Inputs
 ********************
 
- Download CSV: :download:`Titan_Illumina_SE_optional_inputs.csv <tables/titan_workflows/titan_illumina_se_optional_inputs.csv>`
+Download CSV: :download:`Titan_Illumina_SE_optional_inputs.csv <tables/titan_workflows/titan_illumina_se_optional_inputs.csv>`
 
- .. csv-table::
-    :file: tables/titan_workflows/titan_illumina_se_optional_inputs.csv
-    :widths: 10, 10, 10, 10, 20
-    :header-rows: 1
+.. csv-table::
+  :file: tables/titan_workflows/titan_illumina_se_optional_inputs.csv
+  :widths: 10, 10, 10, 10, 20
+  :header-rows: 1
           
 |
 
