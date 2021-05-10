@@ -11,7 +11,7 @@ Genomic characterization, *i.e.* generating consensus assemblies (FASTA format) 
 
 The Titan Series includes four separate WDL workflows (Titan_Illumina_PE, Titan_Illumina_SE, Titan_ClearLabs, and Titan_ONT) that process NGS read data from four different sequencing approaches: Illumina paired-end, Illumina single-end, Clear Labs, and Oxford Nanopore Technology (ONT)) to generate consensus assemblies, produce relevant quality-control metrics for both the input read data and the generated assembly, and assign samples with a lineage and clade designation using Pangolin and NextClade, respectively.
 
-All four Titan workflows for genomic characterization will generate a viral assembly by mapping input read data to ta reference genome, removing primer reads from that alignment, and then calling the consensus assembly based on the primer-trimmed alignment. These consensus assemblies are then fed into the Pangolin and NextClade CLI tools for lineage and clade assignments.
+All four Titan workflows for genomic characterization will generate a viral assembly by mapping input read data to a reference genome, removing primer reads from that alignment, and then calling the consensus assembly based on the primer-trimmed alignment. These consensus assemblies are then fed into the Pangolin and NextClade CLI tools for lineage and clade assignments.
 
 The major difference between each of these Titan workflows is in how the read mapping, primer trimming, and consensus genome calling is performed. More information on the technical details of these processes and information on how to utilize and apply these workflows for public health investigations is available below.
 
@@ -46,8 +46,10 @@ More information on required user inputs, optional user inputs, default tool par
 
 User Inputs
 ********************
+Download CSV: :download:`Titan_Illumina_PE_required_inputs.csv <tables/titan_workflows/titan_illumina_pe_required_inputs.csv>`
+
 .. csv-table:: **Required User Inputs**
-   :file: tables/titan_illumina_pe_required_inputs.csv
+   :file: tables/titan_workflows/titan_illumina_pe_required_inputs.csv
    :widths: 20, 20, 20, 40
    :header-rows: 1
    
@@ -56,19 +58,25 @@ User Inputs
 .. toggle-header::
    :header: **Optional User Inputs**
 
-   Download CSV: :download:`Titan_Illumina_PE optional inputs <tables/titan_illumina_pe_optional_inputs.csv>`
+   Download CSV: :download:`Titan_Illumina_PE_optional_inputs.csv <tables/titan_workflows/titan_illumina_pe_optional_inputs.csv>`
 
    .. csv-table::
-      :file: tables/titan_illumina_pe_optional_inputs.csv
+      :file: tables/titan_workflows/titan_illumina_pe_optional_inputs.csv
       :widths: 10, 10, 10, 10, 20
       :header-rows: 1
-      
-    
+          
 |
 
 Outputs 
 ********************
+Download CSV: :download:`Titan_Illumina_PE_default_outputs.csv <tables/titan_workflows/titan_illumina_pe_outputs.csv>`
 
+.. csv-table:: **Default Outputs**
+   :file: tables/titan_workflows/titan_illumina_pe_outputs.csv
+   :widths: 20, 20, 60
+   :header-rows: 1
+   
+|
 
 Titan_Illumina_SE
 =================

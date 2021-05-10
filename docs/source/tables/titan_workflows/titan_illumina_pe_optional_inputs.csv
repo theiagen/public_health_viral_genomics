@@ -8,10 +8,10 @@ consensus,ref_genome,String,Path to the reference genome within the staphb/ivar:
 consensus,min_qual,Int,Minimum quality threshold for sliding window to pass for iVar consensus,20
 consensus,min_freq,Float,Minimum frequency threshold(0 - 1) to call variants for iVar consensus,0.6
 consensus,min_depth,Int,Minimum read depth to call variants for iVar consensus,10
-consensus,min_bq,Int,Minimum mapping quality for an alignment to be used for SamTools mpileup before running iVar consensus,0
-consensus,max_depth,Int,Maximum reads read at a position per input file for SamTools mpileup before running iVar consensus,600000
-consensus,disable_baq,Boolean,Disable read-pair overlap detection for SamTools mpileup before running iVar consensus,TRUE
-consensus,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SamTools mpileup before running iVar consensus,TRUE
+consensus,min_bq,Int,Minimum mapping quality for an alignment to be used for SAMtools mpileup before running iVar consensus,0
+consensus,max_depth,Int,Maximum reads read at a position per input file for SAMtools mpileup before running iVar consensus,600000
+consensus,disable_baq,Boolean,Disable read-pair overlap detection for SAMtools mpileup before running iVar consensus,TRUE
+consensus,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SAMtools mpileup before running iVar consensus,TRUE
 consensus,char_unknown,String,Character to print in regions with less than minimum coverage for iVar consensus,N
 nextclade_one_sample,root_sequence,File,Custom reference sequence file for NextClade ,None
 nextclade_one_sample,qc_config_json,File,Custom QC configuraiton file for NextClade,None
@@ -36,7 +36,7 @@ variant_call,ref_genome,String,Path to the reference genome within the staphb/iv
 variant_call,min_qual,Int,Minimum quality threshold for sliding window to pass for iVar variants,20
 variant_call,min_freq,Float,Minimum frequency threshold(0 - 1) to call variants for iVar variants,0.6
 variant_call,min_depth,Int,Minimum read depth to call variants for iVar variants,10
-variant_call,min_bq,Int,Minimum mapping quality for an alignment to be used for SamTools mpileup before running iVar variants,0
-variant_call,max_depth,Int,Maximum reads read at a position per input file for SamTools mpileup before running iVar variants,600000
-variant_call,disable_baq,Boolean,Disable read-pair overlap detection for SamTools mpileup before running iVar variants,TRUE
-variant_call,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SamTools mpileup before running iVar variants,TRUE
+variant_call,min_bq,Int,Minimum mapping quality for an alignment to be used for SAMtools mpileup before running iVar variants,0
+variant_call,max_depth,Int,Maximum reads read at a position per input file for SAMtools mpileup before running iVar variants,600000
+variant_call,disable_baq,Boolean,Disable read-pair overlap detection for SAMtools mpileup before running iVar variants,TRUE
+variant_call,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SAMtools mpileup before running iVar variants,TRUE
