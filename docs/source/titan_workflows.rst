@@ -21,6 +21,7 @@ A series of introductory training videos that provide conceptual overviews of me
 
    <iframe width="560" height="315" src="https://www.youtube.com/embed/zP9I1r6TNrw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
    </div>
+
 |
 
 Titan_Illumina_PE
@@ -44,14 +45,19 @@ Consensus genome assembly with the Titan_Illumina_PE workflow is performed by fi
 More information on required user inputs, optional user inputs, and default tool parameters are outlined below.   
 
 Required User Inputs
-*********************
+********************
 .. csv-table::
    :file: tables/Titan_Illumina_PE/required_inputs.csv
    :widths: 20, 20, 20, 40
    :header-rows: 1
 
-
-
+Optional User Inputs
+********************
+.. csv-table::
+   :file: tables/Titan_Illumina_PE/optional_inputs.csv
+   :widths: 15, 15, 15, 15, 40
+   :header-rows: 1
+   
 Titan_Illumina_SE
 =================
 .. figure:: images/Titan_Illumina_SE.png
