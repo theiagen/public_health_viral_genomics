@@ -47,7 +47,7 @@ More information on required user inputs, optional user inputs, default tool par
 User Inputs
 ********************
 .. csv-table:: **Required User Inputs**
-   :file: tables/Titan_Illumina_PE/required_inputs.csv
+   :file: tables/titan_illumina_pe_required_inputs.csv
    :widths: 20, 20, 20, 40
    :header-rows: 1
    
@@ -56,11 +56,14 @@ User Inputs
 .. toggle-header::
    :header: **Optional User Inputs**
 
-   .. csv-table::
-      :file: tables/Titan_Illumina_PE/optional_inputs.csv
-      :widths: 15, 15, 15, 15, 40
-      :header-rows: 1
+   Download CSV: :download:`Titan_Illumina_PE optional inputs <tables/titan_illumina_pe_optional_inputs.csv>`
 
+   .. csv-table::
+      :file: tables/titan_illumina_pe_optional_inputs.csv
+      :widths: 10, 10, 10, 10, 20
+      :header-rows: 1
+      
+    
 |
 
 Outputs 
