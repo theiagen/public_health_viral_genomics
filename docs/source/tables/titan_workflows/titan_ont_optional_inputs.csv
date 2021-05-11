@@ -1,0 +1,31 @@
+Task,Variable Name,Data Type,Description,Default
+bedtools_cov,primer_bed,String,Path to the primer sequence coordinates of the PCR scheme utilized in BED file format,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019_amplicon.bed
+bedtools_cov,fail_threshold,String,Minimum coverage threshold to determin amplicon sequencing failture ,20x
+consensus,cpu,Int,CPU resources allocated to the Artric Medaka task runtime environment,8
+fastqc_se_clean,cpus,Int,CPU resources allocated to the FastQC task runtime environment for asessing size-selected read data,2
+fastqc_se_clean,read1_name,String,Name of the sample being analyzed ,Inferred from the input read file
+fastqc_se_raw,cpus,Int,CPU resources allocated to the FastQC task runtime environment for asessing raw read data,
+fastqc_se_raw,read1_name,String,Name of the sample being analyzed ,Inferred from the input read file
+kraken2_raw,cpus,Int,CPU resources allocated to the Kraken task runtime environment for asessing raw read data,4
+kraken2_raw,kraken2_db,String,Path to the reference genome within the staphb/kraken2:2.0.8-beta_hv Docker container,/kraken2-db
+kraken2_raw,read2,File,Optional input file for the Kraken task that is not applicable to this workflow,None
+nextclade_one_sample,root_sequence,File,Custom reference sequence file for NextClade ,None
+nextclade_one_sample,qc_config_json,File,Custom QC configuraiton file for NextClade,None
+nextclade_one_sample,pcr_primers_csv,File,Custom PCR primers file for NextClade,None
+nextclade_one_sample,gene_annotations_json,File,Custom gene annotation file for NextClade,None
+nextclade_one_sample,docker,String,Docker tag used for running NextClade,neherlab/nextclade:0.14.2
+nextclade_one_sample,auspice_reference_tree_json,File,Custom reference tree file for NextClade ,None
+pangolin2,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
+pangolin2,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
+read_filtering,cpu,Int,CPU resources allocated to the read filtering task (Artic guppypled) runtime environment ,8
+read_filtering,max_length,Int,Maximum sequence length ,700
+read_filtering,min_length,Int,Minimum sequence length,400
+read_filtering,run_prefix,String,Run name,artic_ncov2019
+titan_ont,artic_primer_version,String,Version of the Artic PCR protocol used to generate input read data ,V3
+titan_ont,normalise,Int,Value to normalize read counts,200
+titan_ont,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
+titan_ont,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-04-28
+vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
+vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
+vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2
