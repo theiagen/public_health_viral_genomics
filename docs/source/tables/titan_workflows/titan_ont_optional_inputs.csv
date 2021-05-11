@@ -23,7 +23,7 @@ read_filtering,min_length,Int,Minimum sequence length,400
 read_filtering,run_prefix,String,Run name,artic_ncov2019
 titan_ont,artic_primer_version,String,Version of the Artic PCR protocol used to generate input read data ,V3
 titan_ont,normalise,Int,Value to normalize read counts,200
-titan_ont,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
+titan_ont,seq_method,String,Description of the sequencing methodology used to generate the input read data,ONT
 titan_ont,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-04-28
 vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
