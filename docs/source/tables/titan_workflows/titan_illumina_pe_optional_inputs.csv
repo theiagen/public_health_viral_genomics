@@ -24,7 +24,7 @@ pangolin2,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attem
 primer_trim,keep_noprimer_reads,Boolean,Include reads with no primers for iVar trim,True
 read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
 read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
-read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,15
+read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,75
 titan_illumina_pe,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
 titan_illumina_pe,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-04-28
 vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
