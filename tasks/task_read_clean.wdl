@@ -173,7 +173,7 @@ task trimmomatic {
     File        read2
     String      samplename
     String      docker="staphb/trimmomatic:0.39"
-    Int?        trimmomatic_minlen = 15
+    Int?        trimmomatic_minlen = 25
     Int?        trimmomatic_window_size=4
     Int?        trimmomatic_quality_trim_score=30
     Int?    threads = 4
