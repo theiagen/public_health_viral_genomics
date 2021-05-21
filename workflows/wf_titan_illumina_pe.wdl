@@ -84,7 +84,9 @@ workflow titan_illumina_pe {
   output {
 
   String	seq_platform	=	seq_method
-
+  
+  File  read1_dehosted  = read_QC_trim.read1_dehosted
+  File  read2_dehosted  = read_QC_trim.read2_dehosted
   File	read1_clean	=	read_QC_trim.read1_clean
   File	read2_clean	=	read_QC_trim.read2_clean
   Int	fastqc_raw1	=	read_QC_trim.fastqc_raw1
@@ -102,6 +104,9 @@ workflow titan_illumina_pe {
   Float	kraken_human	=	read_QC_trim.kraken_human
   Float	kraken_sc2	=	read_QC_trim.kraken_sc2
   String	kraken_report	=	read_QC_trim.kraken_report
+  Float	kraken_human_dehosted	=	read_QC_trim.kraken_human_dehosted
+  Float	kraken_sc2_dehosted	=	read_QC_trim.kraken_sc2_dehosted
+  String	kraken_report_dehosted	=	read_QC_trim.kraken_report_dehosted
 
   String	bwa_version	=	bwa.bwa_version
   String	sam_version	=	bwa.sam_version
