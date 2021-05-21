@@ -5,7 +5,7 @@ task ncbi_scrub_pe {
     File        read1
     File        read2
     String      samplename
-    String      docker = "ncbi/sra-human-scrubber:1.0.2021-04-19"
+    String      docker = "ncbi/sra-human-scrubber:1.0.2021-05-05"
 
   }
   String r1_filename = basename(read1)
@@ -25,7 +25,7 @@ task ncbi_scrub_pe {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh ${read1_unzip}
+    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} |& tail -n1 | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
 
     # gzip dehosted reads
     gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
@@ -41,10 +41,10 @@ task ncbi_scrub_pe {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh ${read2_unzip}
+    /opt/scrubber/scripts/scrub.sh -n ${read2_unzip} |& tail -n1 | awk -F" " '{print $1}' > REV_SPOTS_REMOVED
 
     # gzip dehosted reads
-    gzip ${read2_unzip}.clean -c > ~{samplename}_R2_dehosted.fastq.gz
+    gzip ${read2_unzip}.clean -c > ~{samplename}_R2_dehosted.fastq.gz 
 
 
   >>>
@@ -52,13 +52,16 @@ task ncbi_scrub_pe {
   output {
     File read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
     File read2_dehosted = "~{samplename}_R2_dehosted.fastq.gz"
+    Int read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
+    Int read2_human_spots_removed = read_int("REV_SPOTS_REMOVED")
     String ncbi_scrub_docker = docker
+
   }
 
   runtime {
       docker:       "~{docker}"
       memory:       "8 GB"
-      cpu:          2
+      cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
   }
@@ -68,7 +71,7 @@ task ncbi_scrub_se {
   input {
     File        read1
     String      samplename
-    String      docker = "ncbi/sra-human-scrubber:1.0.2021-04-19"
+    String      docker = "ncbi/sra-human-scrubber:1.0.2021-05-05"
 
   }
   String r1_filename = basename(read1)
@@ -87,7 +90,7 @@ task ncbi_scrub_se {
     fi
 
     # dehost reads
-    /opt/scrubber/scripts/scrub.sh ${read1_unzip}
+    /opt/scrubber/scripts/scrub.sh -n ${read1_unzip} |& tail -n1 | awk -F" " '{print $1}' > FWD_SPOTS_REMOVED
 
     # gzip dehosted reads
     gzip ${read1_unzip}.clean -c > ~{samplename}_R1_dehosted.fastq.gz
@@ -96,13 +99,15 @@ task ncbi_scrub_se {
 
   output {
     File       read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
+    Int read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
     String     ncbi_scrub_docker    = docker
+
   }
 
   runtime {
       docker:       "~{docker}"
       memory:       "8 GB"
-      cpu:          2
+      cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
   }
@@ -168,7 +173,7 @@ task trimmomatic {
     File        read2
     String      samplename
     String      docker="staphb/trimmomatic:0.39"
-    Int?        trimmomatic_minlen = 15
+    Int?        trimmomatic_minlen = 75
     Int?        trimmomatic_window_size=4
     Int?        trimmomatic_quality_trim_score=30
     Int?    threads = 4

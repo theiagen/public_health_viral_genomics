@@ -25,10 +25,24 @@ workflow titan_clearlabs {
     input:
       read1 = clear_lab_fastq
   }
+  call read_clean.ncbi_scrub_se {
+    input:
+      samplename = samplename,
+      read1 = clear_lab_fastq
+  }
+  call qc_utils.fastqc_se as fastqc_se_clean {
+    input:
+      read1 = ncbi_scrub_se.read1_dehosted
+  }
+  call taxon_ID.kraken2 as kraken2_dehosted {
+    input:
+      samplename = samplename,
+      read1 = ncbi_scrub_se.read1_dehosted
+  }
   call medaka.consensus {
     input:
       samplename = samplename,
-      filtered_reads = clear_lab_fastq,
+      filtered_reads = ncbi_scrub_se.read1_dehosted,
       artic_primer_version = artic_primer_version,
       normalise = normalise
   }
@@ -69,12 +83,18 @@ workflow titan_clearlabs {
   output {
     String	seq_platform	=	seq_method
 
-    Int fastqc_raw = fastqc_se_raw.number_reads
+    File	dehosted_reads	=	ncbi_scrub_se.read1_dehosted
 
+    Int fastqc_raw = fastqc_se_raw.number_reads
+    Int fastqc_clean = fastqc_se_clean.number_reads
+    
   	String	kraken_version	=	kraken2_raw.version
   	Float	kraken_human	=	kraken2_raw.percent_human
   	Float	kraken_sc2	=	kraken2_raw.percent_sc2
   	String	kraken_report	=	kraken2_raw.kraken_report
+    Float	kraken_human_dehosted	=	kraken2_dehosted.percent_human
+  	Float	kraken_sc2_dehosted	=	kraken2_dehosted.percent_sc2
+  	String	kraken_report_dehosted	=	kraken2_dehosted.kraken_report
 
   	File	aligned_bam	=	consensus.trim_sorted_bam
   	File	aligned_bai	=	consensus.trim_sorted_bai
