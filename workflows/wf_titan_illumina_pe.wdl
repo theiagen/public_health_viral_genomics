@@ -20,7 +20,7 @@ workflow titan_illumina_pe {
     File    read1_raw
     File    read2_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-04-28"
+    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
 
   }
 
