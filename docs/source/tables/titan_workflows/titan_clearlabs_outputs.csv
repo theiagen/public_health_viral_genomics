@@ -9,10 +9,15 @@ assembly_method,String,Method employed to generate consensus assembly
 auspice_json,File,Auspice-compatable JSON output generated from NextClade analysis that includes the NextClade default samples for clade-typing and the single sample placed on this tree
 consensus_flagstat,File,Output from the SAMtools flagstat command to assess quality of the alignment file (BAM)
 consensus_stats,File,Output from the SAMtools stats command to assess quality of the alignment file (BAM)
-fastqc_raw,Int,Number of reads after seqyclean filtering as determined by FastQC
+dehosted_reads,File,Dehosted reads; suggested read file for SRA submission
+fastqc_clean,Int,Number of reads after dehosting as determined by FastQC
+fastqc_raw,Int,Number of raw input reads as determined by FastQC
 kraken_human,Float,Percent of human read data detected using the Kraken2 software
+kraken_human_dehosted,Float,Percent of human read data detected using the Kraken2 software after host removal
 kraken_report,String,Full Kraken report
+kraken_report_dehosted,File, Full Kraken report after host removal
 kraken_sc2,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software
+kraken_sc2_dehosted,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software after host removal
 kraken_version,String,Version of Kraken software used
 meanbaseq_trim,Float,Mean quality of the nucleotide basecalls aligned to the reference genome after primer trimming
 meanmapq_trim,Float,Mean quality of the mapped reads to the reference genome after primer trimming

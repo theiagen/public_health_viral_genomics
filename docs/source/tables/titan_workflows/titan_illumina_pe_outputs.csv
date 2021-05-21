@@ -10,6 +10,8 @@ bbduk_docker,String,Docker image used to run BBDuk
 bwa_version,String,Version of BWA used to map read data to the reference genome
 consensus_flagstat,File,Output from the SAMtools flagstat command to assess quality of the alignment file (BAM)
 consensus_stats,File,Output from the SAMtools stats command to assess quality of the alignment file (BAM)
+dehosted_read1,File,Dehosted forward reads; suggested read file for SRA submission
+dehosted_read2,File,Dehosted reverse reads; suggested read file for SRA submission
 fastqc_clean_pairs,String,Number of paired reads after SeqyClean filtering as determined by FastQC
 fastqc_clean1,Int,Number of forward reads after seqyclean filtering as determined by FastQC
 fastqc_clean2,Int,Number of reverse reads after seqyclean filtering as determined by FastQC
@@ -22,8 +24,11 @@ ivar_variant_version,String,Version of iVar for running the iVar variants comman
 ivar_version_consensus,String,Version of iVar for running the iVar consensus command
 ivar_version_primtrim,String,Version of iVar for running the iVar trim command
 kraken_human,Float,Percent of human read data detected using the Kraken2 software
-kraken_report,String,Full Kraken report
+kraken_human_dehosted,Float,Percent of human read data detected using the Kraken2 software after host removal
+kraken_report,File,Full Kraken report
+kraken_report_dehosted,File, Full Kraken report after host removal
 kraken_sc2,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software
+kraken_sc2_dehosted,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software after host removal
 kraken_version,String,Version of Kraken software used
 meanbaseq_trim,Float,Mean quality of the nucleotide basecalls aligned to the reference genome after primer trimming
 meanmapq_trim,Float,Mean quality of the mapped reads to the reference genome after primer trimming

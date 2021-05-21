@@ -26,7 +26,7 @@ read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to averag
 read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
 read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,75
 titan_illumina_pe,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
-titan_illumina_pe,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-04-28
+titan_illumina_pe,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-05-19
 vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
