@@ -10,7 +10,7 @@ import "../tasks/task_qc_utils.wdl" as qc_utils
 
 workflow titan_ont {
   meta {
-    description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on the Clear Labs platform."
+    description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on ONT NGS platforms."
   }
 
   input {
