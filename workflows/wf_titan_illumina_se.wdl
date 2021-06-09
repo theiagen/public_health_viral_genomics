@@ -81,7 +81,7 @@ workflow titan_illumina_se {
     String titan_gc_version = "Titan_Illumina_SE v1.4.4"
     String  seq_platform = seq_method
 
-    File    read1_clean        = read_QC_trim.read1_clean
+    File    reads_clean        = read_QC_trim.read1_clean
     Int     fastqc_raw = read_QC_trim.fastqc_number_reads
     String  fastqc_version     = read_QC_trim.fastqc_version
 
