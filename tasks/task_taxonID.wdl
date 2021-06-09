@@ -153,6 +153,83 @@ task pangolin2 {
   }
 }
 
+task pangolin3 {
+  input {
+    File        fasta
+    String      samplename
+    Int         min_length=10000
+    Float       max_ambig=0.5
+    String      docker
+    String      inference_engine="usher"
+  }
+
+  command <<<
+    # set inference inference_engine
+    if [[ "~{inference_engine}" == "usher" ]]
+    then 
+      pango_inference="--usher"
+    elif [[ "~{inference_engine}" == "pangolearn" ]]
+    then 
+      pango_inference=""
+    else 
+      echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
+      exit 1
+    fi
+    # date and version control
+    date | tee DATE
+    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION 
+    set -e
+
+    echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
+
+    pangolin "~{fasta}" $pango_inference \
+       --outfile "~{samplename}.pangolin_report.csv" \
+       --min-length ~{min_length} \
+       --max-ambig ~{max_ambig} \
+       --verbose
+
+
+    python3 <<CODE
+    import csv
+    #grab output values by column header
+    with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
+      csv_reader = list(csv.DictReader(csv_file, delimiter=","))
+      for line in csv_reader:
+        with open("VERSION", 'wt') as lineage:
+          pangolin_version=line["pangolin_version"]
+          version=line["version"]
+          lineage.write(f"pangolin {pangolin_version}; {version}")
+        with open("PANGOLIN_LINEAGE", 'wt') as lineage:
+          lineage.write(line["lineage"])
+        with open("PANGOLIN_CONFLICTS", 'wt') as lineage:
+          lineage.write(line["conflict"])
+        with open("PANGOLIN_NOTES", 'wt') as lineage:
+          lineage.write(line["note"])
+    CODE
+
+  >>>
+
+  output {
+    String     date                 = read_string("DATE")
+    String     version              = read_string("VERSION")
+    String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
+    String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
+    String     pangolin_notes       = read_string("PANGOLIN_NOTES")
+    String     pangolin_usher_version = read_string("PANGO_USHER_VERSION")
+    String     pangolin_docker      = docker
+    File       pango_lineage_report = "${samplename}.pangolin_report.csv"
+  }
+
+  runtime {
+    docker:     "~{docker}"
+    memory:       "8 GB"
+    cpu:          4
+    disks:        "local-disk 100 SSD"
+    preemptible:  0
+  }
+}
+
+
 task nextclade_one_sample {
     meta {
         description: "Nextclade classification of one sample. Leaving optional inputs unspecified will use SARS-CoV-2 defaults."
@@ -164,7 +241,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
-        String docker = "neherlab/nextclade:0.14.2"
+        String docker = "neherlab/nextclade:0.14.4"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {

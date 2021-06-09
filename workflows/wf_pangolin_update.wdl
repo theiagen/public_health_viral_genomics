@@ -9,7 +9,7 @@ workflow pangolin_update {
 		String    updated_pangolin_docker
 	}
 
-	call taxon_ID.pangolin2 {
+	call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
       fasta = assembly,
@@ -17,11 +17,12 @@ workflow pangolin_update {
 	}
 
 	output {
-		String	pango_lineage	=	pangolin2.pangolin_lineage
-    String	pangolin_conflicts	=	pangolin2.pangolin_conflicts
-    String pangolin_notes = pangolin2.pangolin_notes
-  	String	pangolin_version	=	pangolin2.version
-  	File	pango_lineage_report	=	pangolin2.pango_lineage_report
-  	String	pangolin_docker	=	pangolin2.pangolin_docker
+		String	pango_lineage	=	pangolin3.pangolin_lineage
+    String	pangolin_conflicts	=	pangolin3.pangolin_conflicts
+    String pangolin_notes = pangolin3.pangolin_notes
+  	String	pangolin_version	=	pangolin3.version
+  	File	pango_lineage_report	=	pangolin3.pango_lineage_report
+  	String	pangolin_docker	=	pangolin3.pangolin_docker
+		String	pangolin_usher_version = pangolin3.pangolin_usher_version
 	}
 }

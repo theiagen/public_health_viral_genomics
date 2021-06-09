@@ -20,7 +20,7 @@ workflow titan_illumina_pe {
     File    read1_raw
     File    read2_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
+    String  pangolin_docker_image = "staphb/pangolin:3.0.5-pangolearn-2021-06-05"
 
   }
 
@@ -62,7 +62,7 @@ workflow titan_illumina_pe {
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam
   }
-  call taxon_ID.pangolin2 {
+  call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq,
@@ -82,7 +82,7 @@ workflow titan_illumina_pe {
       genome_fasta = consensus.consensus_seq,
   }
   output {
-
+  String titan_gc_version = "Titan_Illumina_PE v1.4.4"
   String	seq_platform	=	seq_method
   
   File  read1_dehosted  = read_QC_trim.read1_dehosted
@@ -134,12 +134,13 @@ workflow titan_illumina_pe {
   Float	assembly_mean_coverage	=	stats_n_coverage_primtrim.depth
   String	samtools_version_stats	=	stats_n_coverage.samtools_version
 
-  String	pango_lineage	=	pangolin2.pangolin_lineage
-  String	pangolin_conflicts	=	pangolin2.pangolin_conflicts
-  String pangolin_notes = pangolin2.pangolin_notes
-  String	pangolin_version	=	pangolin2.version
-  File	pango_lineage_report	=	pangolin2.pango_lineage_report
-  String	pangolin_docker	=	pangolin2.pangolin_docker
+  String	pango_lineage	=	pangolin3.pangolin_lineage
+  String	pangolin_conflicts	=	pangolin3.pangolin_conflicts
+  String pangolin_notes = pangolin3.pangolin_notes
+  String	pangolin_version	=	pangolin3.version
+  File	pango_lineage_report	=	pangolin3.pango_lineage_report
+  String	pangolin_docker	=	pangolin3.pangolin_docker
+  String  pangolin_usher_version = pangolin3.pangolin_usher_version
 
   File	nextclade_json	=	nextclade_one_sample.nextclade_json
   File	auspice_json	=	nextclade_one_sample.auspice_json
