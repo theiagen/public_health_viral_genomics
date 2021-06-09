@@ -20,7 +20,6 @@ workflow titan_ont {
     File  demultiplexed_reads
     Int?  normalise = 200
     String  pangolin_docker_image = "staphb/pangolin:3.0.5-pangolearn-2021-06-05"
-    Int min_genome_bases = 24000
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
