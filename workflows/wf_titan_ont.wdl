@@ -82,12 +82,10 @@ workflow titan_ont {
       bamfile = consensus.trim_sorted_bam,
       baifile = consensus.trim_sorted_bai
   }
-  if (consensus.number_ATCG >= min_genome_bases) {
-    
-      call ncbi.vadr {
-        input:
-          genome_fasta = consensus.consensus_seq
-    }
+  call ncbi.vadr {
+    input:
+      genome_fasta = consensus.consensus_seq
+  }
 
   output {
     String  titan_gc_version = "Titan_ONT v1.4.4"

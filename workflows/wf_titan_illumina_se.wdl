@@ -75,7 +75,7 @@ workflow titan_illumina_se {
   }
   call ncbi.vadr {
     input:
-      genome_fasta = consensus.consensus_seq,
+      genome_fasta = consensus.consensus_seq
   }
   output {
     String titan_gc_version = "Titan_Illumina_SE v1.4.4"
