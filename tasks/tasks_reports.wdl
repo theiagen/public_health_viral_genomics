@@ -5,9 +5,9 @@ task plot_coverage {
     File     aligned_reads_bam
     String   sample_name
 
-    Boolean skip_mark_dupes=false
-    Boolean plot_only_non_duplicates=false
-    Boolean bin_large_plots=false
+    Boolean  skip_mark_dupes=false
+    Boolean  plot_only_non_duplicates=false
+    Boolean  bin_large_plots=false
     String?  binning_summary_statistic="max" # max or min
 
     String   docker="quay.io/broadinstitute/viral-core:2.1.19"
@@ -219,9 +219,7 @@ task align_and_count {
 task align_and_count_summary {
   input {
     Array[File]+  counts_txt
-
-    String       output_prefix="count_summary"
-
+    String        output_prefix="count_summary"
     String        docker="quay.io/broadinstitute/viral-core:2.1.19"
   }
 

@@ -14,28 +14,28 @@ workflow viral_refbased_assembly {
   }
 
   input {
-    String  samplename
-    String? artic_primer_version="V3"
-    File    clear_lab_fastq
+    String    samplename
+    String?   artic_primer_version="V3"
+    File      clear_lab_fastq
     Int?      normalise=20000
 
-    String	   	submission_id
-    String 		  collection_date
-    String    	gisaid_submitter
-    String    	iso_state
-    String    	iso_continent
-    String      iso_country
-    String    	originating_lab
-    String    	origLab_address
-    String      BioProject
-    String    	submitting_lab
-    String    	subLab_address
-    String    	Authors
-    String    	organism = "Severe acute respiratory syndrome coronavirus 2"
-    String    	iso_org = "SARS-CoV-2"
-    String    	iso_host = "Human"
-    String    	assembly_or_consensus = "consensus"
-    String    	seq_platform = "Nanopore via Clear Labs Dx WGS SARS-CoV-2"
+    String    submission_id
+    String    collection_date
+    String    gisaid_submitter
+    String    iso_state
+    String    iso_continent
+    String    iso_country
+    String    originating_lab
+    String    origLab_address
+    String    BioProject
+    String    submitting_lab
+    String    subLab_address
+    String    Authors
+    String    organism = "Severe acute respiratory syndrome coronavirus 2"
+    String    iso_org = "SARS-CoV-2"
+    String    iso_host = "Human"
+    String    assembly_or_consensus = "consensus"
+    String    seq_platform = "Nanopore via Clear Labs Dx WGS SARS-CoV-2"
 
     String    passage_details="Original"
     String    gender="unknown"
@@ -97,30 +97,30 @@ workflow viral_refbased_assembly {
       samplename = samplename
   }
   call submission.SC2_submission_files {
-  	input:
+    input:
       samplename = samplename,
-		 	submission_id = submission_id,
-		  collection_date = collection_date,
-		  sequence = consensus.consensus_seq,
-		  reads = clear_lab_fastq,
+      submission_id = submission_id,
+      collection_date = collection_date,
+      sequence = consensus.consensus_seq,
+      reads = clear_lab_fastq,
 
-	  	organism = organism,
-	  	iso_org = iso_org,
-	  	iso_host = iso_host,
-	  	iso_country = iso_country,
-	  	assembly_or_consensus = assembly_or_consensus,
+      organism = organism,
+      iso_org = iso_org,
+      iso_host = iso_host,
+      iso_country = iso_country,
+      assembly_or_consensus = assembly_or_consensus,
 
-		 	gisaid_submitter = gisaid_submitter,
-     	iso_state = iso_state,
-     	iso_continent = iso_continent,
-     	seq_platform = seq_platform,
-     	artic_pipeline_version = consensus.artic_pipeline_version,
-    	originating_lab = originating_lab,
-    	origLab_address = origLab_address,
+      gisaid_submitter = gisaid_submitter,
+      iso_state = iso_state,
+      iso_continent = iso_continent,
+      seq_platform = seq_platform,
+      artic_pipeline_version = consensus.artic_pipeline_version,
+      originating_lab = originating_lab,
+      origLab_address = origLab_address,
       BioProject = BioProject,
-    	submitting_lab = submitting_lab,
-    	subLab_address = subLab_address,
-    	Authors = Authors,
+      submitting_lab = submitting_lab,
+      subLab_address = subLab_address,
+      Authors = Authors,
 
       passage_details = passage_details,
       gender = gender,
@@ -134,22 +134,22 @@ workflow viral_refbased_assembly {
 
   output {
 
-    Float   kraken_human       = kraken2.percent_human
-    Float   kraken_sc2         = kraken2.percent_sc2
-    String  kraken_version     = kraken2.version
-    String  kraken_report      = kraken2.kraken_report
+    Float   kraken_human           = kraken2.percent_human
+    Float   kraken_sc2             = kraken2.percent_sc2
+    String  kraken_version         = kraken2.version
+    String  kraken_report          = kraken2.kraken_report
 
-    File    trim_sorted_bam         = consensus.trim_sorted_bam
-    File    trim_sorted_bai         = consensus.trim_sorted_bai
-    String  artic_version           = consensus.artic_pipeline_version
-    File    consensus_seq              = consensus.consensus_seq
-    Int     number_N                   = consensus.number_N
-    Int     number_ATCG                = consensus.number_ATCG
-    Int     number_Degenerate          = consensus.number_Degenerate
-    Int     number_Total               = consensus.number_Total
-    String  artic_pipeline_version     = consensus.artic_pipeline_version
+    File    trim_sorted_bam        = consensus.trim_sorted_bam
+    File    trim_sorted_bai        = consensus.trim_sorted_bai
+    String  artic_version          = consensus.artic_pipeline_version
+    File    consensus_seq          = consensus.consensus_seq
+    Int     number_N               = consensus.number_N
+    Int     number_ATCG            = consensus.number_ATCG
+    Int     number_Degenerate      = consensus.number_Degenerate
+    Int     number_Total           = consensus.number_Total
+    String  artic_pipeline_version = consensus.artic_pipeline_version
 
-    Int     variant_num                = variant_call.variant_num
+    Int     variant_num            = variant_call.variant_num
 
     File    consensus_stats        = stats_n_coverage.stats
     File    cov_hist               = stats_n_coverage.cov_hist
@@ -179,14 +179,14 @@ workflow viral_refbased_assembly {
     File    amp_coverage           = bedtools_cov.amp_coverage
     String  bedtools_version       = bedtools_cov.version
 
-    File vadr_alterts_list = vadr.alerts_list
-    Int vadr_num_alerts = vadr.num_alerts
+    File vadr_alterts_list         = vadr.alerts_list
+    Int vadr_num_alerts            = vadr.num_alerts
 
-    File?      deID_assembly      = SC2_submission_files.deID_assembly
-    File?     genbank_assembly   = SC2_submission_files.genbank_assembly
-    File?     genbank_metadata   = SC2_submission_files.genbank_metadata
-    File?     gisaid_assembly    = SC2_submission_files.gisaid_assembly
-    File?     gisaid_metadata    = SC2_submission_files.gisaid_metadata
+    File?      deID_assembly       = SC2_submission_files.deID_assembly
+    File?     genbank_assembly     = SC2_submission_files.genbank_assembly
+    File?     genbank_metadata     = SC2_submission_files.genbank_metadata
+    File?     gisaid_assembly      = SC2_submission_files.gisaid_assembly
+    File?     gisaid_metadata      = SC2_submission_files.gisaid_metadata
 
   }
 }

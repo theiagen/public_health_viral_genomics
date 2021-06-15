@@ -4,11 +4,11 @@ import "../tasks/task_se_pub_repo_submission.wdl" as submission
 
 workflow mercury_se_prep {
     input {
-	String    samplename
-	String    submission_id
-	String    collection_date
-	File      sequence
-	File      reads
+        String    samplename
+        String    submission_id
+        String    collection_date
+        File      sequence
+        File      reads
 
         String    organism = "Severe acute respiratory syndrome coronavirus 2"
         String    iso_org = "SARS-CoV-2"

@@ -198,17 +198,17 @@ task sra {
 task compile {
 
   input {
-    Array[File] single_submission_fasta
-    Array[File] single_submission_meta
+    Array[File]   single_submission_fasta
+    Array[File]   single_submission_meta
     Array[String] samplename
-    Array[Int]  vadr_num_alerts
-    Int         vadr_threshold=0
-    String       repository
-    String    docker_image = "theiagen/utility:1.0"
-    Int       mem_size_gb = 1
-    Int       CPUs = 1
-    Int       disk_size = 25
-    Int       preemptible_tries = 0
+    Array[Int]    vadr_num_alerts
+    Int           vadr_threshold=0
+    String        repository
+    String        docker_image = "theiagen/utility:1.0"
+    Int           mem_size_gb = 1
+    Int           CPUs = 1
+    Int           disk_size = 25
+    Int           preemptible_tries = 0
   }
 
   command <<<
@@ -275,8 +275,8 @@ task compile {
   >>>
 
   output {
-    File?    upload_meta   = "${repository}_upload_meta.csv"
-    File?    upload_fasta  = "${repository}_upload.fasta"
+    File?   upload_meta   = "${repository}_upload_meta.csv"
+    File?   upload_fasta  = "${repository}_upload.fasta"
     File    batched_samples = "${repository}_batched_samples.tsv"
     File    excluded_samples = "${repository}_excluded_samples.tsv"
 

@@ -54,21 +54,21 @@ workflow read_QC_trim {
 #  }
 
   output {
-    File	read1_clean	=	bbduk_se.read1_clean
+    File    read1_clean               = bbduk_se.read1_clean
 
-    Int	fastqc_number_reads	=	fastqc_raw.number_reads
-    Int	fastqc_clean_number_reads	=	fastqc_clean.number_reads
+    Int     fastqc_number_reads       = fastqc_raw.number_reads
+    Int     fastqc_clean_number_reads = fastqc_clean.number_reads
 
-    String	kraken_version	=	kraken2_raw.version
-    Float	kraken_human	=	kraken2_raw.percent_human
-    Float	kraken_sc2	=	kraken2_raw.percent_sc2
-    String	kraken_report	=	kraken2_raw.kraken_report
-#    Float	kraken_human_dehosted	=	kraken2_dehosted.percent_human
-#    Float	kraken_sc2_dehosted	=	kraken2_dehosted.percent_sc2
-#    String	kraken_report_dehosted	=	kraken2_dehosted.kraken_report
+    String  kraken_version            = kraken2_raw.version
+    Float   kraken_human              = kraken2_raw.percent_human
+    Float   kraken_sc2                = kraken2_raw.percent_sc2
+    String  kraken_report             = kraken2_raw.kraken_report
+#    Float    kraken_human_dehosted    =    kraken2_dehosted.percent_human
+#    Float    kraken_sc2_dehosted    =    kraken2_dehosted.percent_sc2
+#    String    kraken_report_dehosted    =    kraken2_dehosted.kraken_report
 
-    String	fastqc_version	=	fastqc_raw.version
-    String	bbduk_docker	=	bbduk_se.bbduk_docker
-    String	trimmomatic_version	=	trimmomatic_se.version
+    String  fastqc_version          = fastqc_raw.version
+    String  bbduk_docker            = bbduk_se.bbduk_docker
+    String  trimmomatic_version     = trimmomatic_se.version
   }
 }

@@ -8,11 +8,11 @@ task sample_metrics_v1 {
     String    collection_date
     String    pangolin_lineage
     String    pangolin_aLRT
-    String?    fastqc_raw_pairs
-    String?    seqy_pairs
-    String?    seqy_percent
-    String?    kraken_human
-    String?    kraken_sc2
+    String?   fastqc_raw_pairs
+    String?   seqy_pairs
+    String?   seqy_percent
+    String?   kraken_human
+    String?   kraken_sc2
     String    number_N
     String    number_ATCG
     String    number_Degenerate
@@ -86,11 +86,11 @@ task sample_metrics {
     String    nextclade_clade
     String    nextclade_aa_subs
     String    nextclade_aa_dels
-    Int?       fastqc_raw_pairs
-    Int?       seqy_pairs
-    Float?     seqy_percent
-    Float?     kraken_human
-    Float?     kraken_sc2
+    Int?      fastqc_raw_pairs
+    Int?      seqy_pairs
+    Float?    seqy_percent
+    Float?    kraken_human
+    Float?    kraken_sc2
     Int       number_N
     Int       number_ATCG
     Int       number_Degenerate

@@ -209,12 +209,12 @@ input {
   Array[File] single_submission_meta
   Array[Int]  vadr_num_alerts
   Int         vadr_threshold=0
-  String       repository
-  String    docker_image = "theiagen/utility:1.0"
-  Int       mem_size_gb = 1
-  Int       CPUs = 1
-  Int       disk_size = 25
-  Int       preemptible_tries = 0
+  String      repository
+  String      docker_image = "theiagen/utility:1.0"
+  Int         mem_size_gb = 1
+  Int         CPUs = 1
+  Int         disk_size = 25
+  Int         preemptible_tries = 0
 }
 
   command <<<
