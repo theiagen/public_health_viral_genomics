@@ -141,7 +141,7 @@ task genbank {
     isolate=$(echo ~{submission_id} | awk 'BEGIN { FS = "-" } ; {$1=$2=""; print $0}' | sed 's/^ *//g')
 
     # removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">~{submission_id} [organism=~{organism}][isolate=~{iso_org}/~{iso_host}/~{iso_country}/~{submission_id}/~{year})][host=~{iso_host}][country=~{iso_country}][collection_date=~{collection_date}]" > ~{submission_id}.genbank.fa
+    echo ">~{submission_id} [organism=~{organism}][isolate=~{iso_org}/~{iso_host}/~{iso_country}/~{submission_id}/$year)][host=~{iso_host}][country=~{iso_country}][collection_date=~{collection_date}]" > ~{submission_id}.genbank.fa
     grep -v ">" ~{sequence} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}.genbank.fa
 
     echo Sequence_ID,Country,Host,Isolate,Collection Date, BioProject Accession > ~{submission_id}.genbankMeta.csv
@@ -209,12 +209,12 @@ input {
   Array[File] single_submission_meta
   Array[Int]  vadr_num_alerts
   Int         vadr_threshold=0
-  String       repository
-  String    docker_image = "theiagen/utility:1.0"
-  Int       mem_size_gb = 1
-  Int       CPUs = 1
-  Int       disk_size = 25
-  Int       preemptible_tries = 0
+  String      repository
+  String      docker_image = "theiagen/utility:1.0"
+  Int         mem_size_gb = 1
+  Int         CPUs = 1
+  Int         disk_size = 25
+  Int         preemptible_tries = 0
 }
 
   command <<<

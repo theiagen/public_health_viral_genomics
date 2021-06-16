@@ -50,12 +50,11 @@ task ncbi_scrub_pe {
   >>>
 
   output {
-    File read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
-    File read2_dehosted = "~{samplename}_R2_dehosted.fastq.gz"
-    Int read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
-    Int read2_human_spots_removed = read_int("REV_SPOTS_REMOVED")
+    File   read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
+    File   read2_dehosted = "~{samplename}_R2_dehosted.fastq.gz"
+    Int    read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
+    Int    read2_human_spots_removed = read_int("REV_SPOTS_REMOVED")
     String ncbi_scrub_docker = docker
-
   }
 
   runtime {
@@ -99,7 +98,7 @@ task ncbi_scrub_se {
 
   output {
     File       read1_dehosted = "~{samplename}_R1_dehosted.fastq.gz"
-    Int read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
+    Int        read1_human_spots_removed = read_int("FWD_SPOTS_REMOVED")
     String     ncbi_scrub_docker    = docker
 
   }
@@ -176,7 +175,7 @@ task trimmomatic {
     Int?        trimmomatic_minlen = 75
     Int?        trimmomatic_window_size=4
     Int?        trimmomatic_quality_trim_score=30
-    Int?    threads = 4
+    Int?        threads = 4
   }
 
   command <<<

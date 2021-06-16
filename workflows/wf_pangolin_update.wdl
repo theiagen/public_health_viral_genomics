@@ -3,18 +3,18 @@ version 1.0
 import "../tasks/task_taxonID.wdl" as taxon_ID
 
 workflow pangolin_update {
-	input {
-		String    samplename
-		File 		assembly
-		String    updated_pangolin_docker
-	}
+    input {
+        String  samplename
+        File    assembly
+        String  updated_pangolin_docker
+    }
 
 	call taxon_ID.pangolin3 {
     input:
-      samplename = samplename,
-      fasta = assembly,
-			docker = updated_pangolin_docker
-	}
+        samplename = samplename,
+        fasta = assembly,
+        docker = updated_pangolin_docker
+    }
 
 	output {
 		String	pango_lineage	=	pangolin3.pangolin_lineage

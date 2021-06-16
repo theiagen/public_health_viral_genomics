@@ -31,7 +31,7 @@ task demultiplexing {
 task read_filtering {
 
   input {
-    File demultiplexed_reads
+    File        demultiplexed_reads
     String      samplename
     String?     run_prefix="artic_ncov2019"
     Int?        min_length=400
@@ -67,7 +67,7 @@ task consensus {
   input {
     String    samplename
     File      filtered_reads
-    String?    artic_primer_version="V3"
+    String?   artic_primer_version="V3"
     Int?      normalise=20000
     Int?      cpu=8
   }
@@ -119,9 +119,9 @@ task consensus {
     Int     number_ATCG = read_string("NUM_ACTG")
     Int     number_Degenerate = read_string("NUM_DEGENERATE")
     Int     number_Total = read_string("NUM_TOTAL")
-    Float     pool1_percent = read_string("POOL1_PERCENT")
-    Float     pool2_percent = read_string("POOL2_PERCENT")
-    Float     percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
+    Float   pool1_percent = read_string("POOL1_PERCENT")
+    Float   pool2_percent = read_string("POOL2_PERCENT")
+    Float   percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
     String  artic_pipeline_version = read_string("VERSION")
   }
 
