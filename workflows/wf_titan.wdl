@@ -18,187 +18,240 @@ workflow titan {
     input {
         File    input_fofn
         File    primer_bed
-        String  pangolin_docker = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
+        String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
         Array[Array[File]] samples = read_tsv(input_fofn)
     }
 
-    scatter (sample in inputSamples) {
-        String samplename = sample[0]
-        String run_id     = sample[1]
-        String platform   = sample[2]
-        File   r1         = sample[3]
-        File?  r2         = sample[4]
+    scatter (sample in samples) {
+        # String samplename = sample[0]
+        # String run_id     = sample[1]
+        # String platform   = sample[2]
+        # File   r1         = sample[3]
+        # File?  r2         = sample[4]
 
-        if (platform == "clearlabs") {
-            call clearlabs.titan_clearlabs as titan { 
+        if (sample[2] == "clearlabs") {
+            call clearlabs.titan_clearlabs as titan_clearlabs { 
                 input:
-                    samplename = samplename,
-                    clear_lab_fastq = r1,
+                    samplename = sample[0],
+                    clear_lab_fastq = sample[3],
                     pangolin_docker_image = pangolin_docker_image
             }
-        } else if (platform == "clearlabs_assembly") {
-            call clearlabs.titan_clearlabs as titan { 
+
+           call summary.titan_summary {
                 input:
-                    samplename = samplename,
-                    clear_lab_fastq = r1,
-                    primer_bed = primer_bed,
-                    pangolin_docker_image = pangolin_docker_image
-            }
-        } else if (platform == "illumina_pe")
-            call illumina_pe.titan_clearlabs as titan { 
-                input:
-                    samplename = samplename,
-                    read_1raw = r1,
-                    read_2raw = r2,
-                    primer_bed = primer_bed,
-                    pangolin_docker_image = pangolin_docker_image
-            }
-        } else if (platform == "illumina_se")
-            call illumina_se.titan_clearlabs as titan { 
-                input:
-                    samplename = samplename,
-                    read1_raw  = r1,
-                    primer_bed = primer_bed,
-                    pangolin_docker_image = pangolin_docker_image
-            }
-        } else if (platform == "ont")
-            call ont.titan_clearlabs as titan { 
-                input:
-                    samplename = samplename,
-                    clear_lab_fastq = r1,
-                    primer_bed = primer_bed,
-                    pangolin_docker_image = pangolin_docker_image
+                    samplename = sample[0],
+                    seq_platform = titan_clearlabs.seq_platform,
+                    percent_reference_coverage = titan_clearlabs.percent_reference_coverage,
+                    number_N = titan_clearlabs.number_N,
+                    pango_lineage = titan_clearlabs.pango_lineage,
+                    pangolin_conflicts = titan_clearlabs.pangolin_conflicts,
+                    pangolin_notes = titan_clearlabs.pangolin_notes,
+                    pangolin_version = titan_clearlabs.pangolin_version,
+                    pangolin_docker = titan_clearlabs.pangolin_docker,
+                    nextclade_clade = titan_clearlabs.nextclade_clade,
+                    nextclade_aa_subs = titan_clearlabs.nextclade_aa_subs,
+                    nextclade_aa_dels = titan_clearlabs.nextclade_aa_dels,
+                    vadr_num_alerts = titan_clearlabs.vadr_num_alerts,
+                    assembly_length_unambiguous = titan_clearlabs.assembly_length_unambiguous,
+                    assembly_mean_coverage = titan_clearlabs.assembly_mean_coverage,
+                    assembly_method = titan_clearlabs.assembly_method,
+                    number_Degenerate = titan_clearlabs.number_Degenerate,
+                    number_Total = titan_clearlabs.number_Total,
+                    meanbaseq_trim = titan_clearlabs.meanbaseq_trim,
+                    meanmapq_trim = titan_clearlabs.meanmapq_trim,
+                    fastqc_clean1 = titan_clearlabs.fastqc_clean,
+                    fastqc_raw1 = titan_clearlabs.fastqc_raw,
+                    kraken_report = titan_clearlabs.kraken_report,
+                    kraken_report_dehosted = titan_clearlabs.kraken_report_dehosted,
+                    kraken_human = titan_clearlabs.kraken_human,
+                    kraken_human_dehosted = titan_clearlabs.kraken_human_dehosted,
+                    kraken_sc2 = titan_clearlabs.kraken_sc2,
+                    kraken_sc2_dehosted = titan_clearlabs.kraken_sc2_dehosted,
+                    pool1_percent = titan_clearlabs.pool1_percent,
+                    pool2_percent = titan_clearlabs.pool2_percent,
+                    artic_version = titan_clearlabs.artic_version,
+                    kraken_version = titan_clearlabs.kraken_version,
+                    nextclade_version = titan_clearlabs.nextclade_version,
+                    samtools_version = titan_clearlabs.samtools_version,
+                    vadr_docker = titan_clearlabs.vadr_docker
             }
         }
 
-        # Produce summary
-        call summary.sample_results {
-            input:
-        String seq_platform                = titan.seq_platform
-        Int    fastqc_raw                  = titan.fastqc_raw
-        Int    fastqc_clean                = titan.fastqc_clean
+        if (sample[2] == "illumina_pe") {
+            call illumina_pe.titan_illumina_pe as titan_illumina_pe { 
+                input:
+                    samplename = sample[0],
+                    read_1raw = sample[3],
+                    read_2raw = sample[4],
+                    primer_bed = primer_bed,
+                    pangolin_docker_image = pangolin_docker_image
+            }
 
-        String kraken_version              = titan.kraken_version
-        Float  kraken_human                = titan.kraken_human
-        Float  kraken_sc2                  = titan.kraken_sc2
-        String kraken_report               = titan.kraken_report
-        Float  kraken_human_dehosted       = titan.kraken_human_dehosted
-        Float  kraken_sc2_dehosted         = titan.kraken_sc2_dehosted
-        String kraken_report_dehosted      = titan.kraken_report_dehosted
-
-        File   aligned_bam                 = titan.aligned_bam
-        File   aligned_bai                 = titan.aligned_bai
-        File   variants_from_ref_vcf       = titan.variants_from_ref_vcf
-        String artic_version               = titan.artic_version
-        File   assembly_fasta              = titan.assembly_fasta
-        Int    number_N                    = titan.number_N
-        Int    assembly_length_unambiguous = titan.assembly_length_unambiguous
-        Int    number_Degenerate           = titan.number_Degenerate
-        Int    number_Total                = titan.number_Total
-        Float  pool1_percent               = titan.pool1_percent
-        Float  pool2_percent               = titan.pool2_percent
-        Float  percent_reference_coverage  = titan.percent_reference_coverage
-        String assembly_method             = titan.assembly_method
-
-        File   consensus_stats             = titan.consensus_stats
-        File   consensus_flagstat          = titan.consensus_flagstat
-        Float  meanbaseq_trim              = titan.meanbaseq_trim
-        Float  meanmapq_trim               = titan.meanmapq_trim
-        Float  assembly_mean_coverage      = titan.assembly_mean_coverage
-        String samtools_version            = titan.samtools_version
-
-        String pango_lineage               = titan.pango_lineage
-        String pangolin_conflicts          = titan.pangolin_conflicts
-        String pangolin_notes              = titan.pangolin_notes
-        String pangolin_version            = titan.pangolin_version
-        String pangolin_docker             = titan.pangolin_docker
-
-        File   nextclade_json              = titan.nextclade_json
-        File   auspice_json                = titan.auspice_json
-        File   nextclade_tsv               = titan.nextclade_tsv
-        String nextclade_clade             = titan.nextclade_clade
-        String nextclade_aa_subs           = titan.nextclade_aa_subs
-        String nextclade_aa_dels           = titan.nextclade_aa_dels
-        String nextclade_version           = titan.nextclade_version
-        Int    vadr_num_alerts             = titan.vadr_num_alerts
-        String vadr_docker                 = titan.vadr_docker
+           call summary.titan_summary {
+                input:
+                    samplename = sample[0],
+                    seq_platform = titan_illumina_pe.seq_platform,
+                    percent_reference_coverage = titan_illumina_pe.percent_reference_coverage,
+                    number_N = titan_illumina_pe.number_N,
+                    pango_lineage = titan_illumina_pe.pango_lineage,
+                    pangolin_conflicts = titan_illumina_pe.pangolin_conflicts,
+                    pangolin_notes = titan_illumina_pe.pangolin_notes,
+                    pangolin_version = titan_illumina_pe.pangolin_version,
+                    pangolin_docker = titan_illumina_pe.pangolin_docker,
+                    nextclade_clade = titan_illumina_pe.nextclade_clade,
+                    nextclade_aa_subs = titan_illumina_pe.nextclade_aa_subs,
+                    nextclade_aa_dels = titan_illumina_pe.nextclade_aa_dels,
+                    vadr_num_alerts = titan_illumina_pe.vadr_num_alerts,
+                    assembly_length_unambiguous = titan_illumina_pe.assembly_length_unambiguous,
+                    assembly_mean_coverage = titan_illumina_pe.assembly_mean_coverage,
+                    assembly_method = titan_illumina_pe.assembly_method,
+                    number_Degenerate = titan_illumina_pe.number_Degenerate,
+                    number_Total = titan_illumina_pe.number_Total,
+                    meanbaseq_trim = titan_illumina_pe.meanbaseq_trim,
+                    meanmapq_trim = titan_illumina_pe.meanmapq_trim,
+                    fastqc_clean1 = titan_illumina_pe.fastqc_clean1,
+                    fastqc_clean2 = titan_illumina_pe.fastqc_clean2,
+                    fastqc_clean_pairs = titan_illumina_pe.fastqc_clean_pairs,
+                    fastqc_raw1 = titan_illumina_pe.fastqc_raw1,
+                    fastqc_raw2 = titan_illumina_pe.fastqc_raw2,
+                    fastqc_raw_pairs = titan_illumina_pe.fastqc_raw_pairs,
+                    kraken_report = titan_illumina_pe.kraken_report,
+                    kraken_report_dehosted = titan_illumina_pe.kraken_report_dehosted,
+                    kraken_human = titan_illumina_pe.kraken_human,
+                    kraken_human_dehosted = titan_illumina_pe.kraken_human_dehosted,
+                    kraken_sc2 = titan_illumina_pe.kraken_sc2,
+                    kraken_sc2_dehosted = titan_illumina_pe.kraken_sc2_dehosted,
+                    primer_trimmed_read_percent = titan_illumina_pe.primer_trimmed_read_percent,
+                    bbduk_docker = titan_illumina_pe.bbduk_docker,
+                    bwa_version = titan_illumina_pe.bwa_version,
+                    fastqc_version = titan_illumina_pe.fastqc_version,
+                    ivar_variant_version = titan_illumina_pe.ivar_variant_version,
+                    ivar_version_consensus = titan_illumina_pe.ivar_version_consensus,
+                    ivar_version_primtrim = titan_illumina_pe.ivar_version_primtrim,
+                    kraken_version = titan_illumina_pe.kraken_version,
+                    nextclade_version = titan_illumina_pe.nextclade_version,
+                    samtools_version = titan_illumina_pe.sam_version,
+                    samtools_version_consensus = titan_illumina_pe.samtools_version_consensus,
+                    samtools_version_primtrim = titan_illumina_pe.samtools_version_primtrim,
+                    samtools_version_stats = titan_illumina_pe.samtools_version_stats,
+                    trimmomatic_version = titan_illumina_pe.trimmomatic_version,
+                    vadr_docker = titan_illumina_pe.vadr_docker
+            }
         }
+        
+        if (sample[2] == "illumina_se") {
+            call illumina_se.titan_illumina_se as titan_illumina_se { 
+                input:
+                    samplename = sample[0],
+                    read1_raw  = sample[3],
+                    primer_bed = primer_bed,
+                    pangolin_docker_image = pangolin_docker_image
+            }
+
+            call summary.titan_summary {
+                input:
+                    samplename = sample[0],
+                    seq_platform = titan_illumina_se.seq_platform,
+                    percent_reference_coverage = titan_illumina_se.percent_reference_coverage,
+                    number_N = titan_illumina_se.number_N,
+                    pango_lineage = titan_illumina_se.pango_lineage,
+                    pangolin_conflicts = titan_illumina_se.pangolin_conflicts,
+                    pangolin_notes = titan_illumina_se.pangolin_notes,
+                    pangolin_version = titan_illumina_se.pangolin_version,
+                    pangolin_docker = titan_illumina_se.pangolin_docker,
+                    nextclade_clade = titan_illumina_se.nextclade_clade,
+                    nextclade_aa_subs = titan_illumina_se.nextclade_aa_subs,
+                    nextclade_aa_dels = titan_illumina_se.nextclade_aa_dels,
+                    vadr_num_alerts = titan_illumina_se.vadr_num_alerts,
+                    assembly_length_unambiguous = titan_illumina_se.assembly_length_unambiguous,
+                    assembly_mean_coverage = titan_illumina_se.assembly_mean_coverage,
+                    assembly_method = titan_illumina_se.assembly_method,
+                    number_Degenerate = titan_illumina_se.number_Degenerate,
+                    number_Total = titan_illumina_se.number_Total,
+                    meanbaseq_trim = titan_illumina_se.meanbaseq_trim,
+                    meanmapq_trim = titan_illumina_se.meanmapq_trim,
+                    fastqc_clean1 = titan_illumina_se.fastqc_clean,
+                    fastqc_raw1 = titan_illumina_se.fastqc_raw,
+                    kraken_report = titan_illumina_se.kraken_report,
+                    kraken_human = titan_illumina_se.kraken_human,
+                    kraken_sc2 = titan_illumina_se.kraken_sc2,
+                    primer_trimmed_read_percent = titan_illumina_se.primer_trimmed_read_percent,
+                    bbduk_docker = titan_illumina_se.bbduk_docker,
+                    bwa_version = titan_illumina_se.bwa_version,
+                    fastqc_version = titan_illumina_se.fastqc_version,
+                    ivar_variant_version = titan_illumina_se.ivar_variant_version,
+                    ivar_version_consensus = titan_illumina_se.ivar_version_consensus,
+                    ivar_version_primtrim = titan_illumina_se.ivar_version_primtrim,
+                    kraken_version = titan_illumina_se.kraken_version,
+                    nextclade_version = titan_illumina_se.nextclade_version,
+                    samtools_version = titan_illumina_se.sam_version,
+                    samtools_version_consensus = titan_illumina_se.samtools_version_consensus,
+                    samtools_version_primtrim = titan_illumina_se.samtools_version_primtrim,
+                    samtools_version_stats = titan_illumina_se.samtools_version_stats,
+                    trimmomatic_version = titan_illumina_se.trimmomatic_version,
+                    vadr_docker = titan_illumina_se.vadr_docker
+            }
+        }
+        
+        if (sample[2] == "ont") {
+            call ont.titan_ont as titan_ont { 
+                input:
+                    samplename = sample[0],
+                    clear_lab_fastq = sample[3],
+                    primer_bed = primer_bed,
+                    pangolin_docker_image = pangolin_docker_image
+            }
+
+            call summary.titan_summary {
+                input:
+                    samplename = sample[0],
+                    seq_platform = titan_ont.seq_platform,
+                    percent_reference_coverage = titan_ont.percent_reference_coverage,
+                    number_N = titan_ont.number_N,
+                    pango_lineage = titan_ont.pango_lineage,
+                    pangolin_conflicts = titan_ont.pangolin_conflicts,
+                    pangolin_notes = titan_ont.pangolin_notes,
+                    pangolin_version = titan_ont.pangolin_version,
+                    pangolin_docker = titan_ont.pangolin_docker,
+                    nextclade_clade = titan_ont.nextclade_clade,
+                    nextclade_aa_subs = titan_ont.nextclade_aa_subs,
+                    nextclade_aa_dels = titan_ont.nextclade_aa_dels,
+                    vadr_num_alerts = titan_ont.vadr_num_alerts,
+                    assembly_length_unambiguous = titan_ont.assembly_length_unambiguous,
+                    assembly_mean_coverage = titan_ont.assembly_mean_coverage,
+                    assembly_method = titan_ont.assembly_method,
+                    number_Degenerate = titan_ont.number_Degenerate,
+                    number_Total = titan_ont.number_Total,
+                    meanbaseq_trim = titan_ont.meanbaseq_trim,
+                    meanmapq_trim = titan_ont.meanmapq_trim,
+                    fastqc_clean1 = titan_ont.fastqc_clean,
+                    fastqc_raw1 = titan_ont.fastqc_raw,
+                    kraken_report = titan_ont.kraken_report,
+                    kraken_report_dehosted = titan_ont.kraken_report_dehosted,
+                    kraken_human = titan_ont.kraken_human,
+                    kraken_human_dehosted = titan_ont.kraken_human_dehosted,
+                    kraken_sc2 = titan_ont.kraken_sc2,
+                    kraken_sc2_dehosted = titan_ont.kraken_sc2_dehosted,
+                    pool1_percent = titan_ont.pool1_percent,
+                    pool2_percent = titan_ont.pool2_percent,
+                    artic_version = titan_ont.artic_version,
+                    kraken_version = titan_ont.kraken_version,
+                    nextclade_version = titan_ont.nextclade_version,
+                    samtools_version = titan_ont.samtools_version,
+                    vadr_docker = titan_ont.vadr_docker
+            }
+        }
+
+
     }
 
-    call summary.merge_results {
-
+    call summary.merge_titan_summary {
+        input:
+            summaries = titan_summary.summary
     }
 
     output {
         # Titan outputs
-        String seq_platform                = titan.seq_platform
-        File   dehosted_reads              = titan.dehosted_reads
-        Int    fastqc_raw                  = titan.fastqc_raw
-        Int    fastqc_clean                = titan.fastqc_clean
-
-        String kraken_version              = titan.kraken_version
-        Float  kraken_human                = titan.kraken_human
-        Float  kraken_sc2                  = titan.kraken_sc2
-        String kraken_report               = titan.kraken_report
-        Float  kraken_human_dehosted       = titan.kraken_human_dehosted
-        Float  kraken_sc2_dehosted         = titan.kraken_sc2_dehosted
-        String kraken_report_dehosted      = titan.kraken_report_dehosted
-
-        File   aligned_bam                 = titan.aligned_bam
-        File   aligned_bai                 = titan.aligned_bai
-        File   variants_from_ref_vcf       = titan.variants_from_ref_vcf
-        String artic_version               = titan.artic_version
-        File   assembly_fasta              = titan.assembly_fasta
-        Int    number_N                    = titan.number_N
-        Int    assembly_length_unambiguous = titan.assembly_length_unambiguous
-        Int    number_Degenerate           = titan.number_Degenerate
-        Int    number_Total                = titan.number_Total
-        Float  pool1_percent               = titan.pool1_percent
-        Float  pool2_percent               = titan.pool2_percent
-        Float  percent_reference_coverage  = titan.percent_reference_coverage
-        String assembly_method             = titan.assembly_method
-
-        File   consensus_stats             = titan.consensus_stats
-        File   consensus_flagstat          = titan.consensus_flagstat
-        Float  meanbaseq_trim              = titan.meanbaseq_trim
-        Float  meanmapq_trim               = titan.meanmapq_trim
-        Float  assembly_mean_coverage      = titan.assembly_mean_coverage
-        String samtools_version            = titan.samtools_version
-
-        String pango_lineage               = titan.pango_lineage
-        String pangolin_conflicts          = titan.pangolin_conflicts
-        String pangolin_notes              = titan.pangolin_notes
-        String pangolin_version            = titan.pangolin_version
-        File   pango_lineage_report        = titan.pango_lineage_report
-        String pangolin_docker             = titan.pangolin_docker
-
-        File   nextclade_json              = titan.nextclade_json
-        File   auspice_json                = titan.auspice_json
-        File   nextclade_tsv               = titan.nextclade_tsv
-        String nextclade_clade             = titan.nextclade_clade
-        String nextclade_aa_subs           = titan.nextclade_aa_subs
-        String nextclade_aa_dels           = titan.nextclade_aa_dels
-        String nextclade_version           = titan.nextclade_version
-
-        File   vadr_alerts_list            = titan.vadr_alerts_list
-        Int    vadr_num_alerts             = titan.vadr_num_alerts
-        String vadr_docker                 = titan.vadr_docker
-
-        # Mercury Prep
-        File   deID_assembly               = mercury_se_prep.deID_assembly
-        File?  genbank_assembly            = mercury_se_prep.genbank_assembly
-        File?  genbank_metadata            = mercury_se_prep.genbank_metadata
-        File?  gisaid_assembly             = mercury_se_prep.gisaid_assembly
-        File?  gisaid_metadata             = mercury_se_prep.gisaid_metadata
-
-        # Mercury Batch
-        File?  GenBank_upload_meta         = mercury_batch.GenBank_upload_meta
-        File?  GenBank_upload_fasta        = mercury_batch.GenBank_upload_fasta
-        File   GenBank_batched_samples     = mercury_batch.GenBank_batched_samples
-        File   GenBank_excluded_samples    = mercury_batch.GenBank_excluded_samples
-        File?  GISAID_upload_meta          = mercury_batch.GISAID_upload_meta
-        File?  GISAID_upload_fasta         = mercury_batch.GISAID_upload_fasta
-        File   GISAID_batched_samples      = mercury_batch.GISAID_batched_samples
-        File   GISAID_excluded_samples     = mercury_batch.GISAID_excluded_samples
+        File        merged_summaries      = merge_titan_summary.merged_summaries
     }
 }
