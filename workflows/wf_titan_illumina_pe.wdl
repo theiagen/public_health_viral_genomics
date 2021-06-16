@@ -75,6 +75,7 @@ workflow titan_illumina_pe {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
+      assembly_length_unambiguous = consensus.number_ATCG
   }
   output {
 
@@ -147,8 +148,8 @@ workflow titan_illumina_pe {
     File    ivar_tsv                    = variant_call.sample_variants
     String  ivar_variant_version        = variant_call.ivar_version
 
-    File    vadr_alerts_list            = vadr.alerts_list
-    Int     vadr_num_alerts             = vadr.num_alerts
+    File?    vadr_alerts_list            = vadr.alerts_list
+    String     vadr_num_alerts             = vadr.num_alerts
     String  vadr_docker                 = vadr.vadr_docker
   }
 }
