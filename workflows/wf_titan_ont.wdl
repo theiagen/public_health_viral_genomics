@@ -87,11 +87,9 @@ workflow titan_ont {
   }
 
   output {
-    String  titan_gc_version = "Titan_ONT v1.4.4"
-    String	seq_platform	=	seq_method
+    String  titan_gc_version            = "Titan_ONT v1.4.4"
+    String  seq_platform                = seq_method
     
-    File reads_dehosted = ncbi_scrub_se.read1_dehosted
-
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
     Int     fastqc_raw                  = fastqc_se_raw.number_reads
