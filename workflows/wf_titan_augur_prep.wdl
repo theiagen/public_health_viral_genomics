@@ -1,6 +1,7 @@
 version 1.0
 
 import "../tasks/tasks_nextstrain.wdl" as nextstrain
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_augur_prep {
     input {
@@ -24,9 +25,13 @@ workflow titan_augur_prep {
             iso_county = iso_county,
             pango_lineage = pango_lineage
     }
-
-    output {
-            File     augur_metadata = prep_augur_metadata.augur_metadata
+    call versioning.version_capture{
+      input:
+    }
+    output 
+      String titan_augur_run_version            = version_capture.phvg_version
+      String titan_augur_run_analysis_date      = version_capture.date
+      File   augur_metadata                     = prep_augur_metadata.augur_metadata
 
     }
 }

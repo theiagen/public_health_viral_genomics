@@ -1,6 +1,7 @@
 version 1.0
 
 import "../tasks/task_se_pub_repo_submission.wdl" as submission
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow mercury_batch {
     input {
@@ -29,8 +30,12 @@ workflow mercury_batch {
             vadr_num_alerts=vadr_num_alerts,
             repository="GISAID"
     }
-
-    output {
+    call versioning.version_capture{
+      input:
+    }
+    output 
+        String mercury_batch_version    =    version_capture.phvg_version
+        String mercury_batch_analysis_date    =    version_capture.date
         File?    GenBank_upload_meta  = genbank_compile.upload_meta
         File?    GenBank_upload_fasta = genbank_compile.upload_fasta
         File     GenBank_batched_samples = genbank_compile.batched_samples
