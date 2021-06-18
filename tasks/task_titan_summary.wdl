@@ -2,119 +2,121 @@ version 1.0
 
 task titan_summary {
     input {
-        String samplename
-        String seq_platform
-        Float  percent_reference_coverage
-        Int    number_N
-        String pango_lineage
-        String pangolin_conflicts
-        String pangolin_notes
-        String pangolin_version
-        String pangolin_docker
-        String nextclade_clade
-        String nextclade_aa_subs
-        String nextclade_aa_dels
-        Int    vadr_num_alerts
-        Int    assembly_length_unambiguous
-        Float  assembly_mean_coverage
-        String assembly_method
-        Int    number_Degenerate
-        Int    number_Total
-        Float  meanbaseq_trim
-        Float  meanmapq_trim
-        Int    fastqc_clean1
-        Int    fastqc_clean2 = ""
-        String fastqc_clean_pairs = ""
-        Int    fastqc_raw1
-        Int    fastqc_raw2 = ""
-        String fastqc_raw_pairs = ""
-        Float  kraken_human
-        Float  kraken_human_dehosted = ""
-        String kraken_report
-        String kraken_report_dehosted = ""
-        Float  kraken_sc2
-        Float  kraken_sc2_dehosted = ""
-        Float  pool1_percent = ""
-        Float  pool2_percent = ""
-        Float  primer_trimmed_read_percent
-        String artic_version
-        String bbduk_docker = ""
-        String bedtools_version = ""
-        String bwa_version = ""
-        String fastqc_version = ""
-        String ivar_variant_version = ""
-        String ivar_version_consensus = ""
-        String ivar_version_primtrim = ""
-        String kraken_version = ""
-        String nextclade_version = ""
-        String samtools_version
-        String samtools_version_consensus = ""
-        String samtools_version_primtrim = ""
-        String samtools_version_stats = ""
-        String trimmomatic_version = ""
-        String vadr_docker = ""
+        String  samplename
+        String  seq_platform
+        Float   percent_reference_coverage
+        Int     number_N
+        String  pango_lineage
+        String  pangolin_conflicts
+        String  pangolin_notes
+        String  pangolin_version
+        String  pangolin_docker
+        String  nextclade_clade
+        String  nextclade_aa_subs
+        String  nextclade_aa_dels
+        Int     vadr_num_alerts
+        Int     assembly_length_unambiguous
+        Float   assembly_mean_coverage
+        String  assembly_method
+        Int     number_Degenerate
+        Int     number_Total
+        Float   meanbaseq_trim
+        Float   meanmapq_trim
+        Int     fastqc_clean1
+        String? fastqc_clean2 = ""
+        String? fastqc_clean_pairs = ""
+        Int     fastqc_raw1
+        String? fastqc_raw2 = ""
+        String? fastqc_raw_pairs = ""
+        Float   kraken_human
+        String? kraken_human_dehosted = ""
+        String  kraken_report
+        String? kraken_report_dehosted = ""
+        Float   kraken_sc2
+        String? kraken_sc2_dehosted = ""
+        String? pool1_percent = ""
+        String? pool2_percent = ""
+        String? primer_trimmed_read_percent
+        String? artic_version
+        String? bbduk_docker = ""
+        String? bwa_version = ""
+        String? fastqc_version = ""
+        String? ivar_variant_version = ""
+        String? ivar_version_consensus = ""
+        String? ivar_version_primtrim = ""
+        String? kraken_version = ""
+        String? nextclade_version = ""
+        String  samtools_version
+        String? samtools_version_consensus = ""
+        String? samtools_version_primtrim = ""
+        String? samtools_version_stats = ""
+        String? trimmomatic_version = ""
+        String? vadr_docker = ""
     }
 
     command <<<
         python3<<CODE
-        data = [
-            '~{samplename}',
-            '~{seq_platform}',
-            '~{percent_reference_coverage}',
-            '~{number_N}',
-            '~{pango_lineage}',
-            '~{pangolin_conflicts}',
-            '~{pangolin_notes}',
-            '~{pangolin_version}',
-            '~{pangolin_docker}',
-            '~{nextclade_clade}',
-            '~{nextclade_aa_subs}',
-            '~{nextclade_aa_dels}',
-            '~{vadr_num_alerts}',
-            '~{assembly_length_unambiguous}',
-            '~{assembly_mean_coverage}',
-            '~{assembly_method}',
-            '~{number_Degenerate}',
-            '~{number_Total}',
-            '~{meanbaseq_trim}',
-            '~{meanmapq_trim}',
-            '~{fastqc_clean1}',
-            '~{fastqc_clean2}',
-            '~{fastqc_clean_pairs}',
-            '~{fastqc_raw1}',
-            '~{fastqc_raw2}',
-            '~{fastqc_raw_pairs}',
-            '~{kraken_human}',
-            '~{kraken_human_dehosted}',
-            '~{kraken_report}',
-            '~{kraken_report_dehosted}',
-            '~{kraken_sc2}',
-            '~{kraken_sc2_dehosted}',
-            '~{pool1_percent}',
-            '~{pool2_percent}',
-            '~{primer_trimmed_read_percent}',
-            '~{artic_version}',
-            '~{bbduk_docker}',
-            '~{bwa_version}',
-            '~{fastqc_version}',
-            '~{ivar_variant_version}',
-            '~{ivar_version_consensus}',
-            '~{ivar_version_primtrim}',
-            '~{kraken_version}',
-            '~{nextclade_version}',
-            '~{samtools_version}',
-            '~{samtools_version_consensus}',
-            '~{samtools_version_primtrim}',
-            '~{samtools_version_stats}',
-            '~{trimmomatic_version}',
-            '~{vadr_docker}'
-        ]
-        print("\t".join(data))
+        from collections import OrderedDict
+        import json
+        data = OrderedDict((
+            ('samplename', '~{samplename}'),
+            ('seq_platform', '~{seq_platform}'),
+            ('percent_reference_coverage', '~{percent_reference_coverage}'),
+            ('number_N', '~{number_N}'),
+            ('pango_lineage', '~{pango_lineage}'),
+            ('pangolin_conflicts', '~{pangolin_conflicts}'),
+            ('pangolin_notes', '~{pangolin_notes}'),
+            ('pangolin_version', '~{pangolin_version}'),
+            ('pangolin_docker', '~{pangolin_docker}'),
+            ('nextclade_clade', '~{nextclade_clade}'),
+            ('nextclade_aa_subs', '~{nextclade_aa_subs}'),
+            ('nextclade_aa_dels', '~{nextclade_aa_dels}'),
+            ('vadr_num_alerts', '~{vadr_num_alerts}'),
+            ('assembly_length_unambiguous', '~{assembly_length_unambiguous}'),
+            ('assembly_mean_coverage', '~{assembly_mean_coverage}'),
+            ('assembly_method', '~{assembly_method}'),
+            ('number_Degenerate', '~{number_Degenerate}'),
+            ('number_Total', '~{number_Total}'),
+            ('meanbaseq_trim', '~{meanbaseq_trim}'),
+            ('meanmapq_trim', '~{meanmapq_trim}'),
+            ('fastqc_clean1', '~{fastqc_clean1}'),
+            ('fastqc_clean2', '~{fastqc_clean2}'),
+            ('fastqc_clean_pairs', '~{fastqc_clean_pairs}'),
+            ('fastqc_raw1', '~{fastqc_raw1}'),
+            ('fastqc_raw2', '~{fastqc_raw2}'),
+            ('fastqc_raw_pairs', '~{fastqc_raw_pairs}'),
+            ('kraken_human', '~{kraken_human}'),
+            ('kraken_human_dehosted', '~{kraken_human_dehosted}'),
+            ('kraken_report', '~{kraken_report}'),
+            ('kraken_report_dehosted', '~{kraken_report_dehosted}'),
+            ('kraken_sc2', '~{kraken_sc2}'),
+            ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
+            ('pool1_percent', '~{pool1_percent}'),
+            ('pool2_percent', '~{pool2_percent}'),
+            ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
+            ('artic_version', '~{artic_version}'),
+            ('bbduk_docker', '~{bbduk_docker}'),
+            ('bwa_version', '~{bwa_version}'),
+            ('fastqc_version', '~{fastqc_version}'),
+            ('ivar_variant_version', '~{ivar_variant_version}'),
+            ('ivar_version_consensus', '~{ivar_version_consensus}'),
+            ('ivar_version_primtrim', '~{ivar_version_primtrim}'),
+            ('kraken_version', '~{kraken_version}'),
+            ('nextclade_version', '~{nextclade_version}'),
+            ('samtools_version', '~{samtools_version}'),
+            ('samtools_version_consensus', '~{samtools_version_consensus}'),
+            ('samtools_version_primtrim', '~{samtools_version_primtrim}'),
+            ('samtools_version_stats', '~{samtools_version_stats}'),
+            ('trimmomatic_version', '~{trimmomatic_version}'),
+            ('vadr_docker', '~{vadr_docker}')
+        ))
+        with open(f'~{samplename}.results.json', "wt") as json_fh:
+            json.dump(data, json_fh, indent = 4)
         CODE
     >>>
 
     output {
-        String summary = read_string(stdout())
+        File summary = '~{samplename}.results.json'
     }
 
     runtime {
@@ -127,72 +129,43 @@ task titan_summary {
 
 task merge_titan_summary {
     input {
-        Array[String] summaries
+        Array[File?] clearlabs_summaries
+        Array[File?] illumina_pe_summaries
+        Array[File?] illumina_se_summaries
+        Array[File?] ont_summaries
     }
+    Array[File] clearlabs = select_all(clearlabs_summaries)
+    Array[File] illumina_pe = select_all(illumina_pe_summaries)
+    Array[File] illumina_se = select_all(illumina_se_summaries)
+    Array[File] ont = select_all(ont_summaries)
 
     command <<<
         python3<<CODE
-        with open("titan-results.tsv", 'wt') as tsv_fh:
-            header = [
-                'samplename',
-                'seq_platform',
-                'percent_reference_coverage',
-                'number_N',
-                'pango_lineage',
-                'pangolin_conflicts',
-                'pangolin_notes',
-                'pangolin_version',
-                'pangolin_docker',
-                'nextclade_clade',
-                'nextclade_aa_subs',
-                'nextclade_aa_dels',
-                'vadr_num_alerts',
-                'assembly_length_unambiguous',
-                'assembly_mean_coverage',
-                'assembly_method',
-                'number_Degenerate',
-                'number_Total',
-                'meanbaseq_trim',
-                'meanmapq_trim',
-                'fastqc_clean1',
-                'fastqc_clean2',
-                'fastqc_clean_pairs',
-                'fastqc_raw1',
-                'fastqc_raw2',
-                'fastqc_raw_pairs',
-                'kraken_human',
-                'kraken_human_dehosted',
-                'kraken_report',
-                'kraken_report_dehosted',
-                'kraken_sc2',
-                'kraken_sc2_dehosted',
-                'pool1_percent',
-                'pool2_percent',
-                'primer_trimmed_read_percent',
-                'artic_version',
-                'bbduk_docker',
-                'bwa_version',
-                'fastqc_version',
-                'ivar_variant_version',
-                'ivar_version_consensus',
-                'ivar_version_primtrim',
-                'kraken_version',
-                'nextclade_version',
-                'samtools_version',
-                'samtools_version_consensus',
-                'samtools_version_primtrim',
-                'samtools_version_stats',
-                'trimmomatic_version',
-                'vadr_docker'
-            ]
-            header = "\t".join(header)
-            tsv_fh.write(f'{header}\n')
-            summaries = '~{sep="SUMMARY" summaries}'.split('SUMMARY')
-            for summary in summaries:
-                tsv_fh.write(f'{summary}\n')
+        import json
+        header = None
+        rows = []
+        results = [
+            *'~{sep=" " clearlabs}'.split(),
+            *'~{sep=" " illumina_pe}'.split(),
+            *'~{sep=" " illumina_se}'.split(),
+            *'~{sep=" " ont}'.split()
+        ]
+        for result in results:
+            with open(result, 'rt') as json_fh:
+                row = []
+                json_data = json.load(json_fh)
+                if not header:
+                    header = json_data.keys()
+                    rows.append("\t".join(header))
+                for col in header:
+                    row.append(json_data[col])
+                rows.append("\t".join(row))
+
+        with open("titan-results.tsv", "wt") as tsv_fh:
+            for row in rows:
+                tsv_fh.write(f'{row}\n')
         CODE
     >>>
-
     output {
         File merged_summaries = "titan-results.tsv"
     }

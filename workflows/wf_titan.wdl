@@ -8,6 +8,14 @@ import "wf_titan_illumina_se.wdl" as illumina_se
 import "wf_titan_ont.wdl" as ont
 import "../tasks/task_titan_summary.wdl" as summary
 
+struct parseTSV {
+    String samplename
+    String run_id
+    String platform
+    File   r1
+    File   r2
+}
+
 workflow titan {
     meta {
         description: "Incorporates each of the Titan workflows (clearlabs, illumina_pe, illumina_se, ont) into a single run."
@@ -16,30 +24,23 @@ workflow titan {
     }
 
     input {
-        File    input_fofn
+        Array[parseTSV]    samples
         File    primer_bed
-        String  pangolin_docker_image = "staphb/pangolin:2.3.2-pangolearn-2021-02-21"
-        Array[Array[File]] samples = read_tsv(input_fofn)
+        String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
     }
 
     scatter (sample in samples) {
-        # String samplename = sample[0]
-        # String run_id     = sample[1]
-        # String platform   = sample[2]
-        # File   r1         = sample[3]
-        # File?  r2         = sample[4]
-
-        if (sample[2] == "clearlabs") {
+        if (sample.platform == "clearlabs") {
             call clearlabs.titan_clearlabs as titan_clearlabs { 
                 input:
-                    samplename = sample[0],
-                    clear_lab_fastq = sample[3],
+                    samplename = sample.samplename,
+                    clear_lab_fastq = sample.r1,
                     pangolin_docker_image = pangolin_docker_image
             }
 
-           call summary.titan_summary {
+           call summary.titan_summary as clearlabs_summary {
                 input:
-                    samplename = sample[0],
+                    samplename = sample.samplename,
                     seq_platform = titan_clearlabs.seq_platform,
                     percent_reference_coverage = titan_clearlabs.percent_reference_coverage,
                     number_N = titan_clearlabs.number_N,
@@ -77,19 +78,19 @@ workflow titan {
             }
         }
 
-        if (sample[2] == "illumina_pe") {
+        if (sample.platform == "illumina_pe") {
             call illumina_pe.titan_illumina_pe as titan_illumina_pe { 
                 input:
-                    samplename = sample[0],
-                    read_1raw = sample[3],
-                    read_2raw = sample[4],
+                    samplename = sample.samplename,
+                    read1_raw = sample.r1,
+                    read2_raw = sample.r2,
                     primer_bed = primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
-           call summary.titan_summary {
+           call summary.titan_summary as illumina_pe_summary {
                 input:
-                    samplename = sample[0],
+                    samplename = sample.samplename,
                     seq_platform = titan_illumina_pe.seq_platform,
                     percent_reference_coverage = titan_illumina_pe.percent_reference_coverage,
                     number_N = titan_illumina_pe.number_N,
@@ -139,18 +140,18 @@ workflow titan {
             }
         }
         
-        if (sample[2] == "illumina_se") {
+        if (sample.platform == "illumina_se") {
             call illumina_se.titan_illumina_se as titan_illumina_se { 
                 input:
-                    samplename = sample[0],
-                    read1_raw  = sample[3],
+                    samplename = sample.samplename,
+                    read1_raw  = sample.r1,
                     primer_bed = primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
-            call summary.titan_summary {
+            call summary.titan_summary as illumina_se_summary {
                 input:
-                    samplename = sample[0],
+                    samplename = sample.samplename,
                     seq_platform = titan_illumina_se.seq_platform,
                     percent_reference_coverage = titan_illumina_se.percent_reference_coverage,
                     number_N = titan_illumina_se.number_N,
@@ -193,18 +194,17 @@ workflow titan {
             }
         }
         
-        if (sample[2] == "ont") {
+        if (sample.platform == "ont") {
             call ont.titan_ont as titan_ont { 
                 input:
-                    samplename = sample[0],
-                    clear_lab_fastq = sample[3],
-                    primer_bed = primer_bed,
+                    samplename = sample.samplename,
+                    demultiplexed_reads = sample.r1,
                     pangolin_docker_image = pangolin_docker_image
             }
 
-            call summary.titan_summary {
+            call summary.titan_summary as ont_summary {
                 input:
-                    samplename = sample[0],
+                    samplename = sample.samplename,
                     seq_platform = titan_ont.seq_platform,
                     percent_reference_coverage = titan_ont.percent_reference_coverage,
                     number_N = titan_ont.number_N,
@@ -241,13 +241,14 @@ workflow titan {
                     vadr_docker = titan_ont.vadr_docker
             }
         }
-
-
     }
 
     call summary.merge_titan_summary {
         input:
-            summaries = titan_summary.summary
+            clearlabs_summaries = clearlabs_summary.summary,
+            illumina_pe_summaries = illumina_pe_summary.summary,
+            illumina_se_summaries = illumina_se_summary.summary,
+            ont_summaries = ont_summary.summary
     }
 
     output {
