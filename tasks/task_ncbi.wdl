@@ -793,7 +793,7 @@ task vadr {
     Int assembly_length_unambiguous
     Int skip_length=10000
 
-    String  docker="staphb/vadr:1.2"
+    String  docker="staphb/vadr:1.2.1"
     Int minlen=50
     Int maxlen=30000
   }
