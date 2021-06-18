@@ -109,7 +109,7 @@ workflow titan_illumina_pe {
     String  kraken_report_dehosted      = read_QC_trim.kraken_report_dehosted
 
     String  bwa_version                 = bwa.bwa_version
-    String  sam_version                 = bwa.sam_version
+    String  samtools_version            = bwa.sam_version
     String  assembly_method             = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
 
     File    aligned_bam                 = primer_trim.trim_sorted_bam
@@ -152,8 +152,8 @@ workflow titan_illumina_pe {
     File    ivar_tsv                    = variant_call.sample_variants
     String  ivar_variant_version        = variant_call.ivar_version
 
-    File?    vadr_alerts_list            = vadr.alerts_list
-    String     vadr_num_alerts             = vadr.num_alerts
+    File?   vadr_alerts_list            = vadr.alerts_list
+    String  vadr_num_alerts             = vadr.num_alerts
     String  vadr_docker                 = vadr.vadr_docker
   }
 }
