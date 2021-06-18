@@ -77,8 +77,8 @@ workflow titan_illumina_se {
     input:
   }
   output {
-    String titan_illumina_pe_version            = version_capture.phvg_version
-    String titan_illumina_pe_analysis_date      = version_capture.date
+    String titan_illumina_se_version            = version_capture.phvg_version
+    String titan_illumina_se_analysis_date      = version_capture.date
     String  seq_platform = seq_method
 
     File    read1_clean                 = read_QC_trim.read1_clean
