@@ -90,7 +90,7 @@ workflow titan_clearlabs {
     String titan_clearlabs_analysis_date      = version_capture.date
     String seq_platform                = seq_method
 
-    File   dehosted_reads              = ncbi_scrub_se.read1_dehosted
+    File   reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
     Int    fastqc_raw                  = fastqc_se_raw.number_reads
     Int    fastqc_clean                = fastqc_se_clean.number_reads
@@ -140,8 +140,8 @@ workflow titan_clearlabs {
     String nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String nextclade_version           = nextclade_one_sample.nextclade_version
 
-    File?   vadr_alerts_list            = vadr.alerts_list
-    String    vadr_num_alerts             = vadr.num_alerts
+    File?  vadr_alerts_list            = vadr.alerts_list
+    String vadr_num_alerts             = vadr.num_alerts
     String vadr_docker                 = vadr.vadr_docker
   }
 }
