@@ -14,6 +14,7 @@ task titan_summary {
         String  pangolin_notes
         String  pangolin_version
         String  pangolin_docker
+        String  pangolin_usher_version
         String  nextclade_clade
         String  nextclade_aa_subs
         String  nextclade_aa_dels
@@ -33,8 +34,6 @@ task titan_summary {
         String? fastqc_raw_pairs = ""
         Float   kraken_human
         String? kraken_human_dehosted = ""
-        String  kraken_report
-        String? kraken_report_dehosted = ""
         Float   kraken_sc2
         String? kraken_sc2_dehosted = ""
         String? pool1_percent = ""
@@ -74,6 +73,7 @@ task titan_summary {
             ('pangolin_notes', '~{pangolin_notes}'),
             ('pangolin_version', '~{pangolin_version}'),
             ('pangolin_docker', '~{pangolin_docker}'),
+            ('pangolin_usher_version', '~{pangolin_usher_version}'),
             ('nextclade_clade', '~{nextclade_clade}'),
             ('nextclade_aa_subs', '~{nextclade_aa_subs}'),
             ('nextclade_aa_dels', '~{nextclade_aa_dels}'),
@@ -93,8 +93,6 @@ task titan_summary {
             ('fastqc_raw_pairs', '~{fastqc_raw_pairs}'),
             ('kraken_human', '~{kraken_human}'),
             ('kraken_human_dehosted', '~{kraken_human_dehosted}'),
-            ('kraken_report', '~{kraken_report}'),
-            ('kraken_report_dehosted', '~{kraken_report_dehosted}'),
             ('kraken_sc2', '~{kraken_sc2}'),
             ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
             ('pool1_percent', '~{pool1_percent}'),

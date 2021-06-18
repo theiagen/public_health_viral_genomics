@@ -26,7 +26,7 @@ workflow titan {
     input {
         Array[parseJSON] samples
         File    primer_bed
-        String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
+        String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
     }
 
     scatter (sample in samples) {
@@ -41,7 +41,7 @@ workflow titan {
            call summary.titan_summary as clearlabs_summary {
                 input:
                     samplename = sample.samplename,
-                    titan_workflow = 'titan_clearlabs'
+                    titan_workflow = 'titan_clearlabs',
                     titan_version = titan_clearlabs.titan_clearlabs_version,
                     titan_analysis_date = titan_clearlabs.titan_clearlabs_analysis_date,
                     seq_platform = titan_clearlabs.seq_platform,
@@ -52,6 +52,7 @@ workflow titan {
                     pangolin_notes = titan_clearlabs.pangolin_notes,
                     pangolin_version = titan_clearlabs.pangolin_version,
                     pangolin_docker = titan_clearlabs.pangolin_docker,
+                    pangolin_usher_version = titan_clearlabs.pangolin_usher_version,
                     nextclade_clade = titan_clearlabs.nextclade_clade,
                     nextclade_aa_subs = titan_clearlabs.nextclade_aa_subs,
                     nextclade_aa_dels = titan_clearlabs.nextclade_aa_dels,
@@ -65,8 +66,6 @@ workflow titan {
                     meanmapq_trim = titan_clearlabs.meanmapq_trim,
                     fastqc_clean1 = titan_clearlabs.fastqc_clean,
                     fastqc_raw1 = titan_clearlabs.fastqc_raw,
-                    kraken_report = titan_clearlabs.kraken_report,
-                    kraken_report_dehosted = titan_clearlabs.kraken_report_dehosted,
                     kraken_human = titan_clearlabs.kraken_human,
                     kraken_human_dehosted = titan_clearlabs.kraken_human_dehosted,
                     kraken_sc2 = titan_clearlabs.kraken_sc2,
@@ -94,7 +93,7 @@ workflow titan {
            call summary.titan_summary as illumina_pe_summary {
                 input:
                     samplename = sample.samplename,
-                    titan_workflow = 'titan_illumina_pe'
+                    titan_workflow = 'titan_illumina_pe',
                     titan_version = titan_illumina_pe.titan_illumina_pe_version,
                     titan_analysis_date = titan_illumina_pe.titan_illumina_pe_analysis_date,
                     seq_platform = titan_illumina_pe.seq_platform,
@@ -105,6 +104,7 @@ workflow titan {
                     pangolin_notes = titan_illumina_pe.pangolin_notes,
                     pangolin_version = titan_illumina_pe.pangolin_version,
                     pangolin_docker = titan_illumina_pe.pangolin_docker,
+                    pangolin_usher_version = titan_illumina_pe.pangolin_usher_version,
                     nextclade_clade = titan_illumina_pe.nextclade_clade,
                     nextclade_aa_subs = titan_illumina_pe.nextclade_aa_subs,
                     nextclade_aa_dels = titan_illumina_pe.nextclade_aa_dels,
@@ -122,8 +122,6 @@ workflow titan {
                     fastqc_raw1 = titan_illumina_pe.fastqc_raw1,
                     fastqc_raw2 = titan_illumina_pe.fastqc_raw2,
                     fastqc_raw_pairs = titan_illumina_pe.fastqc_raw_pairs,
-                    kraken_report = titan_illumina_pe.kraken_report,
-                    kraken_report_dehosted = titan_illumina_pe.kraken_report_dehosted,
                     kraken_human = titan_illumina_pe.kraken_human,
                     kraken_human_dehosted = titan_illumina_pe.kraken_human_dehosted,
                     kraken_sc2 = titan_illumina_pe.kraken_sc2,
@@ -137,7 +135,7 @@ workflow titan {
                     ivar_version_primtrim = titan_illumina_pe.ivar_version_primtrim,
                     kraken_version = titan_illumina_pe.kraken_version,
                     nextclade_version = titan_illumina_pe.nextclade_version,
-                    samtools_version = titan_illumina_pe.sam_version,
+                    samtools_version = titan_illumina_pe.samtools_version,
                     samtools_version_consensus = titan_illumina_pe.samtools_version_consensus,
                     samtools_version_primtrim = titan_illumina_pe.samtools_version_primtrim,
                     samtools_version_stats = titan_illumina_pe.samtools_version_stats,
@@ -158,7 +156,7 @@ workflow titan {
             call summary.titan_summary as illumina_se_summary {
                 input:
                     samplename = sample.samplename,
-                    titan_workflow = 'titan_illumina_se'
+                    titan_workflow = 'titan_illumina_se',
                     titan_version = titan_illumina_se.titan_illumina_se_version,
                     titan_analysis_date = titan_illumina_se.titan_illumina_se_analysis_date,
                     seq_platform = titan_illumina_se.seq_platform,
@@ -169,6 +167,7 @@ workflow titan {
                     pangolin_notes = titan_illumina_se.pangolin_notes,
                     pangolin_version = titan_illumina_se.pangolin_version,
                     pangolin_docker = titan_illumina_se.pangolin_docker,
+                    pangolin_usher_version = titan_illumina_se.pangolin_usher_version,
                     nextclade_clade = titan_illumina_se.nextclade_clade,
                     nextclade_aa_subs = titan_illumina_se.nextclade_aa_subs,
                     nextclade_aa_dels = titan_illumina_se.nextclade_aa_dels,
@@ -182,7 +181,6 @@ workflow titan {
                     meanmapq_trim = titan_illumina_se.meanmapq_trim,
                     fastqc_clean1 = titan_illumina_se.fastqc_clean,
                     fastqc_raw1 = titan_illumina_se.fastqc_raw,
-                    kraken_report = titan_illumina_se.kraken_report,
                     kraken_human = titan_illumina_se.kraken_human,
                     kraken_sc2 = titan_illumina_se.kraken_sc2,
                     primer_trimmed_read_percent = titan_illumina_se.primer_trimmed_read_percent,
@@ -194,7 +192,7 @@ workflow titan {
                     ivar_version_primtrim = titan_illumina_se.ivar_version_primtrim,
                     kraken_version = titan_illumina_se.kraken_version,
                     nextclade_version = titan_illumina_se.nextclade_version,
-                    samtools_version = titan_illumina_se.sam_version,
+                    samtools_version = titan_illumina_se.samtools_version,
                     samtools_version_consensus = titan_illumina_se.samtools_version_consensus,
                     samtools_version_primtrim = titan_illumina_se.samtools_version_primtrim,
                     samtools_version_stats = titan_illumina_se.samtools_version_stats,
@@ -214,7 +212,7 @@ workflow titan {
             call summary.titan_summary as ont_summary {
                 input:
                     samplename = sample.samplename,
-                    titan_workflow = 'titan_ont'
+                    titan_workflow = 'titan_ont',
                     titan_version = titan_ont.titan_ont_version,
                     titan_analysis_date = titan_ont.titan_ont_analysis_date,
                     seq_platform = titan_ont.seq_platform,
@@ -225,6 +223,7 @@ workflow titan {
                     pangolin_notes = titan_ont.pangolin_notes,
                     pangolin_version = titan_ont.pangolin_version,
                     pangolin_docker = titan_ont.pangolin_docker,
+                    pangolin_usher_version = titan_ont.pangolin_usher_version,
                     nextclade_clade = titan_ont.nextclade_clade,
                     nextclade_aa_subs = titan_ont.nextclade_aa_subs,
                     nextclade_aa_dels = titan_ont.nextclade_aa_dels,
@@ -238,8 +237,6 @@ workflow titan {
                     meanmapq_trim = titan_ont.meanmapq_trim,
                     fastqc_clean1 = titan_ont.fastqc_clean,
                     fastqc_raw1 = titan_ont.fastqc_raw,
-                    kraken_report = titan_ont.kraken_report,
-                    kraken_report_dehosted = titan_ont.kraken_report_dehosted,
                     kraken_human = titan_ont.kraken_human,
                     kraken_human_dehosted = titan_ont.kraken_human_dehosted,
                     kraken_sc2 = titan_ont.kraken_sc2,
@@ -267,7 +264,7 @@ workflow titan {
         # Titan outputs
         File        merged_summaries      = merge_titan_summary.merged_summaries
         Array[File] reads_dehosted        = flatten([
-                                                select_all(titan_clearlabs.dehosted_reads), select_all(titan_illumina_pe.read1_dehosted), 
+                                                select_all(titan_clearlabs.reads_dehosted), select_all(titan_illumina_pe.read1_dehosted), 
                                                 select_all(titan_illumina_pe.read2_dehosted), select_all(titan_ont.reads_dehosted)
                                             ])
         Array[File] aligned_bam           = flatten([
@@ -310,5 +307,13 @@ workflow titan {
                                                 select_all(titan_clearlabs.vadr_alerts_list), select_all(titan_illumina_pe.vadr_alerts_list),
                                                 select_all(titan_illumina_se.vadr_alerts_list), select_all(titan_ont.vadr_alerts_list)
                                             ])
+        Array[File] kraken_report         = flatten([
+                                                select_all(titan_clearlabs.kraken_report), select_all(titan_illumina_pe.kraken_report),
+                                                select_all(titan_illumina_se.kraken_report), select_all(titan_ont.kraken_report)
+                                            ])
+        Array[File] kraken_report_dehosted = flatten([
+                                                select_all(titan_clearlabs.kraken_report_dehosted), select_all(titan_illumina_pe.kraken_report_dehosted),
+                                                select_all(titan_ont.kraken_report_dehosted)
+                                            ])                  
     }
 }
