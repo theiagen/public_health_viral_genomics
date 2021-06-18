@@ -7,7 +7,7 @@ import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
-
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_illumina_pe {
   meta {
@@ -77,8 +77,12 @@ workflow titan_illumina_pe {
       genome_fasta = consensus.consensus_seq,
       assembly_length_unambiguous = consensus.number_ATCG
   }
+  call versioning.version_capture{
+    input:
+  }
   output {
-
+    String titan_illumina_pe_version            = version_capture.phvg_version
+    String titan_illumina_pe_analysis_date      = version_capture.date
     String  seq_platform                = seq_method
 
     File    read1_dehosted              = read_QC_trim.read1_dehosted

@@ -3,6 +3,7 @@ version 1.0
 import "wf_sarscov2_nextstrain_modified.wdl" as augur
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_data_vis.wdl" as vis
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_augur_run {
     meta {
@@ -41,8 +42,13 @@ workflow titan_augur_run {
         cluster_name = build_name,
         alignment = sarscov2_nextstrain.mafft_alignment
     }
-
-    output {
+    call versioning.version_capture{
+      input:
+    }
+    output 
+      String titan_augur_run_version            = version_capture.phvg_version
+      String titan_augur_run_analysis_date      = version_capture.date
+      
       File  combined_assemblies   = sarscov2_nextstrain.combined_assemblies
       File  MAFFT_alignment    = sarscov2_nextstrain.mafft_alignment
       File  unmasked_snps         = sarscov2_nextstrain.unmasked_snps

@@ -7,6 +7,7 @@ import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_clearlabs {
   meta {
@@ -81,9 +82,13 @@ workflow titan_clearlabs {
       genome_fasta = consensus.consensus_seq,
       assembly_length_unambiguous = consensus.number_ATCG
   }
+  call versioning.version_capture{
+    input:
+  }
   output {
-    String titan_gc_version = "Titan_ClearLabs v1.4.4"
-    String	seq_platform	=	seq_method
+    String titan_clearlabs_version            = version_capture.phvg_version
+    String titan_clearlabs_analysis_date      = version_capture.date
+    String seq_platform                = seq_method
 
     File   dehosted_reads              = ncbi_scrub_se.read1_dehosted
 
