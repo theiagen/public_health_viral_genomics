@@ -791,7 +791,7 @@ task vadr {
     File   genome_fasta
     String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 
-    String  docker="staphb/vadr:1.2"
+    String  docker="staphb/vadr:1.2.1"
     Int minlen=50
     Int maxlen=30000
   }
