@@ -86,62 +86,62 @@ workflow titan_clearlabs {
     input:
   }
   output {
-    String titan_clearlabs_version            = version_capture.phvg_version
-    String titan_clearlabs_analysis_date      = version_capture.date
-    String seq_platform                = seq_method
+    String titan_clearlabs_version          = version_capture.phvg_version
+    String titan_clearlabs_analysis_date    = version_capture.date
+    String seq_platform                     = seq_method
 
-    File   dehosted_reads              = ncbi_scrub_se.read1_dehosted
+    File   dehosted_reads                   = ncbi_scrub_se.read1_dehosted
 
-    Int    fastqc_raw                  = fastqc_se_raw.number_reads
-    Int    fastqc_clean                = fastqc_se_clean.number_reads
+    Int    fastqc_raw                       = fastqc_se_raw.number_reads
+    Int    fastqc_clean                     = fastqc_se_clean.number_reads
 
-    String kraken_version              = kraken2_raw.version
-    Float  kraken_human                = kraken2_raw.percent_human
-    Float  kraken_sc2                  = kraken2_raw.percent_sc2
-    String kraken_report               = kraken2_raw.kraken_report
-    Float  kraken_human_dehosted       = kraken2_dehosted.percent_human
-    Float  kraken_sc2_dehosted         = kraken2_dehosted.percent_sc2
-    String kraken_report_dehosted      = kraken2_dehosted.kraken_report
+    String kraken_version                   = kraken2_raw.version
+    Float  kraken_human                     = kraken2_raw.percent_human
+    Float  kraken_sc2                       = kraken2_raw.percent_sc2
+    String kraken_report                    = kraken2_raw.kraken_report
+    Float  kraken_human_dehosted            = kraken2_dehosted.percent_human
+    Float  kraken_sc2_dehosted              = kraken2_dehosted.percent_sc2
+    String kraken_report_dehosted           = kraken2_dehosted.kraken_report
 
-    File   aligned_bam                 = consensus.trim_sorted_bam
-    File   aligned_bai                 = consensus.trim_sorted_bai
-    File   variants_from_ref_vcf       = consensus.medaka_pass_vcf
-    String artic_version               = consensus.artic_pipeline_version
-    File   assembly_fasta              = consensus.consensus_seq
-    Int    number_N                    = consensus.number_N
-    Int    assembly_length_unambiguous = consensus.number_ATCG
-    Int    number_Degenerate           = consensus.number_Degenerate
-    Int    number_Total                = consensus.number_Total
-    Float  pool1_percent               = consensus.pool1_percent
-    Float  pool2_percent               = consensus.pool2_percent
-    Float  percent_reference_coverage  = consensus.percent_reference_coverage
-    String assembly_method             = consensus.artic_pipeline_version
+    File   aligned_bam                      = consensus.trim_sorted_bam
+    File   aligned_bai                      = consensus.trim_sorted_bai
+    File   variants_from_ref_vcf            = consensus.medaka_pass_vcf
+    String artic_version                    = consensus.artic_pipeline_version
+    File   assembly_fasta                   = consensus.consensus_seq
+    Int    number_N                         = consensus.number_N
+    Int    assembly_length_unambiguous      = consensus.number_ATCG
+    Int    number_Degenerate                = consensus.number_Degenerate
+    Int    number_Total                     = consensus.number_Total
+    Float  pool1_percent                    = consensus.pool1_percent
+    Float  pool2_percent                    = consensus.pool2_percent
+    Float  percent_reference_coverage       = consensus.percent_reference_coverage
+    String assembly_method                  = consensus.artic_pipeline_version
 
-    String	pango_lineage	=	pangolin3.pangolin_lineage
-    String	pangolin_conflicts	=	pangolin3.pangolin_conflicts
-    String pangolin_notes = pangolin3.pangolin_notes
-  	String	pangolin_version	=	pangolin3.version
-  	File	pango_lineage_report	=	pangolin3.pango_lineage_report
-  	String	pangolin_docker	=	pangolin3.pangolin_docker
-  	String	pangolin_usher_version	=	pangolin3.pangolin_usher_version
+    String pango_lineage                    =	pangolin3.pangolin_lineage
+    String pangolin_conflicts               =	pangolin3.pangolin_conflicts
+    String pangolin_notes                   = pangolin3.pangolin_notes
+    String pangolin_version                 =	pangolin3.version
+    File	 pango_lineage_report             =	pangolin3.pango_lineage_report
+    String pangolin_docker                  =	pangolin3.pangolin_docker
+    String pangolin_usher_version           =	pangolin3.pangolin_usher_version
 
-    File   consensus_stats             = stats_n_coverage.stats
-    File   consensus_flagstat          = stats_n_coverage.flagstat
-    Float  meanbaseq_trim              = stats_n_coverage_primtrim.meanbaseq
-    Float  meanmapq_trim               = stats_n_coverage_primtrim.meanmapq
-    Float  assembly_mean_coverage      = stats_n_coverage_primtrim.depth
-    String samtools_version            = stats_n_coverage.samtools_version
+    File   consensus_stats                  = stats_n_coverage.stats
+    File   consensus_flagstat               = stats_n_coverage.flagstat
+    Float  meanbaseq_trim                   = stats_n_coverage_primtrim.meanbaseq
+    Float  meanmapq_trim                    = stats_n_coverage_primtrim.meanmapq
+    Float  assembly_mean_coverage           = stats_n_coverage_primtrim.depth
+    String samtools_version                 = stats_n_coverage.samtools_version
 
-    File   nextclade_json              = nextclade_one_sample.nextclade_json
-    File   auspice_json                = nextclade_one_sample.auspice_json
-    File   nextclade_tsv               = nextclade_one_sample.nextclade_tsv
-    String nextclade_clade             = nextclade_one_sample.nextclade_clade
-    String nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
-    String nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
-    String nextclade_version           = nextclade_one_sample.nextclade_version
+    File   nextclade_json                   = nextclade_one_sample.nextclade_json
+    File   auspice_json                     = nextclade_one_sample.auspice_json
+    File   nextclade_tsv                    = nextclade_one_sample.nextclade_tsv
+    String nextclade_clade                  = nextclade_one_sample.nextclade_clade
+    String nextclade_aa_subs                = nextclade_one_sample.nextclade_aa_subs
+    String nextclade_aa_dels                = nextclade_one_sample.nextclade_aa_dels
+    String nextclade_version                = nextclade_one_sample.nextclade_version
 
-    File?   vadr_alerts_list            = vadr.alerts_list
-    String    vadr_num_alerts             = vadr.num_alerts
-    String vadr_docker                 = vadr.vadr_docker
+    File?  vadr_alerts_list                 = vadr.alerts_list
+    String vadr_num_alerts                  = vadr.num_alerts
+    String vadr_docker                      = vadr.vadr_docker
   }
 }
