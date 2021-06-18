@@ -90,10 +90,11 @@ workflow titan_clearlabs {
     String titan_clearlabs_analysis_date    = version_capture.date
     String seq_platform                     = seq_method
 
-    File   dehosted_reads                   = ncbi_scrub_se.read1_dehosted
+    File   reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
-    Int    fastqc_raw                       = fastqc_se_raw.number_reads
-    Int    fastqc_clean                     = fastqc_se_clean.number_reads
+    Int    fastqc_raw                  = fastqc_se_raw.number_reads
+    Int    fastqc_clean                = fastqc_se_clean.number_reads
+    String fastqc_version              = fastqc_se_clean.fastqc_version
 
     String kraken_version                   = kraken2_raw.version
     Float  kraken_human                     = kraken2_raw.percent_human
