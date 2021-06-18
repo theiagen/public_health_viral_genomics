@@ -41,6 +41,9 @@ workflow titan {
            call summary.titan_summary as clearlabs_summary {
                 input:
                     samplename = sample.samplename,
+                    titan_workflow = 'titan_clearlabs'
+                    titan_version = titan_clearlabs.titan_clearlabs_version,
+                    titan_analysis_date = titan_clearlabs.titan_clearlabs_analysis_date,
                     seq_platform = titan_clearlabs.seq_platform,
                     percent_reference_coverage = titan_clearlabs.percent_reference_coverage,
                     number_N = titan_clearlabs.number_N,
@@ -91,6 +94,9 @@ workflow titan {
            call summary.titan_summary as illumina_pe_summary {
                 input:
                     samplename = sample.samplename,
+                    titan_workflow = 'titan_illumina_pe'
+                    titan_version = titan_illumina_pe.titan_illumina_pe_version,
+                    titan_analysis_date = titan_illumina_pe.titan_illumina_pe_analysis_date,
                     seq_platform = titan_illumina_pe.seq_platform,
                     percent_reference_coverage = titan_illumina_pe.percent_reference_coverage,
                     number_N = titan_illumina_pe.number_N,
@@ -152,6 +158,9 @@ workflow titan {
             call summary.titan_summary as illumina_se_summary {
                 input:
                     samplename = sample.samplename,
+                    titan_workflow = 'titan_illumina_se'
+                    titan_version = titan_illumina_se.titan_illumina_se_version,
+                    titan_analysis_date = titan_illumina_se.titan_illumina_se_analysis_date,
                     seq_platform = titan_illumina_se.seq_platform,
                     percent_reference_coverage = titan_illumina_se.percent_reference_coverage,
                     number_N = titan_illumina_se.number_N,
@@ -205,6 +214,9 @@ workflow titan {
             call summary.titan_summary as ont_summary {
                 input:
                     samplename = sample.samplename,
+                    titan_workflow = 'titan_ont'
+                    titan_version = titan_ont.titan_ont_version,
+                    titan_analysis_date = titan_ont.titan_ont_analysis_date,
                     seq_platform = titan_ont.seq_platform,
                     percent_reference_coverage = titan_ont.percent_reference_coverage,
                     number_N = titan_ont.number_N,

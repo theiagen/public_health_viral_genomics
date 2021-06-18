@@ -3,6 +3,9 @@ version 1.0
 task titan_summary {
     input {
         String  samplename
+        String  titan_workflow
+        String  titan_version
+        String  titan_analysis_date
         String  seq_platform
         Float   percent_reference_coverage
         Int     number_N
@@ -60,6 +63,9 @@ task titan_summary {
         import json
         data = OrderedDict((
             ('samplename', '~{samplename}'),
+            ('titan_workflow', '~{titan_workflow}'),
+            ('titan_version', '~{titan_version}'),
+            ('titan_analysis_date', '~{titan_analysis_date}'),
             ('seq_platform', '~{seq_platform}'),
             ('percent_reference_coverage', '~{percent_reference_coverage}'),
             ('number_N', '~{number_N}'),
