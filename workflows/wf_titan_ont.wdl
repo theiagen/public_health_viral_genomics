@@ -7,6 +7,7 @@ import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_ont {
   meta {
@@ -19,7 +20,7 @@ workflow titan_ont {
     String? artic_primer_version  = "V3"
     File  demultiplexed_reads
     Int?  normalise = 200
-    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
+    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -61,7 +62,7 @@ workflow titan_ont {
       samplename = samplename,
       bamfile = consensus.trim_sorted_bam
   }
-  call taxon_ID.pangolin2 {
+  call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq,
@@ -86,16 +87,20 @@ workflow titan_ont {
       genome_fasta = consensus.consensus_seq,
       assembly_length_unambiguous = consensus.number_ATCG
   }
-
+  call versioning.version_capture{
+    input:
+  }
   output {
-
+    String titan_ont_version            = version_capture.phvg_version
+    String titan_ont_analysis_date      = version_capture.date
     String  seq_platform                = seq_method
-
+    
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
     Int     fastqc_raw                  = fastqc_se_raw.number_reads
     Int     fastqc_clean                = fastqc_se_clean.number_reads
-
+    String  fastqc_version              = fastqc_se_clean.fastqc_version
+    
     String  kraken_version              = kraken2_raw.version
     Float   kraken_human                = kraken2_raw.percent_human
     Float   kraken_sc2                  = kraken2_raw.percent_sc2
@@ -125,12 +130,13 @@ workflow titan_ont {
     Float   assembly_mean_coverage      = stats_n_coverage_primtrim.depth
     String  samtools_version            = stats_n_coverage.samtools_version
 
-    String  pango_lineage               = pangolin2.pangolin_lineage
-    String  pangolin_conflicts          = pangolin2.pangolin_conflicts
-    String  pangolin_notes              = pangolin2.pangolin_notes
-    String  pangolin_version            = pangolin2.version
-    File    pango_lineage_report        = pangolin2.pango_lineage_report
-    String  pangolin_docker             = pangolin2.pangolin_docker
+    String  pango_lineage               = pangolin3.pangolin_lineage
+    String  pangolin_conflicts          = pangolin3.pangolin_conflicts
+    String  pangolin_notes              = pangolin3.pangolin_notes
+    String  pangolin_version            = pangolin3.version
+    File  pango_lineage_report          = pangolin3.pango_lineage_report
+    String  pangolin_docker             = pangolin3.pangolin_docker
+    String  pangolin_usher_version      = pangolin3.pangolin_usher_version
 
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
