@@ -121,7 +121,7 @@ workflow titan_clearlabs {
     String pangolin_conflicts               =	pangolin3.pangolin_conflicts
     String pangolin_notes                   = pangolin3.pangolin_notes
     String pangolin_version                 =	pangolin3.version
-    File	 pango_lineage_report             =	pangolin3.pango_lineage_report
+    File   pango_lineage_report             =	pangolin3.pango_lineage_report
     String pangolin_docker                  =	pangolin3.pangolin_docker
     String pangolin_usher_version           =	pangolin3.pangolin_usher_version
 
