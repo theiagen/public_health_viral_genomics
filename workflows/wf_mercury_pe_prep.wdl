@@ -1,6 +1,7 @@
 version 1.0
 
 import "../tasks/task_pe_pub_repo_submission.wdl" as submission
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow mercury_pe_prep {
   input {
@@ -109,9 +110,12 @@ workflow mercury_pe_prep {
       }
     }
   }
-
-
-  output {
+  call versioning.version_capture{
+    input:
+  }
+  output 
+    String mercury_pe_prep_version            = version_capture.phvg_version
+    String mercury_pe_prep_analysis_date      = version_capture.date
 #      File?     read1_submission   = sra.read1_submission
 #      File?     read2_submission   = sra.read2_submission
 #      File?     SE_read_submission = sra.SE_read_submission

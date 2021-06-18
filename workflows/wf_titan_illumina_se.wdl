@@ -7,7 +7,7 @@ import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
-
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_illumina_se {
   meta {
@@ -16,10 +16,10 @@ workflow titan_illumina_se {
 
   input {
     String  samplename
-    String  seq_method="Illumina paired-end"
+    String  seq_method="Illumina single-end"
     File    read1_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
+    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
   }
 
   call read_qc.read_QC_trim {
@@ -58,7 +58,7 @@ workflow titan_illumina_se {
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam
   }
-  call taxon_ID.pangolin2 {
+  call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq,
@@ -71,9 +71,14 @@ workflow titan_illumina_se {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
+      assembly_length_unambiguous = consensus.number_ATCG
+  }
+  call versioning.version_capture{
+    input:
   }
   output {
-
+    String titan_illumina_pe_version            = version_capture.phvg_version
+    String titan_illumina_pe_analysis_date      = version_capture.date
     String  seq_platform = seq_method
 
     File    read1_clean                 = read_QC_trim.read1_clean
@@ -93,7 +98,7 @@ workflow titan_illumina_se {
 #    String    kraken_report_dehosted = read_QC_trim.kraken_report_dehosted
 
     String  bwa_version                 = bwa.bwa_version
-    String  sam_version                 = bwa.sam_version
+    String  samtools_version            = bwa.sam_version
     String  assembly_method             = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
 
     File    aligned_bam                 = primer_trim.trim_sorted_bam
@@ -118,12 +123,13 @@ workflow titan_illumina_se {
     Float   assembly_mean_coverage      = stats_n_coverage_primtrim.depth
     String  samtools_version_stats      = stats_n_coverage.samtools_version
 
-    String  pango_lineage               = pangolin2.pangolin_lineage
-    String  pangolin_conflicts          = pangolin2.pangolin_conflicts
-    String  pangolin_notes              = pangolin2.pangolin_notes
-    String  pangolin_version            = pangolin2.version
-    File    pango_lineage_report        = pangolin2.pango_lineage_report
-    String  pangolin_docker             = pangolin2.pangolin_docker
+    String  pango_lineage               = pangolin3.pangolin_lineage
+    String  pangolin_conflicts          = pangolin3.pangolin_conflicts
+    String  pangolin_notes              = pangolin3.pangolin_notes
+    String  pangolin_version            = pangolin3.version
+    File    pango_lineage_report        = pangolin3.pango_lineage_report
+    String  pangolin_docker             = pangolin3.pangolin_docker
+    String  pangolin_usher_version      = pangolin3.pangolin_usher_version
 
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
@@ -136,8 +142,8 @@ workflow titan_illumina_se {
     File    ivar_tsv                    = variant_call.sample_variants
     String  ivar_variant_version        = variant_call.ivar_version
 
-    File    vadr_alerts_list            = vadr.alerts_list
-    Int     vadr_num_alerts             = vadr.num_alerts
+    File?    vadr_alerts_list           = vadr.alerts_list
+    String     vadr_num_alerts          = vadr.num_alerts
     String  vadr_docker                 = vadr.vadr_docker
   }
 }

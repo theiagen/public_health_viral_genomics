@@ -1,6 +1,7 @@
 version 1.0
 
 import "../tasks/task_se_pub_repo_submission.wdl" as submission
+import "../tasks/task_versioning.wdl" as versioning
 
 workflow mercury_se_prep {
     input {
@@ -107,12 +108,17 @@ workflow mercury_se_prep {
         }
     }
 
-    output {
-        # File?     reads_submission   = sra.reads_submission
-        File      deID_assembly      = deidentify.deID_assembly
-        File?     genbank_assembly   = genbank.genbank_assembly
-        File?     genbank_metadata   = genbank.genbank_metadata
-        File?     gisaid_assembly    = gisaid.gisaid_assembly
-        File?     gisaid_metadata    = gisaid.gisaid_metadata
+    call versioning.version_capture{
+      input:
+    }
+    output 
+      String    mercury_se_prep_version    =    version_capture.phvg_version
+      String    mercury_se_prep_analysis_date    =    version_capture.date
+      # File?     reads_submission   = sra.reads_submission
+      File      deID_assembly      = deidentify.deID_assembly
+      File?     genbank_assembly   = genbank.genbank_assembly
+      File?     genbank_metadata   = genbank.genbank_metadata
+      File?     gisaid_assembly    = gisaid.gisaid_assembly
+      File?     gisaid_metadata    = gisaid.gisaid_metadata
     }
 }
