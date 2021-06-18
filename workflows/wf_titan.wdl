@@ -8,7 +8,7 @@ import "wf_titan_illumina_se.wdl" as illumina_se
 import "wf_titan_ont.wdl" as ont
 import "../tasks/task_titan_summary.wdl" as summary
 
-struct parseTSV {
+struct parseJSON {
     String samplename
     String run_id
     String platform
@@ -24,7 +24,7 @@ workflow titan {
     }
 
     input {
-        Array[parseTSV]    samples
+        Array[parseJSON] samples
         File    primer_bed
         String  pangolin_docker_image = "staphb/pangolin:2.4.2-pangolearn-2021-05-19"
     }
@@ -254,5 +254,49 @@ workflow titan {
     output {
         # Titan outputs
         File        merged_summaries      = merge_titan_summary.merged_summaries
+        Array[File] reads_dehosted        = flatten([
+                                                select_all(titan_clearlabs.dehosted_reads), select_all(titan_illumina_pe.read1_dehosted), 
+                                                select_all(titan_illumina_pe.read2_dehosted), select_all(titan_ont.reads_dehosted)
+                                            ])
+        Array[File] aligned_bam           = flatten([
+                                                select_all(titan_clearlabs.aligned_bam), select_all(titan_illumina_pe.aligned_bam),
+                                                select_all(titan_illumina_se.aligned_bam), select_all(titan_ont.aligned_bam)
+                                            ])
+        Array[File] aligned_bai           = flatten([
+                                                select_all(titan_clearlabs.aligned_bai), select_all(titan_illumina_pe.aligned_bai),
+                                                select_all(titan_illumina_se.aligned_bai), select_all(titan_ont.aligned_bai)
+                                            ])
+        Array[File] assembly_fasta        = flatten([
+                                                select_all(titan_clearlabs.assembly_fasta), select_all(titan_illumina_pe.assembly_fasta),
+                                                select_all(titan_illumina_se.assembly_fasta), select_all(titan_ont.assembly_fasta)
+                                            ])
+        Array[File] consensus_stats       = flatten([
+                                                select_all(titan_clearlabs.consensus_stats), select_all(titan_illumina_pe.consensus_stats),
+                                                select_all(titan_illumina_se.consensus_stats), select_all(titan_ont.consensus_stats)
+                                            ])
+        Array[File] consensus_flagstat    = flatten([
+                                                select_all(titan_clearlabs.consensus_flagstat), select_all(titan_illumina_pe.consensus_flagstat),
+                                                select_all(titan_illumina_se.consensus_flagstat), select_all(titan_ont.consensus_flagstat)
+                                            ])
+        Array[File] pango_lineage_report  = flatten([
+                                                select_all(titan_clearlabs.pango_lineage_report), select_all(titan_illumina_pe.pango_lineage_report),
+                                                select_all(titan_illumina_se.pango_lineage_report), select_all(titan_ont.pango_lineage_report)
+                                            ])
+        Array[File] nextclade_json        = flatten([
+                                                select_all(titan_clearlabs.nextclade_json), select_all(titan_illumina_pe.nextclade_json),
+                                                select_all(titan_illumina_se.nextclade_json), select_all(titan_ont.nextclade_json)
+                                            ])
+        Array[File] auspice_json          = flatten([
+                                                select_all(titan_clearlabs.auspice_json), select_all(titan_illumina_pe.auspice_json),
+                                                select_all(titan_illumina_se.auspice_json), select_all(titan_ont.auspice_json)
+                                            ])
+        Array[File] nextclade_tsv         = flatten([
+                                                select_all(titan_clearlabs.nextclade_tsv), select_all(titan_illumina_pe.nextclade_tsv),
+                                                select_all(titan_illumina_se.nextclade_tsv), select_all(titan_ont.nextclade_tsv)
+                                            ])
+        Array[File] vadr_alerts_list      = flatten([
+                                                select_all(titan_clearlabs.vadr_alerts_list), select_all(titan_illumina_pe.vadr_alerts_list),
+                                                select_all(titan_illumina_se.vadr_alerts_list), select_all(titan_ont.vadr_alerts_list)
+                                            ])
     }
 }
