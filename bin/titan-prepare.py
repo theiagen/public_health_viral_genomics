@@ -101,8 +101,6 @@ if __name__ == '__main__':
         sys.exit(0)
 
     args = parser.parse_args()
-
-    # https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
     abspath = os.path.abspath(args.path)
     SAMPLES = {}
 
