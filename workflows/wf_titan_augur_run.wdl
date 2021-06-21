@@ -45,7 +45,7 @@ workflow titan_augur_run {
     call versioning.version_capture{
       input:
     }
-    output 
+    output {
       String titan_augur_run_version            = version_capture.phvg_version
       String titan_augur_run_analysis_date      = version_capture.date
       
