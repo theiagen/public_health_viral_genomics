@@ -1,0 +1,65 @@
+#! /bin/bash
+# usage: titan-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]
+#
+# titan-cli - Run Titan on a set of samples.
+#
+# required arguments:
+#   -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs.
+#   -o STR, --outdir STR  Output directory to store the final results in.
+#
+# optional arguments:
+#   -h, --help            show this help message and exit
+#   --options STR         JSON file containing Cromwell options
+#   --verbose             Print out all STDOUT from Cromwell and titan-organize
+set -e
+set -u
+OPTIONS="0"
+CROMWELL_OPTS=""
+TITAN_PATH=$(which titan-cli | sed 's=bin/titan-cli==')
+
+usage() {
+    echo "usage: titan-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
+    echo ""
+    echo "titan-cli - Run Titan on a set of samples."
+    echo ""
+    echo "required arguments:"
+    echo "  -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs."
+    echo "  -o STR, --outdir STR  Output directory to store the final results in."
+    echo ""
+    echo "optional arguments:"
+    echo "  -h, --help            show this help message and exit"
+    echo "  --options STR         JSON file containing Cromwell options"
+    echo "  --verbose             Print out all STDOUT from Cromwell and titan-organize"
+
+    if [ -n "$1" ]; then
+        exit "$1"
+    fi
+}
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -i|--inputs) INPUTS="$2"; shift ;;
+        -o|--outdir) OUTDIR="$2"; shift ;;
+        -h|--help) usage 0 ;;
+        --options) OPTIONS="$2"; shift ;;
+        --verbose) VERBOSE=1 ;;
+        *) echo "Unknown parameter passed: $1"; usage 1 ;;
+    esac
+    shift
+done
+
+if [[ -z ${INPUTS+x} ]]; then
+    echo "ERROR: -i/--inputs is required"
+    usage 1
+elif [[ -z ${OUTDIR+x} ]]; then
+    echo "ERROR: -o/--outdir is required"
+    usage 1
+fi
+
+if [[ "${OPTIONS}" != "0" ]]; then
+    CROMWELL_OPTS="-o ${OPTIONS}"
+fi
+
+mkdir -p ${OUTDIR}
+cromwell run ${TITAN_PATH}/workflows/wf_titan.wdl -i ${INPUTS} -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS}
+titan-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}

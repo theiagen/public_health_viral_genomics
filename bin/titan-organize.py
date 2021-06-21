@@ -117,7 +117,6 @@ if __name__ == '__main__':
         if args.debug:
             print(f"Working on {task_name} outputs", file=sys.stderr)
         if key == "titan.merged_summaries":
-            print(outputs)
             if args.debug:
                 print(f"Copying {outputs} to {args.outdir}/complete-titan-results.tsv", file=sys.stderr)
             copy2(outputs, f"{args.outdir}/titan-results.tsv")
