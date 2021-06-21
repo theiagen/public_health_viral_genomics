@@ -149,8 +149,8 @@ workflow titan_ont {
     File    amp_coverage                = bedtools_cov.amp_coverage
     String  bedtools_version            = bedtools_cov.version
 
-    File?    vadr_alerts_list            = vadr.alerts_list
-    String     vadr_num_alerts             = vadr.num_alerts
+    File?   vadr_alerts_list            = vadr.alerts_list
+    String  vadr_num_alerts             = vadr.num_alerts
     String  vadr_docker                 = vadr.vadr_docker
   }
 }
