@@ -28,7 +28,7 @@ workflow titan_augur_prep {
     call versioning.version_capture{
       input:
     }
-    output 
+    output {
       String titan_augur_run_version            = version_capture.phvg_version
       String titan_augur_run_analysis_date      = version_capture.date
       File   augur_metadata                     = prep_augur_metadata.augur_metadata

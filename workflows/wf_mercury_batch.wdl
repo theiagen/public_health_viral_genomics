@@ -33,7 +33,7 @@ workflow mercury_batch {
     call versioning.version_capture{
       input:
     }
-    output 
+    output {
         String mercury_batch_version    =    version_capture.phvg_version
         String mercury_batch_analysis_date    =    version_capture.date
         File?    GenBank_upload_meta  = genbank_compile.upload_meta

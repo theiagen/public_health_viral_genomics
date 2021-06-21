@@ -111,7 +111,7 @@ workflow mercury_se_prep {
     call versioning.version_capture{
       input:
     }
-    output 
+    output {
       String    mercury_se_prep_version    =    version_capture.phvg_version
       String    mercury_se_prep_analysis_date    =    version_capture.date
       # File?     reads_submission   = sra.reads_submission
