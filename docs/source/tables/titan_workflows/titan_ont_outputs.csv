@@ -14,6 +14,7 @@ consensus_stats,File,Output from the SAMtools stats command to assess quality of
 dehosted_reads,File,Dehosted reads; suggested read file for SRA submission
 fastqc_clean,Int,Number of reads after size filttering and dehosting as determined by FastQC
 fastqc_raw,Int,Number of raw reads input reads as determined by FastQC
+fastqc_version,String,Version of the FastQC version used
 kraken_human,Float,Percent of human read data detected using the Kraken2 software
 kraken_human_dehosted,Float,Percent of human read data detected using the Kraken2 software after host removal
 kraken_report,File,Full Kraken report
@@ -41,9 +42,11 @@ pangolin_version,String,Pangolin and PangoLEARN versions used
 percent_reference_coverage,Float,"Percent coverage of the reference genome after performing primer trimming; calculated as assembly_length_unambiguous / length of reference genome (SC2: 29,903) x 100"
 pool1_percent,Float,Percentage of aligned read data assocaited with the pool1 amplicons
 pool2_percent,Float,Percentage of aligned read data assocaited with the pool 2 amplicons
-sam_version,String,Version of SAMtools used to sort and index the alignment file
+samtools_version,String,Version of SAMtools used to sort and index the alignment file
 seq_platform,String,Description of the sequencing methodology used to generate the input read data
+titan_ont_analysis_date,String,Date of analysis
+titan_ont_version,String,Version of the Public Health Viral Genomics (PHVG) repository used
 vadr_alerts_list,File,File containing all of the fatal alerts as determined by VADR
 vadr_docker,String,Docker image used to run VADR
-vadr_num_alerts,Int,Number of fatal alerts as determined by VADR
+vadr_num_alerts,String,Number of fatal alerts as determined by VADR
 variants_from_ref_vcf,File,Number of variants relative to the reference genome

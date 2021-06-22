@@ -19,8 +19,9 @@ nextclade_one_sample,pcr_primers_csv,File,Custom PCR primers file for NextClade,
 nextclade_one_sample,gene_annotations_json,File,Custom gene annotation file for NextClade,None
 nextclade_one_sample,docker,String,Docker tag used for running NextClade,neherlab/nextclade:0.14.2
 nextclade_one_sample,auspice_reference_tree_json,File,Custom reference tree file for NextClade ,None
-pangolin2,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
-pangolin2,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
+pangolin3,inference_engine,String,pangolin inference engine for lineage designations (usher or pangolarn),usher
+pangolin3,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
+pangolin3,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
 primer_trim,keep_noprimer_reads,Boolean,Include reads with no primers for iVar trim,True
 read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
 read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
@@ -30,7 +31,7 @@ titan_illumina_pe,pangolin_docker_image,String,Docker tag used for running Pango
 vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
-vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2
+vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
 variant_call,ref_gff,String,Path to the general feature format of the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/reference/GCF_009858895.2_ASM985889v3_genomic.gff
 variant_call,ref_genome,String,Path to the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
 variant_call,min_qual,Int,Minimum quality threshold for sliding window to pass for iVar variants,20
@@ -40,3 +41,4 @@ variant_call,min_bq,Int,Minimum mapping quality for an alignment to be used for 
 variant_call,max_depth,Int,Maximum reads read at a position per input file for SAMtools mpileup before running iVar variants,600000
 variant_call,disable_baq,Boolean,Disable read-pair overlap detection for SAMtools mpileup before running iVar variants,TRUE
 variant_call,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SAMtools mpileup before running iVar variants,TRUE
+version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None

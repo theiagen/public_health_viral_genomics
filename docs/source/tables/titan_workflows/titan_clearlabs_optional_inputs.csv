@@ -13,8 +13,9 @@ nextclade_one_sample,pcr_primers_csv,File,Custom PCR primers file for NextClade,
 nextclade_one_sample,gene_annotations_json,File,Custom gene annotation file for NextClade,None
 nextclade_one_sample,docker,String,Docker tag used for running NextClade,neherlab/nextclade:0.14.2
 nextclade_one_sample,auspice_reference_tree_json,File,Custom reference tree file for NextClade ,None
-pangolin2,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
-pangolin2,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
+pangolin3,inference_engine,String,pangolin inference engine for lineage designations (usher or pangolarn),usher
+pangolin3,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
+pangolin3,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
 titan_clearlabs,artic_primer_version,String,Version of the Artic PCR protocol used to generate input read data ,V3
 titan_clearlabs,normalise,Int,Value to normalize read counts,200
 titan_clearlabs,seq_method,String,Description of the sequencing methodology used to generate the input read data,ONT via Clear Labs WGS
@@ -22,4 +23,5 @@ titan_clearlabs,pangolin_docker_image,String,Docker tag used for running Pangoli
 vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
-vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2
+vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
+version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None
