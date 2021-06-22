@@ -1,7 +1,7 @@
 #! /bin/bash
-# usage: titan-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]
+# usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]
 #
-# titan-cli - Run Titan on a set of samples.
+# titan-gc-cli - Run Titan GC on a set of samples.
 #
 # required arguments:
 #   -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs.
@@ -16,13 +16,13 @@ set -u
 OPTIONS="0"
 VERBOSE="0"
 CROMWELL_OPTS=""
-TITAN_PATH=$(which titan-cli | sed 's=bin/titan-cli==')
+TITAN_PATH=$(which titan-gc-cli | sed 's=bin/titan-gc-cli==')
 export LOG_LEVEL=ERROR
 
 usage() {
-    echo "usage: titan-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
+    echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
     echo ""
-    echo "titan-cli - Run Titan on a set of samples."
+    echo "titan-gc-cli - Run Titan on a set of samples."
     echo ""
     echo "required arguments:"
     echo "  -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs."
@@ -67,7 +67,7 @@ if [[ "${VERBOSE}" == "1" ]]; then
 fi
 
 mkdir -p ${OUTDIR}
-echo "Running Titan" 1>&2
-cromwell run ${TITAN_PATH}/workflows/wf_titan.wdl -i ${INPUTS} -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS}
-echo "Titan complete, organizing outputs" 1>&2
+echo "Running Titan GC" 1>&2
+cromwell run ${TITAN_PATH}/workflows/wf_titan_gc.wdl -i ${INPUTS} -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS}
+echo "Titan GC complete, organizing outputs" 1>&2
 titan-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}

@@ -179,7 +179,7 @@ if __name__ == '__main__':
 
     if FOFN:
         inputs_json = {
-            "titan.samples": FOFN,
-            "titan.primer_bed": args.primers
+            "titan_gc.samples": FOFN,
+            "titan_gc.primer_bed": args.primers
         }
         print(json.dumps(inputs_json, indent = 4))

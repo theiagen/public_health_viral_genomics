@@ -61,7 +61,7 @@ task titan_summary {
         from collections import OrderedDict
         import json
         data = OrderedDict((
-            ('samplename', '~{samplename}'),
+            ('specimen_id', '~{samplename}'),
             ('titan_workflow', '~{titan_workflow}'),
             ('titan_version', '~{titan_version}'),
             ('titan_analysis_date', '~{titan_analysis_date}'),
@@ -115,7 +115,7 @@ task titan_summary {
             ('vadr_docker', '~{vadr_docker}')
         ))
         with open(f'~{samplename}.results.json', "wt") as json_fh:
-            json.dump(data, json_fh, indent = 4)
+            json.dump(data, json_fh)
         CODE
     >>>
 
@@ -154,16 +154,18 @@ task merge_titan_summary {
             *'~{sep=" " illumina_se}'.split(),
             *'~{sep=" " ont}'.split()
         ]
-        for result in results:
-            with open(result, 'rt') as json_fh:
-                row = []
-                json_data = json.load(json_fh)
-                if not header:
-                    header = json_data.keys()
-                    rows.append("\t".join(header))
-                for col in header:
-                    row.append(json_data[col])
-                rows.append("\t".join(row))
+        with open("titan-results.json", 'wt') as results_fh:
+            for result in results:
+                with open(result, 'rt') as json_fh:
+                    row = []
+                    json_data = json.load(json_fh)
+                    results_fh.write(f'{json.dumps(json_data)}\n')
+                    if not header:
+                        header = json_data.keys()
+                        rows.append("\t".join(header))
+                    for col in header:
+                        row.append(json_data[col])
+                    rows.append("\t".join(row))
 
         with open("titan-results.tsv", "wt") as tsv_fh:
             for row in rows:
@@ -171,7 +173,8 @@ task merge_titan_summary {
         CODE
     >>>
     output {
-        File merged_summaries = "titan-results.tsv"
+        File summaries_tsv  = "titan-results.tsv"
+        File summaries_json = "titan-results.json"
     }
 
     runtime {

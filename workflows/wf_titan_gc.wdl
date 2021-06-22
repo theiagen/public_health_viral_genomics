@@ -16,7 +16,7 @@ struct parseJSON {
     File   r2
 }
 
-workflow titan {
+workflow titan_gc {
     meta {
         description: "Incorporates each of the Titan workflows (clearlabs, illumina_pe, illumina_se, ont) into a single run."
         author: "Robert A. Petit III"
@@ -262,7 +262,8 @@ workflow titan {
 
     output {
         # Titan outputs
-        File        merged_summaries      = merge_titan_summary.merged_summaries
+        File        summaries_tsv         = merge_titan_summary.summaries_tsv
+        File        summaries_json        = merge_titan_summary.summaries_json
         Array[File] reads_dehosted        = flatten([
                                                 select_all(titan_clearlabs.reads_dehosted), select_all(titan_illumina_pe.read1_dehosted), 
                                                 select_all(titan_illumina_pe.read2_dehosted), select_all(titan_ont.reads_dehosted)
@@ -314,6 +315,10 @@ workflow titan {
         Array[File] kraken_report_dehosted = flatten([
                                                 select_all(titan_clearlabs.kraken_report_dehosted), select_all(titan_illumina_pe.kraken_report_dehosted),
                                                 select_all(titan_ont.kraken_report_dehosted)
-                                            ])                  
+                                            ])
+        Array[File] json_summary           = flatten([
+                                                select_all(clearlabs_summary.summary), select_all(illumina_pe_summary.summary),
+                                                select_all(illumina_se_summary.summary), select_all(ont_summary.summary)
+                                            ])             
     }
 }

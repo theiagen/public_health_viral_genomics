@@ -12,27 +12,31 @@ optional arguments:
   --outdir STR   Directory to copy files to. (Default: ./titan).
   --debug        Print helpful information
 """
+import json
 
 def mkdir(path):
     from pathlib import Path
     Path(path).mkdir(parents=True, exist_ok=True)
 
-def read_titan_results(tsv):
+def read_titan_results(tsv, is_json=False):
     results = {}
     with open(tsv, 'rt') as tsv_fh:
         for line in tsv_fh:
-            if "result-header" not in results:
-                results["result-header"] = line
+            if is_json:
+                json_data = json.loads(line.rstrip())
+                results[json_data['specimen_id']] = line
             else:
-                # store the line, col[0] is samplename
-                results[line.split("\t")[0]] = line
+                if "result-header" not in results:
+                    results["result-header"] = line
+                else:
+                    # store the line, col[0] is samplename
+                    results[line.split("\t")[0]] = line
     return results
 
 if __name__ == '__main__':
     import argparse as ap
     from collections import defaultdict
     from shutil import copy2
-    import json
     import os
     import re
     import sys
@@ -93,34 +97,40 @@ if __name__ == '__main__':
     """
     Start moving files: metadata["outputs"]
     Output keys:
-        "titan.reads_dehosted"
-        "titan.kraken_report"
-        "titan.pango_lineage_report"
-        "titan.nextclade_json"
-        "titan.consensus_flagstat"
-        "titan.kraken_report_dehosted"
-        "titan.vadr_alerts_list"
-        "titan.aligned_bam"
-        "titan.assembly_fasta"
-        "titan.nextclade_tsv"
-        "titan.consensus_stats"
-        "titan.auspice_json"
-        "titan.aligned_bai"
+        "titan_gc.reads_dehosted"
+        "titan_gc.kraken_report"
+        "titan_gc.pango_lineage_report"
+        "titan_gc.nextclade_json"
+        "titan_gc.consensus_flagstat"
+        "titan_gc.kraken_report_dehosted"
+        "titan_gc.vadr_alerts_list"
+        "titan_gc.aligned_bam"
+        "titan_gc.assembly_fasta"
+        "titan_gc.nextclade_tsv"
+        "titan_gc.consensus_stats"
+        "titan_gc.auspice_json"
+        "titan_gc.aligned_bai"
 
-    The merged summary is under: "titan.merged_summaries"
+    The merged summary is under: "titan_gc.summaries_tsv" and "titan_gc.summaries_json"
     Output files should start with the sample name (sample01.file or sample01_file)
     """
     mkdir(f"{args.outdir}")
     titan_results = None
+    titan_json = None
     for key, outputs in metadata["outputs"].items():
         task_name = key.replace("titan.", "")
         if args.debug:
             print(f"Working on {task_name} outputs", file=sys.stderr)
-        if key == "titan.merged_summaries":
+        if key == "titan_gc.summaries_tsv":
             if args.debug:
                 print(f"Copying {outputs} to {args.outdir}/complete-titan-results.tsv", file=sys.stderr)
             copy2(outputs, f"{args.outdir}/titan-results.tsv")
             titan_results = read_titan_results(outputs)
+        elif key == "titan_gc.summaries_json":
+            if args.debug:
+                print(f"Copying {outputs} to {args.outdir}/complete-titan-results.json", file=sys.stderr)
+            copy2(outputs, f"{args.outdir}/titan-results.json")
+            titan_json = read_titan_results(outputs, is_json=True)
         else:
             for output in outputs:
                 filename = os.path.basename(output)
@@ -140,10 +150,12 @@ if __name__ == '__main__':
 
     # Write per-run Titan results
     for run_id, inputs in runs.items():
-        run_results = f"{args.outdir}/{run_id}/{run_id}-titan-results.tsv"
+        results_tsv = f"{args.outdir}/{run_id}/{run_id}-titan-results.tsv"
+        results_json = f"{args.outdir}/{run_id}/{run_id}-titan-results.json"
         if args.debug:
-            print(f"Writing Titan results for {run_id} to {run_results}", file=sys.stderr)
-        with open(run_results, 'wt') as result_fh:
-            result_fh.write(titan_results["result-header"])
+            print(f"Writing Titan GC results for {run_id} to {results_tsv} and {results_json}", file=sys.stderr)
+        with open(results_tsv, 'wt') as tsv_fh, open(results_json, 'wt') as json_fh:
+            tsv_fh.write(titan_results["result-header"])
             for sample in inputs:
-                 result_fh.write(titan_results[sample])
+                tsv_fh.write(titan_results[sample])
+                json_fh.write(titan_json[sample])
