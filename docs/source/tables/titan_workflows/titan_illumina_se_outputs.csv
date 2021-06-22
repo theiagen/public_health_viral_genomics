@@ -41,12 +41,14 @@ pangolin_version,String,Pangolin and PangoLEARN versions used
 percent_reference_coverage,Float,"Percent coverage of the reference genome after performing primer trimming; calculated as assembly_length_unambiguous / length of reference genome (SC2: 29,903) x 100"
 primer_trimmed_read_percent,Float,Percent of read data with primers trimmed as deteremined by iVar trim
 read1_clean,File,Forward read file after quality trimming and adapter removal
-sam_version,String,Version of SAMtools used to sort and index the alignment file
-SAMtools_version_consensus,String,Version of SAMtools used to create the pileup before running iVar consensus
-SAMtools_version_primtrim,String,Version of SAMtools used to create the pileup before running iVar trim
-SAMtools_version_stats,String,Version of SAMtools used to assess quality of read mapping
+samtools_version,String,Version of SAMtools used to sort and index the alignment file
+samtools_version_consensus,String,Version of SAMtools used to create the pileup before running iVar consensus
+samtools_version_primtrim,String,Version of SAMtools used to create the pileup before running iVar trim
+samtools_version_stats,String,Version of SAMtools used to assess quality of read mapping
 seq_platform,String,Description of the sequencing methodology used to generate the input read data
+titan_illumina_se_analysis_date,String,Date of analysis
+titan_illumina_se_version,String,Version of the Public Health Viral Genomics (PHVG) repository used
 trimmomatic_version,String,Version of Trimmomatic used
 vadr_alerts_list,File,File containing all of the fatal alerts as determined by VADR
 vadr_docker,String,Docker image used to run VADR
-vadr_num_alerts,Int,Number of fatal alerts as determined by VADR
+vadr_num_alerts,String,Number of fatal alerts as determined by VADR

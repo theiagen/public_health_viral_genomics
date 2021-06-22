@@ -15,8 +15,9 @@ nextclade_one_sample,pcr_primers_csv,File,Custom PCR primers file for NextClade,
 nextclade_one_sample,gene_annotations_json,File,Custom gene annotation file for NextClade,None
 nextclade_one_sample,docker,String,Docker tag used for running NextClade,neherlab/nextclade:0.14.2
 nextclade_one_sample,auspice_reference_tree_json,File,Custom reference tree file for NextClade ,None
-pangolin2,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
-pangolin2,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
+pangolin3,inference_engine,String,pangolin inference engine for lineage designations (usher or pangolarn),usher
+pangolin3,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
+pangolin3,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
 read_filtering,cpu,Int,CPU resources allocated to the read filtering task (Artic guppypled) runtime environment ,8
 read_filtering,max_length,Int,Maximum sequence length ,700
 read_filtering,min_length,Int,Minimum sequence length,400
@@ -25,7 +26,9 @@ titan_ont,artic_primer_version,String,Version of the Artic PCR protocol used to 
 titan_ont,normalise,Int,Value to normalize read counts,200
 titan_ont,seq_method,String,Description of the sequencing methodology used to generate the input read data,ONT
 titan_ont,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-05-19
-vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
-vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
+vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
-vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2
+vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
+vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+vadr,skip_length,Int,Minimum assembly length (unambiguous) to run vadr,10000
+version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None

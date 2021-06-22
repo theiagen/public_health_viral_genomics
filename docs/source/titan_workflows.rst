@@ -38,7 +38,7 @@ Upon initiating a Titan_Illumina_PE job, the input primer scheme coordinates and
    :alt: Titan_Illumina_PE workflow
    :figclass: align-center
    
-   **Titan_Illumina_PE v1.4.3 Data Workflow**
+   **Titan_Illumina_PE v1.4.4 Data Workflow**
 
 Consensus genome assembly with the Titan_Illumina_PE workflow is performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then trimming low-quality reads with Trimmomatic and removing adapter sequences with BBDuk.  These cleaned read data are then aligned to the Wuhan-1 reference genome with BWA to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file using the iVar Trim sub-command. The iVar consensus sub-command is then  utilized to generate a consensus assembly in FASTA format. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -92,7 +92,7 @@ Upon initiating a Titan_Illumina_SE job, the input primer scheme coordinates and
    :alt: Titan_Illumina_SE workflow
    :figclass: align-center
    
-   **Titan_Illumina_SE v1.4.3 Data Workflow**
+   **Titan_Illumina_SE v1.4.4 Data Workflow**
 
 Consensus genome assembly with the Titan_Illumina_SE workflow is performed by first trimming low-quality reads with Trimmomatic and removing adapter sequences with BBDuk.  These cleaned read data are then aligned to the Wuhan-1 reference genome with BWA to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file using the iVar Trim sub-command. The iVar consensus sub-command is then  utilized to generate a consensus assembly in FASTA format. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -143,7 +143,7 @@ Upon initiating a Titan_ClearLabs run,  input ClearLabs read data provided for e
    :alt: Titan_ClearLabs workflow
    :figclass: align-center
    
-   **Titan_ClearLabs v1.4.3 Data Workflow**
+   **Titan_ClearLabs v1.4.4 Data Workflow**
 
 Consensus genome assembly with the Titan_ClearLabs workflow is performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then following the `Artic nCoV-2019 novel coronavirs bioinformatics protocol <https://artic.network/ncov-2019/ncov2019-bioinformatics-sop.html>`. Briefly, input reads are aligned to the Wuhan-1 reference genome with minimap2 to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file and a consensus assembly file is generated using the Artic medaka command. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -201,7 +201,7 @@ Upon initiating a Titan_ONT run,  input ONT read data provided for each sample w
    :alt: Titan_ONT workflow
    :figclass: align-center
    
-   **Titan_ONT v1.4.3 Data Workflow**
+   **Titan_ONT v1.4.4 Data Workflow**
 
 Consensus genome assembly with the Titan_ONT workflow is performed performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then following then following  `Artic nCoV-2019 novel coronavirs bioinformatics protocol <https://artic.network/ncov-2019/ncov2019-bioinformatics-sop.html>`. Briefly, input reads are filtered by size (min-length: 400bp; max-length: 700bp) with the Aritc guppyplex command.  These size-selected read data are aligned to the Wuhan-1 reference genome with minimap2 to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file and a consensus assembly file is generated using the Artic medaka command. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
