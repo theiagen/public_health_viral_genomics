@@ -29,10 +29,11 @@ read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality re
 read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,25
 titan_illumina_pe,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
 titan_illumina_pe,pangolin_docker_image,String,Docker tag used for running Pangolin,staphb/pangolin:2.4.2-pangolearn-2021-05-19
-vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
-vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
-vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
 vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
+vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
+vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
+vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+vadr,skip_length,Int,Minimum assembly length (unambiguous) to run vadr,10000
 variant_call,ref_gff,String,Path to the general feature format of the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/reference/GCF_009858895.2_ASM985889v3_genomic.gff
 variant_call,ref_genome,String,Path to the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
 variant_call,min_qual,Int,Minimum quality threshold for sliding window to pass for iVar variants,20
