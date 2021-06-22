@@ -14,8 +14,10 @@
 set -e
 set -u
 OPTIONS="0"
+VERBOSE="0"
 CROMWELL_OPTS=""
 TITAN_PATH=$(which titan-cli | sed 's=bin/titan-cli==')
+export LOG_LEVEL=ERROR
 
 usage() {
     echo "usage: titan-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
@@ -42,7 +44,7 @@ while [[ "$#" -gt 0 ]]; do
         -o|--outdir) OUTDIR="$2"; shift ;;
         -h|--help) usage 0 ;;
         --options) OPTIONS="$2"; shift ;;
-        --verbose) VERBOSE=1 ;;
+        --verbose) VERBOSE="1" ;;
         *) echo "Unknown parameter passed: $1"; usage 1 ;;
     esac
     shift
@@ -60,6 +62,12 @@ if [[ "${OPTIONS}" != "0" ]]; then
     CROMWELL_OPTS="-o ${OPTIONS}"
 fi
 
+if [[ "${VERBOSE}" == "1" ]]; then
+    export LOG_LEVEL=DEBUG
+fi
+
 mkdir -p ${OUTDIR}
+echo "Running Titan" 1>&2
 cromwell run ${TITAN_PATH}/workflows/wf_titan.wdl -i ${INPUTS} -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS}
+echo "Titan complete, organizing outputs" 1>&2
 titan-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}
