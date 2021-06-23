@@ -73,17 +73,18 @@ task consensus {
     String  medaka_model="r941_min_high_g360"
     String  docker="staphb/artic-ncov2019:1.3.0"
   }
-
+  String primer_name = basename(primer_bed)
+  
   command{
     # setup custom primer scheme (/V is required by Artic)
-    mkdir -p ./primer_schemes/nCoV-2019/Vuser
-    cp /artic-ncov2019/primer_schemes/nCoV-2019/V3/SARS-CoV-2.reference.fasta ./primer_schemes/nCoV-2019/Vuser/SARS-CoV-2.reference.fasta
-    cp ${primer_bed} /artic-ncov2019/primer_schemes/nCoV-2019/V3/SARS-CoV-2.scheme.bed
+    mkdir -p ./primer-schemes/nCoV-2019/Vuser
+    cp /primer-schemes/nCoV-2019/V3/nCoV-2019.reference.fasta ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.reference.fasta
+    cp ${primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
-    echo "${primer_bed}" | tee PRIMER_BED
-    artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer_schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
+    echo "${primer_name}" | tee PRIMER_NAME
+    artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
 
     num_N=$( grep -v ">" ~{samplename}.consensus.fasta | grep -o 'N' | wc -l )
     if [ -z "$num_N" ] ; then num_N="0" ; fi
@@ -121,7 +122,7 @@ task consensus {
     Int     number_Total = read_string("NUM_TOTAL")
     Float   percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
     String  artic_pipeline_version = read_string("VERSION")
-    String  primer_bed_name = read_string("PRIMER_BED")
+    String  primer_bed_name = read_string("PRIMER_NAME")
   }
 
   runtime {

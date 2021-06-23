@@ -8,10 +8,11 @@ task primer_trim {
     File     primer_bed
     Boolean? keep_noprimer_reads=true
   }
+  String primer_name = basename(primer_bed)
 
   command {
     # date and version control
-    echo "${primer_bed}" | tee PRIMER_BED
+    echo "${primer_name}" | tee PRIMER_NAME
     date | tee DATE
     ivar version | head -n1 | tee IVAR_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
@@ -44,7 +45,7 @@ task primer_trim {
     String pipeline_date = read_string("DATE")
     Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
     Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
-    String primer_bed_name = read_string("PRIMER_BED")
+    String primer_bed_name = read_string("PRIMER_NAME")
   }
 
   runtime {
