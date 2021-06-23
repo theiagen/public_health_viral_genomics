@@ -106,6 +106,7 @@ workflow titan_illumina_se {
     Float   primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String  ivar_version_primtrim       = primer_trim.ivar_version
     String  samtools_version_primtrim   = primer_trim.samtools_version
+    String  primer_bed_name             = primer_trim.primer_bed_name
 
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                    = consensus.number_N

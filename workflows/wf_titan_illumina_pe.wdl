@@ -81,8 +81,8 @@ workflow titan_illumina_pe {
     input:
   }
   output {
-    String titan_illumina_pe_version            = version_capture.phvg_version
-    String titan_illumina_pe_analysis_date      = version_capture.date
+    String  titan_illumina_pe_version            = version_capture.phvg_version
+    String  titan_illumina_pe_analysis_date      = version_capture.date
     String  seq_platform                = seq_method
 
     File    read1_dehosted              = read_QC_trim.read1_dehosted
@@ -117,6 +117,7 @@ workflow titan_illumina_pe {
     Float   primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String  ivar_version_primtrim       = primer_trim.ivar_version
     String  samtools_version_primtrim   = primer_trim.samtools_version
+    String  primer_bed_name             = primer_trim.primer_bed_name
 
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                    = consensus.number_N
@@ -138,7 +139,7 @@ workflow titan_illumina_pe {
     String  pangolin_conflicts          = pangolin3.pangolin_conflicts
     String  pangolin_notes              = pangolin3.pangolin_notes
     String  pangolin_version            = pangolin3.version
-    File  pango_lineage_report          = pangolin3.pango_lineage_report
+    File    pango_lineage_report        = pangolin3.pango_lineage_report
     String  pangolin_docker             = pangolin3.pangolin_docker
     String  pangolin_usher_version      = pangolin3.pangolin_usher_version
 

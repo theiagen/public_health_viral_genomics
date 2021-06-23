@@ -16,11 +16,11 @@ workflow titan_clearlabs {
 
   input {
     String  samplename
-    File  clear_lab_fastq
+    File    clear_lab_fastq
     String  seq_method  = "ONT via Clear Labs WGS"
-    String? artic_primer_version  = "V3"
+    File    primer_bed
     String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
-    Int?  normalise  = 20000
+    Int?    normalise  = 20000
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -44,7 +44,7 @@ workflow titan_clearlabs {
     input:
       samplename = samplename,
       filtered_reads = ncbi_scrub_se.read1_dehosted,
-      artic_primer_version = artic_primer_version,
+      primer_bed = primer_bed,
       normalise = normalise
   }
   call assembly_metrics.stats_n_coverage {
@@ -108,23 +108,22 @@ workflow titan_clearlabs {
     File   aligned_bai                      = consensus.trim_sorted_bai
     File   variants_from_ref_vcf            = consensus.medaka_pass_vcf
     String artic_version                    = consensus.artic_pipeline_version
+    String primer_bed_name                       = consensus.primer_bed_name
     File   assembly_fasta                   = consensus.consensus_seq
     Int    number_N                         = consensus.number_N
     Int    assembly_length_unambiguous      = consensus.number_ATCG
     Int    number_Degenerate                = consensus.number_Degenerate
     Int    number_Total                     = consensus.number_Total
-    Float  pool1_percent                    = consensus.pool1_percent
-    Float  pool2_percent                    = consensus.pool2_percent
     Float  percent_reference_coverage       = consensus.percent_reference_coverage
     String assembly_method                  = consensus.artic_pipeline_version
 
-    String pango_lineage                    =	pangolin3.pangolin_lineage
-    String pangolin_conflicts               =	pangolin3.pangolin_conflicts
+    String pango_lineage                    = pangolin3.pangolin_lineage
+    String pangolin_conflicts               = pangolin3.pangolin_conflicts
     String pangolin_notes                   = pangolin3.pangolin_notes
-    String pangolin_version                 =	pangolin3.version
-    File   pango_lineage_report             =	pangolin3.pango_lineage_report
-    String pangolin_docker                  =	pangolin3.pangolin_docker
-    String pangolin_usher_version           =	pangolin3.pangolin_usher_version
+    String pangolin_version                 = pangolin3.version
+    File   pango_lineage_report             = pangolin3.pango_lineage_report
+    String pangolin_docker                  = pangolin3.pangolin_docker
+    String pangolin_usher_version           = pangolin3.pangolin_usher_version
 
     File   consensus_stats                  = stats_n_coverage.stats
     File   consensus_flagstat               = stats_n_coverage.flagstat

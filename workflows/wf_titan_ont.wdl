@@ -15,12 +15,12 @@ workflow titan_ont {
   }
 
   input {
-    String  samplename
-    String  seq_method  = "ONT"
-    String? artic_primer_version  = "V3"
-    File  demultiplexed_reads
-    Int?  normalise = 200
-    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String samplename
+    String seq_method  = "ONT"
+    File   primer_bed
+    File   demultiplexed_reads
+    Int?   normalise = 200
+    String pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -49,7 +49,7 @@ workflow titan_ont {
     input:
       samplename = samplename,
       filtered_reads = read_filtering.filtered_reads,
-      artic_primer_version = artic_primer_version,
+      primer_bed = primer_bed,
       normalise = normalise
   }
   call assembly_metrics.stats_n_coverage {
@@ -91,8 +91,8 @@ workflow titan_ont {
     input:
   }
   output {
-    String titan_ont_version            = version_capture.phvg_version
-    String titan_ont_analysis_date      = version_capture.date
+    String  titan_ont_version            = version_capture.phvg_version
+    String  titan_ont_analysis_date      = version_capture.date
     String  seq_platform                = seq_method
     
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
@@ -113,13 +113,12 @@ workflow titan_ont {
     File    aligned_bai                 = consensus.trim_sorted_bai
     File    variants_from_ref_vcf       = consensus.medaka_pass_vcf
     String  artic_version               = consensus.artic_pipeline_version
+    String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
     Int     number_N                    = consensus.number_N
     Int     assembly_length_unambiguous = consensus.number_ATCG
     Int     number_Degenerate           = consensus.number_Degenerate
     Int     number_Total                = consensus.number_Total
-    Float   pool1_percent               = consensus.pool1_percent
-    Float   pool2_percent               = consensus.pool2_percent
     Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  assembly_method             = consensus.artic_pipeline_version
 
@@ -134,7 +133,7 @@ workflow titan_ont {
     String  pangolin_conflicts          = pangolin3.pangolin_conflicts
     String  pangolin_notes              = pangolin3.pangolin_notes
     String  pangolin_version            = pangolin3.version
-    File  pango_lineage_report          = pangolin3.pango_lineage_report
+    File    pango_lineage_report        = pangolin3.pango_lineage_report
     String  pangolin_docker             = pangolin3.pangolin_docker
     String  pangolin_usher_version      = pangolin3.pangolin_usher_version
 
