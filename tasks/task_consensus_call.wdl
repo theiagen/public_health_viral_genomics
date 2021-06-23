@@ -3,14 +3,15 @@ version 1.0
 task primer_trim {
 
   input {
-    File        bamfile
-    String      samplename
+    File     bamfile
+    String   samplename
     File     primer_bed
-    Boolean?    keep_noprimer_reads=true
+    Boolean? keep_noprimer_reads=true
   }
 
   command {
     # date and version control
+    echo "${primer_bed}" | tee PRIMER_BED
     date | tee DATE
     ivar version | head -n1 | tee IVAR_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
@@ -35,13 +36,15 @@ task primer_trim {
   }
 
   output {
-    File      trimmed_bam = "${samplename}.primertrim.bam"
-    File 	  trim_sorted_bam = "${samplename}.primertrim.sorted.bam"
-    File 	  trim_sorted_bai = "${samplename}.primertrim.sorted.bam.bai"
-    String    ivar_version = read_string("IVAR_VERSION")
-    String 	  samtools_version = read_string("SAMTOOLS_VERSION")
-    String    pipeline_date = read_string("DATE")
+    File   trimmed_bam = "${samplename}.primertrim.bam"
+    File   trim_sorted_bam = "${samplename}.primertrim.sorted.bam"
+    File   trim_sorted_bai = "${samplename}.primertrim.sorted.bam.bai"
+    String ivar_version = read_string("IVAR_VERSION")
+    String samtools_version = read_string("SAMTOOLS_VERSION")
+    String pipeline_date = read_string("DATE")
     Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
+    Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
+    String primer_bed_name = read_string("PRIMER_BED")
   }
 
   runtime {
@@ -56,17 +59,17 @@ task primer_trim {
 task variant_call {
 
   input {
-    File        bamfile
-    String      samplename
-    String? 	ref_genome = "/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
-    String? 	ref_gff = "/reference/GCF_009858895.2_ASM985889v3_genomic.gff"
-    Boolean?    count_orphans = true
-    Int?        max_depth = "600000"
-    Boolean?    disable_baq = true
-    Int?        min_bq = "0"
-    Int?        min_qual = "20"
-    Float?      min_freq = "0.6"
-    Int?        min_depth = "10"
+    File     bamfile
+    String   samplename
+    String?  ref_genome = "/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
+    String?  ref_gff = "/reference/GCF_009858895.2_ASM985889v3_genomic.gff"
+    Boolean? count_orphans = true
+    Int?     max_depth = "600000"
+    Boolean? disable_baq = true
+    Int?     min_bq = "0"
+    Int?     min_qual = "20"
+    Float?   min_freq = "0.6"
+    Int?     min_depth = "10"
   }
 
   command {
