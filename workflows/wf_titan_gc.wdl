@@ -35,6 +35,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.samplename,
                     clear_lab_fastq = sample.r1,
+                    primer_bed = primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
@@ -45,6 +46,7 @@ workflow titan_gc {
                     titan_version = titan_clearlabs.titan_clearlabs_version,
                     titan_analysis_date = titan_clearlabs.titan_clearlabs_analysis_date,
                     seq_platform = titan_clearlabs.seq_platform,
+                    primer_bed_name = titan_clearlabs.primer_bed_name,
                     percent_reference_coverage = titan_clearlabs.percent_reference_coverage,
                     number_N = titan_clearlabs.number_N,
                     pango_lineage = titan_clearlabs.pango_lineage,
@@ -70,8 +72,6 @@ workflow titan_gc {
                     kraken_human_dehosted = titan_clearlabs.kraken_human_dehosted,
                     kraken_sc2 = titan_clearlabs.kraken_sc2,
                     kraken_sc2_dehosted = titan_clearlabs.kraken_sc2_dehosted,
-                    pool1_percent = titan_clearlabs.pool1_percent,
-                    pool2_percent = titan_clearlabs.pool2_percent,
                     artic_version = titan_clearlabs.artic_version,
                     kraken_version = titan_clearlabs.kraken_version,
                     nextclade_version = titan_clearlabs.nextclade_version,
@@ -97,6 +97,7 @@ workflow titan_gc {
                     titan_version = titan_illumina_pe.titan_illumina_pe_version,
                     titan_analysis_date = titan_illumina_pe.titan_illumina_pe_analysis_date,
                     seq_platform = titan_illumina_pe.seq_platform,
+                    primer_bed_name = titan_illumina_pe.primer_bed_name,
                     percent_reference_coverage = titan_illumina_pe.percent_reference_coverage,
                     number_N = titan_illumina_pe.number_N,
                     pango_lineage = titan_illumina_pe.pango_lineage,
@@ -160,6 +161,7 @@ workflow titan_gc {
                     titan_version = titan_illumina_se.titan_illumina_se_version,
                     titan_analysis_date = titan_illumina_se.titan_illumina_se_analysis_date,
                     seq_platform = titan_illumina_se.seq_platform,
+                    primer_bed_name = titan_illumina_se.primer_bed_name,
                     percent_reference_coverage = titan_illumina_se.percent_reference_coverage,
                     number_N = titan_illumina_se.number_N,
                     pango_lineage = titan_illumina_se.pango_lineage,
@@ -206,6 +208,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.samplename,
                     demultiplexed_reads = sample.r1,
+                    primer_bed = primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
@@ -216,6 +219,7 @@ workflow titan_gc {
                     titan_version = titan_ont.titan_ont_version,
                     titan_analysis_date = titan_ont.titan_ont_analysis_date,
                     seq_platform = titan_ont.seq_platform,
+                    primer_bed_name = titan_ont.primer_bed_name,
                     percent_reference_coverage = titan_ont.percent_reference_coverage,
                     number_N = titan_ont.number_N,
                     pango_lineage = titan_ont.pango_lineage,
@@ -241,8 +245,6 @@ workflow titan_gc {
                     kraken_human_dehosted = titan_ont.kraken_human_dehosted,
                     kraken_sc2 = titan_ont.kraken_sc2,
                     kraken_sc2_dehosted = titan_ont.kraken_sc2_dehosted,
-                    pool1_percent = titan_ont.pool1_percent,
-                    pool2_percent = titan_ont.pool2_percent,
                     artic_version = titan_ont.artic_version,
                     kraken_version = titan_ont.kraken_version,
                     nextclade_version = titan_ont.nextclade_version,

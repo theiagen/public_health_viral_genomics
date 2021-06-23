@@ -7,6 +7,7 @@ task titan_summary {
         String  titan_version
         String  titan_analysis_date
         String  seq_platform
+        String  primer_bed_name
         Float   percent_reference_coverage
         Int     number_N
         String  pango_lineage
@@ -36,8 +37,6 @@ task titan_summary {
         String? kraken_human_dehosted = ""
         Float   kraken_sc2
         String? kraken_sc2_dehosted = ""
-        String? pool1_percent = ""
-        String? pool2_percent = ""
         String? primer_trimmed_read_percent
         String? artic_version
         String? bbduk_docker = ""
@@ -66,6 +65,7 @@ task titan_summary {
             ('titan_version', '~{titan_version}'),
             ('titan_analysis_date', '~{titan_analysis_date}'),
             ('seq_platform', '~{seq_platform}'),
+            ('primer_bed_name', '~{primer_bed_name}'),
             ('percent_reference_coverage', '~{percent_reference_coverage}'),
             ('number_N', '~{number_N}'),
             ('pango_lineage', '~{pango_lineage}'),
@@ -95,8 +95,6 @@ task titan_summary {
             ('kraken_human_dehosted', '~{kraken_human_dehosted}'),
             ('kraken_sc2', '~{kraken_sc2}'),
             ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
-            ('pool1_percent', '~{pool1_percent}'),
-            ('pool2_percent', '~{pool2_percent}'),
             ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
             ('artic_version', '~{artic_version}'),
             ('bbduk_docker', '~{bbduk_docker}'),

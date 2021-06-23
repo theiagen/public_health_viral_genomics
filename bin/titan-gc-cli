@@ -63,7 +63,7 @@ if [[ "${OPTIONS}" != "0" ]]; then
 fi
 
 if [[ "${VERBOSE}" == "1" ]]; then
-    export LOG_LEVEL=DEBUG
+    export LOG_LEVEL=INFO
 fi
 
 mkdir -p ${OUTDIR}
