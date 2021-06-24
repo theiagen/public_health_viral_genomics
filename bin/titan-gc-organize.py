@@ -1,15 +1,15 @@
 #! /usr/bin/env python3
 """
-usage: titan-prepare [-h] [--outdir STR] [--debug] METADATA_JSON
+usage: titan-gc-organize [-h] [--outdir STR] [--debug] METADATA_JSON
 
-titan-prepare - Read a directory and prepare a JSON for input to Titan
+titan-gc-organize- Read Cromwell metadata to organize files into readable structure
 
 positional arguments:
-  METADATA_JSON  The metadata.json output (-m) from the Titan run.
+  METADATA_JSON  The metadata.json output (-m) from the Titan GC run.
 
 optional arguments:
   -h, --help     show this help message and exit
-  --outdir STR   Directory to copy files to. (Default: ./titan).
+  --outdir STR   Directory to copy files to. (Default: ./titan-gc).
   --debug        Print helpful information
 """
 import json
@@ -42,16 +42,16 @@ if __name__ == '__main__':
     import sys
 
     parser = ap.ArgumentParser(
-        prog='titan-prepare',
+        prog='titan-gc-organize',
         conflict_handler='resolve',
         description=(
-            f'titan-prepare - Read a directory and prepare a JSON for input to Titan'
+            f'titan-gc-organize- Read Cromwell metadata to organize files into readable structure'
         )
     )
     parser.add_argument('metadata', metavar="METADATA_JSON", type=str,
-                        help='The metadata.json output (-m) from the Titan run.')
-    parser.add_argument('--outdir', metavar='STR', type=str, default="./titan",
-                        help='Directory to copy files to. (Default: ./titan).')
+                        help='The metadata.json output (-m) from the Titan GC run.')
+    parser.add_argument('--outdir', metavar='STR', type=str, default="./titan-gc",
+                        help='Directory to copy files to. (Default: ./titan-gc).')
     parser.add_argument('--debug', action='store_true', help='Print helpful information')
     if len(sys.argv) == 1:
         parser.print_help()
