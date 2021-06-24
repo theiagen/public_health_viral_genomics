@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
 """
-usage: titan-prepare [-h] [-f STR] [--fastq_seperator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
-                     [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM
+usage: titan-gc-prepare [-h] [-f STR] [--fastq_seperator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
+                        [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM
 
-titan-prepare - Read a directory and prepare a JSON for input to Titan
+titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
 
 positional arguments:
   FASTQ_PATH            Directory where FASTQ files are stored
@@ -50,10 +50,10 @@ if __name__ == '__main__':
     import sys
 
     parser = ap.ArgumentParser(
-        prog='titan-prepare',
+        prog='titan-gc-prepare',
         conflict_handler='resolve',
         description=(
-            f'titan-prepare - Read a directory and prepare a JSON for input to Titan'
+            f'titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC'
         )
     )
     parser.add_argument('path', metavar="FASTQ_PATH", type=str,
@@ -174,12 +174,12 @@ if __name__ == '__main__':
                 'run_id': args.run_id,
                 'platform': args.platform,
                 'r1': r1,
-                'r2': r2
+                'r2': r2,
+                'primer_bed': args.primers
             })
 
     if FOFN:
         inputs_json = {
-            "titan_gc.samples": FOFN,
-            "titan_gc.primer_bed": args.primers
+            "titan_gc.samples": FOFN
         }
         print(json.dumps(inputs_json, indent = 4))

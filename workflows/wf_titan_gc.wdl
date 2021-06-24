@@ -14,6 +14,7 @@ struct parseJSON {
     String platform
     File   r1
     File   r2
+    File   primer_bed
 }
 
 workflow titan_gc {
@@ -25,7 +26,6 @@ workflow titan_gc {
 
     input {
         Array[parseJSON] samples
-        File    primer_bed
         String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
     }
 
@@ -35,7 +35,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.samplename,
                     clear_lab_fastq = sample.r1,
-                    primer_bed = primer_bed,
+                    primer_bed = sample.primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
@@ -86,7 +86,7 @@ workflow titan_gc {
                     samplename = sample.samplename,
                     read1_raw = sample.r1,
                     read2_raw = sample.r2,
-                    primer_bed = primer_bed,
+                    primer_bed = sample.primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
@@ -150,7 +150,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.samplename,
                     read1_raw  = sample.r1,
-                    primer_bed = primer_bed,
+                    primer_bed = sample.primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
@@ -208,7 +208,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.samplename,
                     demultiplexed_reads = sample.r1,
-                    primer_bed = primer_bed,
+                    primer_bed = sample.primer_bed,
                     pangolin_docker_image = pangolin_docker_image
             }
 
