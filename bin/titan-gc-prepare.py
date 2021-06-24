@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 """
-usage: titan-gc-prepare [-h] [-f STR] [--fastq_seperator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
+usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
                         [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM
 
 titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
@@ -14,7 +14,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -f STR, --fastq_ext STR
                         Extension of the FASTQs. Default: .fastq.gz
-  --fastq_seperator STR
+  --fastq_separator STR
                         Split FASTQ name on the last occurrence of the separator. Default: _
   --fastq_pattern STR   Glob pattern to match FASTQs. Default: *.fastq.gz
   --pe1_pattern STR     Designates difference first set of paired-end reads. Default: ([Aa]|[Rr]1|1) (R1, r1, 1, A, a)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         help='Extension of the FASTQs. Default: .fastq.gz'
     )
     parser.add_argument(
-        '--fastq_seperator', metavar='STR', type=str, default="_",
+        '--fastq_separator', metavar='STR', type=str, default="_",
         help='Split FASTQ name on the last occurrence of the separator. Default: _'
     )
     parser.add_argument(
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         # Split the fastq file name on separator
         # Example MY_FASTQ_R1.rsplit('_', 1) becomes ['MY_FASTQ', 'R1'] (PE)
         # Example MY_FASTQ.rsplit('_', 1) becomes ['MY_FASTQ'] (SE)
-        split_vals = fastq_name.rsplit(args.fastq_seperator, 1)
+        split_vals = fastq_name.rsplit(args.fastq_separator, 1)
         sample_name = split_vals[0]
         if sample_name not in SAMPLES:
             SAMPLES[sample_name] = {'pe': {'r1': [], 'r2': []}, 'se': []}
