@@ -20,7 +20,7 @@ CONFIG="0"
 CROMWELL_OPTS=""
 TITAN_PATH=$(which titan-gc-cli | sed 's=bin/titan-gc-cli==')
 CROMWELL_JAR=$(which cromwell | sed 's=bin/cromwell=share/cromwell/cromwell.jar=')
-export LOG_LEVEL=ERROR
+LOG_LEVEL=ERROR
 
 usage() {
     echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
@@ -115,13 +115,18 @@ if [[ "${OPTIONS}" != "0" ]]; then
 fi
 
 if [[ "${VERBOSE}" == "1" ]]; then
-    export LOG_LEVEL=INFO
+    LOG_LEVEL=INFO
 fi
 
 mkdir -p ${OUTDIR}
 echo "Running Titan GC" 1>&2
-CONFIG_PATH="-Dconfig.file=${TITAN_PATH}/conf/${CONFIG}"
-java -jar ${CONFIG_PATH} ${CROMWELL_JAR} run -i ${INPUTS} -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_PATH}/workflows/wf_titan_gc.wdl
-
+CONFIG_PATH="${TITAN_PATH}/conf/${CONFIG}"
+if [[ ${VERBOSE} == "1" ]]; then 
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
+        -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_PATH}/workflows/wf_titan_gc.wdl 2> ${OUTDIR}/cromwell-stderr.txt | tee ${OUTDIR}/cromwell-stdout.txt
+else
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
+        -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_PATH}/workflows/wf_titan_gc.wdl > ${OUTDIR}/cromwell-stdout.txt 2> ${OUTDIR}/cromwell-stderr.txt
+fi
 echo "Titan GC complete, organizing outputs" 1>&2
 titan-gc-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}
