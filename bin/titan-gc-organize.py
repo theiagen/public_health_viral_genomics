@@ -118,7 +118,7 @@ if __name__ == '__main__':
     titan_results = None
     titan_json = None
     for key, outputs in metadata["outputs"].items():
-        task_name = key.replace("titan.", "")
+        task_name = key.replace("titan_gc.", "")
         if args.debug:
             print(f"Working on {task_name} outputs", file=sys.stderr)
         if key == "titan_gc.summaries_tsv":
