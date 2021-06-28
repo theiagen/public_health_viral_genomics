@@ -38,7 +38,7 @@ workflow read_QC_trim {
       samplename = samplename,
       read1_trimmed = trimmomatic.read1_trimmed,
       read2_trimmed = trimmomatic.read2_trimmed,
-      mem_size_gb.  = bbduk_mem
+      mem_size_gb   = bbduk_mem
   }
   call qc_utils.fastqc as fastqc_raw {
     input:
