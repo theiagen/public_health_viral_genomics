@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """
 usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
-                        [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM
+                        [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM PRIMER
 
 titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
 
@@ -9,6 +9,7 @@ positional arguments:
   FASTQ_PATH            Directory where FASTQ files are stored
   RUN_ID                Run ID to associate with the samples.
   PLATFORM              The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
+  PRIMER                A file containing primers (bed format) used during sequencing.
 
 optional arguments:
   -h, --help            show this help message and exit
