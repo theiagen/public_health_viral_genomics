@@ -253,6 +253,7 @@ task bbduk {
     File        read1_trimmed
     File        read2_trimmed
     String      samplename
+    Int         mem_size_gb = 8
     String      docker="staphb/bbtools:38.76"
   }
 
@@ -278,8 +279,8 @@ task bbduk {
   }
 
   runtime {
-      docker:     "~{docker}"
-      memory:       "8 GB"
+      docker:       "~{docker}"
+      memory:       "~{mem_size_gb} GB"
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
@@ -290,7 +291,8 @@ task bbduk_se {
     File        read1_trimmed
     String      samplename
     String      docker="staphb/bbtools:38.76"
-  }
+    Int         mem_size_gb = 8 
+    }
 
   command <<<
     # date and version control
@@ -311,8 +313,8 @@ task bbduk_se {
   }
 
   runtime {
-      docker:     "~{docker}"
-      memory:       "8 GB"
+      docker:       "~{docker}"
+      memory:       "~{mem_size_gb} GB"
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
