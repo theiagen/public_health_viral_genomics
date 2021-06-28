@@ -14,7 +14,7 @@
 set -e
 set -u
 OPTIONS="0"
-VERBOSE="0"
+QUIET="0"
 PROFILE="docker"
 CONFIG="0"
 CROMWELL_OPTS=""
@@ -25,7 +25,7 @@ CROMWELL_JAR=$(which cromwell | sed 's=bin/cromwell=share/cromwell/cromwell.jar=
 LOG_LEVEL=ERROR
 
 usage() {
-    echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]"
+    echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--quiet]"
     echo ""
     echo "titan-gc-cli - Run Titan GC on a set of samples."
     echo ""
@@ -39,7 +39,7 @@ usage() {
     echo "  --profile STR         The backend profile to use [options: docker, singularity]"
     echo "  --config STR          Custom backend profile to use"
     echo "  --cromwell_jar STR    Path to cromwell.jar (Default use conda install)"
-    echo "  --verbose             Print out all STDOUT from Cromwell and titan-organize"
+    echo "  --quiet               Silence all STDOUT from Cromwell and titan-gc-organize"
 
     if [ -n "$1" ]; then
         exit "$1"
@@ -55,7 +55,7 @@ while [[ "$#" -gt 0 ]]; do
         --profile) PROFILE="$2" ; shift ;;
         --config) CONFIG="$2" ; shift ;;
         --cromwell_jar) CROMWELL_JAR="$2" ; shift ;;
-        --verbose) VERBOSE="1" ;;
+        --quiet) QUIET="1" ;;
         *) echo "Unknown parameter passed: $1"; usage 1 ;;
     esac
     shift
@@ -95,13 +95,13 @@ if [[ "${CONFIG}" == "0" ]]; then
                     WARNED="1"
                 fi
                 echo "Building Singularity image: ${IMAGE}" 1>&2
-                if [[ ${VERBOSE} == "1" ]]; then
+                if [[ ${QUIET} == "0" ]]; then
                     singularity build ${IMAGE} docker://${container_name}
                 else
                     singularity build ${IMAGE} docker://${container_name} 1> /dev/null
                 fi
             else
-                if [[ ${VERBOSE} == "1" ]]; then
+                if [[ ${QUIET} == "0" ]]; then
                     echo "Skipping build of existing Singularity image: ${IMAGE}" 1>&2
                 fi
             fi
@@ -117,9 +117,9 @@ if [[ "${OPTIONS}" != "0" ]]; then
 fi
 
 mkdir -p ${OUTDIR}
-echo "Running Titan GC" 1>&2
+echo "Running Titan GC (use --quiet to quiet things down a bit)" 1>&2
 CONFIG_PATH="${TITAN_SHARE}/conf/${CONFIG}"
-if [[ ${VERBOSE} == "1" ]]; then 
+if [[ ${QUIET} == "0" ]]; then 
     java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
         -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_SHARE}/workflows/wf_titan_gc.wdl 2> ${OUTDIR}/cromwell-stderr.txt | tee ${OUTDIR}/cromwell-stdout.txt
 else
