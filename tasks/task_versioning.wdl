@@ -7,12 +7,12 @@ task version_capture {
   meta {
     volatile: true
   }
-  command {
+  command <<<
     PHVG_Version="PHVG v1.5.0-dev"
     ~{default='' 'export TZ=' + timezone}
     date +"%Y-%m-%d" > TODAY
     echo $PHVG_Version > PHVG_VERSION
-  }
+  >>>
   output {
     String date = read_string("TODAY")
     String phvg_version = read_string("PHVG_VERSION")
