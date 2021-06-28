@@ -16,6 +16,7 @@ workflow read_QC_trim {
     Int?    trimmomatic_minlen = 75
     Int?    trimmomatic_quality_trim_score = 30
     Int?    trimmomatic_window_size = 4
+    Int     bbduk_mem = 8
   }
   call read_clean.ncbi_scrub_pe {
     input:
@@ -46,7 +47,8 @@ workflow read_QC_trim {
   call qc_utils.fastqc as fastqc_clean {
     input:
       read1 = bbduk.read1_clean,
-      read2 = bbduk.read2_clean
+      read2 = bbduk.read2_clean,
+      mem_size_gb = bbduk_mem
   }
   call taxonID.kraken2 as kraken2_raw {
     input:
