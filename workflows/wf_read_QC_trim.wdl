@@ -37,7 +37,8 @@ workflow read_QC_trim {
     input:
       samplename = samplename,
       read1_trimmed = trimmomatic.read1_trimmed,
-      read2_trimmed = trimmomatic.read2_trimmed
+      read2_trimmed = trimmomatic.read2_trimmed,
+      mem_size_gb.  = bbduk_mem
   }
   call qc_utils.fastqc as fastqc_raw {
     input:
@@ -47,8 +48,7 @@ workflow read_QC_trim {
   call qc_utils.fastqc as fastqc_clean {
     input:
       read1 = bbduk.read1_clean,
-      read2 = bbduk.read2_clean,
-      mem_size_gb = bbduk_mem
+      read2 = bbduk.read2_clean
   }
   call taxonID.kraken2 as kraken2_raw {
     input:
