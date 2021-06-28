@@ -24,9 +24,9 @@ optional arguments:
 
 Heavily based off bactopia prepare (https://github.com/bactopia/bactopia/blob/master/bin/helpers/bactopia-prepare.py)
 """
+from pathlib import Path
 
 def search_path(path, pattern, recursive=False):
-    from pathlib import Path
     if recursive:
         return Path(path).rglob(pattern)
     else:
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         help='The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont'
     )
     parser.add_argument(
-        '--primers', metavar='STR', type=str, default="",
+        'primers', metavar='PRIMER', type=str, default="",
         help='A file containing primers (bed format) used during sequencing.'
     )
     parser.add_argument(
@@ -95,6 +95,7 @@ if __name__ == '__main__':
         '--prefix', metavar='STR', type=str,
         help='Replace the absolute path with a given string. Default: Use absolute path'
     )
+    parser.add_argument('--tsv', action='store_true', help='Output FOFN as a TSV (Default JSON)')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -175,11 +176,19 @@ if __name__ == '__main__':
                 'platform': args.platform,
                 'r1': r1,
                 'r2': r2,
-                'primer_bed': args.primers
+                'primer_bed': get_path(Path(args.primers), abspath, args.prefix)
             })
 
     if FOFN:
-        inputs_json = {
-            "titan_gc.samples": FOFN
-        }
-        print(json.dumps(inputs_json, indent = 4))
+        if args.tsv:
+            needs_header = True
+            for f in FOFN:
+                if needs_header:
+                    print("\t".join(f.keys()))
+                    needs_header = False
+                print("\t".join([f['samplename'], f['run_id'], f['platform'], f['r1'], f['r2'], f['primer_bed']]))
+        else:
+            inputs_json = {
+                "titan_gc.samples": FOFN
+            }
+            print(json.dumps(inputs_json, indent = 4))
