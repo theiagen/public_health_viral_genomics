@@ -12,6 +12,26 @@ optional arguments:
   --outdir STR   Directory to copy files to. (Default: ./titan-gc).
   --debug        Print helpful information
 """
+# Known file extensions from Titan-GC outputs
+OUTPUTS = {
+    'aligned_bam': {'ext': '.primertrim.sorted.bam', 'folder': 'alignments'},
+    'aligned_bai': {'ext': '.primertrim.sorted.bam.bai', 'folder': 'alignments'},
+    'assembly_fasta': {'ext': '.ivar.consensus.fasta', 'folder': 'assemblies'},
+    'auspice_json': {'ext': '.ivar.consensus.nextclade.auspice.json', 'folder': 'nextclade'},
+    'consensus_flagstat': {'ext': '.flagstat.txt', 'folder': 'summary'},
+    'consensus_stats': {'ext': '.stats.txt', 'folder': 'summary'},
+    'json_summary': {'ext': '.results.json', 'folder': 'summary'},
+    'nextclade_json': {'ext': '.ivar.consensus.nextclade.json', 'folder': 'nextclade'},
+    'nextclade_tsv': {'ext': '.ivar.consensus.nextclade.tsv', 'folder': 'nextclade'},
+    'pango_lineage_report': {'ext': '.pangolin_report.csv', 'folder': 'pangolin_reports'},
+    'vadr_alerts_list': {'ext': '.ivar.consensus.vadr.alt.list', 'folder': 'vadr_alerts'},
+    'reads_dehosted': {'ext': '_dehosted.fastq.gz', 'folder': 'dehosted_reads'},
+    'kraken_report_dehosted': {'ext': '_kraken2_report.txt', 'folder': 'kraken2_reports'},
+    'kraken_report': {'ext': '_kraken2_report.txt', 'folder': 'kraken2_reports'}
+}
+
+
+
 import json
 
 def mkdir(path):
@@ -110,6 +130,7 @@ if __name__ == '__main__':
         "titan_gc.consensus_stats"
         "titan_gc.auspice_json"
         "titan_gc.aligned_bai"
+        "titan_gc.json_summary"
 
     The merged summary is under: "titan_gc.summaries_tsv" and "titan_gc.summaries_json"
     Output files should start with the sample name (sample01.file or sample01_file)
@@ -121,32 +142,38 @@ if __name__ == '__main__':
         task_name = key.replace("titan_gc.", "")
         if args.debug:
             print(f"Working on {task_name} outputs", file=sys.stderr)
-        if key == "titan_gc.summaries_tsv":
+        if task_name == "summaries_tsv":
             if args.debug:
                 print(f"Copying {outputs} to {args.outdir}/complete-titan-results.tsv", file=sys.stderr)
             copy2(outputs, f"{args.outdir}/titan-results.tsv")
             titan_results = read_titan_results(outputs)
-        elif key == "titan_gc.summaries_json":
+        elif task_name == "summaries_json":
             if args.debug:
                 print(f"Copying {outputs} to {args.outdir}/complete-titan-results.json", file=sys.stderr)
             copy2(outputs, f"{args.outdir}/titan-results.json")
             titan_json = read_titan_results(outputs, is_json=True)
         else:
             for output in outputs:
-                filename = os.path.basename(output)
-                samplename = filename.split(".")[0]
-                if samplename not in samples:
-                    samplename = filename.split("_")[0]
+                samplename = os.path.basename(output).replace(OUTPUTS[task_name]['ext'], "")
+
+                if task_name == 'reads_dehosted':
+                    samplename = samplename.replace("_R1", "")
+                    samplename = samplename.replace("_R2", "")
+
                 if samplename not in samples:
                     print(f"Unable to associate {output} with a sample", file=sys.stderr)
                     continue
                 
-                copy_path = f"{args.outdir}/{samples[samplename]['run_id']}/{task_name}"
+                copy_path = f"{args.outdir}/{samples[samplename]['run_id']}/{OUTPUTS[task_name]['folder']}"
                 mkdir(copy_path)
 
                 if args.debug:
                     print(f"Copying {output} to {copy_path}", file=sys.stderr)
-                copy2(output, copy_path)
+
+                if task_name == 'kraken_report_dehosted':
+                    copy2(output, f'{copy_path}/{samplename}_dehosted_kraken2_report.txt')
+                else:
+                    copy2(output, copy_path)
 
     # Write per-run Titan results
     for run_id, inputs in runs.items():
