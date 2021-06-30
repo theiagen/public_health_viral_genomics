@@ -1,5 +1,5 @@
 # WDL scripts for genomic analyses
-Bioinformatics workflows for genomic characteriation, submission preparation, and genomic epidmiology of viral pathogens of concern, especially the SARS-CoV-2 virus. More information available the [Public Health Viral Genomics ReadTheDocs page](https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html)
+Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of viral pathogens of concern, especially the SARS-CoV-2 virus. More information available the [Public Health Viral Genomics ReadTheDocs page](https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html)
 
 ### Contributors & Influence
 * Based on collaborative work with Andrew Lang, PhD & his [Genomic Analysis WDL workflows](https://github.com/AndrewLangvt/genomic_analyses)
