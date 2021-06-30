@@ -3,6 +3,7 @@ version 1.0
 task titan_summary {
     input {
         String  samplename
+        String  run_name
         String  titan_workflow
         String  titan_version
         String  titan_analysis_date
@@ -61,6 +62,7 @@ task titan_summary {
         import json
         data = OrderedDict((
             ('specimen_id', '~{samplename}'),
+            ('run_name', '~{run_name}'),
             ('titan_workflow', '~{titan_workflow}'),
             ('titan_version', '~{titan_version}'),
             ('titan_analysis_date', '~{titan_analysis_date}'),

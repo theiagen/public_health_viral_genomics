@@ -10,7 +10,7 @@ import "../tasks/task_titan_summary.wdl" as summary
 
 struct parseJSON {
     String samplename
-    String run_id
+    String run_name
     String platform
     File   r1
     File   r2
@@ -42,6 +42,7 @@ workflow titan_gc {
            call summary.titan_summary as clearlabs_summary {
                 input:
                     samplename = sample.samplename,
+                    run_name = sample.run_name,
                     titan_workflow = 'titan_clearlabs',
                     titan_version = titan_clearlabs.titan_clearlabs_version,
                     titan_analysis_date = titan_clearlabs.titan_clearlabs_analysis_date,
@@ -93,6 +94,7 @@ workflow titan_gc {
            call summary.titan_summary as illumina_pe_summary {
                 input:
                     samplename = sample.samplename,
+                    run_name = sample.run_name,
                     titan_workflow = 'titan_illumina_pe',
                     titan_version = titan_illumina_pe.titan_illumina_pe_version,
                     titan_analysis_date = titan_illumina_pe.titan_illumina_pe_analysis_date,
@@ -157,6 +159,7 @@ workflow titan_gc {
             call summary.titan_summary as illumina_se_summary {
                 input:
                     samplename = sample.samplename,
+                    run_name = sample.run_name,
                     titan_workflow = 'titan_illumina_se',
                     titan_version = titan_illumina_se.titan_illumina_se_version,
                     titan_analysis_date = titan_illumina_se.titan_illumina_se_analysis_date,
@@ -215,6 +218,7 @@ workflow titan_gc {
             call summary.titan_summary as ont_summary {
                 input:
                     samplename = sample.samplename,
+                    run_name = sample.run_name,
                     titan_workflow = 'titan_ont',
                     titan_version = titan_ont.titan_ont_version,
                     titan_analysis_date = titan_ont.titan_ont_analysis_date,

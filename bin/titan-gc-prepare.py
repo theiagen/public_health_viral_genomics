@@ -2,7 +2,7 @@
 """
 usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR]
                         [-r] [--prefix STR] [--tsv] [--pangolin_docker STR] [--clearlabs_normalise INT] [--ont_normalise INT]
-                        [--seq_method STR] FASTQ_PATH RUN_ID PLATFORM PRIMER
+                        [--seq_method STR] FASTQ_PATH run_name PLATFORM PRIMER
 
 titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
 
@@ -11,7 +11,7 @@ optional arguments:
 
 Titan-GC Prepare Parameters:
   FASTQ_PATH            Directory where FASTQ files are stored
-  RUN_ID                Run ID to associate with the samples.
+  RUN_NAME              A name for the run to associate with the samples.
   PLATFORM              The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
   PRIMER                A file containing primers (bed format) used during sequencing.
   -f STR, --fastq_ext STR
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     group1 = parser.add_argument_group('Titan-GC Prepare Parameters')
     group1.add_argument('path', metavar="FASTQ_PATH", type=str,
                         help='Directory where FASTQ files are stored')
-    group1.add_argument('run_id', metavar='RUN_ID', type=str, help='Run ID to associate with the samples.')
+    group1.add_argument('run_name', metavar='run_name', type=str, help='A run name to associate with the samples.')
     group1.add_argument(
         'platform', metavar='PLATFORM', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
         help='The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont'
@@ -199,7 +199,7 @@ if __name__ == '__main__':
 
             FOFN.append({
                 'samplename': sample, 
-                'run_id': args.run_id,
+                'run_name': args.run_name,
                 'platform': args.platform,
                 'r1': r1,
                 'r2': r2,
@@ -213,7 +213,7 @@ if __name__ == '__main__':
                 if needs_header:
                     print("\t".join(f.keys()))
                     needs_header = False
-                print("\t".join([f['samplename'], f['run_id'], f['platform'], f['r1'], f['r2'], f['primer_bed']]))
+                print("\t".join([f['samplename'], f['run_name'], f['platform'], f['r1'], f['r2'], f['primer_bed']]))
         else:
             inputs_json = {
                 "titan_gc.samples": FOFN
