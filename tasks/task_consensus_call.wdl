@@ -44,7 +44,6 @@ task primer_trim {
     String samtools_version = read_string("SAMTOOLS_VERSION")
     String pipeline_date = read_string("DATE")
     Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
-    Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
     String primer_bed_name = read_string("PRIMER_NAME")
   }
 
