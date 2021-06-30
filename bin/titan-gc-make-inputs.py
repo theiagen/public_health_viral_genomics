@@ -18,6 +18,7 @@ if __name__ == '__main__':
     import argparse as ap
     from pathlib import Path
     import json
+    import os
     import sys
 
     parser = ap.ArgumentParser(
@@ -56,26 +57,22 @@ if __name__ == '__main__':
         sys.exit(0)
 
     args = parser.parse_args()
-    inputs = {
-        "titan_gc.samples": []
-    }
-    if args.r2:
-        inputs["titan_gc.samples"].append({
-            'samplename': args.sample, 
-            'run_id': args.run_id,
-            'platform': args.platform,
-            'r1': str(Path(args.r1).absolute()),
-            'r2': str(Path(args.r2).absolute()),
-            'primer_bed': str(Path(args.primers).absolute())
-        })
-    else:
-        inputs["titan_gc.samples"].append({
-            'samplename': args.sample, 
-            'run_id': args.run_id,
-            'platform': args.platform,
-            'r1': str(Path(args.r1).absolute()),
-            'r2': "",
-            'primer_bed': str(Path(args.primers).absolute())
-        })
+    EMPTY_FASTQ = f"{str(Path.home())}/.titan/EMPTY.fastq.gz"
+    if not os.path.exists(EMPTY_FASTQ):
+        Path(f"{str(Path.home())}/.titan").mkdir(parents=True, exist_ok=True)
+        with open(EMPTY_FASTQ, 'a'):
+            pass
 
+    inputs = {
+        "titan_gc.samples": [
+            {
+                'samplename': args.sample, 
+                'run_id': args.run_id,
+                'platform': args.platform,
+                'r1': str(Path(args.r1).absolute()),
+                'r2': str(Path(args.r2).absolute()) if args.r2 else EMPTY_FASTQ,
+                'primer_bed': str(Path(args.primers).absolute())
+            }
+        ]
+    }
     print(json.dumps(inputs, indent = 4))
