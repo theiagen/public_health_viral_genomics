@@ -112,18 +112,10 @@ if __name__ == '__main__':
     group2 = parser.add_argument_group('Optional Titan-GC Workflow Parameters')
     group2.add_argument(
         '--pangolin_docker', metavar='STR', type=str,
-        help='Docker image used to run Pangolin'
+        help='Docker image used to run Pangolin (takes priority over --params)'
     )
     group2.add_argument(
-        '--clearlabs_normalise', metavar='INT', type=str,
-        help='Value to normalize Clearlabs read counts'
-    )
-    group2.add_argument(
-        '--ont_normalise', metavar='INT', type=str,
-        help='Value to normalize ONT read counts'
-    )
-    group2.add_argument(
-        '--seq_method', metavar='STR', type=str, help='Seqeuncing method used'
+        '--params', metavar='STR', type=str, help='A JSON file containing parameter values'
     )
 
     if len(sys.argv) == 1:
@@ -226,17 +218,15 @@ if __name__ == '__main__':
             inputs_json = {
                 "titan_gc.samples": FOFN
             }
+            params_json = {}
+
 
             # Add optional parameters if user specified them
+            if args.params:
+                with open(args.params, 'rt') as json_fh:
+                    params_json = json.load(json_fh)
+
             if args.pangolin_docker:
-                inputs_json['titan_gc.pangolin_docker_image'] = args.pangolin_docker
-            if args.clearlabs_normalise:
-                inputs_json['titan_gc.titan_clearlabs.normalise'] = args.clearlabs_normalise
-            if args.ont_normalise:
-                inputs_json['titan_gc.titan_ont.normalise'] = args.ont_normalise
-            if args.seq_method:
-                key = {'clearlabs': "titan_gc.titan_clearlabs.seq_method", 'illumina_pe': "titan_gc.titan_illumina_pe.seq_method",
-                       'illumina_se': "titan_gc.titan_illumina_se.seq_method", 'ont': "titan_gc.titan_ont.seq_method"}
-                inputs_json[key[args.platform]] = args.seq_method
+                params_json['titan_gc.pangolin_docker_image'] = args.pangolin_docker
             
-            print(json.dumps(inputs_json, indent = 4))
+            print(json.dumps({**inputs_json, **params_json}, indent = 4))
