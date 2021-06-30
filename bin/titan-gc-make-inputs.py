@@ -74,7 +74,7 @@ if __name__ == '__main__':
         help='Value to normalize Clearlabs read counts'
     )
     group2.add_argument(
-        '--ont_normalise', metavar='INT', type=str, default=200,
+        '--ont_normalise', metavar='INT', type=str,
         help='Value to normalize ONT read counts'
     )
     group2.add_argument(
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     # Add optional parameters if user specified them
     if args.pangolin_docker:
-        inputs['pangolin_docker_image'] = args.pangolin_docker
+        inputs['titan_gc.pangolin_docker_image'] = args.pangolin_docker
     if args.clearlabs_normalise:
         inputs['titan_gc.titan_clearlabs.normalise'] = args.clearlabs_normalise
     if args.ont_normalise:
