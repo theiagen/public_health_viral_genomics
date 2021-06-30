@@ -128,5 +128,10 @@ else
     java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
         -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_SHARE}/workflows/wf_titan_gc.wdl > ${OUTDIR}/cromwell-stdout.txt 2> ${OUTDIR}/cromwell-stderr.txt
 fi
-echo "Titan GC complete, organizing outputs" 1>&2
-titan-gc-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}
+
+if [[ -f "${OUTDIR}/titan-metadata.json" ]]; then
+    echo "Titan GC complete, organizing outputs" 1>&2
+    titan-gc-organize.py ${OUTDIR}/titan-metadata.json --outdir ${OUTDIR}
+else
+    echo "Titan GC did not complete sucessfully, please review the logs (${OUTDIR}/cromwell-std{err|out}.txt)" 1>&2
+fi
