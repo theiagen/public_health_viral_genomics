@@ -1,18 +1,19 @@
 #! /usr/bin/env python3
 """
-usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR] 
-                        [-r] [--prefix STR] FASTQ_PATH RUN_ID PLATFORM PRIMER
+usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR]
+                        [-r] [--prefix STR] [--tsv] [--pangolin_docker STR] [--clearlabs_normalise INT] [--ont_normalise INT]
+                        [--seq_method STR] FASTQ_PATH RUN_ID PLATFORM PRIMER
 
 titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
 
-positional arguments:
+optional arguments:
+  -h, --help            show this help message and exit
+
+Titan-GC Prepare Parameters:
   FASTQ_PATH            Directory where FASTQ files are stored
   RUN_ID                Run ID to associate with the samples.
   PLATFORM              The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
   PRIMER                A file containing primers (bed format) used during sequencing.
-
-optional arguments:
-  -h, --help            show this help message and exit
   -f STR, --fastq_ext STR
                         Extension of the FASTQs. Default: .fastq.gz
   --fastq_separator STR
@@ -22,6 +23,15 @@ optional arguments:
   --pe2_pattern STR     Designates difference second set of paired-end reads. Default: ([Bb]|[Rr]2|2) (R2, r2, 2, AB b)
   -r, --recursive       Directories will be traversed recursively
   --prefix STR          Replace the absolute path with a given string. Default: Use absolute path
+  --tsv                 Output FOFN as a TSV (Default JSON)
+
+Optional Titan-GC Workflow Parameters:
+  --pangolin_docker STR
+                        Docker image used to run Pangolin
+  --clearlabs_normalise INT
+                        Value to normalize Clearlabs read counts
+  --ont_normalise INT   Value to normalize ONT read counts
+  --seq_method STR      Seqeuncing method used
 
 Heavily based off bactopia prepare (https://github.com/bactopia/bactopia/blob/master/bin/helpers/bactopia-prepare.py)
 """
@@ -57,46 +67,64 @@ if __name__ == '__main__':
             f'titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC'
         )
     )
-    parser.add_argument('path', metavar="FASTQ_PATH", type=str,
+    group1 = parser.add_argument_group('Titan-GC Prepare Parameters')
+    group1.add_argument('path', metavar="FASTQ_PATH", type=str,
                         help='Directory where FASTQ files are stored')
-    parser.add_argument('run_id', metavar='RUN_ID', type=str, help='Run ID to associate with the samples.')
-    parser.add_argument(
+    group1.add_argument('run_id', metavar='RUN_ID', type=str, help='Run ID to associate with the samples.')
+    group1.add_argument(
         'platform', metavar='PLATFORM', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
         help='The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont'
     )
-    parser.add_argument(
+    group1.add_argument(
         'primers', metavar='PRIMER', type=str, default="",
         help='A file containing primers (bed format) used during sequencing.'
     )
-    parser.add_argument(
+    group1.add_argument(
         '-f', '--fastq_ext', metavar='STR', type=str, default=".fastq.gz",
         help='Extension of the FASTQs. Default: .fastq.gz'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--fastq_separator', metavar='STR', type=str, default="_",
         help='Split FASTQ name on the last occurrence of the separator. Default: _'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--fastq_pattern', metavar='STR', type=str, default="*.fastq.gz",
         help='Glob pattern to match FASTQs. Default: *.fastq.gz'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--pe1_pattern', metavar='STR', type=str, default="[Aa]|[Rr]1|1",
         help='Designates difference first set of paired-end reads. Default: ([Aa]|[Rr]1|1) (R1, r1, 1, A, a)'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--pe2_pattern', metavar='STR', type=str, default="[Bb]|[Rr]2|2",
         help='Designates difference second set of paired-end reads. Default: ([Bb]|[Rr]2|2) (R2, r2, 2, AB b)'
     )
-    parser.add_argument(
+    group1.add_argument(
         '-r', '--recursive', action='store_true',
         help='Directories will be traversed recursively'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--prefix', metavar='STR', type=str,
         help='Replace the absolute path with a given string. Default: Use absolute path'
     )
-    parser.add_argument('--tsv', action='store_true', help='Output FOFN as a TSV (Default JSON)')
+    group1.add_argument('--tsv', action='store_true', help='Output FOFN as a TSV (Default JSON)')
+
+    group2 = parser.add_argument_group('Optional Titan-GC Workflow Parameters')
+    group2.add_argument(
+        '--pangolin_docker', metavar='STR', type=str,
+        help='Docker image used to run Pangolin'
+    )
+    group2.add_argument(
+        '--clearlabs_normalise', metavar='INT', type=str,
+        help='Value to normalize Clearlabs read counts'
+    )
+    group2.add_argument(
+        '--ont_normalise', metavar='INT', type=str, default=200,
+        help='Value to normalize ONT read counts'
+    )
+    group2.add_argument(
+        '--seq_method', metavar='STR', type=str, help='Seqeuncing method used'
+    )
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -198,4 +226,17 @@ if __name__ == '__main__':
             inputs_json = {
                 "titan_gc.samples": FOFN
             }
+
+            # Add optional parameters if user specified them
+            if args.pangolin_docker:
+                inputs_json['pangolin_docker_image'] = args.pangolin_docker
+            if args.clearlabs_normalise:
+                inputs_json['titan_gc.titan_clearlabs.normalise'] = args.clearlabs_normalise
+            if args.ont_normalise:
+                inputs_json['titan_gc.titan_ont.normalise'] = args.ont_normalise
+            if args.seq_method:
+                key = {'clearlabs': "titan_gc.titan_clearlabs.seq_method", 'illumina_pe': "titan_gc.titan_illumina_pe.seq_method",
+                       'illumina_se': "titan_gc.titan_illumina_se.seq_method", 'ont': "titan_gc.titan_ont.seq_method"}
+                inputs_json[key[args.platform]] = args.seq_method
+            
             print(json.dumps(inputs_json, indent = 4))

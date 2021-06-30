@@ -1,17 +1,28 @@
 #! /usr/bin/env python3
 """
-usage: titan-gc-make-inputs [-h] [--sample STR] [--run_id STR] [--platform STR] [--r1 STR] [--r2 STR] [--primers PRIMER]
+usage: titan-gc-make-inputs [-h] [--sample STR] [--run_id STR] [--platform STR] [--r1 STR] [--r2 STR] [--primers PRIMER] 
+                            [--pangolin_docker STR] [--clearlabs_normalise INT] [--ont_normalise INT] [--seq_method STR]
 
 titan-gc-make-inputs - Creates a input JSON for a single sample
 
 optional arguments:
-  -h, --help        show this help message and exit
-  --sample STR      Directory where FASTQ files are stored
-  --run_id STR      Run ID to associate with the samples.
-  --platform STR    The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
-  --r1 STR          R1 FASTQ of a read pair or single-end FASTQ.
-  --r2 STR          R2 FASTQ of a read pair
-  --primers PRIMER  A file containing primers (bed format) used during sequencing.
+  -h, --help            show this help message and exit
+
+Titan-GC Prepare Parameters:
+  --sample STR          Directory where FASTQ files are stored
+  --run_id STR          Run ID to associate with the samples.
+  --platform STR        The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
+  --r1 STR              R1 FASTQ of a read pair or single-end FASTQ.
+  --r2 STR              R2 FASTQ of a read pair
+  --primers PRIMER      A file containing primers (bed format) used during sequencing.
+
+Optional Titan-GC Workflow Parameters:
+  --pangolin_docker STR
+                        Docker image used to run Pangolin
+  --clearlabs_normalise INT
+                        Value to normalize Clearlabs read counts
+  --ont_normalise INT   Value to normalize ONT read counts
+  --seq_method STR      Seqeuncing method used
 """
 
 if __name__ == '__main__':
@@ -29,27 +40,45 @@ if __name__ == '__main__':
         )
     )
 
-    parser.add_argument(
+    group1 = parser.add_argument_group('Titan-GC Prepare Parameters')
+    group1.add_argument(
         '--sample', metavar="STR", type=str, help='Directory where FASTQ files are stored'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--run_id', metavar='STR', type=str, help='Run ID to associate with the samples.'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--platform', metavar='STR', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
         help='The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--r1', metavar='STR', type=str,
         help='R1 FASTQ of a read pair or single-end FASTQ.'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--r2', metavar='STR', type=str,
         help='R2 FASTQ of a read pair'
     )
-    parser.add_argument(
+    group1.add_argument(
         '--primers', metavar='PRIMER', type=str,
         help='A file containing primers (bed format) used during sequencing.'
+    )
+
+    group2 = parser.add_argument_group('Optional Titan-GC Workflow Parameters')
+    group2.add_argument(
+        '--pangolin_docker', metavar='STR', type=str,
+        help='Docker image used to run Pangolin'
+    )
+    group2.add_argument(
+        '--clearlabs_normalise', metavar='INT', type=str,
+        help='Value to normalize Clearlabs read counts'
+    )
+    group2.add_argument(
+        '--ont_normalise', metavar='INT', type=str, default=200,
+        help='Value to normalize ONT read counts'
+    )
+    group2.add_argument(
+        '--seq_method', metavar='STR', type=str, help='Seqeuncing method used'
     )
 
     if len(sys.argv) == 1:
@@ -75,4 +104,17 @@ if __name__ == '__main__':
             }
         ]
     }
+
+    # Add optional parameters if user specified them
+    if args.pangolin_docker:
+        inputs['pangolin_docker_image'] = args.pangolin_docker
+    if args.clearlabs_normalise:
+        inputs['titan_gc.titan_clearlabs.normalise'] = args.clearlabs_normalise
+    if args.ont_normalise:
+        inputs['titan_gc.titan_ont.normalise'] = args.ont_normalise
+    if args.seq_method:
+        key = {'clearlabs': "titan_gc.titan_clearlabs.seq_method", 'illumina_pe': "titan_gc.titan_illumina_pe.seq_method",
+                'illumina_se': "titan_gc.titan_illumina_se.seq_method", 'ont': "titan_gc.titan_ont.seq_method"}
+        inputs[key[args.platform]] = args.seq_method
+    
     print(json.dumps(inputs, indent = 4))
