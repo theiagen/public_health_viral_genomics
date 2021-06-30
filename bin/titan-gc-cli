@@ -40,7 +40,6 @@ usage() {
     echo "  --options STR           JSON file containing Cromwell options"
     echo "  --profile STR           The backend profile to use [options: docker, singularity]"
     echo "  --config STR            Custom backend profile to use"
-    echo "  --singularity_cache STR Path to save Singularity images (Default: ${HOME}/.singularity/titan-cache)"
     echo "  --cromwell_jar STR      Path to cromwell.jar (Default use conda install)"
     echo "  --quiet                 Silence all STDOUT from Cromwell and titan-gc-organize"
 
@@ -57,7 +56,6 @@ while [[ "$#" -gt 0 ]]; do
         --options) OPTIONS="$2"; shift ;;
         --profile) PROFILE="$2" ; shift ;;
         --config) CONFIG="$2" ; shift ;;
-        --singularity_cache) SINGULARITY_CACHE="$2" ; shift ;;
         --cromwell_jar) CROMWELL_JAR="$2" ; shift ;;
         --quiet) QUIET="1" ;;
         *) echo "Unknown parameter passed: $1"; usage 1 ;;
@@ -91,7 +89,7 @@ if [[ "${CONFIG}" == "0" ]]; then
         mkdir -p ${CACHE_DIR}
         WARNED="0"
         while IFS=$'\t' read -r container version sha256_hash; do
-            container_name="${container}@${sha256_hash}"
+            container_name="${container}:${version}"
             renamed=${container_name//[\/:]/-}
             IMAGE="${CACHE_DIR}/${renamed}.img"
             if [[ ! -f ${IMAGE} ]]; then

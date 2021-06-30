@@ -19,7 +19,7 @@ task titan_summary {
         String  nextclade_clade
         String  nextclade_aa_subs
         String  nextclade_aa_dels
-        Int     vadr_num_alerts
+        String  vadr_num_alerts
         Int     assembly_length_unambiguous
         Float   assembly_mean_coverage
         String  assembly_method
@@ -176,7 +176,7 @@ task merge_titan_summary {
     }
 
     runtime {
-        docker: "python:slim"
+        docker: "python:3.9.5-slim"
         memory: "1 GB"
         cpu: 1
         dx_instance_type: "mem1_ssd1_v2_x2"

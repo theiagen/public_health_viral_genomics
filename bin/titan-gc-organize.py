@@ -14,24 +14,21 @@ optional arguments:
 """
 # Known file extensions from Titan-GC outputs
 OUTPUTS = {
-    'aligned_bam': {'ext': '.primertrim.sorted.bam', 'folder': 'alignments'},
-    'aligned_bai': {'ext': '.primertrim.sorted.bam.bai', 'folder': 'alignments'},
-    'assembly_fasta': {'ext': '.ivar.consensus.fasta', 'folder': 'assemblies'},
-    'auspice_json': {'ext': '.ivar.consensus.nextclade.auspice.json', 'folder': 'nextclade'},
-    'consensus_flagstat': {'ext': '.flagstat.txt', 'folder': 'summary'},
-    'consensus_stats': {'ext': '.stats.txt', 'folder': 'summary'},
-    'json_summary': {'ext': '.results.json', 'folder': 'summary'},
-    'nextclade_json': {'ext': '.ivar.consensus.nextclade.json', 'folder': 'nextclade'},
-    'nextclade_tsv': {'ext': '.ivar.consensus.nextclade.tsv', 'folder': 'nextclade'},
-    'pango_lineage_report': {'ext': '.pangolin_report.csv', 'folder': 'pangolin_reports'},
-    'vadr_alerts_list': {'ext': '.ivar.consensus.vadr.alt.list', 'folder': 'vadr_alerts'},
-    'reads_dehosted': {'ext': '_dehosted.fastq.gz', 'folder': 'dehosted_reads'},
-    'kraken_report_dehosted': {'ext': '_kraken2_report.txt', 'folder': 'kraken2_reports'},
-    'kraken_report': {'ext': '_kraken2_report.txt', 'folder': 'kraken2_reports'}
+    'aligned_bam': {'ext': ['.primertrim.sorted.bam', '.primertrimmed.rg.sorted.bam'], 'folder': 'alignments'},
+    'aligned_bai': {'ext': ['.primertrim.sorted.bam.bai', '.primertrimmed.rg.sorted.bam.bai'], 'folder': 'alignments'},
+    'assembly_fasta': {'ext': ['.ivar.consensus.fasta', '.medaka.consensus.fasta'], 'folder': 'assemblies'},
+    'auspice_json': {'ext': ['.ivar.consensus.nextclade.auspice.json', '.medaka.consensus.nextclade.auspice.json'], 'folder': 'nextclade'},
+    'consensus_flagstat': {'ext': ['.flagstat.txt'], 'folder': 'summary'},
+    'consensus_stats': {'ext': ['.stats.txt'], 'folder': 'summary'},
+    'json_summary': {'ext': ['.results.json'], 'folder': 'summary'},
+    'nextclade_json': {'ext': ['.ivar.consensus.nextclade.json', '.medaka.consensus.nextclade.json'], 'folder': 'nextclade'},
+    'nextclade_tsv': {'ext': ['.ivar.consensus.nextclade.tsv', '.medaka.consensus.nextclade.tsv'], 'folder': 'nextclade'},
+    'pango_lineage_report': {'ext': ['.pangolin_report.csv'], 'folder': 'pangolin_reports'},
+    'vadr_alerts_list': {'ext': ['.ivar.consensus.vadr.alt.list', '.medaka.consensus.vadr.alt.list'], 'folder': 'vadr_alerts'},
+    'reads_dehosted': {'ext': ['_dehosted.fastq.gz'], 'folder': 'dehosted_reads'},
+    'kraken_report_dehosted': {'ext': ['_kraken2_report.txt'], 'folder': 'kraken2_reports'},
+    'kraken_report': {'ext': ['_kraken2_report.txt'], 'folder': 'kraken2_reports'}
 }
-
-
-
 import json
 
 def mkdir(path):
@@ -154,7 +151,10 @@ if __name__ == '__main__':
             titan_json = read_titan_results(outputs, is_json=True)
         else:
             for output in outputs:
-                samplename = os.path.basename(output).replace(OUTPUTS[task_name]['ext'], "")
+                samplename = os.path.basename(output)
+                
+                for ext in OUTPUTS[task_name]['ext']:
+                    samplename = samplename.replace(ext, "")
 
                 if task_name == 'reads_dehosted':
                     samplename = samplename.replace("_R1", "")

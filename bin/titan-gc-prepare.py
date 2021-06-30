@@ -105,6 +105,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     abspath = os.path.abspath(args.path)
     SAMPLES = {}
+    EMPTY_FASTQ = f"{str(Path.home())}/.titan/EMPTY.fastq.gz"
+    if not os.path.exists(EMPTY_FASTQ):
+        Path(f"{str(Path.home())}/.titan").mkdir(parents=True, exist_ok=True)
+        with open(EMPTY_FASTQ, 'a'):
+            pass
 
     # Match FASTQS
     for fastq in search_path(abspath, args.fastq_pattern, recursive=args.recursive):
@@ -170,6 +175,7 @@ if __name__ == '__main__':
 
             if se_reads:
                 r1 = se_reads[0]
+                r2 = EMPTY_FASTQ
 
             FOFN.append({
                 'samplename': sample, 
