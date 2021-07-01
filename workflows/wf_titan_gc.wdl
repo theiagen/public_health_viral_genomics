@@ -9,12 +9,11 @@ import "wf_titan_ont.wdl" as ont
 import "../tasks/task_titan_summary.wdl" as summary
 
 struct parseJSON {
-    String samplename
-    String run_name
-    String platform
+    String sample
+    String titan_wf
     File   r1
     File   r2
-    File   primer_bed
+    File   primers
 }
 
 workflow titan_gc {
@@ -30,19 +29,18 @@ workflow titan_gc {
     }
 
     scatter (sample in samples) {
-        if (sample.platform == "clearlabs") {
+        if (sample.titan_wf == "clearlabs") {
             call clearlabs.titan_clearlabs as titan_clearlabs { 
                 input:
-                    samplename = sample.samplename,
+                    samplename = sample.sample,
                     clear_lab_fastq = sample.r1,
-                    primer_bed = sample.primer_bed,
+                    primer_bed = sample.primers,
                     pangolin_docker_image = pangolin_docker_image
             }
 
            call summary.titan_summary as clearlabs_summary {
                 input:
-                    samplename = sample.samplename,
-                    run_name = sample.run_name,
+                    samplename = sample.sample,
                     titan_workflow = 'titan_clearlabs',
                     titan_version = titan_clearlabs.titan_clearlabs_version,
                     titan_analysis_date = titan_clearlabs.titan_clearlabs_analysis_date,
@@ -81,20 +79,19 @@ workflow titan_gc {
             }
         }
 
-        if (sample.platform == "illumina_pe") {
+        if (sample.titan_wf == "illumina_pe") {
             call illumina_pe.titan_illumina_pe as titan_illumina_pe { 
                 input:
-                    samplename = sample.samplename,
+                    samplename = sample.sample,
                     read1_raw = sample.r1,
                     read2_raw = sample.r2,
-                    primer_bed = sample.primer_bed,
+                    primer_bed = sample.primers,
                     pangolin_docker_image = pangolin_docker_image
             }
 
            call summary.titan_summary as illumina_pe_summary {
                 input:
-                    samplename = sample.samplename,
-                    run_name = sample.run_name,
+                    samplename = sample.sample,
                     titan_workflow = 'titan_illumina_pe',
                     titan_version = titan_illumina_pe.titan_illumina_pe_version,
                     titan_analysis_date = titan_illumina_pe.titan_illumina_pe_analysis_date,
@@ -147,19 +144,18 @@ workflow titan_gc {
             }
         }
         
-        if (sample.platform == "illumina_se") {
+        if (sample.titan_wf == "illumina_se") {
             call illumina_se.titan_illumina_se as titan_illumina_se { 
                 input:
-                    samplename = sample.samplename,
+                    samplename = sample.sample,
                     read1_raw  = sample.r1,
-                    primer_bed = sample.primer_bed,
+                    primer_bed = sample.primers,
                     pangolin_docker_image = pangolin_docker_image
             }
 
             call summary.titan_summary as illumina_se_summary {
                 input:
-                    samplename = sample.samplename,
-                    run_name = sample.run_name,
+                    samplename = sample.sample,
                     titan_workflow = 'titan_illumina_se',
                     titan_version = titan_illumina_se.titan_illumina_se_version,
                     titan_analysis_date = titan_illumina_se.titan_illumina_se_analysis_date,
@@ -206,19 +202,18 @@ workflow titan_gc {
             }
         }
         
-        if (sample.platform == "ont") {
+        if (sample.titan_wf == "ont") {
             call ont.titan_ont as titan_ont { 
                 input:
-                    samplename = sample.samplename,
+                    samplename = sample.sample,
                     demultiplexed_reads = sample.r1,
-                    primer_bed = sample.primer_bed,
+                    primer_bed = sample.primers,
                     pangolin_docker_image = pangolin_docker_image
             }
 
             call summary.titan_summary as ont_summary {
                 input:
-                    samplename = sample.samplename,
-                    run_name = sample.run_name,
+                    samplename = sample.sample,
                     titan_workflow = 'titan_ont',
                     titan_version = titan_ont.titan_ont_version,
                     titan_analysis_date = titan_ont.titan_ont_analysis_date,

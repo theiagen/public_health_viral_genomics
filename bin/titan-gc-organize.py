@@ -90,26 +90,16 @@ if __name__ == '__main__':
 
     Example print(metadata["inputs"]["samples"])
     [{
-      "samplename": "sample_01",
-      "run_id": "run_01",
+      "sample": "sample_01",
+      "workflow": "clearlabs",
       "r1": "sample_01.fastq.gz",
-      "r2": "",
-      "platform": "clearlabs"
-    }, {
-      "samplename": "sample_02",
-      "run_id": "run_02",
-      "r1": "sample_02_R1.fastq.gz",
-      "r2": "sample_02_R2.fastq.gz",
-      "platform": "illumina_pe"
+      "r2": "EMPTY.fastq",
+      "primers": "primers.bed"
     }]
     """
     samples = {}
-    runs = {}
     for sample in metadata["inputs"]["samples"]:
         samples[sample["samplename"]] = sample
-        if sample["run_id"] not in runs:
-            runs[sample["run_id"]] = []
-        runs[sample["run_id"]].append(sample["samplename"])
 
     """
     Start moving files: metadata["outputs"]
@@ -164,7 +154,7 @@ if __name__ == '__main__':
                     print(f"Unable to associate {output} with a sample", file=sys.stderr)
                     continue
                 
-                copy_path = f"{args.outdir}/{samples[samplename]['run_id']}/{OUTPUTS[task_name]['folder']}"
+                copy_path = f"{args.outdir}/{OUTPUTS[task_name]['folder']}"
                 mkdir(copy_path)
 
                 if args.debug:
@@ -174,15 +164,3 @@ if __name__ == '__main__':
                     copy2(output, f'{copy_path}/{samplename}_dehosted_kraken2_report.txt')
                 else:
                     copy2(output, copy_path)
-
-    # Write per-run Titan results
-    for run_id, inputs in runs.items():
-        results_tsv = f"{args.outdir}/{run_id}/{run_id}-titan-results.tsv"
-        results_json = f"{args.outdir}/{run_id}/{run_id}-titan-results.json"
-        if args.debug:
-            print(f"Writing Titan GC results for {run_id} to {results_tsv} and {results_json}", file=sys.stderr)
-        with open(results_tsv, 'wt') as tsv_fh, open(results_json, 'wt') as json_fh:
-            tsv_fh.write(titan_results["result-header"])
-            for sample in inputs:
-                tsv_fh.write(titan_results[sample])
-                json_fh.write(titan_json[sample])

@@ -2,7 +2,7 @@
 """
 usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR]
                         [-r] [--prefix STR] [--tsv] [--pangolin_docker STR] [--clearlabs_normalise INT] [--ont_normalise INT]
-                        [--seq_method STR] FASTQ_PATH run_name PLATFORM PRIMER
+                        [--seq_method STR] FASTQ_PATH WORKFLOW PRIMER
 
 titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
 
@@ -11,9 +11,8 @@ optional arguments:
 
 Titan-GC Prepare Parameters:
   FASTQ_PATH            Directory where FASTQ files are stored
-  RUN_NAME              A name for the run to associate with the samples.
-  PLATFORM              The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont
-  PRIMER                A file containing primers (bed format) used during sequencing.
+  WORKFLOW              The TItan-GC workflow to use for anlaysis. Options: clearlabs, illumina_pe, illumina_se, ont
+  PRIMERS               A file containing primers (bed format) used during sequencing.
   -f STR, --fastq_ext STR
                         Extension of the FASTQs. Default: .fastq.gz
   --fastq_separator STR
@@ -70,10 +69,9 @@ if __name__ == '__main__':
     group1 = parser.add_argument_group('Titan-GC Prepare Parameters')
     group1.add_argument('path', metavar="FASTQ_PATH", type=str,
                         help='Directory where FASTQ files are stored')
-    group1.add_argument('run_name', metavar='run_name', type=str, help='A run name to associate with the samples.')
     group1.add_argument(
-        'platform', metavar='PLATFORM', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
-        help='The platform used for sequencing. Options: clearlabs, illumina_pe, illumina_se, ont'
+        'workflow', metavar='WORKFLOW', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
+        help='The Titan-GC workflow to use for analysis. Options: clearlabs, illumina_pe, illumina_se, ont'
     )
     group1.add_argument(
         'primers', metavar='PRIMER', type=str, default="",
@@ -189,7 +187,6 @@ if __name__ == '__main__':
             r2 = ''
 
             if pe_count:
-                platform = 'illumina_pe'
                 r1 = r1_reads[0]
                 r2 = r2_reads[0]
 
@@ -199,11 +196,10 @@ if __name__ == '__main__':
 
             FOFN.append({
                 'samplename': sample, 
-                'run_name': args.run_name,
-                'platform': args.platform,
+                'workflow': args.workflow,
                 'r1': r1,
                 'r2': r2,
-                'primer_bed': get_path(Path(args.primers), abspath, args.prefix)
+                'primers': get_path(Path(args.primers), abspath, args.prefix)
             })
 
     if FOFN:
@@ -211,9 +207,9 @@ if __name__ == '__main__':
             needs_header = True
             for f in FOFN:
                 if needs_header:
-                    print("\t".join(f.keys()))
+                    print("\t".join(['samplename', 'workflow', 'r1', 'r2', 'primers']))
                     needs_header = False
-                print("\t".join([f['samplename'], f['run_name'], f['platform'], f['r1'], f['r2'], f['primer_bed']]))
+                print("\t".join([f['samplename'], f['workflow'], f['r1'], f['r2'], f['primers']]))
         else:
             inputs_json = {
                 "titan_gc.samples": FOFN
