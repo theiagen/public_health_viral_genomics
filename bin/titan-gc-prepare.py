@@ -195,8 +195,8 @@ if __name__ == '__main__':
                 r2 = EMPTY_FASTQ
 
             FOFN.append({
-                'samplename': sample, 
-                'workflow': args.workflow,
+                'sample': sample, 
+                'titan_wf': args.workflow,
                 'r1': r1,
                 'r2': r2,
                 'primers': get_path(Path(args.primers), abspath, args.prefix)
@@ -207,9 +207,9 @@ if __name__ == '__main__':
             needs_header = True
             for f in FOFN:
                 if needs_header:
-                    print("\t".join(['samplename', 'workflow', 'r1', 'r2', 'primers']))
+                    print("\t".join(['sample', 'titan_wf', 'r1', 'r2', 'primers']))
                     needs_header = False
-                print("\t".join([f['samplename'], f['workflow'], f['r1'], f['r2'], f['primers']]))
+                print("\t".join([f['sample'], f['titan_wf'], f['r1'], f['r2'], f['primers']]))
         else:
             inputs_json = {
                 "titan_gc.samples": FOFN

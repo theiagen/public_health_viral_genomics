@@ -99,7 +99,7 @@ if __name__ == '__main__':
     """
     samples = {}
     for sample in metadata["inputs"]["samples"]:
-        samples[sample["samplename"]] = sample
+        samples[sample["sample"]] = sample
 
     """
     Start moving files: metadata["outputs"]
