@@ -16,7 +16,7 @@ workflow titan_ont {
 
   input {
     String samplename
-    String seq_method  = "ONT"
+    String seq_method = "ONT"
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
@@ -86,8 +86,8 @@ workflow titan_ont {
     input:
   }
   output {
-    String  titan_ont_version            = version_capture.phvg_version
-    String  titan_ont_analysis_date      = version_capture.date
+    String  titan_ont_version           = version_capture.phvg_version
+    String  titan_ont_analysis_date     = version_capture.date
     String  seq_platform                = seq_method
     
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
@@ -139,9 +139,6 @@ workflow titan_ont {
     String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
     String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
-
-    File    amp_coverage                = bedtools_cov.amp_coverage
-    String  bedtools_version            = bedtools_cov.version
 
     File?   vadr_alerts_list            = vadr.alerts_list
     String  vadr_num_alerts             = vadr.num_alerts
