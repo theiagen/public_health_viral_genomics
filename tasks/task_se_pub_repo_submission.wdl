@@ -228,8 +228,8 @@ task compile {
   passed_meta=""
 
   #Create files to capture batched and excluded samples
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tSubmittable Files" > ~{repository}_batched_samples.tsv
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tSubmittable Files" > ~{repository}_excluded_samples.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples.tsv
 
   # Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$submission_id_array" -ne "$vadr_array_len" ]; then
@@ -242,33 +242,35 @@ task compile {
     submission_id=${submission_id_array[$index]}
     samplename=${samplename_array[$index]}
     vadr=${vadr_array[$index]}
+    batch_note=""
     
     # check if the sample has submittable assembly file; if so remove those that excede vadr thresholds
     assembly=$(printf '%s\n' "${assembly_array[@]}" | grep "${submission_id}")
     metadata=$(printf '%s\n' "${meta_array[@]}" | grep "${submission_id}")
-
-    if [ \( ! -z "$assembly" \) -a \( ! -z "$metadata" \) ]; then
-      submittable_files="$assembly"
-      repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )
-    else 
-      submittable_files=FALSE 
-      repository_identifier="Assembly or metadata file missing"
-    fi
 
     echo "Assembly array: $(printf '%s\n' "${assembly_array[@]}")"
     echo "Submission_ID: ${submission_id}"
     echo "Assembly: ${assembly}"
     echo "Metadata: ${metadata}"
 
-    # remove samples from array if vadr_num exceedes threshold
-    if [[ ! -z "${assembly}" || "${vadr}" -lt "~{vadr_threshold}" ]]; then
-      passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
-      passed_meta=( "${passed_meta[@]}" "${metadata}")
-      echo "$samplename added to batch"
-      echo -e "$repository_identifier\t$samplename\t$vadr\t$submittable_files" >> ~{repository}_batched_samples.tsv      
-    else
-      echo "$samplename removed from batch"
-      echo -e "$repository_identifier\t$samplename\t$vadr\t$submittable_files" >> ~{repository}_excluded_samples.tsv
+    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) ]; then
+      repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )  
+
+      if [ "${vadr}" -le "~{vadr_threshold}" ]; then
+        echo "VADR NUM ALERTS: ${vadr} THRESHOLD: ~{vadr_threshold}"
+        passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
+        passed_meta=( "${passed_meta[@]}" "${metadata}")
+        echo "$samplename added to batch"
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples.tsv        
+      else 
+        batch_note="Number of vadr alerts (${vadr}) exceeds threshold ~{vadr_threshold}"
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+      fi
+
+    else 
+      batch_note="Assembly or metadata file missing" 
+      repository_identifier="NA"
+      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
     fi
 
   done
@@ -285,6 +287,12 @@ task compile {
   done
 
   cat ${passed_assemblies[*]} > ~{repository}_upload.fasta
+  printf "\n \n \n"
+  echo "Excldued:"
+  echo "$(cat ~{repository}_excluded_samples.tsv)"
+  printf "\n \n \n"
+  echo "Batched:" 
+  echo "$(cat ~{repository}_batched_samples.tsv)"
 
   >>>
 
