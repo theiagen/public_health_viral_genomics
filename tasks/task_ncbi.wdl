@@ -789,7 +789,7 @@ task vadr {
   }
   input {
     File   genome_fasta
-    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+    String vadr_opts="--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
     Int assembly_length_unambiguous
     Int skip_length=10000
 
