@@ -41,7 +41,7 @@ def read_titan_results(tsv, is_json=False):
         for line in tsv_fh:
             if is_json:
                 json_data = json.loads(line.rstrip())
-                results[json_data['specimen_id']] = line
+                results[json_data['sample']] = line
             else:
                 if "result-header" not in results:
                     results["result-header"] = line
