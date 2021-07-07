@@ -18,13 +18,13 @@ OPTIONS="0"
 QUIET="0"
 PROFILE="docker"
 CONFIG="0"
-CROMWELL_OPTS=""
 VERSION="1.4.4"
 TITAN_PATH=$(which titan-gc-cli | sed 's=bin/titan-gc-cli==')
 TITAN_SHARE=${TITAN_PATH}/share/titan-gc-cli-${VERSION}
 CROMWELL_JAR=$(which cromwell | sed 's=bin/cromwell=share/cromwell/cromwell.jar=')
 LOG_LEVEL=ERROR
 SINGULARITY_CACHE="${HOME}/.singularity/titan-cache"
+CROMWELL_OPTS="${TITAN_SHARE}/conf/options.json"
 
 usage() {
     echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--quiet]"
@@ -116,17 +116,22 @@ if [[ "${CONFIG}" == "0" ]]; then
 fi
 
 if [[ "${OPTIONS}" != "0" ]]; then
-    CROMWELL_OPTS="-o ${OPTIONS}"
+    CROMWELL_OPTS="${OPTIONS}"
 fi
 
 mkdir -p ${OUTDIR}
 echo "Running Titan GC (use --quiet to quiet things down a bit)" 1>&2
 if [[ ${QUIET} == "0" ]]; then 
-    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
-        -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_SHARE}/workflows/wf_titan_gc.wdl 2> ${OUTDIR}/cromwell-stderr.txt | tee ${OUTDIR}/cromwell-stdout.txt
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run \
+        -i ${INPUTS} \
+        -m ${OUTDIR}/titan-metadata.json \
+        -o ${CROMWELL_OPTS} \
+        ${TITAN_SHARE}/workflows/wf_titan_gc.wdl 2> ${OUTDIR}/cromwell-stderr.txt | tee ${OUTDIR}/cromwell-stdout.txt
 else
-    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run -i ${INPUTS} \
-        -m ${OUTDIR}/titan-metadata.json ${CROMWELL_OPTS} ${TITAN_SHARE}/workflows/wf_titan_gc.wdl > ${OUTDIR}/cromwell-stdout.txt 2> ${OUTDIR}/cromwell-stderr.txt
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run \
+        -i ${INPUTS} \
+        -m ${OUTDIR}/titan-metadata.json \
+        -o ${CROMWELL_OPTS} ${TITAN_SHARE}/workflows/wf_titan_gc.wdl > ${OUTDIR}/cromwell-stdout.txt 2> ${OUTDIR}/cromwell-stderr.txt
 fi
 
 if [[ -f "${OUTDIR}/titan-metadata.json" ]]; then
