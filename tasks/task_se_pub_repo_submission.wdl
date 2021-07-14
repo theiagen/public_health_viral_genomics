@@ -202,7 +202,7 @@ task compile {
     Array[File]   single_submission_meta
     Array[String] samplename
     Array[String] submission_id
-    Array[Int]    vadr_num_alerts
+    Array[String] vadr_num_alerts
     Int           vadr_threshold=0
     String        repository
     String        docker_image = "theiagen/utility:1.0"
