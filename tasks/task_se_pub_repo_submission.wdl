@@ -247,7 +247,11 @@ task compile {
     vadr=${vadr_array[$index]}
 
     # remove samples from array if vadr_num exceedes threshold
-    if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
+    re='^[0-9]+$'
+    if ! [[ "${vadr}" =~ $re ]] ; then
+      echo "$assembly removed as it has no VADR value to evaluate "
+      echo -e "$assembly_header\t$samplename\tNo VADR value to evaulate: ${vadr}" >> ~{repository}_excluded_samples.tsv
+    elif [ "${vadr}" -gt "~{vadr_threshold}" ]; then
       echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
       echo -e "$assembly_header\t$samplename\t$vadr" >> ~{repository}_excluded_samples.tsv
     else
