@@ -213,11 +213,12 @@ task compile {
   }
 
   command <<<
-
   assembly_array=(~{sep=' ' single_submission_fasta})
   assembly_array_len=$(echo "${#assembly_array[@]}")
   meta_array=(~{sep=' ' single_submission_meta})
   meta_array_len=$(echo "${#meta_array[@]}")
+  echo "raw vadr array:"
+  echo vadr_array
   vadr_array=(~{sep=' ' vadr_num_alerts})
   vadr_array_len=$(echo "${#vadr_array[@]}")
   samplename_array=(~{sep=' ' samplename})
