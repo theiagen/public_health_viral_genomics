@@ -259,7 +259,7 @@ task compile {
       if ! [[ "${vadr}" =~ $re ]] ; then
         echo "$assembly removed as it has no VADR value to evaluate "
         echo -e "$assembly_header\t$samplename\tNo VADR value to evaulate: ${vadr}" >> ~{repository}_excluded_samples.tsv
-      elif [ "${vadr}" -le "~{vadr_threshold}" ]; then
+      elif [ "${vadr}" -le "~{vadr_threshold}" ] ; then
         echo "VADR NUM ALERTS: ${vadr} THRESHOLD: ~{vadr_threshold}"
         passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
         passed_meta=( "${passed_meta[@]}" "${metadata}")
@@ -269,7 +269,6 @@ task compile {
         batch_note="Number of vadr alerts (${vadr}) exceeds threshold ~{vadr_threshold}"
         echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
       fi
-
     else 
       batch_note="Assembly or metadata file missing" 
       repository_identifier="NA"
