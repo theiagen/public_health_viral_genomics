@@ -255,8 +255,11 @@ task compile {
 
     if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) ]; then
       repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )  
-
-      if [ "${vadr}" -le "~{vadr_threshold}" ]; then
+      re='^[0-9]+$'
+      if ! [[ "${vadr}" =~ $re ]] ; then
+        echo "$assembly removed as it has no VADR value to evaluate "
+        echo -e "$assembly_header\t$samplename\tNo VADR value to evaulate: ${vadr}" >> ~{repository}_excluded_samples.tsv
+      elif [ "${vadr}" -le "~{vadr_threshold}" ]; then
         echo "VADR NUM ALERTS: ${vadr} THRESHOLD: ~{vadr_threshold}"
         passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
         passed_meta=( "${passed_meta[@]}" "${metadata}")
