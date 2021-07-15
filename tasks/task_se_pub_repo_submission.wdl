@@ -264,7 +264,7 @@ task compile {
       re='^[0-9]+$'
       if ! [[ "${vadr}" =~ $re ]] ; then
         echo "$assembly removed as it has no VADR value to evaluate "
-        echo -e "$repository_identifier\t$samplename\tNo VADR value to evaulate: ${vadr}" >> ~{repository}_excluded_samples.tsv
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
       elif [ "${vadr}" -le "~{vadr_threshold}" ] ; then
         echo "VADR NUM ALERTS: ${vadr} THRESHOLD: ~{vadr_threshold}"
         passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
