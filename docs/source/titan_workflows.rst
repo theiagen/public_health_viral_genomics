@@ -241,4 +241,14 @@ Download CSV: :download:`Titan_ONT_default_outputs.csv <tables/titan_workflows/t
    
 |
 
+Titan Workflows for Genomic Epi
+--------------------------------------------
 
+{info about genomic epi workflows}
+
+
+Titan_Augur_Prep
+================
+
+Titan_Augur_Run
+===============
