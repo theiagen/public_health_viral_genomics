@@ -1,0 +1,9 @@
+Task,Input Variable ,Data Type ,Description 
+prep_augur_metadata,assembly ,File ,Assembly/consensus file (single FASTA file per sample)
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+prep_augur_metadata,collection_date ,String ,Collection date of the sample being included in the analysis
+
