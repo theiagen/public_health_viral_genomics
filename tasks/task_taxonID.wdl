@@ -267,7 +267,7 @@ task nextclade_one_sample {
         CODE
         
         # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
-        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUB NEXTCLADE_AADELS
+        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
         
         grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
         grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
