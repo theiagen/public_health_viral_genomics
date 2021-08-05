@@ -72,11 +72,6 @@ workflow titan_clearlabs {
     input:
       genome_fasta = consensus.consensus_seq
   }
-  call amplicon_metrics.bedtools_cov {
-    input:
-      bamfile = consensus.trim_sorted_bam,
-      baifile = consensus.trim_sorted_bai
-  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
