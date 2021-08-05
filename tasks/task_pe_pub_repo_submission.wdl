@@ -129,7 +129,7 @@ task genbank {
     String    specimen_source
     String    BioProject
 
-    String    docker_image = "theiagen/utility:1.0"
+    String    docker_image = "theiagen/utility:1.1"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10

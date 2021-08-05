@@ -35,7 +35,7 @@ task bwa {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.2.2_artic20200528"
+    docker:       "staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
