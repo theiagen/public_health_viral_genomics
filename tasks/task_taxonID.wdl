@@ -282,6 +282,7 @@ task nextclade_one_sample {
     }
     output {
         String nextclade_version  = read_string("VERSION")
+        File transposed_file = "transposed.tsv"
         File   nextclade_json     = "~{basename}.nextclade.json"
         File   auspice_json       = "~{basename}.nextclade.auspice.json"
         File   nextclade_tsv      = "~{basename}.nextclade.tsv"
