@@ -271,6 +271,7 @@ task nextclade_one_sample {
         # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
         echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
         
+        # parse transposed report file if relevant outputs are available
         if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
         then
           grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
