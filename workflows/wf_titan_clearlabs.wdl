@@ -3,7 +3,6 @@ version 1.0
 import "../tasks/task_ont_medaka.wdl" as medaka
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils

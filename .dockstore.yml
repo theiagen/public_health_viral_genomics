@@ -1,35 +1,5 @@
 version: 1.2
 workflows:
- - name: viral_refbased_assembly
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_viral_refbased_assembly.wdl
-   testParameterFiles:
-    - empty.json
- - name: sc2_pubRepo_submission
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_sc2_pubRepo_submission.wdl
-   testParameterFiles:
-    - empty.json
- - name: clearlabs_viral_refbased_assembly
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_clearlabs_viral_refbased_assembly.wdl
-   testParameterFiles:
-    - empty.json
- - name: ont_sc2_pubRepo_submission
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_ont_sc2_pubRepo_submission.wdl
-   testParameterFiles:
-    - empty.json
- - name: genomic_cluster_analysis
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_genomic_cluster_analysis.wdl
-   testParameterFiles:
-    - empty.json
- - name: sc2_batch_submission
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_sc2_batch_submission.wdl
-   testParameterFiles:
-    - empty.json
  - name: Titan_ClearLabs
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_titan_clearlabs.wdl
@@ -50,16 +20,6 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_illumina_se.wdl
    testParameterFiles:
     - empty.json
- - name: sc2_pubRepo_prep_se
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_se.wdl
-   testParameterFiles:
-    - empty.json
- - name: sc2_pubRepo_prep_pe
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_sc2_pubRepo_prep_pe.wdl
-   testParameterFiles:
-    - empty.json
  - name: Mercury_PE_Prep
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_mercury_pe_prep.wdl
@@ -73,11 +33,6 @@ workflows:
  - name: Mercury_Batch
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_mercury_batch.wdl
-   testParameterFiles:
-    - empty.json
- - name: SC2_nextstrain
-   subclass: WDL
-   primaryDescriptorPath: /workflows/wf_sarscov2_nextstrain.wdl
    testParameterFiles:
     - empty.json
  - name: Titan_Augur_Prep
