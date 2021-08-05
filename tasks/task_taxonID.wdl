@@ -265,6 +265,10 @@ task nextclade_one_sample {
                 for c in zip(*(l.rstrip().split('\t') for l in inf)):
                     outf.write('\t'.join(c)+'\n')
         CODE
+        
+        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
+        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUB NEXTCLADE_AADELS
+        
         grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
         grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
         grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
