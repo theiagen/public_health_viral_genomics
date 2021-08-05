@@ -258,6 +258,8 @@ task nextclade_one_sample {
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
         cp "~{basename}".nextclade.tsv input.tsv
+        
+       
         python3 <<CODE
         # transpose table
         with open('input.tsv', 'r', encoding='utf-8') as inf:
@@ -265,9 +267,17 @@ task nextclade_one_sample {
                 for c in zip(*(l.rstrip().split('\t') for l in inf)):
                     outf.write('\t'.join(c)+'\n')
         CODE
-        grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
-        grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
-        grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+        
+        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
+        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
+        
+        # parse transposed report file if relevant outputs are available
+        if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
+        then
+          grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
+          grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
+          grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+        fi
     }
     runtime {
         docker: "~{docker}"
