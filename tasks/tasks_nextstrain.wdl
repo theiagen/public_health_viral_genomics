@@ -251,7 +251,7 @@ task fasta_to_ids {
         memory: "1 GB"
         cpu:    1
         disks: "local-disk 375 LOCAL"
-        dx_instance_type: "mem1_ssd1_v2_x2
+        dx_instance_type: "mem1_ssd1_v2_x2"
         maxRetries: 3
     }
     output {
@@ -432,6 +432,7 @@ task nextstrain_ncov_defaults {
         cpu :   1
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries:   3
     }
     output {
         File clades_tsv      = "clades-with-subclades.tsv"
