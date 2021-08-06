@@ -25,6 +25,7 @@ task demultiplexing {
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -59,6 +60,7 @@ task read_filtering {
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -131,5 +133,6 @@ task consensus {
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
