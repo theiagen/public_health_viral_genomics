@@ -166,18 +166,18 @@ task pangolin3 {
   command <<<
     # set inference inference_engine
     if [[ "~{inference_engine}" == "usher" ]]
-    then 
+    then
       pango_inference="--usher"
     elif [[ "~{inference_engine}" == "pangolearn" ]]
-    then 
+    then
       pango_inference=""
-    else 
+    else
       echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
       exit 1
     fi
     # date and version control
     date | tee DATE
-    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION 
+    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION
     set -e
 
     echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
@@ -236,52 +236,58 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        File?  root_sequence
-        File?  auspice_reference_tree_json
-        File?  qc_config_json
-        File?  gene_annotations_json
         File?  pcr_primers_csv
-        String docker = "neherlab/nextclade:0.14.4"
+        String docker = "nextstrain/nextclade:1.2.0"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
+        nextclade --version > NEXTCLADE_VERSION
+        echo "Nextclade version: $NEXTCLADE_VERSION"
+
+        NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
+        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta" > root_sequence.fasta
+        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff" > gene_annotations.gff
+        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/tree.json" > auspice_reference_tree.json
+        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/qc.json" > qc_config.json
+        ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BAS/primers.csv" > pcr_primers.csv
+
         set -e
-        nextclade.js --version > VERSION
-        nextclade.js \
+        nextclade --version > VERSION
+        nextclade \
             --input-fasta "~{genome_fasta}" \
-            ~{"--input-root-seq " + root_sequence} \
-            ~{"--input-tree " + auspice_reference_tree_json} \
-            ~{"--input-qc-config " + qc_config_json} \
-            ~{"--input-gene-map " + gene_annotations_json} \
-            ~{"--input-pcr-primers " + pcr_primers_csv} \
+            --input-root-seq root_sequence.fasta \
+            --input-tree auspice_reference_tree.json \
+            --input-qc-config qc_config.json \
+            --input-gene-map gene_annotations.gff \
+            --input-pcr-primers "~{pcr_primers_csv}" \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
         cp "~{basename}".nextclade.tsv input.tsv
-        
-       
-        python3 <<CODE
-        # transpose table
-        with open('input.tsv', 'r', encoding='utf-8') as inf:
-            with open('transposed.tsv', 'w', encoding='utf-8') as outf:
-                for c in zip(*(l.rstrip().split('\t') for l in inf)):
-                    outf.write('\t'.join(c)+'\n')
-        CODE
-        
-        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
-        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
-        
-        # parse transposed report file if relevant outputs are available
-        if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
-        then
-          grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
-          grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
-          grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
-        fi
+
+
+              python3 <<CODE
+              # transpose table
+              with open('input.tsv', 'r', encoding='utf-8') as inf:
+                  with open('transposed.tsv', 'w', encoding='utf-8') as outf:
+                      for c in zip(*(l.rstrip().split('\t') for l in inf)):
+                          outf.write('\t'.join(c)+'\n')
+              CODE
+
+              # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
+              echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
+
+              # parse transposed report file if relevant outputs are available
+              if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
+              then
+                grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
+                grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
+                grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+              fi
     }
     runtime {
         docker: "~{docker}"
-        memory: "3 GB"
+        memory: "4 GB"
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
