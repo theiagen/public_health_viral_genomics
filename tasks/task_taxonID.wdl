@@ -293,7 +293,7 @@ task nextclade_one_sample {
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
-        String nextclade_version  = read_string("VERSION")
+        String nextclade_version  = read_string("NEXTCLADE_VERSION")
         File   nextclade_json     = "~{basename}.nextclade.json"
         File   auspice_json       = "~{basename}.nextclade.auspice.json"
         File   nextclade_tsv      = "~{basename}.nextclade.tsv"
