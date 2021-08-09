@@ -244,20 +244,20 @@ task nextclade_one_sample {
         nextclade --version > NEXTCLADE_VERSION
 
         NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
-        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta" > root_sequence.fasta
-        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff" > gene_annotations.gff
-        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/tree.json" > auspice_reference_tree.json
-        curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/qc.json" > qc_config.json
+        wget "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta"
+        wget "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff"
+        wget "$NEXTCLADE_INPUTS_URL_BASE/tree.json"
+        wget "$NEXTCLADE_INPUTS_URL_BASE/qc.json"
         ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BAS/primers.csv" > pcr_primers.csv
 
         set -e
         nextclade --version > NEXTCLADE_VERSION
         nextclade \
             --input-fasta "~{genome_fasta}" \
-            --input-root-seq root_sequence.fasta \
-            --input-tree auspice_reference_tree.json \
-            --input-qc-config qc_config.json \
-            --input-gene-map gene_annotations.gff \
+            --input-root-seq reference.fasta \
+            --input-tree tree.json \
+            --input-qc-config qc.json \
+            --input-gene-map genemap.gff \
             --input-pcr-primers "~{pcr_primers_csv}" \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
