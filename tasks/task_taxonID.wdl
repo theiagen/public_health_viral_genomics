@@ -268,7 +268,7 @@ task nextclade_one_sample {
             --output-tree "~{basename}".nextclade.auspice.json
         cp "~{basename}".nextclade.tsv input.tsv
 
-        python3 <<CODE
+        python <<CODE
         # transpose table
         with open('input.tsv', 'r', encoding='utf-8') as inf:
             with open('transposed.tsv', 'w', encoding='utf-8') as outf:
