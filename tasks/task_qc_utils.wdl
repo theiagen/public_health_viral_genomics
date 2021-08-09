@@ -49,6 +49,7 @@ task fastqc {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 task fastqc_se {
@@ -87,5 +88,6 @@ task fastqc_se {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }

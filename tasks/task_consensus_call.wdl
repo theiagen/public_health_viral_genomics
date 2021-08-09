@@ -53,6 +53,7 @@ task primer_trim {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -113,6 +114,7 @@ task variant_call {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -196,5 +198,6 @@ task consensus {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }

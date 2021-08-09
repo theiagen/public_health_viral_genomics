@@ -76,6 +76,7 @@ task plot_coverage {
     disks: "local-disk 375 LOCAL"
     dx_instance_type: "mem1_ssd1_v2_x4"
     preemptible: 1
+    maxRetries: 3
   }
 }
 
@@ -107,6 +108,7 @@ task coverage_report {
     cpu: 2
     disks: "local-disk 375 LOCAL"
     dx_instance_type: "mem1_ssd2_v2_x4"
+    maxRetries: 3
   }
 }
 
@@ -137,6 +139,7 @@ task assembly_bases {
         cpu: 1
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
 }
 
@@ -167,6 +170,7 @@ task fastqc {
     docker: "${docker}"
     disks: "local-disk 375 LOCAL"
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }
 
@@ -213,6 +217,7 @@ task align_and_count {
     docker: "${docker}"
     disks: "local-disk 375 LOCAL"
     dx_instance_type: "mem1_ssd1_v2_x4"
+    maxRetries: 3
   }
 }
 
@@ -241,6 +246,7 @@ task align_and_count_summary {
     docker: "${docker}"
     disks: "local-disk 50 HDD"
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }
 
@@ -288,6 +294,7 @@ task aggregate_metagenomics_reports {
     disks: "local-disk 50 HDD"
     dx_instance_type: "mem1_ssd2_v2_x2"
     preemptible: 0
+    maxRetries: 3
   }
 }
 
@@ -384,6 +391,7 @@ task MultiQC {
     docker: "${docker}"
     disks: "local-disk 375 LOCAL"
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }
 
@@ -452,6 +460,7 @@ task tsv_join {
     docker: "python:slim"
     disks: "local-disk 100 HDD"
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }
 
@@ -479,6 +488,7 @@ task tsv_stack {
     docker: "${docker}"
     disks: "local-disk 50 HDD"
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 
 }
@@ -516,5 +526,6 @@ task compare_two_genomes {
     disks: "local-disk 50 HDD"
     dx_instance_type: "mem1_ssd1_v2_x2"
     preemptible: 1
+    maxRetries: 3
   }
 }
