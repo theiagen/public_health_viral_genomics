@@ -250,10 +250,10 @@ task nextclade_one_sample {
         #wget "$NEXTCLADE_INPUTS_URL_BASE/qc.json"
         ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/primers.csv" > pcr_primers.csv
 
-        wget https://raw.githubusercontent.com/nextstrain/nextclade/NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta
-        wget https://raw.githubusercontent.com/nextstrain/nextclade/NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff
-        wget https://raw.githubusercontent.com/nextstrain/nextclade/NEXTCLADE_VERSION/data/sars-cov-2/tree.json
-        wget https://raw.githubusercontent.com/nextstrain/nextclade/NEXTCLADE_VERSION/data/sars-cov-2/qc.json
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json
 
         set -e
         nextclade --version >> NEXTCLADE_VERSION
