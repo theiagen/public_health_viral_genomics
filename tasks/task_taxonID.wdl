@@ -264,6 +264,13 @@ task nextclade_one_sample {
             --output-tree "~{basename}".nextclade.auspice.json
         cp "~{basename}".nextclade.tsv input.tsv
 
+        python3 <<CODE
+        # transpose table
+        with open('input.tsv', 'r', encoding='utf-8') as inf:
+            with open('transposed.tsv', 'w', encoding='utf-8') as outf:
+                for c in zip(*(l.rstrip().split('\t') for l in inf)):
+                    outf.write('\t'.join(c)+'\n')
+        CODE
 
         # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
         echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
