@@ -241,14 +241,19 @@ task nextclade_one_sample {
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
-        nextclade --version > NEXTCLADE_VERSION
+        ##nextclade --version > NEXTCLADE_VERSION
 
-        NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
-        wget "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta"
-        wget "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff"
-        wget "$NEXTCLADE_INPUTS_URL_BASE/tree.json"
-        wget "$NEXTCLADE_INPUTS_URL_BASE/qc.json"
+        ##NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
+        #wget "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta"
+        #wget "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff"
+        #wget "$NEXTCLADE_INPUTS_URL_BASE/tree.json"
+        #wget "$NEXTCLADE_INPUTS_URL_BASE/qc.json"
         ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BAS/primers.csv" > pcr_primers.csv
+
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/1.2.0/data/sars-cov-2/reference.fasta
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/1.2.0/data/sars-cov-2/genemap.gff
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/1.2.0/data/sars-cov-2/tree.json
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/1.2.0/data/sars-cov-2/qc.json
 
         set -e
         nextclade --version > NEXTCLADE_VERSION
