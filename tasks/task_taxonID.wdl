@@ -242,7 +242,6 @@ task nextclade_one_sample {
     String basename = basename(genome_fasta, ".fasta")
     command {
         nextclade --version > NEXTCLADE_VERSION
-        echo "Nextclade version: $NEXTCLADE_VERSION"
 
         NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
         curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta" > root_sequence.fasta
@@ -252,7 +251,7 @@ task nextclade_one_sample {
         ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BAS/primers.csv" > pcr_primers.csv
 
         set -e
-        nextclade --version > VERSION
+        nextclade --version > NEXTCLADE_VERSION
         nextclade \
             --input-fasta "~{genome_fasta}" \
             --input-root-seq root_sequence.fasta \
@@ -266,24 +265,16 @@ task nextclade_one_sample {
         cp "~{basename}".nextclade.tsv input.tsv
 
 
-              python3 <<CODE
-              # transpose table
-              with open('input.tsv', 'r', encoding='utf-8') as inf:
-                  with open('transposed.tsv', 'w', encoding='utf-8') as outf:
-                      for c in zip(*(l.rstrip().split('\t') for l in inf)):
-                          outf.write('\t'.join(c)+'\n')
-              CODE
+        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
+        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
 
-              # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
-              echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
-
-              # parse transposed report file if relevant outputs are available
-              if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
-              then
-                grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
-                grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
-                grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
-              fi
+        # parse transposed report file if relevant outputs are available
+        if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
+        then
+          grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
+          grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
+          grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+        fi
     }
     runtime {
         docker: "~{docker}"
