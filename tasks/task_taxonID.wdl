@@ -236,7 +236,6 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        File?  pcr_primers_csv
         String docker = "quay.io/biocontainers/nextclade:1.2.0--h9ee0642_0"
     }
     String basename = basename(genome_fasta, ".fasta")
@@ -254,15 +253,16 @@ task nextclade_one_sample {
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json
+        wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv
 
         set -e
-        nextclade --version >> NEXTCLADE_VERSION
+        #nextclade --version > NEXTCLADE_VERSION
         nextclade --input-fasta "~{genome_fasta}" \
             --input-root-seq reference.fasta \
             --input-tree tree.json \
             --input-qc-config qc.json \
             --input-gene-map genemap.gff \
-            --input-pcr-primers "~{pcr_primers_csv}" \
+            --input-pcr-primers primers.csv \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
