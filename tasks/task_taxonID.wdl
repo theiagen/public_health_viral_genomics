@@ -242,13 +242,6 @@ task nextclade_one_sample {
     command {
         NEXTCLADE_VERSION="$(/usr/local/bin/nextclade --version)"
 
-        ##NEXTCLADE_INPUTS_URL_BASE="https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2"
-        #wget "$NEXTCLADE_INPUTS_URL_BASE/reference.fasta"
-        #wget "$NEXTCLADE_INPUTS_URL_BASE/genemap.gff"
-        #wget "$NEXTCLADE_INPUTS_URL_BASE/tree.json"
-        #wget "$NEXTCLADE_INPUTS_URL_BASE/qc.json"
-        ##curl -fsSLOJ "$NEXTCLADE_INPUTS_URL_BASE/primers.csv" > pcr_primers.csv
-
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json
@@ -256,7 +249,6 @@ task nextclade_one_sample {
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv
 
         set -e
-        #nextclade --version > NEXTCLADE_VERSION
         nextclade --input-fasta "~{genome_fasta}" \
             --input-root-seq reference.fasta \
             --input-tree tree.json \
