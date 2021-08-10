@@ -1,12 +1,11 @@
 version 1.0
 
-task nextclade_output_parser {
+task nextclade_output_parser_one_sample {
     meta {
         description: "Python and bash codeblocks for parsing the output files from Nextclade."
     }
     input {
         File   nextclade_tsv
-        String basename
         String docker = "theiagen/utility:1.1"
     }
     command {
@@ -40,6 +39,5 @@ task nextclade_output_parser {
         String nextclade_clade    = read_string("NEXTCLADE_CLADE")
         String nextclade_aa_subs  = read_string("NEXTCLADE_AASUBS")
         String nextclade_aa_dels  = read_string("NEXTCLADE_AADELS")
-        String sample_name        = read_string("basename")
     }
 }
