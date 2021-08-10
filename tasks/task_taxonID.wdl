@@ -248,6 +248,8 @@ task nextclade_one_sample {
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json
         wget https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv
 
+        echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
+
         set -e
         nextclade --input-fasta "~{genome_fasta}" \
             --input-root-seq reference.fasta \
