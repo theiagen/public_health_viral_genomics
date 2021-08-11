@@ -270,7 +270,7 @@ task pangolin_update_log {
      fi
      
      #populate lineage log file
-     echo -e "${DATE}\t${STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> "${lineage_log_file}"
+     echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> "${lineage_log_file}"
      
     echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE       
 
