@@ -42,5 +42,5 @@ jobs:
         run: |
           mkdir -p titan/${{ matrix.wf }}
           titan-gc-prepare.py tests/data/fastqs/${{ matrix.wf }} ${{ matrix.wf }} tests/data/primers/artic-v3.primers.bed > titan/${{ matrix.wf }}.json
-          pytest --tag titan_${{ matrix.wf }}
+          pytest --keep-workflow-wd --tag titan_${{ matrix.wf }}
           rm -rf titan/${{ matrix.wf }}
