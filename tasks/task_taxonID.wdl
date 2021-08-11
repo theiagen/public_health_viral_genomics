@@ -265,8 +265,8 @@ task pangolin_update_log {
       lineage_log_file="~{lineage_log}"
      else 
        echo "No lineage log provided; creating new lineage log file"
-       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > "~{samplename}_pango_lineage.log"
-       lineage_log_file="~{samplename}_pango_lineage.log"
+       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > "~{samplename}_pango_lineage_log.tsv"
+       lineage_log_file="~{samplename}_pango_lineage_log.tsv"
      fi
      
      #populate lineage log file
@@ -278,7 +278,7 @@ task pangolin_update_log {
 
   output {
     String     pangolin_updates = read_string("PANGOLIN_UPDATE")
-    File       pango_lineage_log = "~{samplename}_pango_lineage.log"
+    File       pango_lineage_log = "~{samplename}_pango_lineage_log.tsv"
   }
 
   runtime {
