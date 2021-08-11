@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup Titan CI Environment
         run: |
-          conda install -y -c conda-forge -c bioconda cromwell 'python>=3.7' pytest pytest-workflows wget
+          conda install -y -c conda-forge -c bioconda cromwell 'python>=3.7' pytest pytest-workflow wget
           chmod 755 bin/*
           cp bin/* ${CONDA_PREFIX}/bin
           TITAN_VERSION=$(titan-gc-cli --version | sed 's/titan-gc-cli //')
