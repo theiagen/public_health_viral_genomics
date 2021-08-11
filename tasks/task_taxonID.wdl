@@ -259,7 +259,7 @@ task pangolin_update_log {
     fi
     
     #if a lineage log not provided, create one with headers
-    if [ -f "~{lineage_log}"]
+    if [ -s "~{lineage_log}"]
     then 
       echo "Lineage log provided"
       lineage_log_file="~{lineage_log}"
