@@ -1,15 +1,11 @@
 name: titan-gc
-
-on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main, dev ]
+on: [push, pull_request]
     
 jobs:
-  titan:
+  titan-gc:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         wf: ['clearlabs', 'illumina_pe', 'illumina_se', 'ont']
     defaults:
@@ -18,6 +14,9 @@ jobs:
     steps:
       - name: Checkout PHVG
         uses: actions/checkout@v2
+
+      - name: Free up Disk Space
+        run: bash ${GITHUB_WORKSPACE}/.github/helpers/free-disk-space.sh
 
       - name: Setup miniconda
         uses: conda-incubator/setup-miniconda@v2
@@ -42,6 +41,16 @@ jobs:
         run: |
           mkdir -p titan/${{ matrix.wf }}
           titan-gc-prepare.py tests/data/fastqs/${{ matrix.wf }} ${{ matrix.wf }} tests/data/primers/artic-v3.primers.bed > titan/${{ matrix.wf }}.json
-          pytest --keep-workflow-wd --tag titan_${{ matrix.wf }} || true
-          find /tmp -n "*cromwell-std*" | xargs -I {} cat {}
+          TMPDIR=~ pytest --symlink --kwdof --tag titan_${{ matrix.wf }}
           rm -rf titan/${{ matrix.wf }}
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs-${{ matrix.wf }}
+          path: |
+            /home/runner/pytest_workflow_*/*/titan/*/cromwell-stderr.txt
+            /home/runner/pytest_workflow_*/*/titan/*/cromwell-stdout.txt
+            /home/runner/pytest_workflow_*/*/log.out
+            /home/runner/pytest_workflow_*/*/log.err
