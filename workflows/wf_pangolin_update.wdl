@@ -11,7 +11,7 @@ workflow pangolin_update {
         String current_pangolin_docker
         String current_pangolin_version
         String  updated_pangolin_docker
-        File lineage_log
+        File? lineage_log
     }
 
     call taxon_ID.pangolin3 {
