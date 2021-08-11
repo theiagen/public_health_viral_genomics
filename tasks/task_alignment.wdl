@@ -40,6 +40,7 @@ task bwa {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -72,5 +73,6 @@ task mafft {
     cpu:          16
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }

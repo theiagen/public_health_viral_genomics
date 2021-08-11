@@ -45,6 +45,7 @@ task deidentify {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -112,6 +113,7 @@ task gisaid {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -161,6 +163,7 @@ task genbank {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -191,6 +194,7 @@ task sra {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -305,5 +309,6 @@ task compile {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }

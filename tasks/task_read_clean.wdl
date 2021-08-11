@@ -63,6 +63,7 @@ task ncbi_scrub_pe {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 
@@ -109,6 +110,7 @@ task ncbi_scrub_se {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 
@@ -163,6 +165,7 @@ task seqyclean {
       cpu:          2
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 
@@ -206,6 +209,7 @@ task trimmomatic {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 task trimmomatic_se {
@@ -246,6 +250,7 @@ task trimmomatic_se {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 task bbduk {
@@ -284,6 +289,7 @@ task bbduk {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }
 task bbduk_se {
@@ -318,5 +324,6 @@ task bbduk_se {
       cpu:          4
       disks:        "local-disk 100 SSD"
       preemptible:  0
+      maxRetries:   3
   }
 }

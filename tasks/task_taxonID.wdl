@@ -19,11 +19,10 @@ task kraken2 {
     fi
     echo $mode
     kraken2 $mode \
-      --classified-out cseqs#.fq \
       --threads ${cpus} \
       --db ${kraken2_db} \
       ${read1} ${read2} \
-      --report ${samplename}_kraken2_report.txt
+      --report ${samplename}_kraken2_report.txt >/dev/null
 
     percentage_human=$(grep "Homo sapiens" ${samplename}_kraken2_report.txt | cut -f 1)
      # | tee PERCENT_HUMAN
@@ -49,6 +48,7 @@ task kraken2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -91,6 +91,7 @@ task pangolin {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -150,6 +151,7 @@ task pangolin2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -226,6 +228,7 @@ task pangolin3 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -268,6 +271,7 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+	maxRetries:   3
     }
     output {
         String nextclade_version  = read_string("NEXTCLADE_VERSION")

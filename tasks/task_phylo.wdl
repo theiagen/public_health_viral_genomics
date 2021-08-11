@@ -28,6 +28,7 @@ task snp_dists {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -66,5 +67,6 @@ task iqtree {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
