@@ -259,14 +259,15 @@ task pangolin_update_log {
     fi
     
     #if a lineage log not provided, create one with headers
+    lineage_log_file="~{samplename}_pango_lineage_log.tsv"
+    
     if [ -s "~{lineage_log}" ]
     then 
       echo "Lineage log provided"
-      lineage_log_file="~{lineage_log}"
+      mv "~{lineage_log}" ${lineage_log_file}
      else 
-       echo "No lineage log provided; creating new lineage log file"
-       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > "~{samplename}_pango_lineage_log.tsv"
-       lineage_log_file="~{samplename}_pango_lineage_log.tsv"
+       echo "Creating new lineage log file as none was provided"
+       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > ${lineage_log_file}
      fi
      
      #populate lineage log file
