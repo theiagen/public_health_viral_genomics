@@ -1,0 +1,36 @@
+- name: titan_ont
+  command: titan-gc-cli -i titan/ont.json -o titan/ont
+  tags:
+    - titan_gc
+    - titan_ont
+  files:
+    - path: titan/ont/alignments/ERR6281317.flagstat.txt
+      md5sum: 5b5be8b5d217d0d55063fab4f293a30a
+    - path: titan/ont/alignments/ERR6281317.primertrimmed.rg.sorted.bam
+    - path: titan/ont/alignments/ERR6281317.primertrimmed.rg.sorted.bam.bai
+    - path: titan/ont/alignments/ERR6281317.stats.txt
+    - path: titan/ont/assemblies/ERR6281317.medaka.consensus.fasta
+      md5sum: bb8a1077bb1fff7f18d31b870637b5d6
+    - path: titan/ont/cromwell-stderr.txt
+      md5sum: d41d8cd98f00b204e9800998ecf8427e
+    - path: titan/ont/cromwell-stdout.txt
+    - path: titan/ont/dehosted_reads/ERR6281317_R1_dehosted.fastq.gz
+    - path: titan/ont/kraken2_reports/ERR6281317_dehosted_kraken2_report.txt
+      md5sum: e80514e1846af3bfee71faf5967310ec
+    - path: titan/ont/kraken2_reports/ERR6281317_kraken2_report.txt
+      md5sum: d49ac65f26600dc786ff9ba8fdd966f2
+    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.auspice.json
+      md5sum: 155e54316eccc5a993af9d4255699a64
+    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.json
+      md5sum: 9e7748768ac473dccaeb492fb87a7351
+    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.tsv
+      md5sum: d03047f8ec9e8f870b60a444411156cb
+    - path: titan/ont/pangolin_reports/ERR6281317.pangolin_report.csv
+      md5sum: a1f2f5e3cf2ac29c6153aaa762e5293a
+    - path: titan/ont/results/ERR6281317.results.json
+      md5sum: fdd70bd23a10e99d003fbd7be2cd200a
+    - path: titan/ont/titan-metadata.json
+    - path: titan/ont/titan-results.json
+      md5sum: 922b5756ea99e949da856235d369b795
+    - path: titan/ont/titan-results.tsv
+      md5sum: 6884524c89a1db470a149f4436259a5e

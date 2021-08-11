@@ -1,0 +1,38 @@
+- name: titan_clearlabs
+  command: titan-gc-cli -i titan/clearlabs.json -o titan/clearlabs
+  tags:
+    - titan_gc
+    - titan_clearlabs
+  files:
+    - path: titan/clearlabs/alignments/clearlabs.flagstat.txt
+      md5sum: b5af0b1c2721c004f8f476d9ca540a35
+    - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
+    - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
+    - path: titan/clearlabs/alignments/clearlabs.stats.txt
+    - path: titan/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
+      md5sum: 1d537e1a17fabda77371ba22bdfb3d80
+    - path: titan/clearlabs/cromwell-stderr.txt
+      md5sum: d41d8cd98f00b204e9800998ecf8427e
+    - path: titan/clearlabs/cromwell-stdout.txt
+    - path: titan/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
+    - path: titan/clearlabs/kraken2_reports/clearlabs_dehosted_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: titan/clearlabs/kraken2_reports/clearlabs_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.auspice.json
+      md5sum: ade0ebc3992e167daf1b8ff645bb4f1c
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.json
+      md5sum: 251e589243c60cca9ad7a684f1192500
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.tsv
+      md5sum: eccf29f64fe718246ce35b89f21bf98c
+    - path: titan/clearlabs/pangolin_reports/clearlabs.pangolin_report.csv
+      md5sum: adfbed4c2664436eb33cfdcc88ed48c9
+    - path: titan/clearlabs/results/clearlabs.results.json
+      md5sum: 46b6ec51f3b0cc1e26b5a41ac3d004ed
+    - path: titan/clearlabs/titan-metadata.json
+    - path: titan/clearlabs/titan-results.json
+      md5sum: 0aef5798df2f6d12311b7a79f730e348
+    - path: titan/clearlabs/titan-results.tsv
+      md5sum: bf5792df0af508da52ea0975f4702a85
+    - path: titan/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
+      md5sum: 94102588e1dd10beea5dc02011af4430

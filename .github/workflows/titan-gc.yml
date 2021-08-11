@@ -1,0 +1,45 @@
+name: titan-gc
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+    
+jobs:
+  titan:
+    strategy:
+      matrix:
+        wf: ['clearlabs', 'illumina_pe', 'illumina_se', 'ont']
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout PHVG
+        uses: actions/checkout@v2
+
+      - name: Setup miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: titan-gc-cli
+          auto-activate-base: false
+
+      - name: Setup Titan CI Environment
+        run: |
+          conda install -y -c conda-forge -c bioconda cromwell 'python>=3.7' pytest pytest-workflows wget
+          chmod 755 bin/*
+          cp bin/* ${CONDA_PREFIX}/bin
+          TITAN_VERSION=$(titan-gc-cli --version | sed 's/titan-gc-cli //')
+          TITAN_SHARE="${CONDA_PREFIX}/share/titan-gc-cli-${TITAN_VERSION}"
+          mkdir -p ${TITAN_SHARE}
+          mv conf/ tasks/ workflows/ ${TITAN_SHARE}
+
+      - name: Environment Information
+        run: uname -a && env && titan-gc-cli -h
+
+      - name: Test Titan-GC Workflows
+        run: |
+          mkdir -p titan/${{ matrix.wf }}
+          titan-gc-prepare.py tests/data/fastqs/${{ matrix.wf }} ${{ matrix.wf }} tests/data/primers/artic-v3.primers.bed > titan/${{ matrix.wf }}.json
+          pytest --tag titan_${{ matrix.wf }}
+          rm -rf titan/${{ matrix.wf }}
