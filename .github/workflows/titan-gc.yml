@@ -42,5 +42,6 @@ jobs:
         run: |
           mkdir -p titan/${{ matrix.wf }}
           titan-gc-prepare.py tests/data/fastqs/${{ matrix.wf }} ${{ matrix.wf }} tests/data/primers/artic-v3.primers.bed > titan/${{ matrix.wf }}.json
-          pytest --keep-workflow-wd --tag titan_${{ matrix.wf }}
+          pytest --keep-workflow-wd --tag titan_${{ matrix.wf }} || true
+          find /tmp -n "*cromwell-std*" | xargs -I {} cat {}
           rm -rf titan/${{ matrix.wf }}
