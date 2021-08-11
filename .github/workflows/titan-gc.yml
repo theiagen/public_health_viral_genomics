@@ -8,6 +8,7 @@ on:
     
 jobs:
   titan:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         wf: ['clearlabs', 'illumina_pe', 'illumina_se', 'ont']
