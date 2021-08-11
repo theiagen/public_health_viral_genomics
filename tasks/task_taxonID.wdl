@@ -253,9 +253,9 @@ task pangolin_update_log {
     #check if lineage has been modified 
     if [[ "~{current_lineage}" == "~{updated_lineage}" ]]
     then 
-      UPDATE_STATUS="pango_lineage unchanged: ~{updated_lineage}"
+      UPDATE_STATUS="pango lineage unchanged: ~{updated_lineage}"
     else 
-      UPDATE_STATUS="pango_lineage modified: ~{current_lineage} -> ~{updated_lineage}"
+      UPDATE_STATUS="pango lineage modified: ~{current_lineage} -> ~{updated_lineage}"
     fi
     
     #if a lineage log not provided, create one with headers
