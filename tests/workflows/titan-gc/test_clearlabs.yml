@@ -20,13 +20,9 @@
     - path: titan/clearlabs/kraken2_reports/clearlabs_kraken2_report.txt
       md5sum: 35841fa2d77ec202c275b1de548b8d98
     - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.auspice.json
-      md5sum: ade0ebc3992e167daf1b8ff645bb4f1c
     - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.json
-      md5sum: 251e589243c60cca9ad7a684f1192500
     - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.tsv
-      md5sum: eccf29f64fe718246ce35b89f21bf98c
     - path: titan/clearlabs/pangolin_reports/clearlabs.pangolin_report.csv
-      md5sum: adfbed4c2664436eb33cfdcc88ed48c9
     - path: titan/clearlabs/results/clearlabs.results.json
       md5sum: 46b6ec51f3b0cc1e26b5a41ac3d004ed
     - path: titan/clearlabs/titan-metadata.json

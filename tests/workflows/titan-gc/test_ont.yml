@@ -20,13 +20,9 @@
     - path: titan/ont/kraken2_reports/ERR6281317_kraken2_report.txt
       md5sum: d49ac65f26600dc786ff9ba8fdd966f2
     - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.auspice.json
-      md5sum: 155e54316eccc5a993af9d4255699a64
     - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.json
-      md5sum: 9e7748768ac473dccaeb492fb87a7351
     - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.tsv
-      md5sum: d03047f8ec9e8f870b60a444411156cb
     - path: titan/ont/pangolin_reports/ERR6281317.pangolin_report.csv
-      md5sum: a1f2f5e3cf2ac29c6153aaa762e5293a
     - path: titan/ont/results/ERR6281317.results.json
       md5sum: fdd70bd23a10e99d003fbd7be2cd200a
     - path: titan/ont/titan-metadata.json

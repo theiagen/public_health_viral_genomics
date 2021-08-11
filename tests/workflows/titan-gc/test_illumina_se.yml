@@ -17,13 +17,9 @@
     - path: titan/illumina_se/kraken2_reports/ERR6319327_kraken2_report.txt
       md5sum: 7e4fc05efbbc3937b99420e6193be061
     - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.auspice.json
-      md5sum: 9d701245fe91c713ad519c34b18f0ec3
     - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.json
-      md5sum: 47971fd61f96c0b9a644f73266cb1d20
     - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.tsv
-      md5sum: b357a819cf06816223a50570a425f053
     - path: titan/illumina_se/pangolin_reports/ERR6319327.pangolin_report.csv
-      md5sum: 8b414ff19d078ed990e276c856bb4223
     - path: titan/illumina_se/results/ERR6319327.results.json
       md5sum: 65d2728fc176c927bc02f6c5c200ddd4
     - path: titan/illumina_se/titan-metadata.json

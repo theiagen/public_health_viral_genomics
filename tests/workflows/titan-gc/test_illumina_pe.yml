@@ -21,13 +21,9 @@
     - path: titan/illumina_pe/kraken2_reports/SRR13687078_kraken2_report.txt
       md5sum: 3544d9ca35d45093c03cdead46677765
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.auspice.json
-      md5sum: d206b833086a65992fec0a0b9cdbe28e
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.json
-      md5sum: fa0f50463afb7778c2e1ebc52b0ec11f
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
-      md5sum: a23379964982e22e6dba06cd4698705d
     - path: titan/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
-      md5sum: d798abdc62d7f9d5588a6f1a25a7a1a8
     - path: titan/illumina_pe/results/SRR13687078.results.json
       md5sum: 758372aad9430d9e949ef8c879d4440e
     - path: titan/illumina_pe/titan-metadata.json
