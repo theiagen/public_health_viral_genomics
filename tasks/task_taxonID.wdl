@@ -266,7 +266,7 @@ task pangolin_update_log {
      else 
        echo "No lineage log provided; creating new lineage log file"
        echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > "~{samplename}_pango_lineage.log"
-       lienage_log_file="pango_lineage.log"
+       lienage_log_file="~{samplename}_pango_lineage.log"
      fi
      
      #populate lineage log file
