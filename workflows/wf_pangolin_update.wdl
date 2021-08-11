@@ -16,25 +16,26 @@ workflow pangolin_update {
     }
 
     call taxon_ID.pangolin3 {
-    input:
+      input:
         samplename = samplename,
         fasta = assembly,
         docker = updated_pangolin_docker
     }
     call taxon_ID.pangolin_update_log {
-    input:
-      samplename = samplename,
-      current_lineage = current_lineage,
-      current_pangolin_docker = current_pangolin_docker,
-      current_pangolin_version = current_pangolin_version,
-      updated_lineage = pangolin3.pangolin_lineage,
-      updated_pangolin_docker = pangolin3.pangolin_docker,
-      updated_pangolin_version = pangolin3.version,
-      timezone = timezone,
-      lineage_log = lineage_log
+      input:
+        samplename = samplename,
+        current_lineage = current_lineage,
+        current_pangolin_docker = current_pangolin_docker,
+        current_pangolin_version = current_pangolin_version,
+        updated_lineage = pangolin3.pangolin_lineage,
+        updated_pangolin_docker = pangolin3.pangolin_docker,
+        updated_pangolin_version = pangolin3.version,
+        timezone = timezone,
+        lineage_log = lineage_log
     }
     call versioning.version_capture{
       input:
+        timezone = timezone
     }
     output {
         String pangolin_update_version            = version_capture.phvg_version
