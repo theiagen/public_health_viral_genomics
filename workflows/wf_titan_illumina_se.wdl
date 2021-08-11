@@ -67,6 +67,10 @@ workflow titan_illumina_se {
     input:
       genome_fasta = consensus.consensus_seq
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
@@ -134,10 +138,10 @@ workflow titan_illumina_se {
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
     File    nextclade_tsv               = nextclade_one_sample.nextclade_tsv
-    String  nextclade_clade             = nextclade_one_sample.nextclade_clade
-    String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
+    String  nextclade_aa_subs           = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String  nextclade_aa_dels           = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String  nextclade_clade             = nextclade_output_parser_one_sample.nextclade_clade
 
     File    ivar_tsv                    = variant_call.sample_variants
     String  ivar_variant_version        = variant_call.ivar_version
