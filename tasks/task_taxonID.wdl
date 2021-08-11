@@ -246,7 +246,7 @@ task pangolin_update_log {
   }
 
   command <<<
-    # set inference inference_engine
+    # set timezone for date outputs
     ~{default='' 'export TZ=' + timezone}
     DATE=$(date +"%Y-%m-%d")
     
