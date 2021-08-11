@@ -10,7 +10,8 @@ workflow mercury_batch {
         Array[File] gisaid_single_submission_fasta
         Array[File] gisaid_single_submission_meta
         Array[String] samplename
-        Array[Int] vadr_num_alerts
+        Array[String] submission_id
+        Array[String] vadr_num_alerts
     }
 
     call submission.compile as genbank_compile {
@@ -19,7 +20,8 @@ workflow mercury_batch {
             single_submission_meta=genbank_single_submission_meta,
             samplename=samplename,
             vadr_num_alerts=vadr_num_alerts,
-            repository="GenBank"
+            repository="GenBank",
+            submission_id=submission_id
     }
 
     call submission.compile as gisaid_compile {
@@ -28,7 +30,8 @@ workflow mercury_batch {
             single_submission_meta=gisaid_single_submission_meta,
             samplename=samplename,
             vadr_num_alerts=vadr_num_alerts,
-            repository="GISAID"
+            repository="GISAID",
+            submission_id=submission_id
     }
     call versioning.version_capture{
       input:

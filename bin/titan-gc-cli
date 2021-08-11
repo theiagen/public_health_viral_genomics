@@ -26,6 +26,11 @@ LOG_LEVEL=ERROR
 SINGULARITY_CACHE="${HOME}/.singularity/titan-cache"
 CROMWELL_OPTS="${TITAN_SHARE}/conf/options.json"
 
+version() {
+    echo "titan-gc-cli ${VERSION}"
+    exit 0
+}
+
 usage() {
     echo "usage: titan-gc-cli [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--quiet]"
     echo ""
@@ -37,6 +42,7 @@ usage() {
     echo ""
     echo "optional arguments:"
     echo "  -h, --help              Show this help message and exit"
+    echo "  -v, --version           Print the version"
     echo "  --options STR           JSON file containing Cromwell options"
     echo "  --profile STR           The backend profile to use [options: docker, singularity]"
     echo "  --config STR            Custom backend profile to use"
@@ -53,6 +59,7 @@ while [[ "$#" -gt 0 ]]; do
         -i|--inputs) INPUTS="$2"; shift ;;
         -o|--outdir) OUTDIR="$2"; shift ;;
         -h|--help) usage 0 ;;
+        -v|--version) version ;;
         --options) OPTIONS="$2"; shift ;;
         --profile) PROFILE="$2" ; shift ;;
         --config) CONFIG="$2" ; shift ;;
@@ -80,35 +87,6 @@ if [[ "${CONFIG}" == "0" ]]; then
         CONFIG_PATH="${TITAN_SHARE}/conf/docker.config"
     elif [[ "${PROFILE}" == "singularity" ]]; then
         CONFIG_PATH="${TITAN_SHARE}/conf/singularity.config"
-        if [[ -z ${SINGULARITY_CACHEDIR+x} ]]; then 
-            CACHE_DIR=${SINGULARITY_CACHE}
-        else 
-            CACHE_DIR=${SINGULARITY_CACHEDIR}
-        fi
-        # Check if images are built
-        mkdir -p ${CACHE_DIR}
-        WARNED="0"
-        while IFS=$'\t' read -r container version sha256_hash; do
-            container_name="${container}:${version}"
-            renamed=${container_name//[\/:]/-}
-            IMAGE="${CACHE_DIR}/${renamed}.img"
-            if [[ ! -f ${IMAGE} ]]; then
-                if [[ ${WARNED} == "0" ]]; then
-                    echo "Building Singularity images, this will be a while... Coffee time?" 1>&2
-                    WARNED="1"
-                fi
-                echo "Building Singularity image: ${IMAGE}" 1>&2
-                if [[ ${QUIET} == "0" ]]; then
-                    singularity build ${IMAGE} docker://${container_name}
-                else
-                    singularity build ${IMAGE} docker://${container_name} 1> /dev/null
-                fi
-            else
-                if [[ ${QUIET} == "0" ]]; then
-                    echo "Skipping build of existing Singularity image: ${IMAGE}" 1>&2
-                fi
-            fi
-        done < ${TITAN_SHARE}/conf/containers.txt
     else
         echo "Uknown profile: ${PROFILE}, exiting..."
         usage 1

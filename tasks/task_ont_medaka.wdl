@@ -25,6 +25,7 @@ task demultiplexing {
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -54,11 +55,12 @@ task read_filtering {
 
   runtime {
 
-    docker:       "theiagen/artic-ncov2019:1.1.3"
+    docker:       "staphb/artic-ncov2019:1.3.0"
     memory:       "16 GB"
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -131,5 +133,6 @@ task consensus {
     cpu:          8
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }

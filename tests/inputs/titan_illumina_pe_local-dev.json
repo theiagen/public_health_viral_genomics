@@ -1,8 +1,0 @@
-{"nCoV19_pipeline.inputSamples": [
-    {"left": ["Sample_01","WA-THGN-0001","2020-10-31"],
-    "right": {
-        "left": "{local_path_to_Sample_01_fwd_read}",
-        "right": "{local_path_to_Sample_02_rev_read}"}}
-    ],
-    "nCoV19_pipeline.primer_bed": "{local_path_to_primer_bed_file}"
-}

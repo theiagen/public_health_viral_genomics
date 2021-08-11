@@ -25,6 +25,7 @@ workflow sarscov2_nextstrain {
         File?           lat_longs_tsv
         Float?          clock_rate
         Float?          clock_std_dev
+        Int             mafft_cpu=64
 
         Int             min_unambig_genome = 27000
     }
@@ -72,7 +73,9 @@ workflow sarscov2_nextstrain {
         input:
             sequences = filter_sequences_by_length.filtered_fasta,
             ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
-            basename  = "all_samples_aligned.fasta"
+            basename  = "all_samples_aligned.fasta",
+            cpus      = mafft_cpu
+            
     }
     call nextstrain.snp_sites {
         input:

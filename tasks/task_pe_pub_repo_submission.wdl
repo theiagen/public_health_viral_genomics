@@ -45,6 +45,7 @@ task deidentify {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -112,6 +113,7 @@ task gisaid {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -161,6 +163,7 @@ task genbank {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -199,6 +202,7 @@ task sra {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -210,7 +214,7 @@ input {
   Array[Int]  vadr_num_alerts
   Int         vadr_threshold=0
   String      repository
-  String      docker_image = "theiagen/utility:1.0"
+  String      docker_image = "theiagen/utility:1.1"
   Int         mem_size_gb = 1
   Int         CPUs = 1
   Int         disk_size = 25
@@ -258,5 +262,6 @@ input {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }

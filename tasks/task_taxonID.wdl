@@ -19,11 +19,10 @@ task kraken2 {
     fi
     echo $mode
     kraken2 $mode \
-      --classified-out cseqs#.fq \
       --threads ${cpus} \
       --db ${kraken2_db} \
       ${read1} ${read2} \
-      --report ${samplename}_kraken2_report.txt
+      --report ${samplename}_kraken2_report.txt >/dev/null
 
     percentage_human=$(grep "Homo sapiens" ${samplename}_kraken2_report.txt | cut -f 1)
      # | tee PERCENT_HUMAN
@@ -49,6 +48,7 @@ task kraken2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -91,6 +91,7 @@ task pangolin {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -150,6 +151,7 @@ task pangolin2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -226,6 +228,7 @@ task pangolin3 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -241,7 +244,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
-        String docker = "neherlab/nextclade:0.14.4"
+        String docker = "nextstrain/nextclade:0.14.4"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -258,6 +261,8 @@ task nextclade_one_sample {
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
         cp "~{basename}".nextclade.tsv input.tsv
+        
+       
         python3 <<CODE
         # transpose table
         with open('input.tsv', 'r', encoding='utf-8') as inf:
@@ -265,9 +270,17 @@ task nextclade_one_sample {
                 for c in zip(*(l.rstrip().split('\t') for l in inf)):
                     outf.write('\t'.join(c)+'\n')
         CODE
-        grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
-        grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
-        grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+        
+        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
+        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
+        
+        # parse transposed report file if relevant outputs are available
+        if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
+        then
+          grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
+          grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
+          grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
+        fi
     }
     runtime {
         docker: "~{docker}"
@@ -275,6 +288,7 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+	maxRetries:   3
     }
     output {
         String nextclade_version  = read_string("VERSION")

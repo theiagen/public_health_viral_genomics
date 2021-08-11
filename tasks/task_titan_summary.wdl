@@ -126,6 +126,7 @@ task titan_summary {
         memory: "1 GB"
         cpu: 1
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
 }
 
@@ -180,5 +181,6 @@ task merge_titan_summary {
         memory: "1 GB"
         cpu: 1
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
 }
