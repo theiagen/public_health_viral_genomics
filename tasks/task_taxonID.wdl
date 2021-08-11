@@ -288,7 +288,7 @@ task nextclade_output_parser_one_sample {
     command {
       python3 <<CODE
       # transpose table
-      with open(~{nextclade_tsv}, 'r', encoding='utf-8') as inf:
+      with open('~{nextclade_tsv}', 'r', encoding='utf-8') as inf:
           with open('transposed.tsv', 'w', encoding='utf-8') as outf:
               for c in zip(*(l.rstrip().split('\t') for l in inf)):
                   outf.write('\t'.join(c)+'\n')
