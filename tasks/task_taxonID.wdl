@@ -245,7 +245,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
-        String docker = "neherlab/nextclade:0.14.4"
+        String docker = "nexstrain/nextclade:0.14.4"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
