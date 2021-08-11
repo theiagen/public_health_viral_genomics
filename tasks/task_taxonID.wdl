@@ -19,7 +19,6 @@ task kraken2 {
     fi
     echo $mode
     kraken2 $mode \
-      --classified-out cseqs#.fq \
       --threads ${cpus} \
       --db ${kraken2_db} \
       ${read1} ${read2} \
