@@ -232,7 +232,62 @@ task pangolin3 {
     maxRetries:   3
   }
 }
+task pangolin_update_log {
+  input {
+    String samplename        
+    String current_lineage
+    String current_pangolin_docker
+    String current_pangolin_version
+    String updated_lineage
+    String updated_pangolin_docker
+    String updated_pangolin_version
+    File?  lineage_log
+  }
 
+  command <<<
+    # set inference inference_engine
+    DATE=$(date +"%Y-%m-%d")
+    
+    #check if lineage has been modified 
+    if [[ "~{current_lineage}" == "{updated_lineage}" ]]
+    then 
+      UPDATE_STATUS="pango_lineage unchanged"
+    else 
+      UPDATE_STATUS="pango_lineage modified: ~{current_lineage} -> ~{updated_lineage}"
+    fi
+    
+    #if a lineage log not provided, create one with headers
+    if [ -f "~{lineage_log}"]
+    then 
+      echo "Lineage log provided"
+      lineage_log_file="~{lineage_log}"
+     else 
+       echo "No lineage log provided; creating new lineage log file"
+       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > "~{samplename}_pango_lineage.log"
+       lienage_log_file="pango_lineage.log"
+     fi
+     
+     #populate lineage log file
+     echo -e "${DATE}\t${STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> ${lineage_log_file}
+     
+    echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE       
+
+  >>>
+
+  output {
+    String     pangolin_updates = read_string("PANGOLIN_UPDATE")
+    File       pango_lineage_log = "~{samplename}_pango_lineage.log"
+  }
+
+  runtime {
+    docker:     "theiagen/utility:1.1"
+    memory:       "8 GB"
+    cpu:          4
+    disks:        "local-disk 100 SSD"
+    preemptible:  0
+    maxRetries:   3
+  }
+}
 
 task nextclade_one_sample {
     meta {
