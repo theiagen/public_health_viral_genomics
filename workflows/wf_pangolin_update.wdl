@@ -11,6 +11,7 @@ workflow pangolin_update {
         String current_pangolin_docker
         String current_pangolin_version
         String  updated_pangolin_docker
+        String? timezone
         File? lineage_log
     }
 
@@ -29,6 +30,7 @@ workflow pangolin_update {
       updated_lineage = pangolin3.pangolin_lineage,
       updated_pangolin_docker = pangolin3.pangolin_docker,
       updated_pangolin_version = pangolin3.version,
+      timezone = timezone,
       lineage_log = lineage_log
     }
     call versioning.version_capture{

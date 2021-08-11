@@ -241,11 +241,13 @@ task pangolin_update_log {
     String updated_lineage
     String updated_pangolin_docker
     String updated_pangolin_version
+    String? timezone
     File?  lineage_log
   }
 
   command <<<
     # set inference inference_engine
+    ~{default='' 'export TZ=' + timezone}
     DATE=$(date +"%Y-%m-%d")
     
     #check if lineage has been modified 
