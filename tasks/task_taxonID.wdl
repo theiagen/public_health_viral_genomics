@@ -298,7 +298,7 @@ task nextclade_output_parser_one_sample {
       echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
 
       # parse transposed report file if relevant outputs are available
-      if [[ $(wc -l ~{nextclade_tsv}) -ge 1 ]]
+      if [[ $(wc -l transposed.tsv) -ge 1 ]]
       then
         grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
         grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
