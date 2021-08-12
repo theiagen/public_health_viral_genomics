@@ -301,7 +301,7 @@ task nextclade_one_sample {
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
-        NEXTCLADE_VERSION="$(/usr/local/bin/nextclade --version)"
+        NEXTCLADE_VERSION="$(nextclade --version)"
 
         curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta > reference.fasta
         curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff > genemap.gff
