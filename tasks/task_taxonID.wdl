@@ -342,7 +342,7 @@ task nextclade_output_parser_one_sample {
     }
     input {
         File   nextclade_tsv
-        String docker = "theiagen/utility:1.1"
+        String docker = "python:slim"
     }
     command {
       # Set WDL input variable to input.tsv file
