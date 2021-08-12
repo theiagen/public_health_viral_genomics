@@ -297,7 +297,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.2.2"
+        String docker = "quay.io/biocontainers/nextclade:1.2.0--h9ee0642_0"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
