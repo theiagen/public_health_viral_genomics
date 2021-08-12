@@ -49,6 +49,7 @@ task kraken2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -91,6 +92,7 @@ task pangolin {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -150,6 +152,7 @@ task pangolin2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -226,6 +229,7 @@ task pangolin3 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -267,6 +271,7 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries:   3
     }
     output {
         String nextclade_version  = read_string("NEXTCLADE_VERSION")
@@ -315,7 +320,6 @@ task nextclade_output_parser_one_sample {
           else:
             nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
-
       CODE
     }
     runtime {
@@ -324,6 +328,7 @@ task nextclade_output_parser_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries:   3
     }
     output {
         String nextclade_clade    = read_string("NEXTCLADE_CLADE")
