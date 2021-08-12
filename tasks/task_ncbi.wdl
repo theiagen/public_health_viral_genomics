@@ -6,11 +6,11 @@ task vadr {
   }
   input {
     File   genome_fasta
-    String vadr_opts="--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn"
     Int assembly_length_unambiguous
     Int skip_length=10000
 
-    String  docker="staphb/vadr:1.2.1"
+    String  docker="staphb/vadr:1.3"
     Int minlen=50
     Int maxlen=30000
   }
