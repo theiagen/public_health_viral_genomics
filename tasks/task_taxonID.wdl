@@ -318,7 +318,8 @@ task nextclade_one_sample {
             --input-gene-map genemap.gff \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
-            --output-tree "~{basename}".nextclade.auspice.json
+            --output-tree "~{basename}".nextclade.auspice.json \
+            --verbose
     }
     runtime {
         docker: "~{docker}"
