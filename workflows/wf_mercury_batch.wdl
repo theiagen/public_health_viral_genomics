@@ -11,7 +11,7 @@ workflow mercury_batch {
         Array[File] gisaid_single_submission_meta
         Array[String] samplename
         Array[Int] vadr_num_alerts
-        String vadr_threshold=0
+        Int vadr_threshold=0
         Array[String] submission_id
     }
 
