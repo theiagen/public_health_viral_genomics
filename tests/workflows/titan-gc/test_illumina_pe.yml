@@ -29,4 +29,4 @@
     - path: titan/illumina_pe/titan-results.json
     - path: titan/illumina_pe/titan-results.tsv
     - path: titan/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
-      md5sum: 94102588e1dd10beea5dc02011af4430
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

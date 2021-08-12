@@ -25,4 +25,4 @@
     - path: titan/illumina_se/titan-results.json
     - path: titan/illumina_se/titan-results.tsv
     - path: titan/illumina_se/vadr_alerts/ERR6319327.ivar.consensus.vadr.alt.list
-      md5sum: 09f7a0550fba59e8523b62dcc85b18cc
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
