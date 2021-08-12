@@ -260,7 +260,6 @@ task nextclade_one_sample {
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
-        /* cp "~{basename}".nextclade.tsv input.tsv */
     }
     runtime {
         docker: "~{docker}"
