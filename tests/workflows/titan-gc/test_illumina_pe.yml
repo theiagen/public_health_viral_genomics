@@ -9,6 +9,8 @@
     - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
     - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
     - path: titan/illumina_pe/alignments/SRR13687078.stats.txt
+    - path: titan/illumina_pe/alignments/SRR13687078.variants.vcf
+      md5sum: 19e716097dcbad1a20f177d8a2590ef5
     - path: titan/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
       md5sum: 5ef30a51925f1b2569f998ae12e1e186
     - path: titan/illumina_pe/cromwell-stderr.txt

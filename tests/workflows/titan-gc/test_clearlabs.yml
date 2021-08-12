@@ -6,6 +6,8 @@
   files:
     - path: titan/clearlabs/alignments/clearlabs.flagstat.txt
       md5sum: b5af0b1c2721c004f8f476d9ca540a35
+    - path: titan/clearlabs/alignments/clearlabs.pass.vcf
+      md5sum: 0847aeb9ba60cbc1b0f0ab9f19b01f96
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
     - path: titan/clearlabs/alignments/clearlabs.stats.txt

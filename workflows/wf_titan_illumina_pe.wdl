@@ -157,7 +157,8 @@ workflow titan_illumina_pe {
     String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
 
-    File    ivar_tsv                    = variant_call.sample_variants
+    File    ivar_tsv                    = variant_call.sample_variants_tsv
+    File    ivar_vcf                    = variant_call.sample_variants_vcf
     String  ivar_variant_version        = variant_call.ivar_version
 
     File?   vadr_alerts_list            = vadr.alerts_list

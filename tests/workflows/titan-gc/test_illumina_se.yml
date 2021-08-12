@@ -9,6 +9,8 @@
     - path: titan/illumina_se/alignments/ERR6319327.primertrim.sorted.bam
     - path: titan/illumina_se/alignments/ERR6319327.primertrim.sorted.bam.bai
     - path: titan/illumina_se/alignments/ERR6319327.stats.txt
+    - path: titan/illumina_se/alignments/ERR6319327.variants.vcf
+      md5sum: 01d93a6a37b9598c594a780a6996d08e
     - path: titan/illumina_se/assemblies/ERR6319327.ivar.consensus.fasta
       md5sum: 45a6c6f18d5fa448e0aa811bdf934bab
     - path: titan/illumina_se/cromwell-stderr.txt
