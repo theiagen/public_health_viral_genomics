@@ -307,6 +307,7 @@ task nextclade_one_sample {
         curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff > genemap.gff
         curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json > tree.json
         curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json > qc.json
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv > primers.csv
 
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
@@ -316,6 +317,7 @@ task nextclade_one_sample {
             --input-tree tree.json \
             --input-qc-config qc.json \
             --input-gene-map genemap.gff \
+            --input-pcr-primers primers.csv \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
