@@ -44,16 +44,16 @@ task primer_trim {
     String samtools_version = read_string("SAMTOOLS_VERSION")
     String pipeline_date = read_string("DATE")
     Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
-    Float  primer_trimmed_read_percent = read_float("IVAR_TRIM_PCT")
     String primer_bed_name = read_string("PRIMER_NAME")
   }
 
   runtime {
-    docker:       "staphb/ivar:1.3.1"
+    docker:       "staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -109,11 +109,12 @@ task variant_call {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.2.2_artic20200528"
+    docker:       "staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -192,10 +193,11 @@ task consensus {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.2.2_artic20200528"
+    docker:       "staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }

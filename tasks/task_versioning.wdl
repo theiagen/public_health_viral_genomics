@@ -22,6 +22,7 @@ task version_capture {
     cpu: 1
     docker: "theiagen/utility:1.1"
     disks: "local-disk 10 HDD"
-    dx_instance_type: "mem1_ssd1_v2_x2" 
+    dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }

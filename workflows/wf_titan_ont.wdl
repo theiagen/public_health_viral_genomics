@@ -3,7 +3,6 @@ version 1.0
 import "../tasks/task_ont_medaka.wdl" as medaka
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
@@ -16,7 +15,7 @@ workflow titan_ont {
 
   input {
     String samplename
-    String seq_method  = "ONT"
+    String seq_method = "ONT"
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
@@ -77,11 +76,6 @@ workflow titan_ont {
     input:
       genome_fasta = consensus.consensus_seq
   }
-  call amplicon_metrics.bedtools_cov {
-    input:
-      bamfile = consensus.trim_sorted_bam,
-      baifile = consensus.trim_sorted_bai
-  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
@@ -91,8 +85,8 @@ workflow titan_ont {
     input:
   }
   output {
-    String  titan_ont_version            = version_capture.phvg_version
-    String  titan_ont_analysis_date      = version_capture.date
+    String  titan_ont_version           = version_capture.phvg_version
+    String  titan_ont_analysis_date     = version_capture.date
     String  seq_platform                = seq_method
     
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
@@ -144,9 +138,6 @@ workflow titan_ont {
     String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
     String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
-
-    File    amp_coverage                = bedtools_cov.amp_coverage
-    String  bedtools_version            = bedtools_cov.version
 
     File?   vadr_alerts_list            = vadr.alerts_list
     String  vadr_num_alerts             = vadr.num_alerts

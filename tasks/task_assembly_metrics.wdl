@@ -51,6 +51,7 @@ task stats_n_coverage {
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
-    preemptible:  0      
+    preemptible:  0
+    maxRetries:   3
   }
 }

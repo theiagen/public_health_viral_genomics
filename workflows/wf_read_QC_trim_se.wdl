@@ -15,6 +15,7 @@ workflow read_QC_trim {
     Int? trimmomatic_minlen = 25
     Int? trimmomatic_quality_trim_score = 30
     Int? trimmomatic_window_size = 4
+    Int  bbduk_mem = 8
   }
 #  call read_clean.ncbi_scrub_se {
 #    input:
@@ -32,7 +33,8 @@ workflow read_QC_trim {
   call read_clean.bbduk_se {
     input:
       samplename = samplename,
-      read1_trimmed = trimmomatic_se.read1_trimmed
+      read1_trimmed = trimmomatic_se.read1_trimmed,
+      mem_size_gb = bbduk_mem
   }
   call qc_utils.fastqc_se as fastqc_raw {
     input:
