@@ -96,7 +96,7 @@ task variant_call {
     -g ${ref_gff}
 
     # Convert TSV to VCF
-    ivar_variants_to_vcf.py ${samplename}.variants.tsv ${samplename}.variants.tsv
+    ivar_variants_to_vcf.py ${samplename}.variants.tsv ${samplename}.variants.vcf
 
     variants_num=$(grep "TRUE" ${samplename}.variants.tsv | wc -l)
     if [ -z "$variants_num" ] ; then variants_num="0" ; fi

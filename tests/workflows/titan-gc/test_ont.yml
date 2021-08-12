@@ -4,26 +4,30 @@
     - titan_gc
     - titan_ont
   files:
-    - path: titan/ont/alignments/ERR6281317.flagstat.txt
-      md5sum: 5b5be8b5d217d0d55063fab4f293a30a
-    - path: titan/ont/alignments/ERR6281317.primertrimmed.rg.sorted.bam
-    - path: titan/ont/alignments/ERR6281317.primertrimmed.rg.sorted.bam.bai
-    - path: titan/ont/alignments/ERR6281317.stats.txt
-    - path: titan/ont/assemblies/ERR6281317.medaka.consensus.fasta
-      md5sum: bb8a1077bb1fff7f18d31b870637b5d6
+    - path: titan/ont/alignments/ont.flagstat.txt
+      md5sum: 4115fec57a52e330a96280f3afa5f89b
+    - path: titan/ont/alignments/ont.pass.vcf
+      md5sum: 236260cacd4f4efa8f4a0fe93dc5ea02
+    - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam
+    - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
+    - path: titan/ont/alignments/ont.stats.txt
+    - path: titan/ont/assemblies/ont.medaka.consensus.fasta
+      md5sum: 02a04e9cf297acc8fc03667edab41fde
     - path: titan/ont/cromwell-stderr.txt
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: titan/ont/cromwell-stdout.txt
-    - path: titan/ont/dehosted_reads/ERR6281317_R1_dehosted.fastq.gz
-    - path: titan/ont/kraken2_reports/ERR6281317_dehosted_kraken2_report.txt
-      md5sum: e80514e1846af3bfee71faf5967310ec
-    - path: titan/ont/kraken2_reports/ERR6281317_kraken2_report.txt
-      md5sum: d49ac65f26600dc786ff9ba8fdd966f2
-    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.auspice.json
-    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.json
-    - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.tsv
-    - path: titan/ont/pangolin_reports/ERR6281317.pangolin_report.csv
-    - path: titan/ont/results/ERR6281317.results.json
+    - path: titan/ont/dehosted_reads/ont_R1_dehosted.fastq.gz
+    - path: titan/ont/kraken2_reports/ont_dehosted_kraken2_report.txt
+      md5sum: 5780753ae61523a3621fbe2635b04b70
+    - path: titan/ont/kraken2_reports/ont_kraken2_report.txt
+      md5sum: f2c6f26b1ef2786d124eae2ab3fe80c1
+    - path: titan/ont/nextclade/ont.medaka.consensus.nextclade.auspice.json
+    - path: titan/ont/nextclade/ont.medaka.consensus.nextclade.json
+    - path: titan/ont/nextclade/ont.medaka.consensus.nextclade.tsv
+    - path: titan/ont/pangolin_reports/ont.pangolin_report.csv
+    - path: titan/ont/results/ont.results.json
     - path: titan/ont/titan-metadata.json
     - path: titan/ont/titan-results.json
     - path: titan/ont/titan-results.tsv
+    - path: titan/ont/vadr_alerts/ont.medaka.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
