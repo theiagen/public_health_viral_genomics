@@ -25,11 +25,8 @@
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
     - path: titan/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
     - path: titan/illumina_pe/results/SRR13687078.results.json
-      md5sum: 758372aad9430d9e949ef8c879d4440e
     - path: titan/illumina_pe/titan-metadata.json
     - path: titan/illumina_pe/titan-results.json
-      md5sum: 34798441f0b550cf599191686e04ba67
     - path: titan/illumina_pe/titan-results.tsv
-      md5sum: 08f2aa185d67021d9f77baa0d4b860b0
     - path: titan/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
       md5sum: 94102588e1dd10beea5dc02011af4430

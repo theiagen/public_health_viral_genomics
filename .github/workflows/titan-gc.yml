@@ -50,7 +50,8 @@ jobs:
         with:
           name: logs-${{ matrix.wf }}
           path: |
-            /home/runner/pytest_workflow_*/*/titan/*/cromwell-stderr.txt
-            /home/runner/pytest_workflow_*/*/titan/*/cromwell-stdout.txt
+            /home/runner/pytest_workflow_*/*/titan/
             /home/runner/pytest_workflow_*/*/log.out
             /home/runner/pytest_workflow_*/*/log.err
+            !/home/runner/pytest_workflow_*/*/titan/*/alignments/*.bam*
+            !/home/runner/pytest_workflow_*/*/titan/*/dehosted_reads/*.fastq.gz
