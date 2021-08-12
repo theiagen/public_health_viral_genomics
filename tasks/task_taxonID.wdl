@@ -350,25 +350,26 @@ task nextclade_output_parser_one_sample {
       # Parse outputs using python3
       python3 <<CODE
       import csv
-      with open("./input.tsv",'r') as tsv_file:
+      import codecs
+      with codecs.open("./input.tsv",'r') as tsv_file:
         tsv_reader=csv.reader(tsv_file, delimiter="\t")
         tsv_data=list(tsv_reader)
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
-        with open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
+        with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
           nc_clade=tsv_dict['clade']
           if nc_clade=='':
             nc_clade='NA'
           else:
             nc_clade=nc_clade
           Nextclade_Clade.write(nc_clade)
-        with open ("NEXTCLADE_AASUBS", 'wt') as Nextclade_AA_Subs:
+        with codecs.open ("NEXTCLADE_AASUBS", 'wt') as Nextclade_AA_Subs:
           nc_aa_subs=tsv_dict['aaSubstitutions']
           if nc_aa_subs=='':
             nc_aa_subs='NA'
           else:
             nc_aa_subs=nc_aa_subs
           Nextclade_AA_Subs.write(nc_aa_subs)
-        with open ("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
+        with codecs.open ("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
           nc_aa_dels=tsv_dict['aaDeletions']
           if nc_aa_dels=='':
             nc_aa_dels='NA'
