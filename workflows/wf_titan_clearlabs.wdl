@@ -51,6 +51,10 @@ workflow titan_clearlabs {
       samplename = samplename,
       bamfile = consensus.sorted_bam
   }
+  call qc_utils.consensus_qc {
+    input:
+      assembly_fasta = consensus.consensus_seq
+  }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
@@ -74,7 +78,7 @@ workflow titan_clearlabs {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus.number_ATCG
+      assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
     input:
@@ -102,14 +106,15 @@ workflow titan_clearlabs {
     File   aligned_bai                      = consensus.trim_sorted_bai
     File   variants_from_ref_vcf            = consensus.medaka_pass_vcf
     String artic_version                    = consensus.artic_pipeline_version
-    String primer_bed_name                       = consensus.primer_bed_name
+    String primer_bed_name                  = consensus.primer_bed_name
     File   assembly_fasta                   = consensus.consensus_seq
-    Int    number_N                         = consensus.number_N
-    Int    assembly_length_unambiguous      = consensus.number_ATCG
-    Int    number_Degenerate                = consensus.number_Degenerate
-    Int    number_Total                     = consensus.number_Total
-    Float  percent_reference_coverage       = consensus.percent_reference_coverage
     String assembly_method                  = consensus.artic_pipeline_version
+
+    Int    number_N                         = consensus_qc.number_N
+    Int    assembly_length_unambiguous      = consensus_qc.number_ATCG
+    Int    number_Degenerate                = consensus_qc.number_Degenerate
+    Int    number_Total                     = consensus_qc.number_Total
+    Float  percent_reference_coverage       = consensus_qc.percent_reference_coverage
 
     String pango_lineage                    = pangolin3.pangolin_lineage
     String pangolin_conflicts               = pangolin3.pangolin_conflicts
