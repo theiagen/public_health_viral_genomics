@@ -296,13 +296,26 @@ task nextclade_output_parser_one_sample {
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
         with open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
           nc_clade=tsv_dict['clade']
+          if nc_clade=='':
+            nc_clade='NA'
+          else:
+            nc_clade=nc_clade
           Nextclade_Clade.write(nc_clade)
         with open ("NEXTCLADE_AASUBS", 'wt') as Nextclade_AA_Subs:
           nc_aa_subs=tsv_dict['aaSubstitutions']
+          if nc_aa_subs=='':
+            nc_aa_subs='NA'
+          else:
+            nc_aa_subs=nc_aa_subs
           Nextclade_AA_Subs.write(nc_aa_subs)
         with open ("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
           nc_aa_dels=tsv_dict['aaDeletions']
+          if nc_aa_dels=='':
+            nc_aa_dels='NA'
+          else:
+            nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
+
       CODE
     }
     runtime {
