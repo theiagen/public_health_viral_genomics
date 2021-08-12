@@ -95,14 +95,18 @@ task variant_call {
     -r ${ref_genome} \
     -g ${ref_gff}
 
+    # Convert TSV to VCF
+    ivar_variants_to_vcf.py ${samplename}.variants.tsv ${samplename}.variants.tsv
+
     variants_num=$(grep "TRUE" ${samplename}.variants.tsv | wc -l)
     if [ -z "$variants_num" ] ; then variants_num="0" ; fi
     echo $variants_num | tee VARIANT_NUM
 	}
 
   output {
- 	Int       variant_num = read_string("VARIANT_NUM")
- 	File  	  sample_variants = "${samplename}.variants.tsv"
+    Int       variant_num = read_string("VARIANT_NUM")
+    File      sample_variants_tsv = "${samplename}.variants.tsv"
+    File      sample_variants_vcf = "${samplename}.variants.vcf"
     String    ivar_version = read_string("IVAR_VERSION")
     String    samtools_version = read_string("SAMTOOLS_VERSION")
     String    pipeline_date = read_string("DATE")

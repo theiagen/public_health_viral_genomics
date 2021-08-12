@@ -87,6 +87,7 @@ task consensus {
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "${primer_name}" | tee PRIMER_NAME
     artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
+    gunzip ~{samplename}.pass.vcf.gz
 
     num_N=$( grep -v ">" ~{samplename}.consensus.fasta | grep -o 'N' | wc -l )
     if [ -z "$num_N" ] ; then num_N="0" ; fi
@@ -117,7 +118,7 @@ task consensus {
     File    sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
     File    trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File    trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
-    File    medaka_pass_vcf = "~{samplename}.pass.vcf.gz"
+    File    medaka_pass_vcf = "~{samplename}.pass.vcf"
     Int     number_N = read_string("NUM_N")
     Int     number_ATCG = read_string("NUM_ACTG")
     Int     number_Degenerate = read_string("NUM_DEGENERATE")
