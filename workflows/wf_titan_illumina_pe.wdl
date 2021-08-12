@@ -7,6 +7,7 @@ import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
+import "../tasks/task_qc_utils.wdl" as qc_utils
 
 workflow titan_illumina_pe {
   meta {
@@ -51,6 +52,10 @@ workflow titan_illumina_pe {
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam
   }
+  call qc_utils.consensus_qc {
+    input:
+      assembly_fasta = consensus.consensus_seq
+  }
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
@@ -74,7 +79,7 @@ workflow titan_illumina_pe {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus.number_ATCG
+      assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
     input:
@@ -119,13 +124,15 @@ workflow titan_illumina_pe {
     String  primer_bed_name             = primer_trim.primer_bed_name
 
     File    assembly_fasta              = consensus.consensus_seq
-    Int     number_N                    = consensus.number_N
-    Int     assembly_length_unambiguous = consensus.number_ATCG
-    Int     number_Degenerate           = consensus.number_Degenerate
-    Int     number_Total                = consensus.number_Total
-    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  ivar_version_consensus      = consensus.ivar_version
     String  samtools_version_consensus  = consensus.samtools_version
+    
+    Int     number_N                    = consensus_qc.number_N
+    Int     assembly_length_unambiguous = consensus_qc.number_ATCG
+    Int     number_Degenerate           = consensus_qc.number_Degenerate
+    Int     number_Total                = consensus_qc.number_Total
+    Float   percent_reference_coverage  = consensus_qc.percent_reference_coverage
+
 
     File    consensus_stats             = stats_n_coverage.stats
     File    consensus_flagstat          = stats_n_coverage.flagstat
