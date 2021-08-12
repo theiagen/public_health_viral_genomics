@@ -24,9 +24,6 @@
     - path: titan/ont/nextclade/ERR6281317.medaka.consensus.nextclade.tsv
     - path: titan/ont/pangolin_reports/ERR6281317.pangolin_report.csv
     - path: titan/ont/results/ERR6281317.results.json
-      md5sum: fdd70bd23a10e99d003fbd7be2cd200a
     - path: titan/ont/titan-metadata.json
     - path: titan/ont/titan-results.json
-      md5sum: 922b5756ea99e949da856235d369b795
     - path: titan/ont/titan-results.tsv
-      md5sum: 6884524c89a1db470a149f4436259a5e
