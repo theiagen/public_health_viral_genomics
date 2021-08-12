@@ -19,10 +19,11 @@ task kraken2 {
     fi
     echo $mode
     kraken2 $mode \
+      --classified-out cseqs#.fq \
       --threads ${cpus} \
       --db ${kraken2_db} \
       ${read1} ${read2} \
-      --report ${samplename}_kraken2_report.txt >/dev/null
+      --report ${samplename}_kraken2_report.txt
 
     percentage_human=$(grep "Homo sapiens" ${samplename}_kraken2_report.txt | cut -f 1)
      # | tee PERCENT_HUMAN
@@ -48,7 +49,6 @@ task kraken2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
-    maxRetries:   3
   }
 }
 
@@ -91,7 +91,6 @@ task pangolin {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
-    maxRetries:   3
   }
 }
 
@@ -151,7 +150,6 @@ task pangolin2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
-    maxRetries:   3
   }
 }
 
@@ -228,7 +226,6 @@ task pangolin3 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
-    maxRetries:   3
   }
 }
 
@@ -239,7 +236,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "quay.io/biocontainers/nextclade:1.2.0--h9ee0642_0"
+        String docker = "nextstrain/nextclade:1.2.1-debian"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -263,7 +260,7 @@ task nextclade_one_sample {
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json
-        cp "~{basename}".nextclade.tsv input.tsv
+        /* cp "~{basename}".nextclade.tsv input.tsv */
     }
     runtime {
         docker: "~{docker}"
@@ -271,7 +268,6 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-	maxRetries:   3
     }
     output {
         String nextclade_version  = read_string("NEXTCLADE_VERSION")
@@ -290,9 +286,10 @@ task nextclade_output_parser_one_sample {
         String docker = "theiagen/utility:1.1"
     }
     command {
+      cat "~{nextclade_tsv}" > input.tsv
       python3 <<CODE
       # transpose table
-      with open('~{nextclade_tsv}', 'r', encoding='utf-8') as inf:
+      with open('input.tsv', 'r', encoding='utf-8') as inf:
           with open('transposed.tsv', 'w', encoding='utf-8') as outf:
               for c in zip(*(l.rstrip().split('\t') for l in inf)):
                   outf.write('\t'.join(c)+'\n')
