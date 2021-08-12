@@ -19,11 +19,10 @@ task kraken2 {
     fi
     echo $mode
     kraken2 $mode \
-      --classified-out cseqs#.fq \
       --threads ${cpus} \
       --db ${kraken2_db} \
       ${read1} ${read2} \
-      --report ${samplename}_kraken2_report.txt
+      --report ${samplename}_kraken2_report.txt >/dev/null
 
     percentage_human=$(grep "Homo sapiens" ${samplename}_kraken2_report.txt | cut -f 1)
      # | tee PERCENT_HUMAN
@@ -49,6 +48,7 @@ task kraken2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -91,6 +91,7 @@ task pangolin {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -150,6 +151,7 @@ task pangolin2 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
 
@@ -226,9 +228,68 @@ task pangolin3 {
     cpu:          4
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
+task pangolin_update_log {
+  input {
+    String samplename        
+    String current_lineage
+    String current_pangolin_docker
+    String current_pangolin_version
+    String updated_lineage
+    String updated_pangolin_docker
+    String updated_pangolin_version
+    String? timezone
+    File?  lineage_log
+  }
 
+  command <<<
+    # set timezone for date outputs
+    ~{default='' 'export TZ=' + timezone}
+    DATE=$(date +"%Y-%m-%d")
+    
+    #check if lineage has been modified 
+    if [[ "~{current_lineage}" == "~{updated_lineage}" ]]
+    then 
+      UPDATE_STATUS="pango lineage unchanged: ~{updated_lineage}"
+    else 
+      UPDATE_STATUS="pango lineage modified: ~{current_lineage} -> ~{updated_lineage}"
+    fi
+    
+    #if a lineage log not provided, create one with headers
+    lineage_log_file="~{samplename}_pango_lineage_log.tsv"
+    
+    if [ -s "~{lineage_log}" ]
+    then 
+      echo "Lineage log provided"
+      mv "~{lineage_log}" ${lineage_log_file}
+     else 
+       echo "Creating new lineage log file as none was provided"
+       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > ${lineage_log_file}
+     fi
+     
+     #populate lineage log file
+     echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> "${lineage_log_file}"
+     
+    echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE       
+
+  >>>
+
+  output {
+    String     pangolin_updates = read_string("PANGOLIN_UPDATE")
+    File       pango_lineage_log = "~{samplename}_pango_lineage_log.tsv"
+  }
+
+  runtime {
+    docker:     "theiagen/utility:1.1"
+    memory:       "8 GB"
+    cpu:          4
+    disks:        "local-disk 100 SSD"
+    preemptible:  0
+    maxRetries:   3
+  }
+}
 
 task nextclade_one_sample {
     meta {
@@ -241,7 +302,7 @@ task nextclade_one_sample {
         File?  qc_config_json
         File?  gene_annotations_json
         File?  pcr_primers_csv
-        String docker = "neherlab/nextclade:0.14.4"
+        String docker = "nextstrain/nextclade:0.14.4"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -285,6 +346,7 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+	maxRetries:   3
     }
     output {
         String nextclade_version  = read_string("VERSION")

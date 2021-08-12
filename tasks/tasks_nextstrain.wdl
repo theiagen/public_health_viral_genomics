@@ -17,6 +17,7 @@ task concatenate {
         cpu:    1
         disks: "local-disk 375 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File combined = "${output_name}"
@@ -48,6 +49,7 @@ task gzcat {
         cpu:    2
         disks: "local-disk 375 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File combined = "${output_name}"
@@ -114,6 +116,7 @@ task nextmeta_prep {
     memory: "1 GB"
     cpu: 1
     dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }
 
@@ -225,6 +228,7 @@ task derived_cols {
         cpu:    1
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File derived_metadata = "~{basename}.derived_cols.tsv"
@@ -248,6 +252,7 @@ task fasta_to_ids {
         cpu:    1
         disks: "local-disk 375 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File ids_txt = "~{basename}.txt"
@@ -293,6 +298,7 @@ task filter_segments {
         cpu:    1
         disks: "local-disk 375 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File assembly_of_segment = stdout()
@@ -394,6 +400,7 @@ task nextstrain_build_subsample {
         cpu :   4
         disks:  "local-disk 375 HDD"
         dx_instance_type: "mem3_ssd1_v2_x16"
+        maxRetries: 3
     }
     output {
         File   subsampled_msa = "ncov/results/~{build_name}/subsampled_alignment.fasta"
@@ -425,6 +432,7 @@ task nextstrain_ncov_defaults {
         cpu :   1
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries:   3
     }
     output {
         File clades_tsv      = "clades-with-subclades.tsv"
@@ -521,6 +529,7 @@ task filter_subsample_sequences {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem1_ssd1_v2_x4"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   filtered_fasta    = out_fname
@@ -583,6 +592,7 @@ task filter_sequences_by_length {
         cpu :   1
         disks:  "local-disk 300 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries: 3
     }
     output {
         File   filtered_fasta    = out_fname
@@ -666,6 +676,7 @@ task filter_sequences_to_list {
         disks:  "local-disk 200 HDD"
         dx_instance_type: "mem1_ssd1_v2_x4"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   filtered_fasta    = out_fname
@@ -752,6 +763,7 @@ task mafft_one_chr {
         disks:  "local-disk 375 LOCAL"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x36"
+        maxRetries: 3
     }
     output {
         File   aligned_sequences = "~{basename}_aligned.fasta"
@@ -798,6 +810,7 @@ task augur_mafft_align {
         disks:  "local-disk 750 LOCAL"
         preemptible: 0
         dx_instance_type: "mem3_ssd2_v2_x32"
+        maxRetries: 3
     }
     output {
         File   aligned_sequences = "~{basename}_aligned.fasta"
@@ -826,6 +839,7 @@ task snp_sites {
         disks:  "local-disk 100 HDD"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x4"
+        maxRetries: 3
     }
     output {
         File   snps_vcf = "~{out_basename}.vcf"
@@ -872,6 +886,7 @@ task augur_mask_sites {
         disks:  "local-disk 100 HDD"
         preemptible: 1
         dx_instance_type: "mem1_ssd1_v2_x4"
+        maxRetries: 3
     }
     output {
         File   masked_sequences = out_fname
@@ -927,6 +942,7 @@ task draft_augur_tree {
         disks:  "local-disk 750 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x36"
         preemptible: 0
+        maxRetries: 3
     }
     output {
         File   aligned_tree = "~{out_basename}_~{method}.nwk"
@@ -1007,6 +1023,7 @@ task refine_augur_tree {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem3_ssd1_v2_x8"
         preemptible: 0
+        maxRetries: 3
     }
     output {
         File   tree_refined  = "~{out_basename}_timetree.nwk"
@@ -1056,6 +1073,7 @@ task ancestral_traits {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   node_data_json = "~{out_basename}_ancestral_traits.json"
@@ -1115,6 +1133,7 @@ task ancestral_tree {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem3_ssd1_v2_x8"
         preemptible: 0
+        maxRetries: 3
     }
     output {
         File   nt_muts_json = "~{out_basename}_nt_muts.json"
@@ -1161,6 +1180,7 @@ task translate_augur_tree {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   aa_muts_json = "~{out_basename}_aa_muts.json"
@@ -1228,6 +1248,7 @@ task tip_frequencies {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   node_data_json = "~{out_basename}_tip-frequencies.json"
@@ -1270,6 +1291,7 @@ task assign_clades_to_nodes {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   node_clade_data_json = "~{out_basename}_clades.json"
@@ -1316,6 +1338,7 @@ task augur_import_beast {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
+        maxRetries: 3
     }
     output {
         File   tree_newick    = "~{tree_basename}.nwk"
@@ -1414,6 +1437,7 @@ task export_auspice_json {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 0
+        maxRetries: 3
     }
     output {
         File   virus_json = "~{out_basename}_auspice.json"
@@ -1470,5 +1494,6 @@ task prep_augur_metadata {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries: 3
   }
 }

@@ -2,7 +2,6 @@ version 1.0
 
 import "wf_sarscov2_nextstrain_modified.wdl" as augur
 import "../tasks/task_phylo.wdl" as phylo
-import "../tasks/task_data_vis.wdl" as vis
 import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_augur_run {

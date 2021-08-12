@@ -45,6 +45,7 @@ task deidentify {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -112,6 +113,7 @@ task gisaid {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -129,7 +131,7 @@ task genbank {
     String    specimen_source
     String    BioProject
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "theiagen/utility:1.1"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10
@@ -161,6 +163,7 @@ task genbank {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -191,6 +194,7 @@ task sra {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }
 
@@ -201,10 +205,11 @@ task compile {
     Array[File]   single_submission_fasta
     Array[File]   single_submission_meta
     Array[String] samplename
-    Array[Int]    vadr_num_alerts
+    Array[String] submission_id
+    Array[String] vadr_num_alerts
     Int           vadr_threshold=0
     String        repository
-    String        docker_image = "theiagen/utility:1.0"
+    String        docker_image = "theiagen/utility:1.1"
     Int           mem_size_gb = 1
     Int           CPUs = 1
     Int           disk_size = 25
@@ -212,49 +217,65 @@ task compile {
   }
 
   command <<<
-
   assembly_array=(~{sep=' ' single_submission_fasta})
   assembly_array_len=$(echo "${#assembly_array[@]}")
   meta_array=(~{sep=' ' single_submission_meta})
   meta_array_len=$(echo "${#meta_array[@]}")
-  vadr_array=(~{sep=' ' vadr_num_alerts})
+  vadr_string="~{sep=',' vadr_num_alerts}"
+  IFS=',' read -r -a vadr_array <<< ${vadr_string}
   vadr_array_len=$(echo "${#vadr_array[@]}")
   samplename_array=(~{sep=' ' samplename})
+  submission_id_array=(~{sep=' ' submission_id})
+  submission_id_array_len=$(echo "${#submission_id_array[@]}")
   vadr_array_len=$(echo "${#vadr_array[@]}")
   passed_assemblies=""
   passed_meta=""
 
   #Create files to capture batched and excluded samples
-  echo -e "GISAID Virus Name\tSamplename\tNumber of Vadr Alerts" > ~{repository}_batched_samples.tsv
-  echo -e "GISAID Virus Name\tSamplename\tNumber of Vadr Alerts" > ~{repository}_excluded_samples.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples.tsv
 
   # Ensure assembly, meta, and vadr arrays are of equal length
-  if [ "$assembly_array_len" -ne "$meta_array_len" ]; then
-    echo "Assembly array (length: $assembly_array_len) and metadata array (length: $meta_array_len) are of unequal length." >&2
-    exit 1
-  elif [ "$assembly_array_len" -ne "$vadr_array_len" ]; then
-    echo "Assembly array (length: $assembly_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
+  if [ "$submission_id_array" -ne "$vadr_array_len" ]; then
+    echo "Submission_id array (length: $assembly_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
     exit 1
   fi
 
   # remove samples that excede vadr threshold
-  for index in ${!assembly_array[@]}; do
-    assembly=${assembly_array[$index]}
-    assembly_header=$(grep -e ">" $assembly | sed 's/\s.*$//' | sed 's/>//g' )
-    echo $assembly_header
-    meta=${meta_array[$index]}
+  for index in ${!submission_id_array[@]}; do
+    submission_id=${submission_id_array[$index]}
     samplename=${samplename_array[$index]}
-    vadr=${vadr_array[$index]}
+    vadr=${vadr_array[$index]} 
+    batch_note=""
+    
+    # check if the sample has submittable assembly file; if so remove those that excede vadr thresholds
+    assembly=$(printf '%s\n' "${assembly_array[@]}" | grep "${submission_id}")
+    metadata=$(printf '%s\n' "${meta_array[@]}" | grep "${submission_id}")
 
-    # remove samples from array if vadr_num exceedes threshold
-    if [ "${vadr}" -gt "~{vadr_threshold}" ]; then
-      echo "$assembly removed: vadr_num_alerts (${vadr}) exceeds vadr_threshold (~{vadr_threshold})"
-      echo -e "$assembly_header\t$samplename\t$vadr" >> ~{repository}_excluded_samples.tsv
-    else
-      passed_assemblies=( "${passed_assemblies[@]}" "$assembly")
-      passed_meta=( "${passed_meta[@]}" "$meta")
-      echo "$assembly added to batch:  vadr_num_alerts (${vadr}) within vadr_threshold (~{vadr_threshold})"
-      echo -e "$assembly_header\t$samplename\t$vadr" >> ~{repository}_batched_samples.tsv
+    echo -e "Submission_ID: ${submission_id}\n\tAssembly: ${assembly}\n\tMetadata: ${metadata}\n\tVADR: ${vadr}"
+
+    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) ]; then
+      repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )  
+      re='^[0-9]+$'
+      if ! [[ "${vadr}" =~ $re ]] ; then
+        batch_note="No VADR value to evaluate"
+        echo -e "\t$submission_id removed: ${batch_note}"
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+      elif [ "${vadr}" -le "~{vadr_threshold}" ] ; then
+        passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
+        passed_meta=( "${passed_meta[@]}" "${metadata}")
+        echo -e "\t$submission_id added to batch"
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples.tsv        
+      else 
+        batch_note="Number of vadr alerts (${vadr}) exceeds threshold ~{vadr_threshold}"
+        echo -e "\t$submission_id removed: ${batch_note}"
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+      fi
+    else 
+      batch_note="Assembly or metadata file missing" 
+      repository_identifier="NA"
+      echo -e "\t$submission_id removed: ${batch_note}"
+      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
     fi
 
   done
@@ -288,5 +309,6 @@ task compile {
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
       preemptible:  preemptible_tries
+      maxRetries:   3
   }
 }

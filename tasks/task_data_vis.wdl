@@ -59,5 +59,6 @@ task cluster_render {
     cpu:          2
     disks:        "local-disk 100 SSD"
     preemptible:  0
+    maxRetries:   3
   }
 }
