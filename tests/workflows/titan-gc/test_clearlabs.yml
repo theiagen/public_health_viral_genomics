@@ -28,3 +28,4 @@
     - path: titan/clearlabs/titan-results.json
     - path: titan/clearlabs/titan-results.tsv
     - path: titan/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
