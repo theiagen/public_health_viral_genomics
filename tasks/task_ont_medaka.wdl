@@ -87,6 +87,7 @@ task consensus {
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "${primer_name}" | tee PRIMER_NAME
     artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
+    gunzip ~{samplename}.pass.vcf.gz
 
     # clean up fasta header
     echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
@@ -98,7 +99,7 @@ task consensus {
     File    sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
     File    trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File    trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
-    File    medaka_pass_vcf = "~{samplename}.pass.vcf.gz" 
+    File    medaka_pass_vcf = "~{samplename}.pass.vcf" 
     String  artic_pipeline_version = read_string("VERSION")
     String  primer_bed_name = read_string("PRIMER_NAME")
   }
