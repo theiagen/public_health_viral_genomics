@@ -25,6 +25,7 @@ task vadr {
         "~{genome_fasta}" \
         --minlen ~{minlen} \
         --maxlen ~{maxlen} \
+        --noseqnamemax	\
         > "~{out_base}_trimmed.fasta"
 
       # run VADR
