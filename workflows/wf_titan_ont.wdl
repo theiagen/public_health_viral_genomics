@@ -80,6 +80,10 @@ workflow titan_ont {
     input:
       genome_fasta = consensus.consensus_seq
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
@@ -92,13 +96,13 @@ workflow titan_ont {
     String  titan_ont_version           = version_capture.phvg_version
     String  titan_ont_analysis_date     = version_capture.date
     String  seq_platform                = seq_method
-    
+
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
     Int     fastqc_raw                  = fastqc_se_raw.number_reads
     Int     fastqc_clean                = fastqc_se_clean.number_reads
     String  fastqc_version              = fastqc_se_clean.version
-    
+
     String  kraken_version              = kraken2_raw.version
     Float   kraken_human                = kraken2_raw.percent_human
     Float   kraken_sc2                  = kraken2_raw.percent_sc2
@@ -139,10 +143,10 @@ workflow titan_ont {
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
     File    nextclade_tsv               = nextclade_one_sample.nextclade_tsv
-    String  nextclade_clade             = nextclade_one_sample.nextclade_clade
-    String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
+    String  nextclade_aa_subs           = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String  nextclade_aa_dels           = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String  nextclade_clade             = nextclade_output_parser_one_sample.nextclade_clade
 
     File?   vadr_alerts_list            = vadr.alerts_list
     String  vadr_num_alerts             = vadr.num_alerts

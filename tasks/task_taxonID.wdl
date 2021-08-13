@@ -168,18 +168,18 @@ task pangolin3 {
   command <<<
     # set inference inference_engine
     if [[ "~{inference_engine}" == "usher" ]]
-    then 
+    then
       pango_inference="--usher"
     elif [[ "~{inference_engine}" == "pangolearn" ]]
-    then 
+    then
       pango_inference=""
-    else 
+    else
       echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
       exit 1
     fi
     # date and version control
     date | tee DATE
-    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION 
+    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION
     set -e
 
     echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
@@ -233,7 +233,7 @@ task pangolin3 {
 }
 task pangolin_update_log {
   input {
-    String samplename        
+    String samplename
     String current_lineage
     String current_pangolin_docker
     String current_pangolin_version
@@ -248,31 +248,31 @@ task pangolin_update_log {
     # set timezone for date outputs
     ~{default='' 'export TZ=' + timezone}
     DATE=$(date +"%Y-%m-%d")
-    
-    #check if lineage has been modified 
+
+    #check if lineage has been modified
     if [[ "~{current_lineage}" == "~{updated_lineage}" ]]
-    then 
+    then
       UPDATE_STATUS="pango lineage unchanged: ~{updated_lineage}"
-    else 
+    else
       UPDATE_STATUS="pango lineage modified: ~{current_lineage} -> ~{updated_lineage}"
     fi
-    
+
     #if a lineage log not provided, create one with headers
     lineage_log_file="~{samplename}_pango_lineage_log.tsv"
-    
+
     if [ -s "~{lineage_log}" ]
-    then 
+    then
       echo "Lineage log provided"
       mv "~{lineage_log}" ${lineage_log_file}
-     else 
+     else
        echo "Creating new lineage log file as none was provided"
        echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > ${lineage_log_file}
      fi
-     
+
      #populate lineage log file
      echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> "${lineage_log_file}"
-     
-    echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE       
+
+    echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE
 
   >>>
 
@@ -297,62 +297,99 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        File?  root_sequence
-        File?  auspice_reference_tree_json
-        File?  qc_config_json
-        File?  gene_annotations_json
-        File?  pcr_primers_csv
-        String docker = "nextstrain/nextclade:0.14.4"
+        String docker = "nextstrain/nextclade:1.2.3"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
+        NEXTCLADE_VERSION="$(nextclade --version)"
+
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta > reference.fasta
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff > genemap.gff
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json > tree.json
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json > qc.json
+        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv > primers.csv
+
+        echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
+
         set -e
-        nextclade.js --version > VERSION
-        nextclade.js \
-            --input-fasta "~{genome_fasta}" \
-            ~{"--input-root-seq " + root_sequence} \
-            ~{"--input-tree " + auspice_reference_tree_json} \
-            ~{"--input-qc-config " + qc_config_json} \
-            ~{"--input-gene-map " + gene_annotations_json} \
-            ~{"--input-pcr-primers " + pcr_primers_csv} \
+        nextclade --input-fasta "~{genome_fasta}" \
+            --input-root-seq reference.fasta \
+            --input-tree tree.json \
+            --input-qc-config qc.json \
+            --input-gene-map genemap.gff \
+            --input-pcr-primers primers.csv \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
-            --output-tree "~{basename}".nextclade.auspice.json
-        cp "~{basename}".nextclade.tsv input.tsv
-        
-       
-        python3 <<CODE
-        # transpose table
-        with open('input.tsv', 'r', encoding='utf-8') as inf:
-            with open('transposed.tsv', 'w', encoding='utf-8') as outf:
-                for c in zip(*(l.rstrip().split('\t') for l in inf)):
-                    outf.write('\t'.join(c)+'\n')
-        CODE
-        
-        # set output files as NA to ensure task doesn't fail if no relevant outputs available in Nextclade report
-        echo "NA" | tee NEXTCLADE_CLADE NEXTCLADE_AASUBS NEXTCLADE_AADELS
-        
-        # parse transposed report file if relevant outputs are available
-        if [[ $(wc -l ~{basename}.nextclade.tsv) -ge 1 ]]
-        then
-          grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
-          grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions | sed 's/,/|/g' > NEXTCLADE_AASUBS
-          grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions | sed 's/,/|/g' > NEXTCLADE_AADELS
-        fi
+            --output-tree "~{basename}".nextclade.auspice.json \
+            --verbose
     }
     runtime {
         docker: "~{docker}"
-        memory: "3 GB"
+        memory: "4 GB"
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-	maxRetries:   3
+        maxRetries:   3
     }
     output {
-        String nextclade_version  = read_string("VERSION")
+        String nextclade_version  = read_string("NEXTCLADE_VERSION")
         File   nextclade_json     = "~{basename}.nextclade.json"
         File   auspice_json       = "~{basename}.nextclade.auspice.json"
         File   nextclade_tsv      = "~{basename}.nextclade.tsv"
+    }
+}
+
+task nextclade_output_parser_one_sample {
+    meta {
+        description: "Python and bash codeblocks for parsing the output files from Nextclade."
+    }
+    input {
+        File   nextclade_tsv
+        String docker = "python:slim"
+    }
+    command {
+      # Set WDL input variable to input.tsv file
+      cat "~{nextclade_tsv}" > input.tsv
+      # Parse outputs using python3
+      python3 <<CODE
+      import csv
+      import codecs
+      with codecs.open("./input.tsv",'r') as tsv_file:
+        tsv_reader=csv.reader(tsv_file, delimiter="\t")
+        tsv_data=list(tsv_reader)
+        tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
+        with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
+          nc_clade=tsv_dict['clade']
+          if nc_clade=='':
+            nc_clade='NA'
+          else:
+            nc_clade=nc_clade
+          Nextclade_Clade.write(nc_clade)
+        with codecs.open ("NEXTCLADE_AASUBS", 'wt') as Nextclade_AA_Subs:
+          nc_aa_subs=tsv_dict['aaSubstitutions']
+          if nc_aa_subs=='':
+            nc_aa_subs='NA'
+          else:
+            nc_aa_subs=nc_aa_subs
+          Nextclade_AA_Subs.write(nc_aa_subs)
+        with codecs.open ("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
+          nc_aa_dels=tsv_dict['aaDeletions']
+          if nc_aa_dels=='':
+            nc_aa_dels='NA'
+          else:
+            nc_aa_dels=nc_aa_dels
+          Nextclade_AA_Dels.write(nc_aa_dels)
+      CODE
+    }
+    runtime {
+        docker: "~{docker}"
+        memory: "4 GB"
+        cpu:    2
+        disks: "local-disk 50 HDD"
+        dx_instance_type: "mem1_ssd1_v2_x2"
+        maxRetries:   3
+    }
+    output {
         String nextclade_clade    = read_string("NEXTCLADE_CLADE")
         String nextclade_aa_subs  = read_string("NEXTCLADE_AASUBS")
         String nextclade_aa_dels  = read_string("NEXTCLADE_AADELS")
