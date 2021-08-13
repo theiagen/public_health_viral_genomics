@@ -25,12 +25,12 @@ task vadr {
         "~{genome_fasta}" \
         --minlen ~{minlen} \
         --maxlen ~{maxlen} \
-        --noseqnamemax	\
         > "~{out_base}_trimmed.fasta"
 
       # run VADR
       v-annotate.pl \
         ~{vadr_opts} \
+        --noseqnamemax \  
         "~{out_base}_trimmed.fasta" \
         "~{out_base}"
 
