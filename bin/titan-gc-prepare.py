@@ -178,7 +178,7 @@ if __name__ == '__main__':
             # Validate everything
             if len(r1_reads) != len(r2_reads):
                 # PE reads must be a pair
-                errors.append(f'ERROR: "{sample}" must have equal paired-end read sets (R1 has {len(r1_reads)} and R2 has {len(r2_reads)}, please check.')
+                errors.append(f'ERROR: "{sample}" must have equal paired-end read sets (R1 has {len(r1_reads)} and R2 has {len(r2_reads)}), please check.')
             elif pe_count > 2:
                 # PE reads must be a pair
                 errors.append(f'ERROR: "{sample}" cannot have more than two paired-end FASTQ, please check.')
