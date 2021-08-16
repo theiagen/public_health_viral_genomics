@@ -6,7 +6,7 @@ task vadr {
   }
   input {
     File   genome_fasta
-    String vadr_opts="--glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn"
+    String vadr_opts="--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn"
     Int assembly_length_unambiguous
     Int skip_length=10000
 
