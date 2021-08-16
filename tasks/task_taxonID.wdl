@@ -248,7 +248,6 @@ task pangolin_update_log {
     # set timezone for date outputs
     ~{default='' 'export TZ=' + timezone}
     DATE=$(date +"%Y-%m-%d")
-
     #check if lineage has been modified
     if [[ "~{current_lineage}" == "~{updated_lineage}" ]]
     then
