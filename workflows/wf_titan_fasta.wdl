@@ -17,7 +17,7 @@ workflow titan_clearlabs {
     String  samplename
     File    assembly_fasta
     String  seq_method  
-    String  assembly_method
+    String  input_assembly_method
     String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
   }
   call qc_utils.consensus_qc {
@@ -34,6 +34,10 @@ workflow titan_clearlabs {
     input:
       genome_fasta = assembly_fasta
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = assembly_fasta,
@@ -45,8 +49,9 @@ workflow titan_clearlabs {
   output {
     String titan_fasta_version          = version_capture.phvg_version
     String titan_fasta_analysis_date    = version_capture.date
-    String seq_platform                     = seq_method
-
+    String seq_platform                 = seq_method
+    String assembly_method              = input_assembly_method
+    
     Int    number_N                         = consensus_qc.number_N
     Int    assembly_length_unambiguous      = consensus_qc.number_ATCG
     Int    number_Degenerate                = consensus_qc.number_Degenerate
@@ -64,10 +69,11 @@ workflow titan_clearlabs {
     File   nextclade_json                   = nextclade_one_sample.nextclade_json
     File   auspice_json                     = nextclade_one_sample.auspice_json
     File   nextclade_tsv                    = nextclade_one_sample.nextclade_tsv
-    String nextclade_clade                  = nextclade_one_sample.nextclade_clade
-    String nextclade_aa_subs                = nextclade_one_sample.nextclade_aa_subs
-    String nextclade_aa_dels                = nextclade_one_sample.nextclade_aa_dels
     String nextclade_version                = nextclade_one_sample.nextclade_version
+
+    String nextclade_clade                  = nextclade_output_parser_one_sample.nextclade_clade
+    String nextclade_aa_subs                = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String nextclade_aa_dels                = nextclade_output_parser_one_sample.nextclade_aa_dels
 
     File?  vadr_alerts_list                 = vadr.alerts_list
     String vadr_num_alerts                  = vadr.num_alerts
