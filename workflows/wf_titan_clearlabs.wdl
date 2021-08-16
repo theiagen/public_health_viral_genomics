@@ -18,7 +18,7 @@ workflow titan_clearlabs {
     File    clear_lab_fastq
     String  seq_method  = "ONT via Clear Labs WGS"
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
     Int?    normalise  = 20000
   }
   call qc_utils.fastqc_se as fastqc_se_raw {

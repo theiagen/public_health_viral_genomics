@@ -19,7 +19,7 @@ workflow titan_illumina_se {
     String  seq_method="Illumina single-end"
     File    read1_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
   }
 
   call read_qc.read_QC_trim {

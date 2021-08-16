@@ -19,7 +19,7 @@ workflow titan_ont {
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
-    String pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
