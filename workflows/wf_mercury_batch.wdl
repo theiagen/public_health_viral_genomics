@@ -10,9 +10,9 @@ workflow mercury_batch {
         Array[File] gisaid_single_submission_fasta
         Array[File] gisaid_single_submission_meta
         Array[String] samplename
-        Array[Int] vadr_num_alerts
-        Int vadr_threshold=0
         Array[String] submission_id
+        Array[String] vadr_num_alerts
+        Int vadr_threshold=0
     }
 
     call submission.compile as genbank_compile {
