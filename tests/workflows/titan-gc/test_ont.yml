@@ -1,5 +1,5 @@
 - name: titan_ont
-  command: titan-gc-cli -i titan/ont.json -o titan/ont
+  command: titan-gc -i titan/ont.json -o titan/ont
   tags:
     - titan_gc
     - titan_ont
