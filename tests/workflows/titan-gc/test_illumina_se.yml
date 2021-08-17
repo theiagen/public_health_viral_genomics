@@ -1,5 +1,5 @@
 - name: titan_illumina_se
-  command: titan-gc-cli -i titan/illumina_se.json -o titan/illumina_se
+  command: titan-gc -i titan/illumina_se.json -o titan/illumina_se
   tags:
     - titan_gc
     - titan_illumina_se
