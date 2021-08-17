@@ -1,5 +1,5 @@
 - name: titan_illumina_pe
-  command: titan-gc-cli -i titan/illumina_pe.json -o titan/illumina_pe
+  command: titan-gc -i titan/illumina_pe.json -o titan/illumina_pe
   tags:
     - titan_gc
     - titan_illumina_pe
