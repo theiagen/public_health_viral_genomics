@@ -289,6 +289,10 @@ workflow titan_gc {
                                                 select_all(titan_clearlabs.consensus_flagstat), select_all(titan_illumina_pe.consensus_flagstat),
                                                 select_all(titan_illumina_se.consensus_flagstat), select_all(titan_ont.consensus_flagstat)
                                             ])
+        Array[File] consensus_variants    = flatten([
+                                                select_all(titan_clearlabs.variants_from_ref_vcf), select_all(titan_illumina_pe.ivar_vcf),
+                                                select_all(titan_illumina_se.ivar_vcf), select_all(titan_ont.variants_from_ref_vcf)
+                                            ])
         Array[File] pango_lineage_report  = flatten([
                                                 select_all(titan_clearlabs.pango_lineage_report), select_all(titan_illumina_pe.pango_lineage_report),
                                                 select_all(titan_illumina_se.pango_lineage_report), select_all(titan_ont.pango_lineage_report)

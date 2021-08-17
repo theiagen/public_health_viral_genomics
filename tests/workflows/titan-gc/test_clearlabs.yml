@@ -1,0 +1,33 @@
+- name: titan_clearlabs
+  command: titan-gc-cli -i titan/clearlabs.json -o titan/clearlabs
+  tags:
+    - titan_gc
+    - titan_clearlabs
+  files:
+    - path: titan/clearlabs/alignments/clearlabs.flagstat.txt
+      md5sum: b5af0b1c2721c004f8f476d9ca540a35
+    - path: titan/clearlabs/alignments/clearlabs.pass.vcf
+      md5sum: 0847aeb9ba60cbc1b0f0ab9f19b01f96
+    - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
+    - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
+    - path: titan/clearlabs/alignments/clearlabs.stats.txt
+    - path: titan/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
+      md5sum: 1d537e1a17fabda77371ba22bdfb3d80
+    - path: titan/clearlabs/cromwell-stderr.txt
+      md5sum: d41d8cd98f00b204e9800998ecf8427e
+    - path: titan/clearlabs/cromwell-stdout.txt
+    - path: titan/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
+    - path: titan/clearlabs/kraken2_reports/clearlabs_dehosted_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: titan/clearlabs/kraken2_reports/clearlabs_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.auspice.json
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.json
+    - path: titan/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.tsv
+    - path: titan/clearlabs/pangolin_reports/clearlabs.pangolin_report.csv
+    - path: titan/clearlabs/results/clearlabs.results.json
+    - path: titan/clearlabs/titan-metadata.json
+    - path: titan/clearlabs/titan-results.json
+    - path: titan/clearlabs/titan-results.tsv
+    - path: titan/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

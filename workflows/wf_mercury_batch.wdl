@@ -12,6 +12,7 @@ workflow mercury_batch {
         Array[String] samplename
         Array[String] submission_id
         Array[String] vadr_num_alerts
+        Int vadr_threshold=0
     }
 
     call submission.compile as genbank_compile {
@@ -21,6 +22,7 @@ workflow mercury_batch {
             samplename=samplename,
             vadr_num_alerts=vadr_num_alerts,
             repository="GenBank",
+            vadr_threshold=vadr_threshold,
             submission_id=submission_id
     }
 
@@ -31,6 +33,7 @@ workflow mercury_batch {
             samplename=samplename,
             vadr_num_alerts=vadr_num_alerts,
             repository="GISAID",
+            vadr_threshold=vadr_threshold,
             submission_id=submission_id
     }
     call versioning.version_capture{

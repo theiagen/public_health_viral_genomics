@@ -1,0 +1,34 @@
+- name: titan_illumina_pe
+  command: titan-gc-cli -i titan/illumina_pe.json -o titan/illumina_pe
+  tags:
+    - titan_gc
+    - titan_illumina_pe
+  files:
+    - path: titan/illumina_pe/alignments/SRR13687078.flagstat.txt
+      md5sum: 7cd08dcf0ccb7cf5b1f445852673fe94
+    - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
+    - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
+    - path: titan/illumina_pe/alignments/SRR13687078.stats.txt
+    - path: titan/illumina_pe/alignments/SRR13687078.variants.vcf
+      md5sum: 19e716097dcbad1a20f177d8a2590ef5
+    - path: titan/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
+      md5sum: 5ef30a51925f1b2569f998ae12e1e186
+    - path: titan/illumina_pe/cromwell-stderr.txt
+      md5sum: d41d8cd98f00b204e9800998ecf8427e
+    - path: titan/illumina_pe/cromwell-stdout.txt
+    - path: titan/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz
+    - path: titan/illumina_pe/dehosted_reads/SRR13687078_R2_dehosted.fastq.gz
+    - path: titan/illumina_pe/kraken2_reports/SRR13687078_dehosted_kraken2_report.txt
+      md5sum: 3544d9ca35d45093c03cdead46677765
+    - path: titan/illumina_pe/kraken2_reports/SRR13687078_kraken2_report.txt
+      md5sum: 3544d9ca35d45093c03cdead46677765
+    - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.auspice.json
+    - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.json
+    - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
+    - path: titan/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
+    - path: titan/illumina_pe/results/SRR13687078.results.json
+    - path: titan/illumina_pe/titan-metadata.json
+    - path: titan/illumina_pe/titan-results.json
+    - path: titan/illumina_pe/titan-results.tsv
+    - path: titan/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

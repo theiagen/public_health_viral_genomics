@@ -5,9 +5,9 @@ import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
+import "../tasks/task_qc_utils.wdl" as qc_utils
 
 workflow titan_illumina_se {
   meta {
@@ -19,7 +19,7 @@ workflow titan_illumina_se {
     String  seq_method="Illumina single-end"
     File    read1_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
   }
 
   call read_qc.read_QC_trim {
@@ -48,6 +48,10 @@ workflow titan_illumina_se {
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam
   }
+  call qc_utils.consensus_qc {
+    input:
+      assembly_fasta = consensus.consensus_seq
+  }
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
@@ -68,10 +72,14 @@ workflow titan_illumina_se {
     input:
       genome_fasta = consensus.consensus_seq
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus.number_ATCG
+      assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
     input:
@@ -109,13 +117,15 @@ workflow titan_illumina_se {
     String  primer_bed_name             = primer_trim.primer_bed_name
 
     File    assembly_fasta              = consensus.consensus_seq
-    Int     number_N                    = consensus.number_N
-    Int     assembly_length_unambiguous = consensus.number_ATCG
-    Int     number_Degenerate           = consensus.number_Degenerate
-    Int     number_Total                = consensus.number_Total
-    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  ivar_version_consensus      = consensus.ivar_version
     String  samtools_version_consensus  = consensus.samtools_version
+    
+    Int     number_N                    = consensus_qc.number_N
+    Int     assembly_length_unambiguous = consensus_qc.number_ATCG
+    Int     number_Degenerate           = consensus_qc.number_Degenerate
+    Int     number_Total                = consensus_qc.number_Total
+    Float   percent_reference_coverage  = consensus_qc.percent_reference_coverage
+
 
     File    consensus_stats             = stats_n_coverage.stats
     File    consensus_flagstat          = stats_n_coverage.flagstat
@@ -135,12 +145,13 @@ workflow titan_illumina_se {
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
     File    nextclade_tsv               = nextclade_one_sample.nextclade_tsv
-    String  nextclade_clade             = nextclade_one_sample.nextclade_clade
-    String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
+    String  nextclade_aa_subs           = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String  nextclade_aa_dels           = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String  nextclade_clade             = nextclade_output_parser_one_sample.nextclade_clade
 
-    File    ivar_tsv                    = variant_call.sample_variants
+    File    ivar_tsv                    = variant_call.sample_variants_tsv
+    File    ivar_vcf                    = variant_call.sample_variants_vcf
     String  ivar_variant_version        = variant_call.ivar_version
 
     File?    vadr_alerts_list           = vadr.alerts_list

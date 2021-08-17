@@ -3,7 +3,6 @@ version 1.0
 import "../tasks/task_ont_medaka.wdl" as medaka
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_amplicon_metrics.wdl" as amplicon_metrics
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
@@ -20,7 +19,7 @@ workflow titan_ont {
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
-    String pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -52,6 +51,10 @@ workflow titan_ont {
       primer_bed = primer_bed,
       normalise = normalise
   }
+  call qc_utils.consensus_qc {
+    input:
+      assembly_fasta = consensus.consensus_seq
+  }
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
@@ -77,10 +80,14 @@ workflow titan_ont {
     input:
       genome_fasta = consensus.consensus_seq
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus.number_ATCG
+      assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
     input:
@@ -89,13 +96,13 @@ workflow titan_ont {
     String  titan_ont_version           = version_capture.phvg_version
     String  titan_ont_analysis_date     = version_capture.date
     String  seq_platform                = seq_method
-    
+
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
     Int     fastqc_raw                  = fastqc_se_raw.number_reads
     Int     fastqc_clean                = fastqc_se_clean.number_reads
     String  fastqc_version              = fastqc_se_clean.version
-    
+
     String  kraken_version              = kraken2_raw.version
     Float   kraken_human                = kraken2_raw.percent_human
     Float   kraken_sc2                  = kraken2_raw.percent_sc2
@@ -110,12 +117,13 @@ workflow titan_ont {
     String  artic_version               = consensus.artic_pipeline_version
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
-    Int     number_N                    = consensus.number_N
-    Int     assembly_length_unambiguous = consensus.number_ATCG
-    Int     number_Degenerate           = consensus.number_Degenerate
-    Int     number_Total                = consensus.number_Total
-    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  assembly_method             = consensus.artic_pipeline_version
+    
+    Int     number_N                    = consensus_qc.number_N
+    Int     assembly_length_unambiguous = consensus_qc.number_ATCG
+    Int     number_Degenerate           = consensus_qc.number_Degenerate
+    Int     number_Total                = consensus_qc.number_Total
+    Float   percent_reference_coverage  = consensus_qc.percent_reference_coverage
 
     File    consensus_stats             = stats_n_coverage.stats
     File    consensus_flagstat          = stats_n_coverage.flagstat
@@ -135,10 +143,10 @@ workflow titan_ont {
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
     File    nextclade_tsv               = nextclade_one_sample.nextclade_tsv
-    String  nextclade_clade             = nextclade_one_sample.nextclade_clade
-    String  nextclade_aa_subs           = nextclade_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels           = nextclade_one_sample.nextclade_aa_dels
     String  nextclade_version           = nextclade_one_sample.nextclade_version
+    String  nextclade_aa_subs           = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String  nextclade_aa_dels           = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String  nextclade_clade             = nextclade_output_parser_one_sample.nextclade_clade
 
     File?   vadr_alerts_list            = vadr.alerts_list
     String  vadr_num_alerts             = vadr.num_alerts
