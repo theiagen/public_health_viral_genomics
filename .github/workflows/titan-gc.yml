@@ -31,7 +31,7 @@ jobs:
           cp bin/* ${CONDA_PREFIX}/bin
           TITAN_GC_VERSION=$(grep "PHVG_Version=" tasks/task_versioning.wdl | sed -E 's/.*="PHVG v(.*)"/\1/')
           echo "TITAN_GC_VERSION=${TITAN_GC_VERSION}" >> $GITHUB_ENV
-          TITAN_SHARE="${CONDA_PREFIX}/share/titan-gc-cli-${TITAN_GC_VERSION}"
+          TITAN_SHARE="${CONDA_PREFIX}/share/titan-gc-${TITAN_GC_VERSION}"
           mkdir -p ${TITAN_SHARE}
           mv conf/ tasks/ workflows/ ${TITAN_SHARE}
 
