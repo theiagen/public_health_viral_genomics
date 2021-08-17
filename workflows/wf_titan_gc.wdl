@@ -25,7 +25,7 @@ workflow titan_gc {
 
     input {
         Array[parseJSON] samples
-        String  pangolin_docker_image
+        String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
     }
 
     scatter (sample in samples) {
