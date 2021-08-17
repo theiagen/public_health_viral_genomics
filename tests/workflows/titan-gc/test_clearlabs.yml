@@ -1,5 +1,5 @@
 - name: titan_clearlabs
-  command: titan-gc-cli -i titan/clearlabs.json -o titan/clearlabs
+  command: titan-gc -i titan/clearlabs.json -o titan/clearlabs
   tags:
     - titan_gc
     - titan_clearlabs
