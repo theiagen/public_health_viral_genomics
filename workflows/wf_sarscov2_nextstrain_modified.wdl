@@ -118,7 +118,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.refine_augur_tree {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
-            msa_or_vcf  = mafft.aligned_sequences,
+            msa_or_vcf  = augur_mask_sites.masked_sequences,
             metadata    = derived_cols.derived_metadata,
             clock_rate  = clock_rate,
             clock_std_dev = clock_std_dev
@@ -145,7 +145,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.ancestral_tree {
         input:
             tree        = refine_augur_tree.tree_refined,
-            msa_or_vcf  = mafft.aligned_sequences
+            msa_or_vcf  = augur_mask_sites.masked_sequences
     }
     call nextstrain.translate_augur_tree {
         input:
@@ -180,6 +180,7 @@ workflow sarscov2_nextstrain {
       File  combined_assemblies   = filter_sequences_by_length.filtered_fasta
       File  multiple_alignment    = mafft.aligned_sequences
       File  unmasked_snps         = snp_sites.snps_vcf
+      File  masked_alignment      = augur_mask_sites.masked_sequences
 
       File  metadata_merged       = derived_cols.derived_metadata
       File  keep_list             = fasta_to_ids.ids_txt
