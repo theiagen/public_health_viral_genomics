@@ -31,9 +31,8 @@ workflow mercury_pe_prep {
     String host_disease
     String host_sci_name = "Homo sapien"
     String instrument_model
-    String isolation_source
     String library_id
-    String library_layout
+    String library_layout = "paired"
     String library_selection
     String library_source
     String library_strategy
@@ -49,6 +48,7 @@ workflow mercury_pe_prep {
     String? amplicon_primer_scheme
     String? amplicon_size
     String? gisaid_accession
+    String? isolation_source
     String? county
     String? patient_gender
     String? patient_age
