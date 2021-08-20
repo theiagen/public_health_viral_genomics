@@ -1,7 +1,7 @@
 version 1.0
 
 import "../tasks/task_versioning.wdl" as versioning
-import "../tsks/task_pub_repo_prep.wdl" as submission_prep
+import "../tasks/task_pub_repo_prep.wdl" as submission_prep
 
 workflow mercury_pe_prep {
   input {
@@ -13,7 +13,7 @@ workflow mercury_pe_prep {
     #required metadata
     String authors
     String bioproject_accession
-    String biosample_accession = "{populate_with_bioSample_accession}"
+    String biosample_accession
     String collecting_lab
     String collecting_lab_address
     String collection_date
@@ -46,7 +46,7 @@ workflow mercury_pe_prep {
     Int number_N_threshold = 5000
   }
   
-  if (number_N <= number_N_threshold)
+  if (number_N <= number_N_threshold) {
     call submission_prep.prep_one_sample {
       input:
         assembly_fasta = assembly_fasta,
@@ -79,6 +79,7 @@ workflow mercury_pe_prep {
         purpose_of_sampling_details = purpose_of_sampling_details,
         purpose_of_sequencing = purpose_of_sequencing,
         sequencing_protocol_name = sequencing_protocol_name 
+    }
   }
 
   call versioning.version_capture{
@@ -88,12 +89,12 @@ workflow mercury_pe_prep {
     String mercury_pe_prep_version = version_capture.phvg_version
     String mercury_pe_prep_analysis_date = version_capture.date
     
-    File biosample_attributes = prep_one_sample.biosample_attributes
-    File sra_metadata = prep_one_sample.sra_metadata
-    File genbank_assembly = prep_one_sample.genbank_assembly
-    File genbank_metadata = prep_one_sample.genbank_modifier
-    File gisaid_assembly = prep_one_sample.gisaid_assembly
-    File gisaid_metadata = prep_one_sample.gisaid_metadata
+    File? biosample_attributes = prep_one_sample.biosample_attributes
+    File? sra_metadata = prep_one_sample.sra_metadata
+    File? genbank_assembly = prep_one_sample.genbank_assembly
+    File? genbank_modifier = prep_one_sample.genbank_modifier
+    File? gisaid_assembly = prep_one_sample.gisaid_assembly
+    File? gisaid_metadata = prep_one_sample.gisaid_metadata
   }
 }
 
