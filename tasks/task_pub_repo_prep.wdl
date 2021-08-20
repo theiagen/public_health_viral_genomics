@@ -95,6 +95,8 @@ task ncbi_prep_one_sample {
     File sra_metadata = "~{submission_id}_sra_metadata.tsv"
     File genbank_assembly = "~{submission_id}_genbank.fasta"
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
+    File sra_read1 = "~{submission_id}_R1.fastq.gz"
+    File sra_read2 = "~{submission_id}_R1.fastq.gz"
   }
 
   runtime {
