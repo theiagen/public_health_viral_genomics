@@ -17,7 +17,6 @@ workflow mercury_pe_prep {
     #required metadata (user inputs)
     String authors
     String bioproject_accession
-    String biosample_accession
     String collecting_lab
     String collecting_lab_address
     String collection_date
@@ -47,6 +46,7 @@ workflow mercury_pe_prep {
     #optional metadata
     String? amplicon_primer_scheme
     String? amplicon_size
+    String? biosample_accession
     String? gisaid_accession
     String? isolation_source
     String? county

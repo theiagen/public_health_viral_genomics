@@ -10,7 +10,6 @@ task ncbi_prep_one_sample {
     #required metadata
     String assembly_method
     String bioproject_accession
-    String biosample_accession = "{populate_with_bioSample_accession}"
     String collecting_lab
     String collection_date
     String country
@@ -35,6 +34,7 @@ task ncbi_prep_one_sample {
     #optional metadata
     String? amplicon_primer_scheme
     String? amplicon_size
+    String? biosample_accession = "{populate_with_bioSample_accession}"
     String? gisaid_accession
     String? gisaid_organism="hCoV-2019"
     String? isolation_source
