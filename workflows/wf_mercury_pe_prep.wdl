@@ -10,10 +10,12 @@ workflow mercury_pe_prep {
     File read1_dehosted
     File read2_dehosted
     
-    #required metadata
-    String authors
+    #required metadata (titan gc outputs)
     String assembly_method
     String assembly_mean_coverage
+    
+    #required metadata (user inputs)
+    String authors
     String bioproject_accession
     String biosample_accession
     String collecting_lab
@@ -21,31 +23,40 @@ workflow mercury_pe_prep {
     String collection_date
     String continent
     String country
+    String dehosting_method = "NCBI Human Scrubber"
+    String design_description
     String gisaid_submitter
+    String gisaid_organism = "hCoV-19"
+    String filetype = "fastq"
     String host ="Human"
     String host_disease
-    String host_sci_name "Homo sapien"
-    String isolate
+    String host_sci_name = "Homo sapien"
+    String instrument_model
+    String isolation_source
+    String library_id
+    String library_layout
+    String library_selection
+    String library_source
+    String library_strategy
     String organism
     Int number_N
     String seq_platform
     String state
     String submission_id
     String submitting_lab
-    String submitting_lab_address
+    String submitting_lab_address  
     
     #optional metadata
+    String? amplicon_primer_scheme
+    String? amplicon_size
+    String? gisaid_accession
     String? county
-    String? gender
-    String? isolation_source
+    String? patient_gender
     String? patient_age
-    String? patient_age_bin
-    String? patient_age_unit
     String? purpose_of_sampling
-    String? purpose_of_sampling_details
     String? purpose_of_sequencing
-    String? sequencing_protocol_name
-    String? specimen_processing
+    String? submitter_email
+    String? treatment
 
     # Optional user-defined thresholds for generating submission files
     Int number_N_threshold = 5000
@@ -54,36 +65,43 @@ workflow mercury_pe_prep {
   if (number_N <= number_N_threshold) {
     call submission_prep.ncbi_prep_one_sample {
       input: 
+        amplicon_primer_scheme = amplicon_primer_scheme,
+        amplicon_size = amplicon_size,
         assembly_fasta = assembly_fasta,
-        read1_dehosted = read1_dehosted,
-        read2_dehosted = read2_dehosted,
-        authors = authors,
+        assembly_method = assembly_method,
         bioproject_accession = bioproject_accession,
         biosample_accession = biosample_accession,
         collecting_lab = collecting_lab,
-        collecting_lab_address = collecting_lab_address,
         collection_date = collection_date,
-        continent = continent,
         country = country,
-        gisaid_submitter = gisaid_submitter,
+        dehosting_method = dehosting_method,
+        design_description = design_description,
+        filetype = filetype,
+        gisaid_accession = gisaid_accession,
+        gisaid_organism = gisaid_organism,
+        host = host,
         host_disease = host_disease,
         host_sci_name = host_sci_name,
-        isolate = isolate,
+        instrument_model = instrument_model,
+        isolation_source = isolation_source,
+        library_id = library_id,
+        library_layout = library_layout,
+        library_selection = library_selection,
+        library_source = library_source,
+        library_strategy = library_strategy,
         organism = organism,
+        patient_age = patient_age,
+        patient_gender = patient_gender,
+        purpose_of_sampling = purpose_of_sampling,
+        purpose_of_sequencing = purpose_of_sequencing,
+        read1_dehosted = read1_dehosted,
+        read2_dehosted = read2_dehosted,
+        seq_platform = seq_platform,
         state = state,
         submission_id = submission_id,
+        submitter_email = submitter_email,
         submitting_lab = submitting_lab,
-        submitting_lab_address = submitting_lab_address,
-        gender = gender,
-        patient_age = patient_age,
-        county = county,
-        specimen_processing = specimen_processing,
-        patient_age_unit = patient_age_unit,
-        patient_age_bin = patient_age_bin,
-        purpose_of_sampling = purpose_of_sampling,
-        purpose_of_sampling_details = purpose_of_sampling_details,
-        purpose_of_sequencing = purpose_of_sequencing,
-        sequencing_protocol_name = sequencing_protocol_name 
+        treatment = treatment	 
     }
     call submission_prep.gisaid_prep_one_sample {
       input: 
@@ -98,15 +116,17 @@ workflow mercury_pe_prep {
         country = country,
         gisaid_submitter = gisaid_submitter,
         host = host,
+        organism = gisaid_organism,
         seq_platform = seq_platform,
         state = state,
         submission_id = submission_id,
         submitting_lab = submitting_lab,
         submitting_lab_address = submitting_lab_address,
         county = county,
-        gender = gender,
+        patient_gender = patient_gender,
         patient_age = patient_age,
-        purpose_of_sequencing = purpose_of_sequencing
+        purpose_of_sequencing = purpose_of_sequencing,
+        treatment = treatment
     }
   }
 

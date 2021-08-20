@@ -8,38 +8,42 @@ task ncbi_prep_one_sample {
     File read2_dehosted
     
     #required metadata
-    String authors
+    String assembly_method
     String bioproject_accession
     String biosample_accession = "{populate_with_bioSample_accession}"
     String collecting_lab
-    String collecting_lab_address
     String collection_date
-    String continent
     String country
-    String gisaid_submitter
+    String design_description
+    String dehosting_method
+    String filetype
     String host_disease
     String host
     String host_sci_name
-    String isolate
+    String instrument_model
+    String isolation_source
+    String library_id
+    String library_layout
+    String library_selection
+    String library_source
+    String library_strategy
     String organism
-    Int number_N
+    String seq_platform
     String state
     String submission_id
     String submitting_lab
-    String submitting_lab_address
     
     #optional metadata
-    String? county
-    String? gender
-    String? isolation_source
+    String? amplicon_primer_scheme
+    String? amplicon_size
+    String? gisaid_accession
+    String? gisaid_organism="hCoV-2019"
     String? patient_age
-    String? patient_age_bin
-    String? patient_age_unit
+    String? patient_gender
     String? purpose_of_sampling
-    String? purpose_of_sampling_details
     String? purpose_of_sequencing
-    String? sequencing_protocol_name
-    String? specimen_processing
+    String? submitter_email
+    String? treatment
     
     #runtime
     String docker_image = "theiagen/utility:1.1"
@@ -49,6 +53,9 @@ task ncbi_prep_one_sample {
     Int preemptible_tries = 0
   }
   command <<<
+    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
+    gisaid_virus_name="~{gisaid_organism}/${country}/${submission_id}/$year"
+
     #Check date format
     if [[ ~{collection_date} != [0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9] ]]
     then 
@@ -57,17 +64,21 @@ task ncbi_prep_one_sample {
     else
       year=$(echo ~{collection_date} | cut -f 1 -d '-')
     fi
-      
+    
     #Format BioSample Attributes
     echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
     
-    #Format SRA Metadata
-    echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email"
+    echo -e "~{submission_id}\t\t~{bioproject_accession}\t~{organism}\t~{collecting_lab}\t~{collection_date}\t~{country}: ~{state}\t~{host_sci_name}\t~{host_disease}\t${isolate}\t~{isolation_source}\t~{treatment}\t\t\t\t\t\t\t\t~{gisaid_accession}\t${gisaid_virus_name}\t~{patient_age}\t\t\t\t\t\t\t\t~{patient_gender}\t\t\t\t\t\t\t\t\t~{purpose_of_sampling}\t~{purpose_of_sequencing}\t\t\t\t\t~{submitting_lab}\t\t\t" >> ~{submission_id}_biosample_attributes.tsv
     
+    #Format SRA Reads & Metadata
+    mv ~{read1_dehosted} ~{submission_id}_R1.fastq.gz
+    mv ~{read2_dehosted} ~{submission_id}_R2.fastq.gz
+
+    echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email" > ~{submission_id}_sra_metadata.tsv
+    
+    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t~{submission_id}_R2.fastq.gz\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
      
-    #Format GenBank metadata and assembly
-    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
-    
+    #Format GenBank metadata and assembly    
     ##GenBank assembly
     ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
     echo ">~{submission_id}" > ~{submission_id}.genbank.fa
@@ -87,7 +98,7 @@ task ncbi_prep_one_sample {
   }
 
   runtime {
-      docker:       "theiagen/utility:1.1"
+      docker:       "~{docker_image}"
       memory:       "~{mem_size_gb} GB"
       cpu:          CPUs
       disks:        "local-disk ~{disk_size} SSD"
@@ -121,7 +132,7 @@ task gisaid_prep_one_sample {
     
     #optional metadata
     String? county
-    String? gender
+    String? patient_gender
     String? last_vaccinated
     String? passage_details
     String? patient_age
@@ -150,7 +161,8 @@ task gisaid_prep_one_sample {
     
     #Format GISAID metadata and assembly
     ##GISAID assembly
-    echo ">~{organism}/${country}/${submission_id}/$year" > ${submission_id}.gisaid.fa
+    gisaid_vuris_name=">~{organism}/${country}/${submission_id}/$year"
+    echo "${gisaid_virus_name}" > ${submission_id}.gisaid.fa
     grep -v ">" ~{assembly_fasta} >> ${submission_id}_gisaid.fasta
     
     ##GISAID tMetadata
@@ -158,7 +170,7 @@ task gisaid_prep_one_sample {
 
     echo "Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ${submission_id}.gisaidMeta.csv
 
-    echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ${submission_id}.gisaidMeta.csv 
+    echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ${submission_id}.gisaidMeta.csv 
 
   >>>
 
