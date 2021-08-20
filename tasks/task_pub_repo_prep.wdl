@@ -86,7 +86,7 @@ task ncbi_prep_one_sample {
     
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
-    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv"
+    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv" >> ~{submission_id}_genbank_modifier.tsv
     
   >>>
 
@@ -170,15 +170,15 @@ task gisaid_prep_one_sample {
     ##GISAID tMetadata
     echo "submitter,fn,covv_virus_name,covv_type,covv_passage,covv_collection_date,covv_location,covv_add_location,covv_host,covv_add_host_info,covv_sampling_strategy,covv_gender,covv_patient_age,covv_patient_status,covv_specimen,covv_outbreak,covv_last_vaccinated,covv_treatment,covv_seq_technology,covv_assembly_method,covv_coverage,covv_orig_lab,covv_orig_lab_addr,covv_provider_sample_id,covv_subm_lab,covv_subm_lab_addr,covv_subm_sample_id,covv_authors,covv_comment,comment_type" >  ~{submission_id}_gisaid_metadata.tsv
 
-    echo "Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ~{submission_id}_gisaid_metadata.tsv
+    echo "Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ~{submission_id}_gisaid_metadata.csv
 
-    echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ~{submission_id}_gisaid_metadata.tsv
+    echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ~{submission_id}_gisaid_metadata.csv
 
   >>>
 
   output {
     File gisaid_assembly = "~{submission_id}_gisaid.fasta"
-    File gisaid_metadata = "~{submission_id}_gisaid_metadata.tsv"
+    File gisaid_metadata = "~{submission_id}_gisaid_metadata.csv"
   }
 
   runtime {
