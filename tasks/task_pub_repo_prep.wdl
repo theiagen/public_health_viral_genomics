@@ -57,7 +57,14 @@ task ncbi_prep_one_sample {
     else
       year=$(echo ~{collection_date} | cut -f 1 -d '-')
     fi
-       
+      
+    #Format BioSample Attributes
+    echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
+    
+    #Format SRA Metadata
+    echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email"
+    
+     
     #Format GenBank metadata and assembly
     isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
     
@@ -70,15 +77,6 @@ task ncbi_prep_one_sample {
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
     echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv"
     
-    #Format GISAID metadata and assembly
-
-    ##GISAID assembly
-    echo ">~{submission_id}" > ~{submission_id}.genbank.fa
-    grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
-    
-    ##GISAID modifier
-    echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
-    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv"
   >>>
 
   output {

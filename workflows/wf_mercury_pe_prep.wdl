@@ -22,9 +22,9 @@ workflow mercury_pe_prep {
     String continent
     String country
     String gisaid_submitter
-    String host
+    String host ="Human"
     String host_disease
-    String host_sci_name
+    String host_sci_name "Homo sapien"
     String isolate
     String organism
     Int number_N
