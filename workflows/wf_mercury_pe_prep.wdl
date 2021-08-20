@@ -12,6 +12,8 @@ workflow mercury_pe_prep {
     
     #required metadata
     String authors
+    String assembly_method
+    String assembly_mean_coverage
     String bioproject_accession
     String biosample_accession
     String collecting_lab
@@ -20,11 +22,13 @@ workflow mercury_pe_prep {
     String continent
     String country
     String gisaid_submitter
+    String host
     String host_disease
     String host_sci_name
     String isolate
     String organism
     Int number_N
+    String seq_platform
     String state
     String submission_id
     String submitting_lab
@@ -48,8 +52,8 @@ workflow mercury_pe_prep {
   }
   
   if (number_N <= number_N_threshold) {
-    call submission_prep.prep_one_sample {
-      input:
+    call submission_prep.ncbi_prep_one_sample {
+      input: 
         assembly_fasta = assembly_fasta,
         read1_dehosted = read1_dehosted,
         read2_dehosted = read2_dehosted,
@@ -81,6 +85,29 @@ workflow mercury_pe_prep {
         purpose_of_sequencing = purpose_of_sequencing,
         sequencing_protocol_name = sequencing_protocol_name 
     }
+    call submission_prep.gisaid_prep_one_sample {
+      input: 
+        assembly_fasta = assembly_fasta,
+        authors = authors,
+        assembly_method = assembly_method,
+        collecting_lab = collecting_lab,
+        collecting_lab_address = collecting_lab_address,
+        collection_date = collection_date,
+        continent = continent,
+        assembly_mean_coverage = assembly_mean_coverage,
+        country = country,
+        gisaid_submitter = gisaid_submitter,
+        host = host,
+        seq_platform = seq_platform,
+        state = state,
+        submission_id = submission_id,
+        submitting_lab = submitting_lab,
+        submitting_lab_address = submitting_lab_address,
+        county = county,
+        gender = gender,
+        patient_age = patient_age,
+        purpose_of_sequencing = purpose_of_sequencing
+    }
   }
 
   call versioning.version_capture{
@@ -90,12 +117,13 @@ workflow mercury_pe_prep {
     String mercury_pe_prep_version = version_capture.phvg_version
     String mercury_pe_prep_analysis_date = version_capture.date
     
-    File? biosample_attributes = prep_one_sample.biosample_attributes
-    File? sra_metadata = prep_one_sample.sra_metadata
-    File? genbank_assembly = prep_one_sample.genbank_assembly
-    File? genbank_modifier = prep_one_sample.genbank_modifier
-    File? gisaid_assembly = prep_one_sample.gisaid_assembly
-    File? gisaid_metadata = prep_one_sample.gisaid_metadata
+    File? biosample_attributes = ncbi_prep_one_sample.biosample_attributes
+    File? sra_metadata = ncbi_prep_one_sample.sra_metadata
+    File? genbank_assembly = ncbi_prep_one_sample.genbank_assembly
+    File? genbank_modifier = ncbi_prep_one_sample.genbank_modifier
+    
+    File? gisaid_assembly = gisaid_prep_one_sample.gisaid_assembly
+    File? gisaid_metadata = gisaid_prep_one_sample.gisaid_metadata
   }
 }
 
