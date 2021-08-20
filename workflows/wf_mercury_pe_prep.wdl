@@ -24,7 +24,6 @@ workflow mercury_pe_prep {
     String continent
     String country
     String dehosting_method = "NCBI Human Scrubber"
-    String design_description
     String gisaid_submitter
     String gisaid_organism = "hCoV-19"
     String filetype = "fastq"
@@ -75,7 +74,7 @@ workflow mercury_pe_prep {
         collection_date = collection_date,
         country = country,
         dehosting_method = dehosting_method,
-        design_description = design_description,
+        design_description = "Whole genome sequencing of ~{organism}",
         filetype = filetype,
         gisaid_accession = gisaid_accession,
         gisaid_organism = gisaid_organism,
