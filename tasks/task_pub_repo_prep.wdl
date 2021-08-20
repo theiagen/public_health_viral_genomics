@@ -20,6 +20,7 @@ task ncbi_prep_one_sample {
     String host
     String host_sci_name
     String instrument_model
+    String isolation_source
     String library_id
     String library_layout
     String library_selection
@@ -37,7 +38,6 @@ task ncbi_prep_one_sample {
     String? biosample_accession = "{populate_with_bioSample_accession}"
     String? gisaid_accession
     String? gisaid_organism="hCoV-2019"
-    String? isolation_source
     String? patient_age
     String? patient_gender
     String? purpose_of_sampling
