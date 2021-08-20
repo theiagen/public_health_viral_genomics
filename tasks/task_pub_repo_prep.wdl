@@ -53,9 +53,6 @@ task ncbi_prep_one_sample {
     Int preemptible_tries = 0
   }
   command <<<
-    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
-    gisaid_virus_name="~{gisaid_organism}/${country}/${submission_id}/$year"
-
     #Check date format
     if [[ ~{collection_date} != [0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9] ]]
     then 
@@ -64,6 +61,10 @@ task ncbi_prep_one_sample {
     else
       year=$(echo ~{collection_date} | cut -f 1 -d '-')
     fi
+    
+    # capture sample variables
+    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
+    gisaid_virus_name="~{gisaid_organism}/~{country}/~{submission_id}/$year"
     
     #Format BioSample Attributes
     echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
@@ -86,7 +87,7 @@ task ncbi_prep_one_sample {
     
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
-    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv" >> ~{submission_id}_genbank_modifier.tsv
+    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
     
   >>>
 
