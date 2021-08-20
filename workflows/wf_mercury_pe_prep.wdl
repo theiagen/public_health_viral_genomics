@@ -31,16 +31,17 @@ workflow mercury_pe_prep {
     String submitting_lab_address
     
     #optional metadata
-    String? gender
-    String? patient_age
     String? county
-    String? specimen_processing
-    String? patient_age_unit
+    String? gender
+    String? isolation_source
+    String? patient_age
     String? patient_age_bin
+    String? patient_age_unit
     String? purpose_of_sampling
     String? purpose_of_sampling_details
     String? purpose_of_sequencing
     String? sequencing_protocol_name
+    String? specimen_processing
 
     # Optional user-defined thresholds for generating submission files
     Int number_N_threshold = 5000

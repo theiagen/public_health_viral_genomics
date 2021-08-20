@@ -18,6 +18,7 @@ task prep_one_sample {
     String country
     String gisaid_submitter
     String host_disease
+    String host
     String host_sci_name
     String isolate
     String organism
@@ -28,16 +29,17 @@ task prep_one_sample {
     String submitting_lab_address
     
     #optional metadata
-    String? gender
-    String? patient_age
     String? county
-    String? specimen_processing
-    String? patient_age_unit
+    String? gender
+    String? isolation_source
+    String? patient_age
     String? patient_age_bin
+    String? patient_age_unit
     String? purpose_of_sampling
     String? purpose_of_sampling_details
     String? purpose_of_sequencing
     String? sequencing_protocol_name
+    String? specimen_processing
     
     #runtime
     String docker_image = "theiagen/utility:1.1"
@@ -46,17 +48,35 @@ task prep_one_sample {
     Int disk_size = 25
     Int preemptible_tries = 0
   }
-  command {
-    # de-identified consensus/assembly sequence
+  command <<<
+    #Check date format
+    if [[ ~{collection_date} != [0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9] ]]
+    then 
+      echo "Incorrect collection date format; collection date must be in  YYYY-MM-DD format." 1>&2
+      exit 1
+    else
+      year=$(echo ~{collection_date} | cut -f 1 -d '-')
+    fi
+       
+    #Format GenBank metadata and assembly
+    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
     
-  }
+    ##GenBank assembly
+    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
+    echo ">~{submission_id}" > ~{submission_id}.genbank.fa
+    grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
+    
+    ##GenBank modifier
+    echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
+    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t{bioproject_accession} >> ~{submission_id}_genbank_modifier.tsv"
+  >>>
 
   output {
     File biosample_attributes = "~{submission_id}_biosample_attributes.tsv"
     File sra_metadata = "~{submission_id}_sra_metadata.tsv"
-    File genbank_assembly = "~{submission_id}_genbank_assembly.tsv"
+    File genbank_assembly = "~{submission_id}_genbank.fasta"
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
-    File gisaid_assembly = "~{submission_id}_gisaid_assembly.tsv"
+    File gisaid_assembly = "~{submission_id}_gisaid.fasta"
     File gisaid_metadata = "~{submission_id}_gisaid_metadata.tsv"
   }
 
