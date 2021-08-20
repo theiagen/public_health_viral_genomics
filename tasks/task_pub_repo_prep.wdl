@@ -81,7 +81,7 @@ task ncbi_prep_one_sample {
     #Format GenBank metadata and assembly    
     ##GenBank assembly
     ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">~{submission_id}" > ~{submission_id}.genbank.fa
+    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
     grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
     
     ##GenBank modifier
@@ -163,8 +163,8 @@ task gisaid_prep_one_sample {
     
     #Format GISAID metadata and assembly
     ##GISAID assembly
-    gisaid_vuris_name=">~{organism}/${country}/${submission_id}/$year"
-    echo "${gisaid_virus_name}" > ~{submission_id}_gisaid.fasta
+    gisaid_virus_name="~{organism}/~{country}/~{submission_id}/$year"   
+    echo ">"${gisaid_virus_name} > ~{submission_id}_gisaid.fasta
     grep -v ">" ~{assembly_fasta} >> ~{submission_id}_gisaid.fasta
     
     ##GISAID tMetadata
