@@ -96,8 +96,7 @@ task ncbi_prep_one_sample {
     File sra_metadata = "~{submission_id}_sra_metadata.tsv"
     File genbank_assembly = "~{submission_id}_genbank.fasta"
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
-    File sra_read1 = "~{submission_id}_R1.fastq.gz"
-    File sra_read2 = "~{submission_id}_R1.fastq.gz"
+    Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
   }
 
   runtime {
@@ -193,7 +192,7 @@ task gisaid_prep_one_sample {
 }
 
 
-task compile {
+task compile_assembly_n_meta {
 input {
   Array[File] single_submission_fasta
   Array[File] single_submission_meta
@@ -234,6 +233,42 @@ input {
 
   cat ${assembly_array[*]} > ~{repository}_upload.fasta
 
+  >>>
+
+  output {
+    File    upload_meta   = "${repository}_upload_meta.csv"
+    File    upload_fasta  = "${repository}_upload.fasta"
+
+  }
+
+  runtime {
+      docker:       docker_image
+      memory:       "~{mem_size_gb} GB"
+      cpu:          CPUs
+      disks:        "local-disk ~{disk_size} SSD"
+      preemptible:  preemptible_tries
+      maxRetries:   3
+  }
+}
+task compile_biosamp_n_sra {
+input {
+  Array[File] single_submission_biosamp_attirubtes
+  Array[File] single_submission_sra_metadata
+  Array[File] single_submission_read1
+  Array[File] single_submission_read2
+  Array[Int]  vadr_num_alerts
+  Int         vadr_threshold=0
+  String      repository
+  String      docker_image = "theiagen/utility:1.1"
+  Int         mem_size_gb = 1
+  Int         CPUs = 1
+  Int         disk_size = 25
+  Int         preemptible_tries = 0
+}
+
+  command <<<
+
+  
   >>>
 
   output {
