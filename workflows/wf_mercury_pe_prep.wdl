@@ -140,6 +140,8 @@ workflow mercury_pe_prep {
     File? sra_metadata = ncbi_prep_one_sample.sra_metadata
     File? genbank_assembly = ncbi_prep_one_sample.genbank_assembly
     File? genbank_modifier = ncbi_prep_one_sample.genbank_modifier
+    File? sra_read1 = ncbi_prep_one_sample.sra_read1
+    File? sra_read2 = ncbi_prep_one_sample.sra_read2
     Array[File]? sra_reads = ncbi_prep_one_sample.sra_reads
     
     File? gisaid_assembly = gisaid_prep_one_sample.gisaid_assembly
