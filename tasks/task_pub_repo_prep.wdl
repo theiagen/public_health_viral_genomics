@@ -98,7 +98,7 @@ task ncbi_prep_one_sample {
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
     File sra_read1 = "~{submission_id}_R1.fastq.gz"
     File sra_read2 = "~{submission_id}_R2.fastq.gz"
-    Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
+    Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R2.fastq.gz"]
   }
 
   runtime {
