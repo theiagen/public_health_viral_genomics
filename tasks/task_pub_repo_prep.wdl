@@ -312,6 +312,7 @@ input {
   Array[File] single_submission_biosample_attirbutes
   Array[File] single_submission_sra_metadata
   Array[File] single_submission_sra_reads
+  String date
   String? gcp_bucket
 
   String      docker_image = "theiagen/utility:1.1"
@@ -322,8 +323,6 @@ input {
 }
 
   command <<<
-  TODAY=$(date +"%Y-%m-%d")
-
   biosample_attributes_array=(~{sep=' ' single_submission_biosample_attirbutes})
   biosample_attributes_array_len=$(echo "${#biosample_attributes_array[@]}")
   sra_metadata_array=(~{sep=' ' single_submission_sra_metadata})
@@ -336,11 +335,11 @@ input {
   for i in ${biosample_attributes_array[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
-        head -n -1 $i > biosample_attributes_${TODAY}.tsv
+        head -n -1 $i > biosample_attributes_${date}.tsv
         count+=1
       done
       #populate csv with each samples metadata
-      tail -n1 $i >> biosample_attributes_${TODAY}.tsv
+      tail -n1 $i >> biosample_attributes_~{date}.tsv
   done
   
   # Compile SRA metadata
@@ -348,11 +347,11 @@ input {
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
-        head -n -1 $i > sra_metadata_${TODAY}tsv
+        head -n -1 $i > sra_metadata_~{date}tsv
         count+=1
       done
       #populate csv with each samples metadata
-      tail -n1 $i >> sra_metadata_${TODAY}.tsv
+      tail -n1 $i >> sra_metadata_~{date}.tsv
   done
   
   # move sra read data to gcp bucket if one is specified; zip into single file if not
@@ -361,20 +360,20 @@ input {
     echo ~{gcp_bucket} | tee SRA_GCP_BUCKET
     gsutil -m cp ${sra_reads_array} ~{gcp_bucket}
   else 
-    mkdir sra_reads_${TODAY} 
+    mkdir sra_reads_~{date} 
     for index in ${!sra_reads_array[@]}; do
       file=${file_array[$index]}
-      mv ${file} sra_reads_${TODAY}
+      mv ${file} sra_reads_~{date}
     done  
-    zip -r sra_reads${TODAY}.zip sra_reads_${TODAY}
+    zip -r sra_reads~{date}.zip sra_reads_~{date}
   fi
 
   >>>
 
   output {
-    File biosample_attributes   = "biosample_attributes*.tsv"
-    File sra_metadata = "sra_metadata*.tsv"
-    File? sra_zipped = "sra_reads*.zip"
+    File biosample_attributes   = "biosample_attributes_~{date}.tsv"
+    File sra_metadata = "sra_metadata_~{date}.tsv"
+    File? sra_zipped = "sra_reads_~{date}.zip"
     String? sra_gcp_bucket = read_string("SRA_GCP_BUCKET")
 
   }

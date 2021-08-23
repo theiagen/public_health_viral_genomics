@@ -43,7 +43,8 @@ workflow mercury_batch {
       single_submission_biosample_attirbutes = biosample_attributes,
       single_submission_sra_metadata = sra_metadata,
       single_submission_sra_reads = sra_reads,
-      gcp_bucket = gcp_bucket
+      gcp_bucket = gcp_bucket,
+      date = version_capture.date
     }
     call versioning.version_capture{
       input:
