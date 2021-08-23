@@ -30,7 +30,6 @@ task ncbi_prep_one_sample {
     String seq_platform
     String state
     String submission_id
-    String submitting_lab
     
     #optional metadata
     String? amplicon_primer_scheme
@@ -369,23 +368,19 @@ input {
     done  
     zip -r sra_reads_~{date}.zip sra_reads_~{date}
   fi
-
   >>>
-
   output {
-    File biosample_attributes   = "biosample_attributes_~{date}.tsv"
+    File biosample_attributes = "biosample_attributes_~{date}.tsv"
     File sra_metadata = "sra_metadata_~{date}.tsv"
     File? sra_zipped = "sra_reads_~{date}.zip"
     String? sra_gcp_bucket = "~{gcp_bucket}"
-
   }
-
   runtime {
-      docker:       docker_image
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries:   3
+    docker: docker_image
+    memory: "~{mem_size_gb} GB"
+    cpu: CPUs
+    disks: "local-disk ~{disk_size} SSD"
+    preemptible: preemptible_tries
+    maxRetries: 3
   }
 }

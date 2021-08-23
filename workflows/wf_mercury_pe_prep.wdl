@@ -99,7 +99,6 @@ workflow mercury_pe_prep {
         state = state,
         submission_id = submission_id,
         submitter_email = submitter_email,
-        submitting_lab = submitting_lab,
         treatment = treatment	 
     }
     call submission_prep.gisaid_prep_one_sample {
