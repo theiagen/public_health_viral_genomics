@@ -345,7 +345,7 @@ input {
   sra_count=0
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
-      while [ "${sra_count" -lt 1 ]; do
+      while [ "${sra_count}" -lt 1 ]; do
         head -n -1 $i > sra_metadata_~{date}.tsv
         sra_count+=1
       done
