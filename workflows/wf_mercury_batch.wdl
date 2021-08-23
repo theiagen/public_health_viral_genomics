@@ -10,7 +10,7 @@ workflow mercury_batch {
     Array[File] gisaid_assembly
     Array[File] gisaid_metadata
     Array[File] sra_metadata
-    Array[Array[String]] sra_reads
+    Array[Array[File]] sra_reads
     Array[File] biosample_attributes
     Array[String] samplename
     Array[String] submission_id
