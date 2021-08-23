@@ -309,23 +309,22 @@ task compile_assembly_n_meta {
 }
 task compile_biosamp_n_sra {
 input {
-  Array[File] single_submission_biosamp_attirubtes
+  Array[File] single_submission_biosample_attirbutes
   Array[File] single_submission_sra_metadata
   Array[File] single_submission_sra_reads
-  String      repository
+  String? gcp_bucket
+
   String      docker_image = "theiagen/utility:1.1"
   Int         mem_size_gb = 1
   Int         CPUs = 1
   Int         disk_size = 25
   Int         preemptible_tries = 0
-  
-  String? gcp_bucket
 }
 
   command <<<
   TODAY=$(date +"%Y-%m-%d")
-  
-  biosample_attributes_array=(~{sep=' ' single_submission_biosample_attributes})
+
+  biosample_attributes_array=(~{sep=' ' single_submission_biosample_attirbutes})
   biosample_attributes_array_len=$(echo "${#biosample_attributes_array[@]}")
   sra_metadata_array=(~{sep=' ' single_submission_sra_metadata})
   sra_metadata_array_len=$(echo "${#sra_metadata_array[@]}")
