@@ -333,7 +333,7 @@ input {
   biosamp_count=0
   for i in ${biosample_attributes_array[*]}; do
       # grab header from first sample in meta_array
-      while [ "$biosample_count" -lt 1 ]; do
+      while [ "${biosamp_count}" -lt 1 ]; do
         head -n -1 $i > biosample_attributes_${date}.tsv
         biosamp_count+=1
       done
@@ -345,7 +345,7 @@ input {
   sra_count=0
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
-      while [ "sra_$count" -lt 1 ]; do
+      while [ "${sra_count" -lt 1 ]; do
         head -n -1 $i > sra_metadata_~{date}.tsv
         sra_count+=1
       done
