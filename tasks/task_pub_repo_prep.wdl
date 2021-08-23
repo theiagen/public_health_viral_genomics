@@ -98,7 +98,7 @@ task ncbi_prep_one_sample {
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
     File sra_read1 = "~{submission_id}_R1.fastq.gz"
     File sra_read2 = "~{submission_id}_R2.fastq.gz"
-    Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
+    Pair[File,File]] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
   }
 
   runtime {
@@ -331,24 +331,24 @@ input {
   sra_reads_arra_len=$(echo "${#sra_reads_arra[@]}")
   
   # Compile BioSample attributes
-  count=0
+  biosamp_count=0
   for i in ${biosample_attributes_array[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
         head -n -1 $i > biosample_attributes_${date}.tsv
-        count+=1
+        biosamp_count+=1
       done
       #populate csv with each samples metadata
       tail -n1 $i >> biosample_attributes_~{date}.tsv
   done
   
   # Compile SRA metadata
-  count=0
+  sra_count=0
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
         head -n -1 $i > sra_metadata_~{date}.tsv
-        count+=1
+        sra_count+=1
       done
       #populate csv with each samples metadata
       tail -n1 $i >> sra_metadata_~{date}.tsv
