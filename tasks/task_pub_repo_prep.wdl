@@ -365,7 +365,7 @@ input {
     for i in ${sra_reads_array[*]}; do
       mv $i sra_reads_~{date}
     done  
-    zip -r sra_reads~{date}.zip sra_reads_~{date}
+    zip -r sra_reads_~{date}.zip sra_reads_~{date}
   fi
 
   >>>
