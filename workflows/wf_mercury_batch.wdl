@@ -66,6 +66,6 @@ workflow mercury_batch {
       File BioSample_attributes = compile_biosamp_n_sra.biosample_attributes
       File SRA_metadata = compile_biosamp_n_sra.sra_metadata
       File? SRA_zipped_reads = compile_biosamp_n_sra.sra_zipped
-      String? SRA_gcp_bucket = compile_biosamp_n_sra.sra_gcp_bucket
+      String? SRA_gcp_bucket = gcp_bucket
     }
 }

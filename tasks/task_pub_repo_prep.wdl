@@ -372,8 +372,7 @@ input {
   output {
     File biosample_attributes = "biosample_attributes_~{date}.tsv"
     File sra_metadata = "sra_metadata_~{date}.tsv"
-    File? sra_zipped = "sra_reads_~{date}.zip"
-    String? sra_gcp_bucket = "~{gcp_bucket}"
+    File? sra_zipped = "sra_reads_*.zip"
   }
   runtime {
     docker: docker_image
