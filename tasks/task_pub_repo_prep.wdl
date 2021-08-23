@@ -334,7 +334,7 @@ input {
   biosamp_count=0
   for i in ${biosample_attributes_array[*]}; do
       # grab header from first sample in meta_array
-      while [ "$count" -lt 1 ]; do
+      while [ "$biosample_count" -lt 1 ]; do
         head -n -1 $i > biosample_attributes_${date}.tsv
         biosamp_count+=1
       done
@@ -346,7 +346,7 @@ input {
   sra_count=0
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
-      while [ "$count" -lt 1 ]; do
+      while [ "sra_$count" -lt 1 ]; do
         head -n -1 $i > sra_metadata_~{date}.tsv
         sra_count+=1
       done
@@ -376,7 +376,7 @@ input {
     File biosample_attributes   = "biosample_attributes_~{date}.tsv"
     File sra_metadata = "sra_metadata_~{date}.tsv"
     File? sra_zipped = "sra_reads_~{date}.zip"
-    String? sra_gcp_bucket = gcp_bucket
+    String? sra_gcp_bucket = "~{gcp_bucket}"
 
   }
 
