@@ -356,7 +356,8 @@ input {
   done
   
   # move sra read data to gcp bucket if one is specified; zip into single file if not
-  if [[ ! -z ~{gcp_bucket} ]]; then 
+  if [[ ! -z "~{gcp_bucket}" ]]
+  then 
     echo ~{gcp_bucket} | tee SRA_GCP_BUCKET
     gsutil -m cp ${sra_reads_array} ~{gcp_bucket}
   else 
