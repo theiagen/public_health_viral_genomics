@@ -98,7 +98,7 @@ task ncbi_prep_one_sample {
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
     File sra_read1 = "~{submission_id}_R1.fastq.gz"
     File sra_read2 = "~{submission_id}_R2.fastq.gz"
-    Pair[File,File]] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
+    Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R1.fastq.gz"]
   }
 
   runtime {
@@ -311,7 +311,7 @@ task compile_biosamp_n_sra {
 input {
   Array[File] single_submission_biosample_attirbutes
   Array[File] single_submission_sra_metadata
-  Array[Array[File]] single_submission_sra_reads
+  Array[Pair[File,File]] single_submission_sra_reads
   String date
   String? gcp_bucket
 
