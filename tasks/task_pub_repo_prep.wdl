@@ -347,7 +347,7 @@ input {
   for i in ${sra_metadata_array[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
-        head -n -1 $i > sra_metadata_~{date}tsv
+        head -n -1 $i > sra_metadata_~{date}.tsv
         count+=1
       done
       #populate csv with each samples metadata
@@ -357,13 +357,13 @@ input {
   # move sra read data to gcp bucket if one is specified; zip into single file if not
   if [[ ! -z "~{gcp_bucket}" ]]
   then 
-    echo ~{gcp_bucket} | tee SRA_GCP_BUCKET
+    echo "Moving read data to provided GCP Bucket ~{gcp_bucket}"
     gsutil -m cp ${sra_reads_array} ~{gcp_bucket}
   else 
+    echo "Preparing SRA read data into single zipped-file"
     mkdir sra_reads_~{date} 
-    for index in ${!sra_reads_array[@]}; do
-      file=${file_array[$index]}
-      mv ${file} sra_reads_~{date}
+    for i in ${sra_reads_array[*]}; do
+      mv $i sra_reads_~{date}
     done  
     zip -r sra_reads~{date}.zip sra_reads_~{date}
   fi
@@ -374,7 +374,7 @@ input {
     File biosample_attributes   = "biosample_attributes_~{date}.tsv"
     File sra_metadata = "sra_metadata_~{date}.tsv"
     File? sra_zipped = "sra_reads_~{date}.zip"
-    String? sra_gcp_bucket = read_string("SRA_GCP_BUCKET")
+    String? sra_gcp_bucket = gcp_bucket
 
   }
 
