@@ -4,37 +4,52 @@ import "../tasks/task_se_pub_repo_submission.wdl" as submission
 import "../tasks/task_versioning.wdl" as versioning
 
 workflow mercury_batch {
-    input {
-        Array[File] genbank_single_submission_fasta
-        Array[File] genbank_single_submission_meta
-        Array[File] gisaid_single_submission_fasta
-        Array[File] gisaid_single_submission_meta
-        Array[String] samplename
-        Array[String] submission_id
-        Array[String] vadr_num_alerts
-        Int vadr_threshold=0
+  input {
+    Array[File] genbank_assembly
+    Array[File] genbank_modifier
+    Array[File] gisaid_assembly
+    Array[File] gisaid_metadata
+    Array[File] sra_metadata
+    Array[File] sra_reads
+    Array[File] biosample_attributes
+    Array[String] samplename
+    Array[String] submission_id
+    Array[String] vadr_num_alerts
+    Int vadr_threshold=0
+    
+    String? gcp_bucket
+  }
+  call submission.compile_assembly_n_meta as genbank_compile {
+    input:
+      single_submission_fasta = genbank_assembly,
+      single_submission_meta = genbank_modifier,
+      samplename = samplename,
+      vadr_num_alerts = vadr_num_alerts,
+      repository = "GenBank",
+      vadr_threshold = vadr_threshold,
+      submission_id = submission_id
+  }
+  call submission.compile_assembly_n_meta as gisaid_compile {
+    input:
+      single_submission_fasta = gisaid_assembly,
+      single_submission_meta = gisaid_metadata,
+      samplename = samplename,
+      vadr_num_alerts = vadr_num_alerts,
+      repository = "GISAID",
+      vadr_threshold = vadr_threshold,
+      submission_id = submission_id,
+      gcp_bucket = gcp_bucket
     }
-
-    call submission.compile as genbank_compile {
-        input:
-            single_submission_fasta=genbank_single_submission_fasta,
-            single_submission_meta=genbank_single_submission_meta,
-            samplename=samplename,
-            vadr_num_alerts=vadr_num_alerts,
-            repository="GenBank",
-            vadr_threshold=vadr_threshold,
-            submission_id=submission_id
-    }
-
-    call submission.compile as gisaid_compile {
-        input:
-            single_submission_fasta=gisaid_single_submission_fasta,
-            single_submission_meta=gisaid_single_submission_meta,
-            samplename=samplename,
-            vadr_num_alerts=vadr_num_alerts,
-            repository="GISAID",
-            vadr_threshold=vadr_threshold,
-            submission_id=submission_id
+  call submission.compile_biosamp_n_sra {
+    input:
+      single_submission_biosamp_attirubtes = biosample_attributes,
+      single_submission_meta = sra_metadata,
+      single_submission_read1
+      samplename=samplename,
+      vadr_num_alerts=vadr_num_alerts,
+      repository="GISAID",
+      vadr_threshold=vadr_threshold,
+      submission_id=submission_id
     }
     call versioning.version_capture{
       input:
