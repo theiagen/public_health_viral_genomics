@@ -358,7 +358,9 @@ input {
   if [[ ! -z "~{gcp_bucket}" ]]
   then 
     echo "Moving read data to provided GCP Bucket ~{gcp_bucket}"
-    gsutil -m cp ${sra_reads_array} ~{gcp_bucket}
+    for i in ${sra_reads_array[*]}; do
+      gsutil -m cp $i ~{gcp_bucket}
+    done  
   else 
     echo "Preparing SRA read data into single zipped-file"
     mkdir sra_reads_~{date} 
