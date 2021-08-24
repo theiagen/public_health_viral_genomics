@@ -196,18 +196,19 @@ task gisaid_prep_one_sample {
 task compile_assembly_n_meta {
 
   input {
-    Array[File]   single_submission_fasta
-    Array[File]   single_submission_meta
+    Array[File] single_submission_fasta
+    Array[File] single_submission_meta
     Array[String] samplename
     Array[String] submission_id
     Array[String] vadr_num_alerts
-    Int           vadr_threshold=0
-    String        repository
-    String        docker_image = "theiagen/utility:1.1"
-    Int           mem_size_gb = 1
-    Int           CPUs = 1
-    Int           disk_size = 25
-    Int           preemptible_tries = 0
+    Int vadr_threshold=0
+    String repository
+    String date
+    String docker_image = "theiagen/utility:1.1"
+    Int mem_size_gb = 1
+    Int CPUs = 1
+    Int disk_size = 25
+    Int preemptible_tries = 0
   }
 
   command <<<
@@ -226,8 +227,8 @@ task compile_assembly_n_meta {
   passed_meta=""
 
   #Create files to capture batched and excluded samples
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples.tsv
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples_~{date}.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples_~{date}.tsv
 
   #Ensure assembly, meta, and vadr arrays are of equal length
   if [ "$submission_id_array" -ne "$vadr_array_len" ]; then
@@ -254,22 +255,22 @@ task compile_assembly_n_meta {
       if ! [[ "${vadr}" =~ $re ]] ; then
         batch_note="No VADR value to evaluate"
         echo -e "\t$submission_id removed: ${batch_note}"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
       elif [ "${vadr}" -le "~{vadr_threshold}" ] ; then
         passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
         passed_meta=( "${passed_meta[@]}" "${metadata}")
         echo -e "\t$submission_id added to batch"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples.tsv        
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples_~{date}.tsv        
       else 
         batch_note="Number of vadr alerts (${vadr}) exceeds threshold ~{vadr_threshold}"
         echo -e "\t$submission_id removed: ${batch_note}"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
       fi
     else 
       batch_note="Assembly or metadata file missing" 
       repository_identifier="NA"
       echo -e "\t$submission_id removed: ${batch_note}"
-      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples.tsv
+      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
     fi
 
   done
@@ -278,22 +279,22 @@ task compile_assembly_n_meta {
   for i in ${passed_meta[*]}; do
       # grab header from first sample in meta_array
       while [ "$count" -lt 1 ]; do
-        head -n -1 $i > ~{repository}_upload_meta.csv
+        head -n -1 $i > ~{repository}_upload_meta_~{date}.csv
         count+=1
       done
       #populate csv with each samples metadata
-      tail -n1 $i >> ~{repository}_upload_meta.csv
+      tail -n1 $i >> ~{repository}_upload_meta_~{date}.csv
   done
 
-  cat ${passed_assemblies[*]} > ~{repository}_upload.fasta
+  cat ${passed_assemblies[*]} > ~{repository}_upload_~{date}.fasta
 
   >>>
 
   output {
-    File?   upload_meta   = "${repository}_upload_meta.csv"
-    File?   upload_fasta  = "${repository}_upload.fasta"
-    File    batched_samples = "${repository}_batched_samples.tsv"
-    File    excluded_samples = "${repository}_excluded_samples.tsv"
+    File?   upload_meta   = "${repository}_upload_meta_~{date}.csv"
+    File?   upload_fasta  = "${repository}_upload_~{date}.fasta"
+    File    batched_samples = "${repository}_batched_samples_~{date}.tsv"
+    File    excluded_samples = "${repository}_excluded_samples_~{date}.tsv"
 
   }
 
