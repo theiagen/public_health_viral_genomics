@@ -334,7 +334,7 @@ input {
   for i in ${biosample_attributes_array[*]}; do
       # grab header from first sample in meta_array
       while [ "${biosamp_count}" -lt 1 ]; do
-        head -n -1 $i > biosample_attributes_${date}.tsv
+        head -n -1 $i > biosample_attributes_~{date}.tsv
         biosamp_count+=1
       done
       #populate csv with each samples metadata
