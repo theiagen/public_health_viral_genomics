@@ -26,7 +26,8 @@ workflow mercury_batch {
       vadr_num_alerts = vadr_num_alerts,
       repository = "GenBank",
       vadr_threshold = vadr_threshold,
-      submission_id = submission_id
+      submission_id = submission_id,
+      date = version_capture.date
   }
   call submission_prep.compile_assembly_n_meta as gisaid_compile {
     input:
@@ -36,7 +37,8 @@ workflow mercury_batch {
       vadr_num_alerts = vadr_num_alerts,
       repository = "GISAID",
       vadr_threshold = vadr_threshold,
-      submission_id = submission_id
+      submission_id = submission_id,
+      date = version_capture.date
     }
   call submission_prep.compile_biosamp_n_sra {
     input:
