@@ -28,7 +28,7 @@ workflow mercury_pe_prep {
     String filetype = "fastq"
     String host ="Human"
     String host_disease
-    String host_sci_name = "Homo sapien"
+    String host_sci_name = "Homo sapiens"
     String instrument_model
     String isolation_source
     String library_id
