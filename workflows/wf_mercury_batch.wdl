@@ -25,6 +25,7 @@ workflow mercury_batch {
       samplename = samplename,
       vadr_num_alerts = vadr_num_alerts,
       repository = "GenBank",
+      file_ext = "tsv",
       vadr_threshold = vadr_threshold,
       submission_id = submission_id,
       date = version_capture.date
@@ -36,6 +37,7 @@ workflow mercury_batch {
       samplename = samplename,
       vadr_num_alerts = vadr_num_alerts,
       repository = "GISAID",
+      file_ext = "csv",
       vadr_threshold = vadr_threshold,
       submission_id = submission_id,
       date = version_capture.date
