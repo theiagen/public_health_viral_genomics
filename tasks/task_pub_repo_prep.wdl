@@ -109,6 +109,111 @@ task ncbi_prep_one_sample {
       maxRetries:   3
   }
 }
+task ncbi_prep_one_sample_se {
+  input {
+    #required files
+    File assembly_fasta
+    File reads_dehosted
+    
+    #required metadata
+    String assembly_method
+    String bioproject_accession
+    String collecting_lab
+    String collection_date
+    String country
+    String design_description
+    String dehosting_method
+    String filetype
+    String host_disease
+    String host
+    String host_sci_name
+    String instrument_model
+    String isolation_source
+    String library_id
+    String library_layout
+    String library_selection
+    String library_source
+    String library_strategy
+    String organism
+    String seq_platform
+    String state
+    String submission_id
+    
+    #optional metadata
+    String? amplicon_primer_scheme
+    String? amplicon_size
+    String? biosample_accession = "{populate_with_bioSample_accession}"
+    String? gisaid_accession
+    String? gisaid_organism="hCoV-2019"
+    String? patient_age
+    String? patient_gender
+    String? purpose_of_sampling
+    String? purpose_of_sequencing
+    String? submitter_email
+    String? treatment
+    
+    #runtime
+    String docker_image = "theiagen/utility:1.1"
+    Int  mem_size_gb = 1
+    Int CPUs = 1
+    Int disk_size = 25
+    Int preemptible_tries = 0
+  }
+  command <<<
+    #Check date format
+    if [[ ~{collection_date} != [0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9] ]]
+    then 
+      echo "Incorrect collection date format; collection date must be in  YYYY-MM-DD format." 1>&2
+      exit 1
+    else
+      year=$(echo ~{collection_date} | cut -f 1 -d '-')
+    fi
+    
+    # capture sample variables
+    isolate="~{organism}/~{host}/~{country}/~{submission_id}/${year}"
+    gisaid_virus_name="~{gisaid_organism}/~{country}/~{submission_id}/$year"
+    
+    #Format BioSample Attributes
+    echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
+    
+    echo -e "~{submission_id}\t\t~{bioproject_accession}\t~{organism}\t~{collecting_lab}\t~{collection_date}\t~{country}: ~{state}\t~{host_sci_name}\t~{host_disease}\t${isolate}\t~{isolation_source}\t~{treatment}\t\t\t\t\t\t\t\t~{gisaid_accession}\t${gisaid_virus_name}\t~{patient_age}\t\t\t\t\t\t\t\t~{patient_gender}\t\t\t\t\t\t\t\t\t~{purpose_of_sampling}\t~{purpose_of_sequencing}\t\t\t\t\t\t\t\t" >> ~{submission_id}_biosample_attributes.tsv
+    
+    #Format SRA Reads & Metadata
+    cp ~{reads_dehosted} ~{submission_id}_R1.fastq.gz
+
+    echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email" > ~{submission_id}_sra_metadata.tsv
+    
+    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t~\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
+     
+    #Format GenBank metadata and assembly    
+    ##GenBank assembly
+    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
+    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
+    grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
+    
+    ##GenBank modifier
+    echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
+    echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t~{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
+    
+  >>>
+
+  output {
+    File biosample_attributes = "~{submission_id}_biosample_attributes.tsv"
+    File sra_metadata = "~{submission_id}_sra_metadata.tsv"
+    File genbank_assembly = "~{submission_id}_genbank.fasta"
+    File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
+    File sra_reads = "~{submission_id}_R1.fastq.gz"
+  }
+
+  runtime {
+      docker:       "~{docker_image}"
+      memory:       "~{mem_size_gb} GB"
+      cpu:          CPUs
+      disks:        "local-disk ~{disk_size} SSD"
+      preemptible:  preemptible_tries
+      maxRetries:   3
+  }
+}
 task gisaid_prep_one_sample {
   input {
     #required files
