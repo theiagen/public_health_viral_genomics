@@ -12,7 +12,7 @@ workflow mercury_pe_prep {
     
     #required metadata (titan gc outputs)
     String assembly_method
-    String assembly_mean_coverage
+    Int assembly_mean_coverage
     
     #required metadata (user inputs)
     String authors
