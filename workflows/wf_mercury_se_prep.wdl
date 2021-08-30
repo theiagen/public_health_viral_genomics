@@ -3,7 +3,7 @@ version 1.0
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_pub_repo_prep.wdl" as submission_prep
 
-workflow mercury_pe_prep {
+workflow mercury_se_prep {
   input {
     #required files
     File assembly_fasta
