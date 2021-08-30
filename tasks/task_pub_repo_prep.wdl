@@ -226,7 +226,7 @@ task gisaid_prep_one_sample {
     String collecting_lab_address
     String collection_date
     String continent
-    Int assembly_mean_coverage
+    Float assembly_mean_coverage
     String country
     String gisaid_submitter
     String host
