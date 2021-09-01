@@ -326,6 +326,7 @@ task compile_assembly_n_meta {
   IFS=',' read -r -a vadr_array <<< ${vadr_string}
   vadr_array_len=$(echo "${#vadr_array[@]}")
   samplename_array=(~{sep=' ' samplename})
+  samplename_array_len=$(echo "${#samplename_array[@]}")
   submission_id_array=(~{sep=' ' submission_id})
   submission_id_array_len=$(echo "${#submission_id_array[@]}")
   vadr_array_len=$(echo "${#vadr_array[@]}")
