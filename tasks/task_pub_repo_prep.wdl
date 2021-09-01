@@ -337,8 +337,9 @@ task compile_assembly_n_meta {
   echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples_~{date}.~{file_ext}
 
   #Ensure assembly, meta, and vadr arrays are of equal length
-  if [ "$submission_id_array" -ne "$vadr_array_len" ]; then
-    echo "Submission_id array (length: $assembly_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
+  echo "Samples: $samplename_array_len, Assemblies: $assembly_array_len, Metadata: $meta_array_len, Vadr: $vadr_array_len, Submission_IDs: $submission_id_array_len"
+  if [ "$samplename_array" -ne "$vadr_array_len" ]; then
+    echo "Samplename array (length: $samplename_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
     exit 1
   fi
 
