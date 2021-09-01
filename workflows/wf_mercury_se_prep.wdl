@@ -3,7 +3,7 @@ version 1.0
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_pub_repo_prep.wdl" as submission_prep
 
-workflow mercury_pe_prep {
+workflow mercury_se_prep {
   input {
     #required files
     File assembly_fasta
@@ -11,7 +11,7 @@ workflow mercury_pe_prep {
     
     #required metadata (titan gc outputs)
     String assembly_method
-    String assembly_mean_coverage
+    Float assembly_mean_coverage
     
     #required metadata (user inputs)
     String authors
