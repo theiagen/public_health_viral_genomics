@@ -358,13 +358,7 @@ task compile_assembly_n_meta {
 
     echo -e "Submission_ID: ${submission_id}\n\tAssembly: ${assembly}\n\tMetadata: ${metadata}\n\tVADR: ${vadr}"
     
-    if [ \( -z "${vadr}" \); then
-      batch_note="VADR number of alerts value missing" 
-      repository_identifier="NA"
-      echo -e "\t$submission_id removed: ${batch_note}"
-      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
-
-    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) ]; then
+    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) -a \( ! -z "{$vadr}" \) ]; then
       repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )  
       re='^[0-9]+$'
       if ! [[ "${vadr}" =~ $re ]] ; then
@@ -382,7 +376,7 @@ task compile_assembly_n_meta {
         echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
       fi
     else 
-      batch_note="Assembly or metadata file missing" 
+      batch_note="Assembly, metadata or vadr alerts values missing" 
       repository_identifier="NA"
       echo -e "\t$submission_id removed: ${batch_note}"
       echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
