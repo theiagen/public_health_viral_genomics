@@ -341,6 +341,7 @@ task compile_assembly_n_meta {
   echo "Samples: $samplename_array_len, Assemblies: $assembly_array_len, Metadata: $meta_array_len, Vadr: $vadr_array_len, Submission_IDs: $submission_id_array_len"
   if [ "$samplename_array_len" -ne "$vadr_array_len" ]; then
     echo "Samplename array (length: $samplename_array_len) and vadr array (length: $vadr_array_len) are of unequal length." >&2
+    exit 1
   else 
     echo "Samplename array (length: $samplename_array_len) and vadr array (length: $vadr_array_len) are of equal length."
   fi
@@ -358,7 +359,7 @@ task compile_assembly_n_meta {
 
     echo -e "Submission_ID: ${submission_id}\n\tAssembly: ${assembly}\n\tMetadata: ${metadata}\n\tVADR: ${vadr}"
     
-    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) -a \( ! -z "{$vadr}" \) ]; then
+    if [ \( ! -z "${assembly}" \) -a \( ! -z "{$metadata}" \) ]; then
       repository_identifier=$(grep -e ">" ${assembly} | sed 's/\s.*$//' | sed 's/>//g' )  
       re='^[0-9]+$'
       if ! [[ "${vadr}" =~ $re ]] ; then
@@ -376,7 +377,7 @@ task compile_assembly_n_meta {
         echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
       fi
     else 
-      batch_note="Assembly, metadata or vadr alerts values missing" 
+      batch_note="Assembly or metadata file missing" 
       repository_identifier="NA"
       echo -e "\t$submission_id removed: ${batch_note}"
       echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
