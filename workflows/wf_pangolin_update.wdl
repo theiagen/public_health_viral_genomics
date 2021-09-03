@@ -10,6 +10,7 @@ workflow pangolin_update {
         String current_lineage
         String current_pangolin_docker
         String current_pangolin_assignment_version
+        String current_pangolin_usher_version
         String current_pangolin_versions
         String  updated_pangolin_docker
         String? timezone
@@ -28,10 +29,12 @@ workflow pangolin_update {
         current_lineage = current_lineage,
         current_pangolin_docker = current_pangolin_docker,
         current_pangolin_assignment_version = current_pangolin_assignment_version,
+        current_pangolin_usher_version = current_pangolin_usher_version,
         current_pangolin_versions = current_pangolin_versions,
         updated_lineage = pangolin3.pangolin_lineage,
         updated_pangolin_docker = pangolin3.pangolin_docker,
         updated_pangolin_assignment_version = pangolin3.pangolin_assignment_version,
+        updated_pangolin_usher_version = pangolin3.pangolin_usher_version,
         updated_pangolin_versions = pangolin3.pangolin_versions,
         timezone = timezone,
         lineage_log = lineage_log

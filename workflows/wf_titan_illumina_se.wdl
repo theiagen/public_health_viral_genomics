@@ -141,6 +141,7 @@ workflow titan_illumina_se {
     File    pango_lineage_report        = pangolin3.pango_lineage_report
     String  pangolin_docker             = pangolin3.pangolin_docker
     String  pangolin_versions      = pangolin3.pangolin_versions
+    String pangolin_usher_version = pangolin3.pangolin_usher_version
 
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json
