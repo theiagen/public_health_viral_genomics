@@ -50,7 +50,6 @@ workflow titan_gc {
                     pangolin_conflicts = titan_clearlabs.pangolin_conflicts,
                     pangolin_notes = titan_clearlabs.pangolin_notes,
                     pangolin_assignment_version = titan_clearlabs.pangolin_assignment_version,
-                    pangolin_usher_version = titan_clearlabs.pangolin_usher_version,
                     pangolin_docker = titan_clearlabs.pangolin_docker,
                     pangolin_versions = titan_clearlabs.pangolin_versions,
                     nextclade_clade = titan_clearlabs.nextclade_clade,
