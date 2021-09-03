@@ -26,8 +26,7 @@ workflow titan_clearlabs {
   call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
-      fasta = assembly_fasta,
-      docker = pangolin_docker_image
+      fasta = assembly_fasta
   }
   call taxon_ID.nextclade_one_sample {
     input:

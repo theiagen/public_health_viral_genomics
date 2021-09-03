@@ -62,8 +62,7 @@ workflow titan_clearlabs {
   call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
-      fasta = consensus.consensus_seq,
-      docker = pangolin_docker_image
+      fasta = consensus.consensus_seq
   }
   call taxon_ID.kraken2 as kraken2_raw {
     input:
