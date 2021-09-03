@@ -72,7 +72,7 @@ task titan_summary {
             ('pangolin_conflicts', '~{pangolin_conflicts}'),
             ('pangolin_notes', '~{pangolin_notes}'),
             ('pangolin_assignment_version', '~{pangolin_assignment_version}'),
-            ('pangolin_versions'), '~{pangolin_versions}'
+            ('pangolin_versions', '~{pangolin_versions}'),
             ('pangolin_docker', '~{pangolin_docker}'),
             ('nextclade_clade', '~{nextclade_clade}'),
             ('nextclade_aa_subs', '~{nextclade_aa_subs}'),
