@@ -18,7 +18,6 @@ workflow titan_clearlabs {
     File    assembly_fasta
     String  seq_method  
     String  input_assembly_method
-    String  pangolin_docker_image 
   }
   call qc_utils.consensus_qc {
     input:

@@ -25,7 +25,6 @@ workflow titan_gc {
 
     input {
         Array[parseJSON] samples
-        String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
     }
 
     scatter (sample in samples) {
@@ -34,8 +33,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     clear_lab_fastq = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
            call summary.titan_summary as clearlabs_summary {
@@ -86,8 +84,7 @@ workflow titan_gc {
                     samplename = sample.sample,
                     read1_raw = sample.r1,
                     read2_raw = sample.r2,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
            call summary.titan_summary as illumina_pe_summary {
@@ -151,8 +148,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     read1_raw  = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
             call summary.titan_summary as illumina_se_summary {
@@ -210,8 +206,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     demultiplexed_reads = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
             call summary.titan_summary as ont_summary {
