@@ -1,129 +1,150 @@
 version 1.0
 
-import "../tasks/task_pe_pub_repo_submission.wdl" as submission
 import "../tasks/task_versioning.wdl" as versioning
+import "../tasks/task_pub_repo_prep.wdl" as submission_prep
 
 workflow mercury_pe_prep {
   input {
-    String   samplename
-    String   submission_id
-    String   collection_date
-    File     sequence
-    File     read1
-    File     read2
+    #required files
+    File assembly_fasta
+    File read1_dehosted
+    File read2_dehosted
+    
+    #required metadata (titan gc outputs)
+    String assembly_method
+    Float assembly_mean_coverage
+    
+    #required metadata (user inputs)
+    String authors
+    String bioproject_accession
+    String collecting_lab
+    String collecting_lab_address
+    String collection_date
+    String continent
+    String country
+    String dehosting_method = "NCBI Human Scrubber"
+    String gisaid_submitter
+    String gisaid_organism = "hCoV-19"
+    String filetype = "fastq"
+    String host ="Human"
+    String host_disease
+    String host_sci_name = "Homo sapiens"
+    String instrument_model
+    String isolation_source
+    String library_id
+    String library_layout = "paired"
+    String library_selection
+    String library_source
+    String library_strategy
+    String organism
+    Int number_N
+    String seq_platform
+    String state
+    String submission_id
+    String submitting_lab
+    String submitting_lab_address  
+    
+    #optional metadata
+    String? amplicon_primer_scheme
+    String? amplicon_size
+    String? biosample_accession
+    String? gisaid_accession
+    String? county
+    String? patient_gender
+    String? patient_age
+    String? purpose_of_sampling
+    String? purpose_of_sequencing
+    String? submitter_email
+    String? treatment
 
-    String   organism = "Severe acute respiratory syndrome coronavirus 2"
-    String   iso_org = "SARS-CoV-2"
-    String   iso_host = "Human"
-    String   assembly_or_consensus = "consensus"
-
-    String   gisaid_submitter
-    String   iso_state
-    String   iso_country
-    String   iso_continent
-    String   seq_platform
-    String   assembly_method
-    String   collecting_lab
-    String   collecting_lab_address
-    String   bioproject_accession
-    String   submitting_lab
-    String   subLab_address
-    String   Authors
-
-    String   passage_details="Original"
-    String   gender="unknown"
-    String   patient_age="unknown"
-    String   patient_status="unknown"
-    String   specimen_source=""
-    String   outbreak=""
-    String   last_vaccinated=""
-    String   treatment=""
-    String   iso_county=""
-
-    # Optional inputs/user-defined thresholds for generating submission files
-    Int      number_N_threshold = 5000
-    Int      number_Total_threshold = 25000
-    Int      number_ATCG_gisaid = 25000
-    Int      number_ATCG_genbank = 25000
+    # Optional user-defined thresholds for generating submission files
+    Int number_N_threshold = 5000
   }
-
-  call submission.sra {
-    input:
-      submission_id = submission_id,
-      read1 = read1,
-      read2 = read2
-  }
-
-  call submission.deidentify {
-    input:
-      samplename    = samplename,
-      submission_id = submission_id,
-      sequence      = sequence
-  }
-
-  if (deidentify.number_N <= number_N_threshold) {
-    if (deidentify.number_Total >= number_Total_threshold) {
-      if (deidentify.number_ATCG >= number_ATCG_gisaid) {
-        call submission.gisaid {
-          input:
-            samplename       = samplename,
-            submission_id    = submission_id,
-            collection_date  = collection_date,
-            sequence         = sequence,
-            iso_host         = iso_host,
-            iso_country      = iso_country,
-            gisaid_submitter = gisaid_submitter,
-            iso_state        = iso_state,
-            iso_continent    = iso_continent,
-            iso_county       = iso_county,
-            seq_platform     = seq_platform,
-            assembly_method  = assembly_method,
-            originating_lab  = collecting_lab,
-            origLab_address  = collecting_lab_address,
-            submitting_lab   = submitting_lab,
-            subLab_address   = subLab_address,
-            Authors          = Authors,
-
-            passage_details  = passage_details,
-            gender           = gender,
-            patient_age      = patient_age,
-            patient_status   = patient_status,
-            specimen_source  = specimen_source,
-            outbreak         = outbreak,
-            last_vaccinated  = last_vaccinated,
-            treatment        = treatment
-
-        }
-        call submission.genbank {
-          input:
-            samplename      = samplename,
-            submission_id   = submission_id,
-            collection_date = collection_date,
-            sequence        = sequence,
-            organism        = organism,
-            iso_org         = iso_org,
-            iso_host        = iso_host,
-            iso_country     = iso_country,
-            specimen_source = specimen_source,
-            BioProject      = bioproject_accession
-        }
-      }
+  
+  if (number_N <= number_N_threshold) {
+    call submission_prep.ncbi_prep_one_sample {
+      input: 
+        amplicon_primer_scheme = amplicon_primer_scheme,
+        amplicon_size = amplicon_size,
+        assembly_fasta = assembly_fasta,
+        assembly_method = assembly_method,
+        bioproject_accession = bioproject_accession,
+        biosample_accession = biosample_accession,
+        collecting_lab = collecting_lab,
+        collection_date = collection_date,
+        country = country,
+        dehosting_method = dehosting_method,
+        design_description = "Whole genome sequencing of ~{organism}",
+        filetype = filetype,
+        gisaid_accession = gisaid_accession,
+        gisaid_organism = gisaid_organism,
+        host = host,
+        host_disease = host_disease,
+        host_sci_name = host_sci_name,
+        instrument_model = instrument_model,
+        isolation_source = isolation_source,
+        library_id = library_id,
+        library_layout = library_layout,
+        library_selection = library_selection,
+        library_source = library_source,
+        library_strategy = library_strategy,
+        organism = organism,
+        patient_age = patient_age,
+        patient_gender = patient_gender,
+        purpose_of_sampling = purpose_of_sampling,
+        purpose_of_sequencing = purpose_of_sequencing,
+        read1_dehosted = read1_dehosted,
+        read2_dehosted = read2_dehosted,
+        seq_platform = seq_platform,
+        state = state,
+        submission_id = submission_id,
+        submitter_email = submitter_email,
+        treatment = treatment	 
+    }
+    call submission_prep.gisaid_prep_one_sample {
+      input: 
+        assembly_fasta = assembly_fasta,
+        authors = authors,
+        assembly_method = assembly_method,
+        collecting_lab = collecting_lab,
+        collecting_lab_address = collecting_lab_address,
+        collection_date = collection_date,
+        continent = continent,
+        assembly_mean_coverage = assembly_mean_coverage,
+        country = country,
+        gisaid_submitter = gisaid_submitter,
+        host = host,
+        organism = gisaid_organism,
+        seq_platform = seq_platform,
+        state = state,
+        submission_id = submission_id,
+        submitting_lab = submitting_lab,
+        submitting_lab_address = submitting_lab_address,
+        county = county,
+        patient_gender = patient_gender,
+        patient_age = patient_age,
+        purpose_of_sequencing = purpose_of_sequencing,
+        treatment = treatment
     }
   }
+
   call versioning.version_capture{
     input:
   }
   output {
-    String mercury_pe_prep_version            = version_capture.phvg_version
-    String mercury_pe_prep_analysis_date      = version_capture.date
-#      File?     read1_submission   = sra.read1_submission
-#      File?     read2_submission   = sra.read2_submission
-#      File?     SE_read_submission = sra.SE_read_submission
-      File      deID_assembly      = deidentify.deID_assembly
-      File?     genbank_assembly   = genbank.genbank_assembly
-      File?     genbank_metadata   = genbank.genbank_metadata
-      File?     gisaid_assembly    = gisaid.gisaid_assembly
-      File?     gisaid_metadata    = gisaid.gisaid_metadata
+    String mercury_pe_prep_version = version_capture.phvg_version
+    String mercury_pe_prep_analysis_date = version_capture.date
+    
+    File? biosample_attributes = ncbi_prep_one_sample.biosample_attributes
+    File? sra_metadata = ncbi_prep_one_sample.sra_metadata
+    File? genbank_assembly = ncbi_prep_one_sample.genbank_assembly
+    File? genbank_modifier = ncbi_prep_one_sample.genbank_modifier
+    File? sra_read1 = ncbi_prep_one_sample.sra_read1
+    File? sra_read2 = ncbi_prep_one_sample.sra_read2
+    Array[File]? sra_reads = ncbi_prep_one_sample.sra_reads
+    
+    File? gisaid_assembly = gisaid_prep_one_sample.gisaid_assembly
+    File? gisaid_metadata = gisaid_prep_one_sample.gisaid_metadata
   }
 }
 
