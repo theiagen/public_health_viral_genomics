@@ -13,9 +13,9 @@ task titan_summary {
         String  pango_lineage
         String  pangolin_conflicts
         String  pangolin_notes
-        String  pangolin_version
+        String  pangolin_assignment_version
         String  pangolin_docker
-        String  pangolin_usher_version
+        String  pangolin_versions
         String  nextclade_clade
         String  nextclade_aa_subs
         String  nextclade_aa_dels

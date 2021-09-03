@@ -18,7 +18,7 @@ workflow titan_clearlabs {
     File    assembly_fasta
     String  seq_method  
     String  input_assembly_method
-    String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
+    String  pangolin_docker_image 
   }
   call qc_utils.consensus_qc {
     input:
@@ -61,10 +61,10 @@ workflow titan_clearlabs {
     String pango_lineage                    = pangolin3.pangolin_lineage
     String pangolin_conflicts               = pangolin3.pangolin_conflicts
     String pangolin_notes                   = pangolin3.pangolin_notes
-    String pangolin_version                 = pangolin3.version
+    String pangolin_assignment_version                 = pangolin3.pangolin_assignment_version
     File   pango_lineage_report             = pangolin3.pango_lineage_report
     String pangolin_docker                  = pangolin3.pangolin_docker
-    String pangolin_usher_version           = pangolin3.pangolin_usher_version
+    String pangolin_versions           = pangolin3.pangolin_versions
 
     File   nextclade_json                   = nextclade_one_sample.nextclade_json
     File   auspice_json                     = nextclade_one_sample.auspice_json
