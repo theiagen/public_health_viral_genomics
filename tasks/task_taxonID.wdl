@@ -166,15 +166,17 @@ task pangolin_update_log {
     if [ -s "~{lineage_log}" ]
     then
       echo "Lineage log provided"
-      if grep -q "previous_pangolin_usher_version" ~{lineage_log}; then
+      if grep -q "previous_pangolin_usher_version" ~{lineage_log}
+      then
         mv "~{lineage_log}" ${lineage_log_file}
       else
         echo "pangolin log file provided not compatible with current PHVG version"
         exit 1
-     else
-       echo "Creating new lineage log file as none was provided"
-       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_assignment_version\tprevious_pangolin_usher_version\tprevious_pangolin_versions\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_assignment_version\tupdated_pangolin_usher_version\tupdated_pangolin_versions" > ${lineage_log_file}
-     fi
+      fi
+   else
+     echo "Creating new lineage log file as none was provided"
+     echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_assignment_version\tprevious_pangolin_usher_version\tprevious_pangolin_versions\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_assignment_version\tupdated_pangolin_usher_version\tupdated_pangolin_versions" > ${lineage_log_file}
+   fi
 
      #populate lineage log file
      echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_assignment_version}\t~{current_pangolin_usher_version}\t~{current_pangolin_versions}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_assignment_version}\t~{updated_pangolin_usher_version}\t~{updated_pangolin_versions}" >> "${lineage_log_file}"
