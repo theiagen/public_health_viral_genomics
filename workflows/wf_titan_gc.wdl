@@ -25,7 +25,6 @@ workflow titan_gc {
 
     input {
         Array[parseJSON] samples
-        String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
     }
 
     scatter (sample in samples) {
@@ -34,8 +33,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     clear_lab_fastq = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
            call summary.titan_summary as clearlabs_summary {
@@ -51,9 +49,9 @@ workflow titan_gc {
                     pango_lineage = titan_clearlabs.pango_lineage,
                     pangolin_conflicts = titan_clearlabs.pangolin_conflicts,
                     pangolin_notes = titan_clearlabs.pangolin_notes,
-                    pangolin_version = titan_clearlabs.pangolin_version,
+                    pangolin_assignment_version = titan_clearlabs.pangolin_assignment_version,
                     pangolin_docker = titan_clearlabs.pangolin_docker,
-                    pangolin_usher_version = titan_clearlabs.pangolin_usher_version,
+                    pangolin_versions = titan_clearlabs.pangolin_versions,
                     nextclade_clade = titan_clearlabs.nextclade_clade,
                     nextclade_aa_subs = titan_clearlabs.nextclade_aa_subs,
                     nextclade_aa_dels = titan_clearlabs.nextclade_aa_dels,
@@ -85,8 +83,7 @@ workflow titan_gc {
                     samplename = sample.sample,
                     read1_raw = sample.r1,
                     read2_raw = sample.r2,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
            call summary.titan_summary as illumina_pe_summary {
@@ -102,9 +99,9 @@ workflow titan_gc {
                     pango_lineage = titan_illumina_pe.pango_lineage,
                     pangolin_conflicts = titan_illumina_pe.pangolin_conflicts,
                     pangolin_notes = titan_illumina_pe.pangolin_notes,
-                    pangolin_version = titan_illumina_pe.pangolin_version,
+                    pangolin_assignment_version = titan_illumina_pe.pangolin_assignment_version,
+                    pangolin_versions = titan_illumina_pe.pangolin_versions,
                     pangolin_docker = titan_illumina_pe.pangolin_docker,
-                    pangolin_usher_version = titan_illumina_pe.pangolin_usher_version,
                     nextclade_clade = titan_illumina_pe.nextclade_clade,
                     nextclade_aa_subs = titan_illumina_pe.nextclade_aa_subs,
                     nextclade_aa_dels = titan_illumina_pe.nextclade_aa_dels,
@@ -149,8 +146,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     read1_raw  = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
             call summary.titan_summary as illumina_se_summary {
@@ -166,9 +162,9 @@ workflow titan_gc {
                     pango_lineage = titan_illumina_se.pango_lineage,
                     pangolin_conflicts = titan_illumina_se.pangolin_conflicts,
                     pangolin_notes = titan_illumina_se.pangolin_notes,
-                    pangolin_version = titan_illumina_se.pangolin_version,
+                    pangolin_versions = titan_illumina_se.pangolin_versions,
+                    pangolin_assignment_version = titan_illumina_se.pangolin_assignment_version,
                     pangolin_docker = titan_illumina_se.pangolin_docker,
-                    pangolin_usher_version = titan_illumina_se.pangolin_usher_version,
                     nextclade_clade = titan_illumina_se.nextclade_clade,
                     nextclade_aa_subs = titan_illumina_se.nextclade_aa_subs,
                     nextclade_aa_dels = titan_illumina_se.nextclade_aa_dels,
@@ -207,8 +203,7 @@ workflow titan_gc {
                 input:
                     samplename = sample.sample,
                     demultiplexed_reads = sample.r1,
-                    primer_bed = sample.primers,
-                    pangolin_docker_image = pangolin_docker_image
+                    primer_bed = sample.primers
             }
 
             call summary.titan_summary as ont_summary {
@@ -224,9 +219,9 @@ workflow titan_gc {
                     pango_lineage = titan_ont.pango_lineage,
                     pangolin_conflicts = titan_ont.pangolin_conflicts,
                     pangolin_notes = titan_ont.pangolin_notes,
-                    pangolin_version = titan_ont.pangolin_version,
+                    pangolin_versions = titan_ont.pangolin_versions,
+                    pangolin_assignment_version = titan_ont.pangolin_assignment_version,
                     pangolin_docker = titan_ont.pangolin_docker,
-                    pangolin_usher_version = titan_ont.pangolin_usher_version,
                     nextclade_clade = titan_ont.nextclade_clade,
                     nextclade_aa_subs = titan_ont.nextclade_aa_subs,
                     nextclade_aa_dels = titan_ont.nextclade_aa_dels,

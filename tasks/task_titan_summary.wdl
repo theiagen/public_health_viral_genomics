@@ -13,9 +13,9 @@ task titan_summary {
         String  pango_lineage
         String  pangolin_conflicts
         String  pangolin_notes
-        String  pangolin_version
+        String  pangolin_assignment_version
         String  pangolin_docker
-        String  pangolin_usher_version
+        String  pangolin_versions
         String  nextclade_clade
         String  nextclade_aa_subs
         String  nextclade_aa_dels
@@ -71,9 +71,9 @@ task titan_summary {
             ('pangolin_lineage', '~{pango_lineage}'),
             ('pangolin_conflicts', '~{pangolin_conflicts}'),
             ('pangolin_notes', '~{pangolin_notes}'),
-            ('pangolin_version', '~{pangolin_version}'),
+            ('pangolin_assignment_version', '~{pangolin_assignment_version}'),
+            ('pangolin_versions'), '~{pangolin_versions}'
             ('pangolin_docker', '~{pangolin_docker}'),
-            ('pangolin_usher_version', '~{pangolin_usher_version}'),
             ('nextclade_clade', '~{nextclade_clade}'),
             ('nextclade_aa_subs', '~{nextclade_aa_subs}'),
             ('nextclade_aa_dels', '~{nextclade_aa_dels}'),

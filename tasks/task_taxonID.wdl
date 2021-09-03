@@ -52,120 +52,18 @@ task kraken2 {
   }
 }
 
-task pangolin {
-  input {
-    File        fasta
-    String      samplename
-
-  }
-
-  command{
-    # date and version control
-    date | tee DATE
-    pangolin --version | head -n1 | tee VERSION
-
-    pangolin --outdir ${samplename} ${fasta}
-    pangolin_lineage=$(tail -n 1 ${samplename}/lineage_report.csv | cut -f 2 -d "," | grep -v "lineage")
-
-    pangolin_aLRT=$(tail -n 1 ${samplename}/lineage_report.csv | cut -f 3 -d "," )
-    pangolin_stats=$(tail -n 1 ${samplename}/lineage_report.csv | cut -f 4 -d "," )
-    mv ${samplename}/lineage_report.csv ${samplename}_pango_lineage.csv
-
-    echo $pangolin_lineage | tee PANGOLIN_LINEAGE
-    echo $pangolin_aLRT | tee PANGOLIN_aLRT
-    echo $pangolin_stats | tee PANGOLIN_STATS
-  }
-
-  output {
-    String     date                 = read_string("DATE")
-    String     version              = read_string("VERSION")
-    String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    Float      pangolin_aLRT        = read_string("PANGOLIN_aLRT")
-    Float      pangolin_stats       = read_string("PANGOLIN_STATS")
-    File       pango_lineage_report = "${samplename}_pango_lineage.csv"
-  }
-
-  runtime {
-    docker:       "staphb/pangolin:1.1.14"
-    memory:       "8 GB"
-    cpu:          4
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
-  }
-}
-
-task pangolin2 {
-  input {
-    File        fasta
-    String      samplename
-    Int         min_length=10000
-    Float       max_ambig=0.5
-    String      docker
-  }
-
-  command <<<
-    # date and version control
-    date | tee DATE
-    set -e
-
-    pangolin "~{fasta}" \
-       --outfile "~{samplename}.pangolin_report.csv" \
-       --min-length ~{min_length} \
-       --max-ambig ~{max_ambig} \
-       --verbose
-
-    python3 <<CODE
-    import csv
-    #grab output values by column header
-    with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
-      csv_reader = list(csv.DictReader(csv_file, delimiter=","))
-      for line in csv_reader:
-        with open("VERSION", 'wt') as lineage:
-          pangolin_version=line["pangolin_version"]
-          pangoLEARN_version=line["pangoLEARN_version"]
-          lineage.write(f"pangolin {pangolin_version}; pangoLEARN {pangoLEARN_version}")
-        with open("PANGOLIN_LINEAGE", 'wt') as lineage:
-          lineage.write(line["lineage"])
-        with open("PANGOLIN_CONFLICTS", 'wt') as lineage:
-          lineage.write(line["conflict"])
-        with open("PANGOLIN_NOTES", 'wt') as lineage:
-          lineage.write(line["note"])
-    CODE
-
-  >>>
-
-  output {
-    String     date                 = read_string("DATE")
-    String     version              = read_string("VERSION")
-    String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
-    String     pangolin_notes       = read_string("PANGOLIN_NOTES")
-    String     pangolin_docker      = docker
-    File       pango_lineage_report = "${samplename}.pangolin_report.csv"
-  }
-
-  runtime {
-    docker:     "~{docker}"
-    memory:       "8 GB"
-    cpu:          4
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
-  }
-}
-
 task pangolin3 {
   input {
     File        fasta
     String      samplename
     Int         min_length=10000
     Float       max_ambig=0.5
-    String      docker
+    String      docker="staphb/pangolin:3.1.11-pangolearn-2021-08-24"
     String      inference_engine="usher"
   }
 
   command <<<
+    set -e
     # set inference inference_engine
     if [[ "~{inference_engine}" == "usher" ]]
     then
@@ -177,12 +75,10 @@ task pangolin3 {
       echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
       exit 1
     fi
-    # date and version control
+    
+    # date and version capture
     date | tee DATE
-    conda list -n pangolin | grep "usher" | awk -F ' +' '{print$1, $2}'| tee PANGO_USHER_VERSION
-    set -e
-
-    echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
+    { pangolin --all-versions && usher --version; } | tr '\n' ';'  | cut -f -6 -d ';' | tee VERSION_PANGOLIN_ALL
 
     pangolin "~{fasta}" $pango_inference \
        --outfile "~{samplename}.pangolin_report.csv" \
@@ -190,14 +86,13 @@ task pangolin3 {
        --max-ambig ~{max_ambig} \
        --verbose
 
-
     python3 <<CODE
     import csv
     #grab output values by column header
     with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
       csv_reader = list(csv.DictReader(csv_file, delimiter=","))
       for line in csv_reader:
-        with open("VERSION", 'wt') as lineage:
+        with open("PANGO_ASSIGNMENT_VERSION", 'wt') as lineage:
           pangolin_version=line["pangolin_version"]
           version=line["version"]
           lineage.write(f"pangolin {pangolin_version}; {version}")
@@ -213,11 +108,11 @@ task pangolin3 {
 
   output {
     String     date                 = read_string("DATE")
-    String     version              = read_string("VERSION")
     String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
     String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
     String     pangolin_notes       = read_string("PANGOLIN_NOTES")
-    String     pangolin_usher_version = read_string("PANGO_USHER_VERSION")
+    String     pangolin_assignment_version              = read_string("PANGO_ASSIGNMENT_VERSION")
+    String     pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
     String     pangolin_docker      = docker
     File       pango_lineage_report = "${samplename}.pangolin_report.csv"
   }
@@ -236,10 +131,12 @@ task pangolin_update_log {
     String samplename
     String current_lineage
     String current_pangolin_docker
-    String current_pangolin_version
+    String current_pangolin_assignment_version
+    String current_pangolin_versions
     String updated_lineage
     String updated_pangolin_docker
-    String updated_pangolin_version
+    String updated_pangolin_assignment_version
+    String updated_pangolin_versions
     String? timezone
     File?  lineage_log
   }
@@ -263,14 +160,20 @@ task pangolin_update_log {
     if [ -s "~{lineage_log}" ]
     then
       echo "Lineage log provided"
-      mv "~{lineage_log}" ${lineage_log_file}
-     else
-       echo "Creating new lineage log file as none was provided"
-       echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_version\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_version" > ${lineage_log_file}
-     fi
+      if grep -q "previous_pangolin_assignment_version" ~{lineage_log}
+      then
+        mv "~{lineage_log}" ${lineage_log_file}
+      else
+        echo "pangolin log file provided not compatible with current PHVG version"
+        exit 1
+      fi
+   else
+     echo "Creating new lineage log file as none was provided"
+     echo -e "analysis_date\tmodification_status\tprevious_lineage\tprevious_pangolin_docker\tprevious_pangolin_assignment_version\tprevious_pangolin_versions\tupdated_lineage\tupdated_pangolin_docker\tupdated_pangolin_assignment_version\tupdated_pangolin_versions" > ${lineage_log_file}
+   fi
 
      #populate lineage log file
-     echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_version}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_version}" >> "${lineage_log_file}"
+     echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_assignment_version}\t~{current_pangolin_versions}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_assignment_version}\t~{updated_pangolin_versions}" >> "${lineage_log_file}"
 
     echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE
 

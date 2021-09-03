@@ -18,7 +18,6 @@ workflow titan_clearlabs {
     File    clear_lab_fastq
     String  seq_method  = "ONT via Clear Labs WGS"
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:3.1.11-pangolearn-2021-08-09"
     Int?    normalise  = 20000
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
@@ -63,8 +62,7 @@ workflow titan_clearlabs {
   call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
-      fasta = consensus.consensus_seq,
-      docker = pangolin_docker_image
+      fasta = consensus.consensus_seq
   }
   call taxon_ID.kraken2 as kraken2_raw {
     input:
@@ -123,10 +121,10 @@ workflow titan_clearlabs {
     String pango_lineage                    = pangolin3.pangolin_lineage
     String pangolin_conflicts               = pangolin3.pangolin_conflicts
     String pangolin_notes                   = pangolin3.pangolin_notes
-    String pangolin_version                 = pangolin3.version
+    String pangolin_assignment_version                 = pangolin3.pangolin_assignment_version
     File   pango_lineage_report             = pangolin3.pango_lineage_report
     String pangolin_docker                  = pangolin3.pangolin_docker
-    String pangolin_usher_version           = pangolin3.pangolin_usher_version
+    String pangolin_versions           = pangolin3.pangolin_versions
 
     File   consensus_stats                  = stats_n_coverage.stats
     File   consensus_flagstat               = stats_n_coverage.flagstat
