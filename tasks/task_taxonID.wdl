@@ -75,18 +75,16 @@ task pangolin3 {
       echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
       exit 1
     fi
+    
     # date and version capture
     date | tee DATE
     { pangolin --all-versions && usher --version; } | tr '\n' ';'  | cut -f -6 -d ';' | tee VERSION_PANGOLIN_ALL
-
-    echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
 
     pangolin "~{fasta}" $pango_inference \
        --outfile "~{samplename}.pangolin_report.csv" \
        --min-length ~{min_length} \
        --max-ambig ~{max_ambig} \
        --verbose
-
 
     python3 <<CODE
     import csv
