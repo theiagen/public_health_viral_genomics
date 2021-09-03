@@ -58,7 +58,7 @@ task pangolin3 {
     String      samplename
     Int         min_length=10000
     Float       max_ambig=0.5
-    String?      docker="staphb/pangolin:3.1.11-pangolearn-2021-08-24"
+    String      docker="staphb/pangolin:3.1.11-pangolearn-2021-08-24"
     String      inference_engine="usher"
   }
 
