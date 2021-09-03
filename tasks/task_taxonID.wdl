@@ -78,8 +78,7 @@ task pangolin3 {
     # date and version capture
     date | tee DATE
     usher --version | tee PANGOLIN_USHER_VERSION
-    pangolin --all-versions | tr '\n' ';' | cut -f -5 -d ';' | (echo -n ; && cat) tee VERSION_PANGOLIN_ALL
-    usher --version >> VERSION_PANGOLIN_ALL
+    { pangolin --all-versions && usher --version; } | tr '\n' ';'  | cut -f -6 -d ';' | tee VERSION_PANGOLIN_ALL
 
     echo "pangolin ~{fasta} ${pango_inference}  --outfile ~{samplename}.pangolin_report.csv  --min-length ~{min_length} --max-ambig ~{max_ambig} --verbose"
 
