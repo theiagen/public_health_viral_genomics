@@ -54,6 +54,7 @@ workflow pangolin_update {
         String pangolin_versions = pangolin3.pangolin_versions
         File   pango_lineage_report = pangolin3.pango_lineage_report
         String pangolin_docker      = pangolin3.pangolin_docker
+        String pangolin_usher_version = pangolin3.pangolin_usher_version
         
         String pangolin_updates = pangolin_update_log.pangolin_updates
         File pango_lineage_log = pangolin_update_log.pango_lineage_log
