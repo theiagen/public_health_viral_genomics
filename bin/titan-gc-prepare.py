@@ -233,7 +233,10 @@ if __name__ == '__main__':
                         params_json = json.load(json_fh)
 
                 if args.pangolin_docker:
-                    params_json['titan_gc.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_clearlabs.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_illumina_pe.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_illumina_se.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_ont.pangolin3.pangolin_docker_image'] = args.pangolin_docker
                 
                 print(json.dumps({**inputs_json, **params_json}, indent = 4))
     else:
