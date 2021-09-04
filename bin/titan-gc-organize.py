@@ -27,7 +27,8 @@ OUTPUTS = {
     'vadr_alerts_list': {'ext': ['.ivar.consensus.vadr.alt.list', '.medaka.consensus.vadr.alt.list'], 'folder': 'vadr_alerts'},
     'reads_dehosted': {'ext': ['_dehosted.fastq.gz'], 'folder': 'dehosted_reads'},
     'kraken_report_dehosted': {'ext': ['_kraken2_report.txt'], 'folder': 'kraken2_reports'},
-    'kraken_report': {'ext': ['_kraken2_report.txt'], 'folder': 'kraken2_reports'}
+    'kraken_report': {'ext': ['_kraken2_report.txt'], 'folder': 'kraken2_reports'},
+    'consensus_variants': {'ext': ['.pass.vcf', '.variants.vcf'], 'folder': 'alignments'}
 }
 import json
 

@@ -7,12 +7,12 @@ task version_capture {
   meta {
     volatile: true
   }
-  command {
-    PHVG_Version="PHVG v1.5.0-dev"
+  command <<<
+    PHVG_Version="PHVG v1.5.2-dev"
     ~{default='' 'export TZ=' + timezone}
     date +"%Y-%m-%d" > TODAY
     echo $PHVG_Version > PHVG_VERSION
-  }
+  >>>
   output {
     String date = read_string("TODAY")
     String phvg_version = read_string("PHVG_VERSION")
@@ -22,6 +22,7 @@ task version_capture {
     cpu: 1
     docker: "theiagen/utility:1.1"
     disks: "local-disk 10 HDD"
-    dx_instance_type: "mem1_ssd1_v2_x2" 
+    dx_instance_type: "mem1_ssd1_v2_x2"
+    maxRetries: 3
   }
 }

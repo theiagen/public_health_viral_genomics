@@ -129,8 +129,17 @@ if __name__ == '__main__':
         with open(EMPTY_FASTQ, 'a'):
             pass
 
+    if not os.path.exists(args.path) or not os.path.exists(args.primers):
+        if not os.path.exists(args.path):
+            print(f'Unable to locate {args.path}, please check spelling or verify it exists, and try again', file=sys.stderr)
+        if not os.path.exists(args.primers):
+            print(f'Unable to locate {args.primers}, please check spelling or verify it exists, and try again', file=sys.stderr)
+        sys.exit(1)
+
     # Match FASTQS
+    total_fastqs = 0
     for fastq in search_path(abspath, args.fastq_pattern, recursive=args.recursive):
+        total_fastqs += 1
         fastq_name = fastq.name.replace(args.fastq_ext, "")
         # Split the fastq file name on separator
         # Example MY_FASTQ_R1.rsplit('_', 1) becomes ['MY_FASTQ', 'R1'] (PE)
@@ -157,72 +166,84 @@ if __name__ == '__main__':
                 print(f'ERROR: Please use --pe1_pattern and --pe2_pattern to correct and try again.', file=sys.stderr)
                 sys.exit(1)
 
-    FOFN = []
-    for sample, vals in sorted(SAMPLES.items()):
-        r1_reads = vals['pe']['r1']
-        r2_reads = vals['pe']['r2']
-        se_reads = vals['se']
-        errors = []
-        pe_count = len(r1_reads) + len(r2_reads)
+    if total_fastqs:
+        FOFN = []
+        for sample, vals in sorted(SAMPLES.items()):
+            r1_reads = vals['pe']['r1']
+            r2_reads = vals['pe']['r2']
+            se_reads = vals['se']
+            errors = []
+            pe_count = len(r1_reads) + len(r2_reads)
 
-        # Validate everything
-        if len(r1_reads) != len(r2_reads):
-            # PE reads must be a pair
-            errors.append(f'ERROR: "{sample}" must have equal paired-end read sets (R1 has {len(r1_reads)} and R2 has {len(r2_reads)}, please check.')
-        elif pe_count > 2:
-            # PE reads must be a pair
-            errors.append(f'ERROR: "{sample}" cannot have more than two paired-end FASTQ, please check.')
+            # Validate everything
+            if len(r1_reads) != len(r2_reads):
+                # PE reads must be a pair
+                errors.append(f'ERROR: "{sample}" must have equal paired-end read sets (R1 has {len(r1_reads)} and R2 has {len(r2_reads)}), please check.')
+            elif pe_count > 2:
+                # PE reads must be a pair
+                errors.append(f'ERROR: "{sample}" cannot have more than two paired-end FASTQ, please check.')
 
-        if len(se_reads) > 1:
-            # Can't have multiple SE reads
-            errors.append(f'ERROR: "{sample}" has more than two single-end FASTQs, please check.')
-        elif pe_count and len(se_reads):
-            # Can't have SE and PE reads unless long reads
-            errors.append(f'ERROR: "{sample}" has paired and single-end FASTQs, please check.')
+            if len(se_reads) > 1:
+                # Can't have multiple SE reads
+                errors.append(f'ERROR: "{sample}" has more than two single-end FASTQs, please check.')
+            elif pe_count and len(se_reads):
+                # Can't have SE and PE reads unless long reads
+                errors.append(f'ERROR: "{sample}" has paired and single-end FASTQs, please check.')
 
-        if errors:
-            print('\n'.join(errors), file=sys.stderr)
-        else:
-            r1 = ''
-            r2 = ''
+            if errors:
+                print('\n'.join(errors), file=sys.stderr)
+            else:
+                r1 = ''
+                r2 = ''
 
-            if pe_count:
-                r1 = r1_reads[0]
-                r2 = r2_reads[0]
+                if pe_count:
+                    r1 = r1_reads[0]
+                    r2 = r2_reads[0]
 
-            if se_reads:
-                r1 = se_reads[0]
-                r2 = EMPTY_FASTQ
+                if se_reads:
+                    r1 = se_reads[0]
+                    r2 = EMPTY_FASTQ
 
-            FOFN.append({
-                'sample': sample, 
-                'titan_wf': args.workflow,
-                'r1': r1,
-                'r2': r2,
-                'primers': get_path(Path(args.primers), abspath, args.prefix)
-            })
+                FOFN.append({
+                    'sample': sample, 
+                    'titan_wf': args.workflow,
+                    'r1': r1,
+                    'r2': r2,
+                    'primers': get_path(Path(args.primers), abspath, args.prefix)
+                })
 
-    if FOFN:
-        if args.tsv:
-            needs_header = True
-            for f in FOFN:
-                if needs_header:
-                    print("\t".join(['sample', 'titan_wf', 'r1', 'r2', 'primers']))
-                    needs_header = False
-                print("\t".join([f['sample'], f['titan_wf'], f['r1'], f['r2'], f['primers']]))
-        else:
-            inputs_json = {
-                "titan_gc.samples": FOFN
-            }
-            params_json = {}
+        if FOFN:
+            if args.tsv:
+                needs_header = True
+                for f in FOFN:
+                    if needs_header:
+                        print("\t".join(['sample', 'titan_wf', 'r1', 'r2', 'primers']))
+                        needs_header = False
+                    print("\t".join([f['sample'], f['titan_wf'], f['r1'], f['r2'], f['primers']]))
+            else:
+                inputs_json = {
+                    "titan_gc.samples": FOFN
+                }
+                params_json = {}
 
 
-            # Add optional parameters if user specified them
-            if args.params:
-                with open(args.params, 'rt') as json_fh:
-                    params_json = json.load(json_fh)
+                # Add optional parameters if user specified them
+                if args.params:
+                    with open(args.params, 'rt') as json_fh:
+                        params_json = json.load(json_fh)
 
-            if args.pangolin_docker:
-                params_json['titan_gc.pangolin_docker_image'] = args.pangolin_docker
-            
-            print(json.dumps({**inputs_json, **params_json}, indent = 4))
+                if args.pangolin_docker:
+                    params_json['titan_gc.titan_clearlabs.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_illumina_pe.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_illumina_se.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['titan_gc.titan_ont.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                
+                print(json.dumps({**inputs_json, **params_json}, indent = 4))
+    else:
+        print(f"Unable to find any FASTQs in {args.path}. Please try adjusting the parameters to fit your needs.", file=sys.stderr)
+        print(f"Values Used:", file=sys.stderr)
+        print(f"    --fastq_pattern => {args.fastq_pattern}", file=sys.stderr)
+        print(f"    --fastq_ext => {args.fastq_ext}", file=sys.stderr)
+        print(f"    --fastq_separator => {args.fastq_separator}", file=sys.stderr)
+        print(f"    --pe1_pattern => {args.pe1_pattern}", file=sys.stderr)
+        print(f"    --pe2_pattern => {args.pe2_pattern}", file=sys.stderr)

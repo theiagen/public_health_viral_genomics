@@ -1,0 +1,30 @@
+- name: titan_illumina_se
+  command: titan-gc -i titan/illumina_se.json -o titan/illumina_se
+  tags:
+    - titan_gc
+    - titan_illumina_se
+  files:
+    - path: titan/illumina_se/alignments/ERR6319327.flagstat.txt
+      md5sum: 63f3429dcb99b85bcc0e525ef19c8471
+    - path: titan/illumina_se/alignments/ERR6319327.primertrim.sorted.bam
+    - path: titan/illumina_se/alignments/ERR6319327.primertrim.sorted.bam.bai
+    - path: titan/illumina_se/alignments/ERR6319327.stats.txt
+    - path: titan/illumina_se/alignments/ERR6319327.variants.vcf
+      md5sum: 01d93a6a37b9598c594a780a6996d08e
+    - path: titan/illumina_se/assemblies/ERR6319327.ivar.consensus.fasta
+      md5sum: 45a6c6f18d5fa448e0aa811bdf934bab
+    - path: titan/illumina_se/cromwell-stderr.txt
+      md5sum: d41d8cd98f00b204e9800998ecf8427e
+    - path: titan/illumina_se/cromwell-stdout.txt
+    - path: titan/illumina_se/kraken2_reports/ERR6319327_kraken2_report.txt
+      md5sum: 7e4fc05efbbc3937b99420e6193be061
+    - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.auspice.json
+    - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.json
+    - path: titan/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.tsv
+    - path: titan/illumina_se/pangolin_reports/ERR6319327.pangolin_report.csv
+    - path: titan/illumina_se/results/ERR6319327.results.json
+    - path: titan/illumina_se/titan-metadata.json
+    - path: titan/illumina_se/titan-results.json
+    - path: titan/illumina_se/titan-results.tsv
+    - path: titan/illumina_se/vadr_alerts/ERR6319327.ivar.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
