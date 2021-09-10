@@ -297,9 +297,9 @@ task nextclade_one_sample {
     input {
         File   genome_fasta
         String docker = "nextstrain/nextclade:1.3.0-alpine"
-        String dataset_name? = "SARS-CoV-2"
-        String dataset_reference? = "MN908947"
-        String dataset_tag? = "2021-06-25T00:00:00Z"
+        String dataset_name = "SARS-CoV-2"
+        String dataset_reference = "MN908947"
+        String dataset_tag = "2021-06-25T00:00:00Z"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
@@ -307,7 +307,6 @@ task nextclade_one_sample {
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
         nextclade dataset get --name='sars-cov-2' --reference='MN908947' --tag='2021-06-25T00:00:00Z' -o nextclade_dataset_dir --verbose
-
         set -e
         nextclade run --input-fasta "~{genome_fasta}" \
             --input-root-seq nextclade_dataset_dir/reference.fasta \
