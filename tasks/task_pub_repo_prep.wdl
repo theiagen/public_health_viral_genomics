@@ -240,11 +240,11 @@ task gisaid_prep_one_sample {
     
     #optional metadata
     String? county
-    String? patient_gender
+    String? patient_gender = "unknown"
     String? last_vaccinated
     String? passage_details
-    String? patient_age
-    String? patient_status
+    String? patient_age = "unknown"
+    String? patient_status = "unknown"
     String? purpose_of_sequencing
     String? outbreak
     String? specimen_source
