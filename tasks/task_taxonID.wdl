@@ -296,7 +296,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.3.0-alpine"
+        String docker = "nextstrain/nextclade:1.3.0"
         String dataset_name = "sars-cov-2"
         String dataset_reference = "MN908947"
         String dataset_tag = "2021-06-25T00:00:00Z"
