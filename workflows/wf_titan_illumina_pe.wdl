@@ -72,9 +72,9 @@ workflow titan_illumina_pe {
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = consensus.consensus_seq
-      dataset_name = dataset_name
-      dataset_reference = dataset_reference
+      genome_fasta = consensus.consensus_seq,
+      dataset_name = dataset_name,
+      dataset_reference = dataset_reference,
       dataset_tag = dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
