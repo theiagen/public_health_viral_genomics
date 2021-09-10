@@ -297,21 +297,24 @@ task nextclade_one_sample {
     input {
         File   genome_fasta
         String docker = "nextstrain/nextclade:1.3.0-alpine"
-        String dataset? = "SARS-CoV-2"
+        String dataset_name? = "SARS-CoV-2"
+        String dataset_reference? = "MN908947"
+        String dataset_tag? = "2021-06-25T00:00:00Z"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
         NEXTCLADE_VERSION="$(nextclade --version)"
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
+        nextclade dataset get --name='sars-cov-2' --reference='MN908947' --tag='2021-06-25T00:00:00Z' -o nextclade_dataset_dir --verbose
 
         set -e
         nextclade run --input-fasta "~{genome_fasta}" \
-            --input-root-seq reference.fasta \
-            --input-tree tree.json \
-            --input-qc-config qc.json \
-            --input-gene-map genemap.gff \
-            --input-pcr-primers primers.csv \
+            --input-root-seq nextclade_dataset_dir/reference.fasta \
+            --input-tree nextclade_dataset_dir/tree.json \
+            --input-qc-config nextclade_dataset_dir/qc.json \
+            --input-gene-map nextclade_dataset_dir/genemap.gff \
+            --input-pcr-primers nextclade_dataset_dir/primers.csv \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
