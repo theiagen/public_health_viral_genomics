@@ -20,6 +20,9 @@ workflow titan_illumina_pe {
     File    read2_raw
     File    primer_bed
     String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
+    String  dataset_name? = "SARS-CoV-2"
+    String  dataset_reference? = "MN908947"
+    String  dataset_tag? = "2021-06-25T00:00:00Z"
 
   }
 
@@ -70,6 +73,9 @@ workflow titan_illumina_pe {
   call taxon_ID.nextclade_one_sample {
     input:
       genome_fasta = consensus.consensus_seq
+      dataset_name = dataset_name
+      dataset_reference = dataset_reference
+      dataset_tag = dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:
