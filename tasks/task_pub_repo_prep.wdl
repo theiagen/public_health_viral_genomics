@@ -311,9 +311,9 @@ task compile_assembly_n_meta {
     String file_ext
     String date
     String docker_image = "theiagen/utility:1.1"
-    Int mem_size_gb = 1
-    Int CPUs = 1
-    Int disk_size = 25
+    Int mem_size_gb = 8
+    Int CPUs = 4
+    Int disk_size = 100
     Int preemptible_tries = 0
   }
 
@@ -426,9 +426,9 @@ input {
   String? gcp_bucket
 
   String      docker_image = "theiagen/utility:1.1"
-  Int         mem_size_gb = 1
-  Int         CPUs = 1
-  Int         disk_size = 25
+  Int         mem_size_gb = 16
+  Int         CPUs = 4
+  Int         disk_size = 100
   Int         preemptible_tries = 0
 }
 
