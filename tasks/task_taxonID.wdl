@@ -296,23 +296,17 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.2.3"
+        String docker = "nextstrain/nextclade:1.3.0-alpine"
         String dataset? = "SARS-CoV-2"
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
         NEXTCLADE_VERSION="$(nextclade --version)"
-
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta > reference.fasta
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff > genemap.gff
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json > tree.json
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json > qc.json
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv > primers.csv
-
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
+
         set -e
-        nextclade --input-fasta "~{genome_fasta}" \
+        nextclade run --input-fasta "~{genome_fasta}" \
             --input-root-seq reference.fasta \
             --input-tree tree.json \
             --input-qc-config qc.json \
