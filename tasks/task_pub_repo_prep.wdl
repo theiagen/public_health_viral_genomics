@@ -44,8 +44,12 @@ task ncbi_prep_one_sample {
     String? submitter_email
     String? treatment
     
+    #GenBank formatting
+    Int minlen = 50
+    Int maxlen = 30000
+    
     #runtime
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -80,9 +84,16 @@ task ncbi_prep_one_sample {
      
     #Format GenBank metadata and assembly    
     ##GenBank assembly
-    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
-    grep -v ">" ~{assembly_fasta} | sed '1 's/^N*N//g'' | fold -w 75 >> ~{submission_id}_genbank.fasta
+    ###Adding metadata for genbank submissions and removing line breaks
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
+    grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
+    
+    # remove terminal ambiguous nucleotides
+    /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
+      "~{submission_id}_genbank_untrimmed.fasta" \
+      --minlen ~{minlen} \
+      --maxlen ~{maxlen} \
+      > "~{submission_id}_genbank.fasta"
     
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
@@ -152,8 +163,12 @@ task ncbi_prep_one_sample_se {
     String? submitter_email
     String? treatment
     
+    #GenBank formatting
+    Int minlen = 50
+    Int maxlen = 30000
+    
     #runtime
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -187,10 +202,17 @@ task ncbi_prep_one_sample_se {
      
     #Format GenBank metadata and assembly    
     ##GenBank assembly
-    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
-    grep -v ">" ~{assembly_fasta} | sed '1 's/^N*N//g'' | fold -w 75 >> ~{submission_id}_genbank.fasta
-    
+    ###Adding metadata for genbank submissions and removing line breaks
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
+    grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
+
+    # remove terminal ambiguous nucleotides
+    /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
+      "~{submission_id}_genbank_untrimmed.fasta" \
+      --minlen ~{minlen} \
+      --maxlen ~{maxlen} \
+      > "~{submission_id}_genbank.fasta"
+      
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
     echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t~{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
