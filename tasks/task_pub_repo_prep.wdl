@@ -45,7 +45,7 @@ task ncbi_prep_one_sample {
     String? treatment
     
     #GenBank formatting
-    Int minleng = 50
+    Int minlen = 50
     Int maxlen = 30000
     
     #runtime
@@ -164,7 +164,7 @@ task ncbi_prep_one_sample_se {
     String? treatment
     
     #GenBank formatting
-    Int minleng = 50
+    Int minlen = 50
     Int maxlen = 30000
     
     #runtime
