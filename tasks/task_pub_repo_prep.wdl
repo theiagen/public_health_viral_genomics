@@ -85,7 +85,7 @@ task ncbi_prep_one_sample {
     #Format GenBank metadata and assembly    
     ##GenBank assembly
     ###Adding metadata for genbank submissions and removing line breaks
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
     grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
     
     # remove terminal ambiguous nucleotides
@@ -203,7 +203,7 @@ task ncbi_prep_one_sample_se {
     #Format GenBank metadata and assembly    
     ##GenBank assembly
     ###Adding metadata for genbank submissions and removing line breaks
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
     grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
 
     # remove terminal ambiguous nucleotides
