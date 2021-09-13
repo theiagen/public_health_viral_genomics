@@ -198,7 +198,7 @@ task ncbi_prep_one_sample_se {
 
     echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email" > ~{submission_id}_sra_metadata.tsv
     
-    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t~\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
+    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
      
     #Format GenBank metadata and assembly    
     ##GenBank assembly
