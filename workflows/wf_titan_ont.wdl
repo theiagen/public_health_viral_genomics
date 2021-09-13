@@ -23,6 +23,7 @@ workflow titan_ont {
     String  dataset_name = "sars-cov-2"
     String  dataset_reference = "MN908947"
     String  dataset_tag = "2021-06-25T00:00:00Z"
+
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -54,6 +55,10 @@ workflow titan_ont {
       primer_bed = primer_bed,
       normalise = normalise
   }
+  call qc_utils.consensus_qc {
+    input:
+      assembly_fasta = consensus.consensus_seq
+  }
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
@@ -67,8 +72,7 @@ workflow titan_ont {
   call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
-      fasta = consensus.consensus_seq,
-      docker = pangolin_docker_image
+      fasta = consensus.consensus_seq
   }
   call taxon_ID.kraken2 as kraken2_raw {
     input:
@@ -86,10 +90,14 @@ workflow titan_ont {
     input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
   }
+  call taxon_ID.nextclade_output_parser_one_sample {
+    input:
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus.number_ATCG
+      assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
     input:
@@ -119,12 +127,13 @@ workflow titan_ont {
     String  artic_version               = consensus.artic_pipeline_version
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
-    Int     number_N                    = consensus.number_N
-    Int     assembly_length_unambiguous = consensus.number_ATCG
-    Int     number_Degenerate           = consensus.number_Degenerate
-    Int     number_Total                = consensus.number_Total
-    Float   percent_reference_coverage  = consensus.percent_reference_coverage
     String  assembly_method             = consensus.artic_pipeline_version
+    
+    Int     number_N                    = consensus_qc.number_N
+    Int     assembly_length_unambiguous = consensus_qc.number_ATCG
+    Int     number_Degenerate           = consensus_qc.number_Degenerate
+    Int     number_Total                = consensus_qc.number_Total
+    Float   percent_reference_coverage  = consensus_qc.percent_reference_coverage
 
     File    consensus_stats             = stats_n_coverage.stats
     File    consensus_flagstat          = stats_n_coverage.flagstat
@@ -136,10 +145,10 @@ workflow titan_ont {
     String  pango_lineage               = pangolin3.pangolin_lineage
     String  pangolin_conflicts          = pangolin3.pangolin_conflicts
     String  pangolin_notes              = pangolin3.pangolin_notes
-    String  pangolin_version            = pangolin3.version
+    String  pangolin_assignment_version            = pangolin3.pangolin_assignment_version
     File    pango_lineage_report        = pangolin3.pango_lineage_report
     String  pangolin_docker             = pangolin3.pangolin_docker
-    String  pangolin_usher_version      = pangolin3.pangolin_usher_version
+    String  pangolin_versions      = pangolin3.pangolin_versions
 
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json

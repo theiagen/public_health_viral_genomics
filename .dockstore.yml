@@ -65,3 +65,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_ncbi_scrub_pe.wdl
    testParameterFiles:
     - empty.json
+ - name: Titan_FASTA
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
+   testParameterFiles:
+    - empty.json
