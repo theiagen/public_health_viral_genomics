@@ -20,6 +20,9 @@ workflow titan_clearlabs {
     File    primer_bed
     String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
     Int?    normalise  = 20000
+    String  dataset_name = "sars-cov-2"
+    String  dataset_reference = "MN908947"
+    String  dataset_tag = "2021-06-25T00:00:00Z"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:
@@ -69,7 +72,10 @@ workflow titan_clearlabs {
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = consensus.consensus_seq
+      genome_fasta = consensus.consensus_seq,
+      dataset_name = dataset_name,
+      dataset_reference = dataset_reference,
+      dataset_tag = dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:
