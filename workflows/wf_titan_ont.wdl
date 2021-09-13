@@ -90,10 +90,6 @@ workflow titan_ont {
     input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
   }
-  call taxon_ID.nextclade_output_parser_one_sample {
-    input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv
-  }
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
