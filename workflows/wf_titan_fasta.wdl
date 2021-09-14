@@ -18,6 +18,9 @@ workflow titan_clearlabs {
     File    assembly_fasta
     String  seq_method  
     String  input_assembly_method
+    String  dataset_name = "sars-cov-2"
+    String  dataset_reference = "MN908947"
+    String  dataset_tag = "2021-06-25T00:00:00Z"
   }
   call qc_utils.consensus_qc {
     input:
@@ -30,7 +33,10 @@ workflow titan_clearlabs {
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = assembly_fasta
+      genome_fasta = assembly_fasta,
+      dataset_name = dataset_name,
+      dataset_reference = dataset_reference,
+      dataset_tag = dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:
