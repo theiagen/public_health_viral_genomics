@@ -8,7 +8,7 @@ import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_clearlabs {
+workflow titan_fasta {
   meta {
     description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on the Clear Labs platform."
   }
