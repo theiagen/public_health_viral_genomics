@@ -19,7 +19,6 @@ workflow titan_illumina_se {
     String  seq_method="Illumina single-end"
     File    read1_raw
     File    primer_bed
-    String  pangolin_docker_image = "staphb/pangolin:3.1.3-pangolearn-2021-06-15"
     String  dataset_name = "sars-cov-2"
     String  dataset_reference = "MN908947"
     String  dataset_tag = "2021-06-25T00:00:00Z"
