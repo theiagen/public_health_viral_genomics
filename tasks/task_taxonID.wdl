@@ -78,6 +78,7 @@ task pangolin3 {
     
     # date and version capture
     date | tee DATE
+
     { pangolin --all-versions && usher --version; } | tr '\n' ';'  | cut -f -6 -d ';' | tee VERSION_PANGOLIN_ALL
 
     pangolin "~{fasta}" $pango_inference \
@@ -160,6 +161,7 @@ task pangolin_update_log {
     if [ -s "~{lineage_log}" ]
     then
       echo "Lineage log provided"
+
       if grep -q "previous_pangolin_assignment_version" ~{lineage_log}
       then
         mv "~{lineage_log}" ${lineage_log_file}
@@ -200,27 +202,24 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.2.3"
+        String docker = "nextstrain/nextclade:1.3.0"
+        String dataset_name
+        String dataset_reference
+        String dataset_tag
     }
     String basename = basename(genome_fasta, ".fasta")
     command {
         NEXTCLADE_VERSION="$(nextclade --version)"
-
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/reference.fasta > reference.fasta
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/genemap.gff > genemap.gff
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/tree.json > tree.json
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/qc.json > qc.json
-        curl https://raw.githubusercontent.com/nextstrain/nextclade/$NEXTCLADE_VERSION/data/sars-cov-2/primers.csv > primers.csv
-
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
+        nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
         set -e
-        nextclade --input-fasta "~{genome_fasta}" \
-            --input-root-seq reference.fasta \
-            --input-tree tree.json \
-            --input-qc-config qc.json \
-            --input-gene-map genemap.gff \
-            --input-pcr-primers primers.csv \
+        nextclade run --input-fasta "~{genome_fasta}" \
+            --input-root-seq nextclade_dataset_dir/reference.fasta \
+            --input-tree nextclade_dataset_dir/tree.json \
+            --input-qc-config nextclade_dataset_dir/qc.json \
+            --input-gene-map nextclade_dataset_dir/genemap.gff \
+            --input-pcr-primers nextclade_dataset_dir/primers.csv \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
@@ -260,6 +259,7 @@ task nextclade_output_parser_one_sample {
       with codecs.open("./input.tsv",'r') as tsv_file:
         tsv_reader=csv.reader(tsv_file, delimiter="\t")
         tsv_data=list(tsv_reader)
+
         if len(tsv_data)==1:
           tsv_data.append(['NA']*len(tsv_data[0]))
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
