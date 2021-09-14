@@ -19,9 +19,9 @@ workflow titan_ont {
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
-    String  dataset_name = "sars-cov-2"
-    String  dataset_reference = "MN908947"
-    String  dataset_tag = "2021-06-25T00:00:00Z"
+    String  nextclade_dataset_name = "sars-cov-2"
+    String  nextclade_dataset_reference = "MN908947"
+    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
 
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
@@ -81,9 +81,9 @@ workflow titan_ont {
   call taxon_ID.nextclade_one_sample {
     input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = dataset_name,
-      dataset_reference = dataset_reference,
-      dataset_tag = dataset_tag
+      dataset_name = nextclade_dataset_name,
+      dataset_reference = nextclade_dataset_reference,
+      dataset_tag = nextclade_dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:
