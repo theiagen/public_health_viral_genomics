@@ -264,7 +264,7 @@ task gisaid_prep_one_sample {
     String? county
     String? patient_gender = "unknown"
     String? last_vaccinated
-    String? passage_details
+    String? passage_details = "original"
     String? patient_age = "unknown"
     String? patient_status = "unknown"
     String? purpose_of_sequencing
