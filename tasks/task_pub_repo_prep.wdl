@@ -491,7 +491,7 @@ input {
   then 
     echo "Moving read data to provided GCP Bucket ~{gcp_bucket}"
     echo "Running: gsutil -m cp -n ${sra_reads_array[*]} ~{gcp_bucket}"
-    Running: gsutil -m cp -n ${sra_reads_array} ~{gcp_bucket}       
+    Running: gsutil -m cp -n ${sra_reads_array[@]} ~{gcp_sbucket}       
   else 
     echo "Preparing SRA read data into single zipped-file"
     mkdir sra_reads_~{date} 
