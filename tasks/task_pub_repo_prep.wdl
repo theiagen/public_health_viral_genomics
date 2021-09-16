@@ -459,7 +459,7 @@ input {
   biosample_attributes_array_len=$(echo "${#biosample_attributes_array[@]}")
   sra_metadata_array=(~{sep=' ' single_submission_sra_metadata})
   sra_metadata_array_len=$(echo "${#sra_metadata_array[@]}")
-  sra_reads_array=~{sep=' ' single_submission_sra_reads}
+  sra_reads_array="~{sep=' ' single_submission_sra_reads}"
   sra_reads_arra_len=$(echo "${#sra_reads_arra[@]}")
   
   # Compile BioSample attributes
