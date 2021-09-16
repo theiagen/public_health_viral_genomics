@@ -459,7 +459,7 @@ input {
   biosample_attributes_array_len=$(echo "${#biosample_attributes_array[@]}")
   sra_metadata_array=(~{sep=' ' single_submission_sra_metadata})
   sra_metadata_array_len=$(echo "${#sra_metadata_array[@]}")
-  sra_reads_array=(~{sep=' ' single_submission_sra_reads})
+  sra_reads_array=~{sep=' ' single_submission_sra_reads}
   sra_reads_arra_len=$(echo "${#sra_reads_arra[@]}")
   
   # Compile BioSample attributes
@@ -490,9 +490,8 @@ input {
   if [[ ! -z "~{gcp_bucket}" ]]
   then 
     echo "Moving read data to provided GCP Bucket ~{gcp_bucket}"
-    for i in ${sra_reads_array[*]}; do
-      gsutil -m cp -n $i ~{gcp_bucket}
-    done  
+    echo "Running: gsutil -m cp -n ${sra_reads_array[*]} ~{gcp_bucket}"
+    Running: gsutil -m cp -n ${sra_reads_array[*]} ~{gcp_bucket}       
   else 
     echo "Preparing SRA read data into single zipped-file"
     mkdir sra_reads_~{date} 
