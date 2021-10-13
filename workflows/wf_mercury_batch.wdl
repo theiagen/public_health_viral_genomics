@@ -15,7 +15,10 @@ workflow mercury_batch {
     Array[String] samplename
     Array[String] submission_id
     Array[String] vadr_num_alerts
-    Int vadr_threshold=0
+    Int vadr_threshold = 0
+    Int CPUs = 4
+    Int disk_size = 100
+    Int mem_size_gb = 8
     String? gcp_bucket
   }
   call submission_prep.compile_assembly_n_meta as genbank_compile {
@@ -28,7 +31,10 @@ workflow mercury_batch {
       file_ext = "tsv",
       vadr_threshold = vadr_threshold,
       submission_id = submission_id,
-      date = version_capture.date
+      date = version_capture.date,
+      CPUs = CPUs,
+      disk_size = disk_size,
+      mem_size_gb = mem_size_gb
   }
   call submission_prep.compile_assembly_n_meta as gisaid_compile {
     input:
@@ -40,7 +46,10 @@ workflow mercury_batch {
       file_ext = "csv",
       vadr_threshold = vadr_threshold,
       submission_id = submission_id,
-      date = version_capture.date
+      date = version_capture.date,
+      CPUs = CPUs,
+      disk_size = disk_size,
+      mem_size_gb = mem_size_gb
     }
   call submission_prep.compile_biosamp_n_sra {
     input:
@@ -48,7 +57,10 @@ workflow mercury_batch {
       single_submission_sra_metadata = sra_metadata,
       single_submission_sra_reads = sra_reads,
       gcp_bucket = gcp_bucket,
-      date = version_capture.date
+      date = version_capture.date,
+      CPUs = CPUs,
+      disk_size = disk_size,
+      mem_size_gb = mem_size_gb
     }
     call versioning.version_capture{
       input:

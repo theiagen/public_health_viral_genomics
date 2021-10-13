@@ -31,7 +31,7 @@ workflow mercury_se_prep {
     String instrument_model
     String isolation_source
     String library_id
-    String library_layout = "paired"
+    String library_layout = "single"
     String library_selection
     String library_source
     String library_strategy

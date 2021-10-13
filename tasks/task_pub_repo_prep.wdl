@@ -44,8 +44,12 @@ task ncbi_prep_one_sample {
     String? submitter_email
     String? treatment
     
+    #GenBank formatting
+    Int minlen = 50
+    Int maxlen = 30000
+    
     #runtime
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -80,9 +84,16 @@ task ncbi_prep_one_sample {
      
     #Format GenBank metadata and assembly    
     ##GenBank assembly
-    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
-    grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
+    ###Adding metadata for genbank submissions and removing line breaks
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
+    grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
+    
+    # remove terminal ambiguous nucleotides
+    /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
+      "~{submission_id}_genbank_untrimmed.fasta" \
+      --minlen ~{minlen} \
+      --maxlen ~{maxlen} \
+      > "~{submission_id}_genbank.fasta"
     
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
@@ -152,8 +163,12 @@ task ncbi_prep_one_sample_se {
     String? submitter_email
     String? treatment
     
+    #GenBank formatting
+    Int minlen = 50
+    Int maxlen = 30000
+    
     #runtime
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -183,14 +198,21 @@ task ncbi_prep_one_sample_se {
 
     echo -e "bioproject_accession\tsample_name\tlibrary_ID\ttitle\tlibrary_strategy\tlibrary_source\tlibrary_selection\tlibrary_layout\tplatform\tinstrument_model\tdesign_description\tfiletype\tfilename\tfilename2\tfilename3\tfilename4\tamplicon _PCR_primer_scheme\tamplicon_size\tsequencing_protocol_name\traw_sequence_data_processing_method \tdehosting_method\tsequence_submitter_contact_email" > ~{submission_id}_sra_metadata.tsv
     
-    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t~\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
+    echo -e "~{bioproject_accession}\t~{submission_id}\t~{library_id}\tGenomic sequencing of ~{organism}: ~{isolation_source}\t~{library_strategy}\t~{library_source}\t~{library_selection}\t~{library_layout}\t~{seq_platform}\t~{instrument_model}\t~{design_description}\t~{filetype}\t~{submission_id}_R1.fastq.gz\t\t\t\t~{amplicon_primer_scheme}\t~{amplicon_size}\t\t~{assembly_method}\t~{dehosting_method}\t~{submitter_email}" >> ~{submission_id}_sra_metadata.tsv 
      
     #Format GenBank metadata and assembly    
     ##GenBank assembly
-    ###removing leading Ns, folding sequencing to 75 bp wide, and adding metadata for genbank submissions
-    echo ">"~{submission_id} > ~{submission_id}_genbank.fasta
-    grep -v ">" ~{assembly_fasta} | sed 's/^N*N//g' | fold -w 75 >> ~{submission_id}_genbank.fasta
-    
+    ###Adding metadata for genbank submissions and removing line breaks
+    echo ">"~{submission_id} > ~{submission_id}_genbank_untrimmed.fasta
+    grep -v ">" ~{assembly_fasta} | tr -d '\n' >> ~{submission_id}_genbank_untrimmed.fasta
+
+    # remove terminal ambiguous nucleotides
+    /opt/vadr/vadr/miniscripts/fasta-trim-terminal-ambigs.pl \
+      "~{submission_id}_genbank_untrimmed.fasta" \
+      --minlen ~{minlen} \
+      --maxlen ~{maxlen} \
+      > "~{submission_id}_genbank.fasta"
+      
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
     echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t~{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
@@ -240,11 +262,11 @@ task gisaid_prep_one_sample {
     
     #optional metadata
     String? county
-    String? patient_gender
+    String? patient_gender = "unknown"
     String? last_vaccinated
-    String? passage_details
-    String? patient_age
-    String? patient_status
+    String? passage_details = "original"
+    String? patient_age = "unknown"
+    String? patient_status = "unknown"
     String? purpose_of_sequencing
     String? outbreak
     String? specimen_source
@@ -311,9 +333,9 @@ task compile_assembly_n_meta {
     String file_ext
     String date
     String docker_image = "theiagen/utility:1.1"
-    Int mem_size_gb = 1
-    Int CPUs = 1
-    Int disk_size = 25
+    Int mem_size_gb = 8
+    Int CPUs = 4
+    Int disk_size = 100
     Int preemptible_tries = 0
   }
 
@@ -426,9 +448,9 @@ input {
   String? gcp_bucket
 
   String      docker_image = "theiagen/utility:1.1"
-  Int         mem_size_gb = 1
-  Int         CPUs = 1
-  Int         disk_size = 25
+  Int         mem_size_gb = 16
+  Int         CPUs = 4
+  Int         disk_size = 100
   Int         preemptible_tries = 0
 }
 

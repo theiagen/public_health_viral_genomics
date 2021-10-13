@@ -20,6 +20,10 @@ workflow titan_illumina_pe {
     File    read1_raw
     File    read2_raw
     File    primer_bed
+    String  nextclade_dataset_name = "sars-cov-2"
+    String  nextclade_dataset_reference = "MN908947"
+    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
+
   }
 
   call read_qc.read_QC_trim {
@@ -71,7 +75,10 @@ workflow titan_illumina_pe {
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = consensus.consensus_seq
+      genome_fasta = consensus.consensus_seq,
+      dataset_name = nextclade_dataset_name,
+      dataset_reference = nextclade_dataset_reference,
+      dataset_tag = nextclade_dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:

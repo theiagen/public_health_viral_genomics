@@ -17,7 +17,7 @@ workflow vadr_update {
       input:
     }
     output {
-        String vaddr_update_version            = version_capture.phvg_version
+        String vadr_update_version            = version_capture.phvg_version
         String vadr_update_analysis_date       = version_capture.date
         File?  vadr_alerts_list = vadr.alerts_list
         String vadr_num_alerts = vadr.num_alerts

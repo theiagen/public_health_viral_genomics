@@ -8,7 +8,7 @@ import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_clearlabs {
+workflow titan_fasta {
   meta {
     description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on the Clear Labs platform."
   }
@@ -18,6 +18,9 @@ workflow titan_clearlabs {
     File    assembly_fasta
     String  seq_method  
     String  input_assembly_method
+    String  nextclade_dataset_name = "sars-cov-2"
+    String  nextclade_dataset_reference = "MN908947"
+    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
   }
   call qc_utils.consensus_qc {
     input:
@@ -30,7 +33,10 @@ workflow titan_clearlabs {
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = assembly_fasta
+      genome_fasta = assembly_fasta,
+      dataset_name = nextclade_dataset_name,
+      dataset_reference = nextclade_dataset_reference,
+      dataset_tag = nextclade_dataset_tag
   }
   call taxon_ID.nextclade_output_parser_one_sample {
     input:
