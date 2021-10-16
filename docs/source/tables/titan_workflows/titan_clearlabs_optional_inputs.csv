@@ -21,7 +21,7 @@ pangolin3,min_length,Int,Minimum query length allowed for pangolin to attempt as
 pangolin3,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
 titan_clearlabs,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
 titan_clearlabs,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
-titan_clearlabs,nextclade_datasert_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
+titan_clearlabs,nextclade_dataset_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
 titan_clearlabs,normalise,Int,Value to normalize read counts,200
 titan_clearlabs,seq_method,String,Description of the sequencing methodology used to generate the input read data,ONT via Clear Labs WGS
 vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
