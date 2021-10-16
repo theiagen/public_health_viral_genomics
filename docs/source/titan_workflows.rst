@@ -239,7 +239,6 @@ Download CSV: :download:`Titan_ONT_default_outputs.csv <tables/titan_workflows/t
    
 |
 
-Titan_FASTA
 =========
 The Titan_FASTA workflow was written to process SARS-CoV-2 assembly files to infer the quality of the input assembly and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_FASTA data workflow below.
 
@@ -289,6 +288,43 @@ Download CSV: :download:`Titan_FASTA_default_outputs.csv <tables/titan_workflows
 |
 
 
+Titan Workflows for Genomic Epidemiology
+--------------------------------------------
+
+Genomic Epidemiology, i.e. generating phylogenetic trees from a set of consensus assemblies (FASTA format) to track the spread and evolution of viruses on a local, national or global scale, has been an important methodological approach in the effort to mitigate disease transmission.
+
+The Titan Genomic Epidemiology Series contains two seperate WDL workflows (Titan_Augur_Prep and Titan_Augur_Run) that process a set of viral genomic assemblies to generate phylogenetic trees (JSON format) and metadata files which can be used to assign epidemiological data to each assembly for subsequent analyses.
+
+The two Titan workflows for genomic epidemiology must be run sequentially to first prepare the data for phylogenetic analysis and second to generate the phylogenetic trees. More information on the technical details of these processes and information on how to utilize and apply these workflows for public health investigations is available below.
+
+Required User Inputs
+********************
+Download CSV: :download:`Titan_Augur_Prep_required_inputs.csv <tables/titan_workflows/titan_augur_prep_required_inputs.csv>`
+
+.. csv-table::
+   :file: tables/titan_workflows/titan_augur_prep_required_inputs.csv
+   :widths: 20, 20, 20, 40
+   :header-rows: 1
+|
+
+Titan_Augur_Prep
+================
+The Titan_Augur_Prep workflow was written to process consensus assemblies (FASTA format) and the associated metadata in preparation for running the Titan_Augur_Run. Input assemblies should be of similar quality (percent reference coverage, number of ambiguous bases, etc.). Inputs with highly discordant quality metrics may result in innacurate inference of genetic relatedness.
+
+.. note::
+  There must be some sequence diversity in the input set of assemblies to be analyzed. As a rule of thumb, the smaller the input set, the more sequence diversity will be required to make any sort of genomic inference. If a small (~10) set of viral genomic assemblies is used as the input then it may be necessary to add one significantly divergent assembly.
+  
+Upon initiating a Titan_Augur_Prep run, input assembly/consensus files and associated metadata will be used to produce the array of assembly/consensus files and the array of metadata files to be used as inputs for the Titan_Augur_Run workflow.
+
+Metadata files are prepared with the Auger_Prep workflow by using BASH commands to first de-identify, and then to parse the headers of the input assembly files. 
+
+|
+
+Titan_Augur_Run
+===============
+The Titan_Augur_Run workflow was written to process an array of assembly/consensus files (FASTA format) and and array of sample metadata files (TSV format) using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report.
+
+=======
 Titan Workflows for Genomic Epidemiology
 --------------------------------------------
 
