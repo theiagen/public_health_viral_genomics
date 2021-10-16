@@ -2,8 +2,7 @@
 Titan Workflow Series
 ======================
 
-The Titan Workflow Series is a collection of WDL workflows developed for performing genomic characterization and genomic epidemiology of viral samples to support public health decision-making. As of today (October 14th, 2021) these workflows are specific to SARS-CoV-2 amplicon read data, but work is underway to allow for the analysis of other viral pathogens of concern.
-
+The Titan Workflow Series is a collection of WDL workflows developed for performing genomic characterization and genomic epidemiology of SARS-CoV-2 samples to support public health decision-making. 
 
 Titan Workflows for Genomic Characterization
 --------------------------------------------
@@ -33,14 +32,14 @@ The Titan_Illumina_PE workflow was written to process Illumina paired-end (PE) r
 .. note::
   By default, this workflow will assume that input reads were generated using a 300-cycle kit (i.e. 2 x 150 bp reads). Modifications to the optional parameter for trimmomatic_minlen may be required to accommodate for shorter read data, such as 2 x 75bp reads generated using a 150-cycle kit.
   
-Upon initiating a Titan_Illumina_PE job, the input primer scheme coordinates and raw paired-end Illumina read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign samples SARS-CoV-2 lineage and clade types as outlined in the Titan_Illumina_PE data workflow below.
+Upon initiating a Titan_Illumina_PE job, the input primer scheme coordinates and raw paired-end Illumina read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_Illumina_PE data workflow below.
 
 .. figure:: images/Titan_Illumina_PE.png
    :width: 800
    :alt: Titan_Illumina_PE workflow
    :figclass: align-center
    
-   **Titan_Illumina_PE v1.4.4 Data Workflow**
+   **Titan_Illumina_PE Data Workflow**
 
 Consensus genome assembly with the Titan_Illumina_PE workflow is performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then trimming low-quality reads with Trimmomatic and removing adapter sequences with BBDuk.  These cleaned read data are then aligned to the Wuhan-1 reference genome with BWA to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file using the iVar Trim sub-command. The iVar consensus sub-command is then  utilized to generate a consensus assembly in FASTA format. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -87,14 +86,14 @@ The Titan_Illumina_SE workflow was written to process Illumina single-end (SE) r
 .. note::
   By default, this workflow will assume that input reads were generated using a 35-cycle kit (i.e. 1 x 35 bp reads). Modifications to the optional parameter for trimmomatic_minlen may be required to accommodate for longer read data.
   
-Upon initiating a Titan_Illumina_SE job, the input primer scheme coordinates and raw paired-end Illumina read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign samples SARS-CoV-2 lineage and clade types as outlined in the Titan_Illumina_PE data workflow below.
+Upon initiating a Titan_Illumina_SE job, the input primer scheme coordinates and raw paired-end Illumina read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_Illumina_PE data workflow below.
 
 .. figure:: images/Titan_Illumina_SE.png
    :width: 800
    :alt: Titan_Illumina_SE workflow
    :figclass: align-center
    
-   **Titan_Illumina_SE v1.4.4 Data Workflow**
+   **Titan_Illumina_SE Data Workflow**
 
 Consensus genome assembly with the Titan_Illumina_SE workflow is performed by first trimming low-quality reads with Trimmomatic and removing adapter sequences with BBDuk.  These cleaned read data are then aligned to the Wuhan-1 reference genome with BWA to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file using the iVar Trim sub-command. The iVar consensus sub-command is then  utilized to generate a consensus assembly in FASTA format. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -138,14 +137,14 @@ Titan_ClearLabs
 =================
 The Titan_ClearLabs workflow was written to process ClearLabs WGS read data for SARS-CoV-2 amplicon sequencing. Currently, Clear Labs sequencing is performed with the Artic V3 protocol. If alternative primer schemes such as the Qiaseq Primer Panel, the Swift Amplicon SARS-CoV-2 Panel and the Artic V4 Amplicon Sequencing Panel become avaialble on the platform, these data can can also be analysed with this workflow since the primer sequence coordinates of the PCR scheme utilized must be provided along with the raw Clear Labs read data must be provided in BED and FASTQ file formats, respectively. 
 
-Upon initiating a Titan_ClearLabs run,  input ClearLabs read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign samples SARS-CoV-2 lineage and clade types as outlined in the Titan_ClearLabs data workflow below.
+Upon initiating a Titan_ClearLabs run,  input ClearLabs read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_ClearLabs data workflow below.
 
 .. figure:: images/Titan_ClearLabs.png
    :width: 800
    :alt: Titan_ClearLabs workflow
    :figclass: align-center
    
-   **Titan_ClearLabs v1.4.4 Data Workflow**
+   **Titan_ClearLabs Data Workflow**
 
 Consensus genome assembly with the Titan_ClearLabs workflow is performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then following the `Artic nCoV-2019 novel coronavirs bioinformatics protocol <https://artic.network/ncov-2019/ncov2019-bioinformatics-sop.html>`. Briefly, input reads are aligned to the Wuhan-1 reference genome with minimap2 to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file and a consensus assembly file is generated using the Artic medaka command. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -193,14 +192,14 @@ Titan_ONT
 =========
 The Titan_ONT workflow was written to process basecalled and demultiplexed Oxford Nanopore Technology (ONT) read data. The most common read data analyzed by the Titan_ONT workflow are generated with the Artic V3 protocol. Alternative primer schemes such as the Qiaseq Primer Panel, the Swift Amplicon SARS-CoV-2 Panel and the Artic V4 Amplicon Sequencing Panel however, can also be analysed with this workflow since the primer sequence coordinates of the PCR scheme utilized must be provided along with the raw paired-end Illumina read data in BED and FASTQ file formats, respectively. 
  
-Upon initiating a Titan_ONT run,  input ONT read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign samples SARS-CoV-2 lineage and clade types as outlined in the Titan_ONT data workflow below.
+Upon initiating a Titan_ONT run,  input ONT read data provided for each sample will be processed to perform consensus genome assembly, infer the quality of both raw read data and the generated consensus genome, and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_ONT data workflow below.
 
 .. figure:: images/Titan_ONT.png
    :width: 800
    :alt: Titan_ONT workflow
    :figclass: align-center
    
-   **Titan_ONT v1.4.4 Data Workflow**
+   **Titan_ONT Data Workflow**
 
 Consensus genome assembly with the Titan_ONT workflow is performed performed by first de-hosting read data with the NCBI SRA-Human-Scrubber tool then following then following  `Artic nCoV-2019 novel coronavirs bioinformatics protocol <https://artic.network/ncov-2019/ncov2019-bioinformatics-sop.html>`. Briefly, input reads are filtered by size (min-length: 400bp; max-length: 700bp) with the Aritc guppyplex command.  These size-selected read data are aligned to the Wuhan-1 reference genome with minimap2 to generate a Binary Alignment Mapping (BAM) file. Primer sequences are then removed from the BAM file and a consensus assembly file is generated using the Artic medaka command. This assembly is then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
 
@@ -239,6 +238,56 @@ Download CSV: :download:`Titan_ONT_default_outputs.csv <tables/titan_workflows/t
    :header-rows: 1
    
 |
+
+Titan_FASTA
+=========
+The Titan_FASTA workflow was written to process SARS-CoV-2 assembly files to infer the quality of the input assembly and assign SARS-CoV-2 lineage and clade types as outlined in the Titan_FASTA data workflow below.
+
+.. figure:: images/Titan_FASTA.png
+   :width: 800
+   :alt: Titan_FASTA workflow
+   :figclass: align-center
+   
+   **Titan_FASTA Data Workflow**
+
+The quality of input SARS-CoV-2 genome assemblies are assessed by the Titan_FASTA workflow using a series of bash shell scripts. Input assemblies are then used to assign lineage and clade designations with Pangolin and NextClade. NCBI’S VADR tool is also employed to screen for potentially errant features (e.g. erroneous frame-shift mutations) in the consensus assembly.  
+
+More information on required user inputs, optional user inputs, default tool parameters and the outputs generated by Titan_FASTA are outlined below.   
+
+Required User Inputs
+********************
+Download CSV: :download:`Titan_FASTA_required_inputs.csv <tables/titan_workflows/titan_fasta_required_inputs.csv>`
+
+.. csv-table::
+   :file: tables/titan_workflows/titan_fasta_required_inputs.csv
+   :widths: 20, 20, 20, 40
+   :header-rows: 1
+   
+|
+
+Optional User Inputs
+********************
+
+Download CSV: :download:`Titan_FASTA_optional_inputs.csv <tables/titan_workflows/titan_fasta_optional_inputs.csv>`
+
+.. csv-table::
+  :file: tables/titan_workflows/titan_fasta_optional_inputs.csv
+  :widths: 10, 10, 10, 10, 20
+  :header-rows: 1
+          
+|
+
+Outputs 
+********************
+Download CSV: :download:`Titan_FASTA_default_outputs.csv <tables/titan_workflows/titan_fasta_outputs.csv>`
+
+.. csv-table::
+   :file: tables/titan_workflows/titan_fasta_outputs.csv
+   :widths: 20, 20, 60
+   :header-rows: 1
+   
+|
+
 
 Titan Workflows for Genomic Epidemiology
 --------------------------------------------
