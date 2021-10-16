@@ -16,7 +16,7 @@ workflow titan_clearlabs {
   input {
     String  samplename
     File    clear_lab_fastq
-    String  seq_method  = "ONT via Clear Labs WGS"
+    String  seq_method  = "OXFORD_NANOPORE"
     File    primer_bed
     Int?    normalise  = 20000
     String  nextclade_dataset_name = "sars-cov-2"

@@ -16,7 +16,7 @@ workflow titan_illumina_se {
 
   input {
     String  samplename
-    String  seq_method="Illumina single-end"
+    String  seq_method="ILLUMINA"
     File    read1_raw
     File    primer_bed
     String  nextclade_dataset_name = "sars-cov-2"

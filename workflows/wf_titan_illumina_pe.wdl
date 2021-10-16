@@ -16,7 +16,7 @@ workflow titan_illumina_pe {
 
   input {
     String  samplename
-    String  seq_method="Illumina paired-end"
+    String  seq_method="ILLUMINA"
     File    read1_raw
     File    read2_raw
     File    primer_bed

@@ -15,7 +15,7 @@ workflow titan_ont {
 
   input {
     String samplename
-    String seq_method = "ONT"
+    String seq_method = "OXFORD_NANOPORE"
     File   primer_bed
     File   demultiplexed_reads
     Int?   normalise = 200
