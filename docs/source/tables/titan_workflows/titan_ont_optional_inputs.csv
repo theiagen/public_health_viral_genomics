@@ -25,7 +25,7 @@ read_filtering,min_length,Int,Minimum sequence length,400
 read_filtering,run_prefix,String,Run name,artic_ncov2019
 titan_ont,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
 titan_ont,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
-titan_ont,nextclade_datasert_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
+titan_ont,nextclade_dataset_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
 titan_ont,artic_primer_version,String,Version of the Artic PCR protocol used to generate input read data ,V3
 titan_ont,normalise,Int,Value to normalize read counts,200
 titan_ont,seq_method,String,Description of the sequencing methodology used to generate the input read data,ONT

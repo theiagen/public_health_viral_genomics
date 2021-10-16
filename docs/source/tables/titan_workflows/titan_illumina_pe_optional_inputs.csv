@@ -24,7 +24,7 @@ read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality re
 read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
 titan_illumina_pe,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
 titan_illumina_pe,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
-titan_illumina_pe,nextclade_datasert_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
+titan_illumina_pe,nextclade_dataset_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
 titan_illumina_pe,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
 vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
