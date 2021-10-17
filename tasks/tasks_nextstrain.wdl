@@ -129,7 +129,7 @@ task derived_cols {
         String?       lab_highlight_loc
         Array[File]   table_map=[]
 
-        String        docker="quay.io/broadinstitute/viral-core:2.1.19"
+        String        docker="quay.io/broadinstitute/viral-core:2.1.33"
     }
     parameter_meta {
         lab_highlight_loc: {
@@ -855,7 +855,7 @@ task augur_mask_sites {
         File     sequences
         File?    mask_bed
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712"
     }
     parameter_meta {
         sequences: {
@@ -911,7 +911,7 @@ task draft_augur_tree {
         String?  tree_builder_args
 
         Int?     cpus
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         msa_or_vcf: {
@@ -1048,7 +1048,7 @@ task ancestral_traits {
         File?          weights
         Float?         sampling_bias_correction
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     String out_basename = basename(tree, '.nwk')
     command {
@@ -1099,7 +1099,7 @@ task ancestral_tree {
         File?    vcf_reference
         File?    output_vcf
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         msa_or_vcf: {
@@ -1158,7 +1158,7 @@ task translate_augur_tree {
         File?  vcf_reference_output
         File?  vcf_reference
 
-        String docker = "nextstrain/base:build-20210218T081251Z"
+        String docker = "nextstrain/base:build-20210413T201712Z"
     }
     String out_basename = basename(tree, '.nwk')
     command {
@@ -1212,7 +1212,7 @@ task tip_frequencies {
         Boolean  censored = false
         Boolean  include_internal_nodes = false
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
         String   out_basename = basename(tree, '.nwk')
     }
     command {
@@ -1270,7 +1270,7 @@ task assign_clades_to_nodes {
         File ref_fasta
         File clades_tsv
 
-        String docker = "nextstrain/base:build-20210218T081251Z"
+        String docker = "nextstrain/base:build-20210413T201712Z"
     }
     String out_basename = basename(basename(tree_nwk, ".nwk"), "_timetree")
     command {
@@ -1371,7 +1371,7 @@ task export_auspice_json {
 
         String out_basename = basename(basename(tree, ".nwk"), "_timetree")
 
-        String docker = "nextstrain/base:build-20210218T081251Z"
+        String docker = "nextstrain/base:build-20210413T201712Z"
     }
 
     command {
@@ -1496,4 +1496,53 @@ task prep_augur_metadata {
       preemptible:  preemptible_tries
       maxRetries: 3
   }
+}
+
+task nextstrain_deduplicate_sequences {
+    meta {
+        description: "This uses the Nextstrain sanitize_sequences.py script to deduplicate sequences by sequence ID. If the sequences themselves differ, and error is optionally raised. See: https://github.com/nextstrain/ncov/blob/c4747c1f53cd84baaeacdbd044390604d1af2cfc/scripts/sanitize_sequences.py"
+    }
+
+    input {
+        File sequences_fasta
+        Boolean error_on_seq_diff = false
+
+        String nextstrain_ncov_repo_commit = "99ccfc5c6601e78468e7db193ee453128ba593ff"
+        String docker                      = "nextstrain/base:build-20210413T201712Z"
+    }
+
+    parameter_meta {
+        sequences_fasta: {
+          description: "FASTA file with multiple sequences",
+          patterns: ["*.fasta","*.fasta.xz","*.fasta.gz"]
+        }
+        error_on_seq_diff: {
+            description: "If error_on_seq_diff=true, an error will be raised if duplicate sequence IDs exist but have different sequences. By default, use the first occurrence of each duplicated sequence."
+        }
+    }
+
+    String out_basename = basename(basename(basename(basename(sequences_fasta, '.xz'), '.gz'), '.tar'), '.fasta')
+    String out_filename = "~{out_basename}_sequences_deduplicated.fasta"
+    command {
+        set -e
+        ncov_path_prefix="/nextstrain/ncov"
+        wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
+        mkdir -p "$ncov_path_prefix"
+        tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
+
+        python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
+        --sequences "~{sequences_fasta}" \
+        ${true="--error-on-duplicate-strains" false="" error_on_seq_diff} \
+        --output "~{out_filename}"
+    }
+    runtime {
+        docker: docker
+        memory: "7 GB"
+        cpu:   1
+        disks:  "local-disk 375 LOCAL"
+        dx_instance_type: "mem2_ssd1_v2_x2"
+    }
+    output {
+        File sequences_deduplicated_fasta = "~{out_filename}"
+    }
 }

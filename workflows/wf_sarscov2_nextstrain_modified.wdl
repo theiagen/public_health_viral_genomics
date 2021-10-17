@@ -3,6 +3,7 @@ version 1.0
 import "../tasks/tasks_nextstrain.wdl" as nextstrain
 import "../tasks/tasks_reports.wdl" as reports
 import "../tasks/tasks_intrahost.wdl" as intrahost
+import "../tasks/tasks_utils.wdl" as utils
 
 workflow sarscov2_nextstrain {
     meta {
@@ -14,8 +15,10 @@ workflow sarscov2_nextstrain {
     input {
         Array[File]+    assembly_fastas
         Array[File]+    sample_metadata_tsvs
+        String          tree_root_seq_id = "Wuhan-Hu-1/2019"
 
         String          build_name
+        File?           builds_yaml
 
         Array[String]?  ancestral_traits_to_infer
 
@@ -59,16 +62,23 @@ workflow sarscov2_nextstrain {
 
     #### mafft_and_snp
 
-    call nextstrain.gzcat {
+    call utils.zcat {
         input:
             infiles     = assembly_fastas,
             output_name = "all_samples_combined_assembly.fasta"
     }
-    call nextstrain.filter_sequences_by_length {
-        input:
-            sequences_fasta = gzcat.combined,
-            min_non_N = min_unambig_genome
+    
+    call nextstrain.nextstrain_deduplicate_sequences as dedup_seqs {
+    input:
+        sequences_fasta = zcat.combined
     }
+    
+    call utils.filter_sequences_by_length {
+        input:
+            sequences_fasta = dedup_seqs.sequences_deduplicated_fasta,
+            min_non_N       = min_unambig_genome
+    }
+    
     call nextstrain.mafft_one_chr as mafft {
         input:
             sequences = filter_sequences_by_length.filtered_fasta,
@@ -77,15 +87,10 @@ workflow sarscov2_nextstrain {
             cpus      = mafft_cpu
             
     }
-    call nextstrain.snp_sites {
-        input:
-            msa_fasta = mafft.aligned_sequences
-    }
-
 
     #### merge metadata, compute derived cols
     if(length(sample_metadata_tsvs)>1) {
-        call reports.tsv_join {
+        call utils.tsv_join {
             input:
                 input_tsvs = sample_metadata_tsvs,
                 id_col = 'strain',
@@ -97,12 +102,15 @@ workflow sarscov2_nextstrain {
             metadata_tsv = select_first(flatten([[tsv_join.out_tsv], sample_metadata_tsvs]))
     }
 
-
-    call nextstrain.fasta_to_ids {
+    call utils.fasta_to_ids {
         input:
             sequences_fasta = mafft.aligned_sequences
     }
-
+    
+    call nextstrain.snp_sites {
+        input:
+            msa_fasta = mafft.aligned_sequences
+    }
 
     #### augur_from_msa
 
@@ -121,7 +129,8 @@ workflow sarscov2_nextstrain {
             msa_or_vcf  = augur_mask_sites.masked_sequences,
             metadata    = derived_cols.derived_metadata,
             clock_rate  = clock_rate,
-            clock_std_dev = clock_std_dev
+            clock_std_dev = clock_std_dev,
+            root = tree_root_seq_id
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
         call nextstrain.ancestral_traits {
