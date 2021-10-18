@@ -855,7 +855,7 @@ task augur_mask_sites {
         File     sequences
         File?    mask_bed
 
-        String   docker = "nextstrain/base:build-20210413T201712"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         sequences: {
