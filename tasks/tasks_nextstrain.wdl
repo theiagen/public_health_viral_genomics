@@ -317,7 +317,7 @@ task nextstrain_build_subsample {
         File?    parameters_yaml
 
         Int?     machine_mem_gb
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
         String   nextstrain_ncov_repo_commit = "5dbca8a45a64e39057c22163f154db981f7ed5c1"
     }
     parameter_meta {
@@ -418,7 +418,7 @@ task nextstrain_build_subsample {
 task nextstrain_ncov_defaults {
     input {
         String   nextstrain_ncov_repo_commit = "5dbca8a45a64e39057c22163f154db981f7ed5c1"
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     command {
         set -e
@@ -468,7 +468,7 @@ task filter_subsample_sequences {
         Array[String]?  exclude_where
         Array[String]?  include_where
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         sequences_fasta: {
@@ -610,7 +610,7 @@ task filter_sequences_to_list {
         File          sequences
         Array[File]?  keep_list
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         sequences: {
@@ -786,7 +786,7 @@ task augur_mafft_align {
         Boolean  fill_gaps = true
         Boolean  remove_reference = true
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     command {
         set -e
@@ -855,7 +855,7 @@ task augur_mask_sites {
         File     sequences
         File?    mask_bed
 
-        String   docker = "nextstrain/base:build-20210413T201712"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         sequences: {
@@ -978,7 +978,7 @@ task refine_augur_tree {
         String?  divergence_units = "mutations"
         File?    vcf_reference
 
-        String   docker = "nextstrain/base:build-20210218T081251Z"
+        String   docker = "nextstrain/base:build-20210413T201712Z"
     }
     parameter_meta {
         msa_or_vcf: {
@@ -1313,7 +1313,7 @@ task augur_import_beast {
         String? tip_date_delimiter
 
         Int?    machine_mem_gb
-        String  docker = "nextstrain/base:build-20210218T081251Z"
+        String  docker = "nextstrain/base:build-20210413T201712Z"
     }
     String tree_basename = basename(beast_mcc_tree, ".tree")
     command {
