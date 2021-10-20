@@ -70,7 +70,7 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
    testParameterFiles:
     - empty.json
-- name: Titan_WWVC
+ - name: Titan_WWVC
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_titan_wwvc.wdl
    testParameterFiles:
