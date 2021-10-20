@@ -23,6 +23,7 @@ workflow titan_illumina_wwvc {
     File           reference_genome
     File           spike_bed
     File           spike_annotations
+    Int            trimmomatic_minlen = 25
 
   }
   scatter (r1_r2 in zip(read1_raw, read2_raw)) {
@@ -31,7 +32,7 @@ workflow titan_illumina_wwvc {
         samplename = "wastewater_sample",
         read1_raw  = r1_r2.left,
         read2_raw  = r1_r2.right,
-        trimmomatic_minlen = 25
+        trimmomatic_minlen = trimmomatic_minlen
     }
     call align.bwa {
       input:
