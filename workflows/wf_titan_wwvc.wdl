@@ -10,7 +10,7 @@ import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../workflows/WasteWaterVariantCalling_modified.wdl" as wastewater
 
-workflow titan_illumina_pe {
+workflow titan_illumina_wwvc {
   meta {
     description: "Reference-based consensus calling for viral amplicon sequencing data"
   }
@@ -19,9 +19,6 @@ workflow titan_illumina_pe {
     Array[String]  samplename
     Array[File]    read1_raw
     Array[File]    read2_raw
-    Int?           trimmomatic_minlen = 
-    Int?           trimmomatic_quality_trim_score = 25
-    Int?           trimmomatic_window_size = 4
     File           primer_bed
     File           reference_genome
     File           spike_bed
@@ -34,9 +31,7 @@ workflow titan_illumina_pe {
         samplename = "wastewater_sample",
         read1_raw  = r1_r2.left,
         read2_raw  = r1_r2.right,
-        trimmomatic_min_len = trimmomatic_minlen,
-        trimmomatic_quality_trim_score = trimmomatic_quality_trim_score,
-        trimmmomatic_window_size = trimmomatic_window_size
+        trimmomatic_minlen = 25
     }
     call align.bwa {
       input:
