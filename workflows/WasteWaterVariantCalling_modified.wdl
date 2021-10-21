@@ -1,7 +1,11 @@
 version 1.0
 
 workflow WasteWaterVariantCalling {
-
+  meta {
+      description: "Modified version of the CDPHE's WasteWaterVariantCalling WDL Worfklow to performs variant calling on SARS-CoV-2 in waster water samples and identifies mutations in the Spike gene associated with known VOCs and VUIs: https://github.com/CDPHE/WasteWaterVariantCalling)."
+      author: "Kevin Libuit"
+      email:  "kevin.libuit@theiagen.com"
+  }
     input {
         Array[File] sorted_bam
         File covid_genome
