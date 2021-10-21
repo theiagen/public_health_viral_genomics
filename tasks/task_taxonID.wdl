@@ -43,7 +43,7 @@ task kraken2 {
   }
 
   runtime {
-    docker:       "staphb/kraken2:2.0.8-beta_hv"
+    docker:       "quay.io/staphb/kraken2:2.0.8-beta_hv"
     memory:       "8 GB"
     cpu:          4
     disks:        "local-disk 100 SSD"
@@ -58,7 +58,7 @@ task pangolin3 {
     String      samplename
     Int         min_length=10000
     Float       max_ambig=0.5
-    String      docker="staphb/pangolin:3.1.11-pangolearn-2021-08-24"
+    String      docker="quay.io/staphb/pangolin:3.1.14-pangolearn-2021-10-13"
     String      inference_engine="usher"
   }
 
@@ -187,7 +187,7 @@ task pangolin_update_log {
   }
 
   runtime {
-    docker:     "theiagen/utility:1.1"
+    docker:     "quay.io/theiagen/utility:1.1"
     memory:       "8 GB"
     cpu:          4
     disks:        "local-disk 100 SSD"
