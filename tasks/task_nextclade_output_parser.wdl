@@ -6,7 +6,7 @@ task nextclade_output_parser_one_sample {
     }
     input {
         File   nextclade_tsv
-        String docker = "theiagen/utility:1.1"
+        String docker = "quay.io/theiagen/utility:1.1"
     }
     command {
       python3 <<CODE
