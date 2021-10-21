@@ -48,7 +48,7 @@ task primer_trim {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.3.1-titan"
+    docker:       "quay.io/staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -113,7 +113,7 @@ task variant_call {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.3.1-titan"
+    docker:       "quay.io/staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -173,7 +173,7 @@ task consensus {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.3.1-titan"
+    docker:       "quay.io/staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
