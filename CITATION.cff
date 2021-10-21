@@ -10,8 +10,13 @@ authors:
   given-names: "Frank"
 - family-names: "Kapsak"
   given-names: "Curtis"
+  orcid: "https://orcid.org/0000-0002-8735-1190"
+- family-names: "Smith"
+  given-names: "Emily"
+  orcid: "https://orcid.org/0000-0002-0501-4693"
 - family-names: "Sevinsky"
   given-names: "Joel"
+  orcid: "https://orcid.org/0000-0003-0512-2827"
 title: "Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of viral pathogens, especially the SARS-CoV-2 virus."
 url: "https://github.com/theiagen/public_health_viral_genomics"
 version: 1.5.3
