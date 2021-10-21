@@ -3,11 +3,7 @@ version 1.0
 import "wf_read_QC_trim.wdl" as read_qc
 import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
-import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
-import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
-import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../workflows/WasteWaterVariantCalling_modified.wdl" as wastewater
 
 workflow titan_illumina_wwvc {
