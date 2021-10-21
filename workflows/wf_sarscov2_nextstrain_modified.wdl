@@ -101,22 +101,33 @@ workflow sarscov2_nextstrain {
         input:
             metadata_tsv = select_first(flatten([[tsv_join.out_tsv], sample_metadata_tsvs]))
     }
-
+    
+    ## Subsample if builds.yaml file provided
+    if(defined(builds_yaml)) {
+      call nextstrain.nextstrain_build_subsample as subsample {
+         input:
+             alignment_msa_fasta = mafft.aligned_sequences,
+             sample_metadata_tsv = derived_cols.derived_metadata,
+             build_name          = build_name,
+             builds_yaml         = builds_yaml
+      }
+    }
+    
     call utils.fasta_to_ids {
         input:
-            sequences_fasta = mafft.aligned_sequences
+            sequences_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     }
     
     call nextstrain.snp_sites {
         input:
-            msa_fasta = mafft.aligned_sequences
+            msa_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     }
 
     #### augur_from_msa
 
     call nextstrain.augur_mask_sites {
         input:
-            sequences = mafft.aligned_sequences
+            sequences = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     }
     call nextstrain.draft_augur_tree {
         input:
@@ -126,7 +137,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.refine_augur_tree {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
-            msa_or_vcf  = augur_mask_sites.masked_sequences,
+            msa_or_vcf  = select_first([subsample.subsampled_msa, augur_mask_sites.masked_sequences]),
             metadata    = derived_cols.derived_metadata,
             clock_rate  = clock_rate,
             clock_std_dev = clock_std_dev,
@@ -154,7 +165,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.ancestral_tree {
         input:
             tree        = refine_augur_tree.tree_refined,
-            msa_or_vcf  = augur_mask_sites.masked_sequences
+            msa_or_vcf  = select_first([subsample.subsampled_msa, augur_mask_sites.masked_sequences])
     }
     call nextstrain.translate_augur_tree {
         input:
