@@ -51,23 +51,29 @@ workflow titan_illumina_wwvc {
        spike_annotations = spike_annotations,
        sample_id = samplename
    }
+   call versioning.version_capture{
+     input:
+   }
    output {
-       Array[File] addrg_bam = WasteWaterVariantCalling.addrg_bam
-       Array[File] variants = WasteWaterVariantCalling.variants
-       Array[File] sorted_vcf = WasteWaterVariantCalling.sorted_vcf
-       Array[File] sample_spike_vcf = WasteWaterVariantCalling.sample_spike_vcf
-       Array[File] sample_spike_tsv = WasteWaterVariantCalling.sample_spike_tsv
-       Array[File] sample_spike_tsv_summary = WasteWaterVariantCalling.sample_spike_tsv_summary
-       Array[File] sample_spike_tsv_dash = WasteWaterVariantCalling.sample_spike_tsv_dash
-       Array[File] fill_NA_tsv = WasteWaterVariantCalling.fill_NA_tsv
-       Array[File] allele_freq_tsv = WasteWaterVariantCalling.allele_freq_tsv
-       Array[File] reformat_tsv_tsv = WasteWaterVariantCalling.reformat_tsv_tsv
-       Array[File] sample_spike_tsv_counts = WasteWaterVariantCalling.sample_spike_tsv_counts
-       Array[File] alignment_files = primer_trim.trim_sorted_bam
-       File spike_summary_temp = WasteWaterVariantCalling.spike_summary_temp
-       File spike_summary = WasteWaterVariantCalling.spike_summary
-       File spike_dashboard = WasteWaterVariantCalling.spike_dashboard
-       File spike_counts = WasteWaterVariantCalling.spike_counts
+     String titan_wwvc_version = version_capture.phvg_version
+     String titan_wwcv_date = version_capture.date
+   
+     Array[File] addrg_bam = WasteWaterVariantCalling.addrg_bam
+     Array[File] variants = WasteWaterVariantCalling.variants
+     Array[File] sorted_vcf = WasteWaterVariantCalling.sorted_vcf
+     Array[File] sample_spike_vcf = WasteWaterVariantCalling.sample_spike_vcf
+     Array[File] sample_spike_tsv = WasteWaterVariantCalling.sample_spike_tsv
+     Array[File] sample_spike_tsv_summary = WasteWaterVariantCalling.sample_spike_tsv_summary
+     Array[File] sample_spike_tsv_dash = WasteWaterVariantCalling.sample_spike_tsv_dash
+     Array[File] fill_NA_tsv = WasteWaterVariantCalling.fill_NA_tsv
+     Array[File] allele_freq_tsv = WasteWaterVariantCalling.allele_freq_tsv
+     Array[File] reformat_tsv_tsv = WasteWaterVariantCalling.reformat_tsv_tsv
+     Array[File] sample_spike_tsv_counts = WasteWaterVariantCalling.sample_spike_tsv_counts
+     Array[File] alignment_files = primer_trim.trim_sorted_bam
+     File spike_summary_temp = WasteWaterVariantCalling.spike_summary_temp
+     File spike_summary = WasteWaterVariantCalling.spike_summary
+     File spike_dashboard = WasteWaterVariantCalling.spike_dashboard
+     File spike_counts = WasteWaterVariantCalling.spike_counts
        
    }
 }
