@@ -29,7 +29,7 @@ workflow sarscov2_nextstrain {
         Float?          clock_rate
         Float?          clock_std_dev
         Int             mafft_cpu=64
-        Int             mafft_mem_size=768
+        Int             mafft_mem_size=500
 
         Int             min_unambig_genome = 27000
     }
