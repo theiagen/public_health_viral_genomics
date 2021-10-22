@@ -29,6 +29,7 @@ workflow sarscov2_nextstrain {
         Float?          clock_rate
         Float?          clock_std_dev
         Int             mafft_cpu=64
+        Int             mafft_mem_size=768
 
         Int             min_unambig_genome = 27000
     }
@@ -85,6 +86,7 @@ workflow sarscov2_nextstrain {
             ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
             basename  = "all_samples_aligned.fasta",
             cpus      = mafft_cpu
+            mem_size  = mafft_mem_size
             
     }
 
