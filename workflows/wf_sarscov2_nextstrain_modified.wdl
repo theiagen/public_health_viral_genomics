@@ -85,7 +85,7 @@ workflow sarscov2_nextstrain {
             sequences = filter_sequences_by_length.filtered_fasta,
             ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
             basename  = "all_samples_aligned.fasta",
-            cpus      = mafft_cpu
+            cpus      = mafft_cpu,
             mem_size  = mafft_mem_size
             
     }
