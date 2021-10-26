@@ -7,7 +7,7 @@ task deidentify {
     String    submission_id
     File      sequence
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "quay.io/staphb/seqyclean:1.10.09"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 100
@@ -80,7 +80,7 @@ task gisaid {
     String    treatment=""
     String    iso_county = ""
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "quay.io/staphb/seqyclean:1.10.09"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10
@@ -131,7 +131,7 @@ task genbank {
     String    specimen_source
     String    BioProject
 
-    String    docker_image = "theiagen/utility:1.1"
+    String    docker_image = "quay.io/theiagen/utility:1.1"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10
@@ -174,7 +174,7 @@ task sra {
     File      read1
     File?     read2
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "quay.io/staphb/seqyclean:1.10.09"
     Int       mem_size_gb = 1
     Int       CPUs = 1
     Int       disk_size = 25
@@ -214,7 +214,7 @@ input {
   Array[Int]  vadr_num_alerts
   Int         vadr_threshold=0
   String      repository
-  String      docker_image = "theiagen/utility:1.1"
+  String      docker_image = "quay.io/theiagen/utility:1.1"
   Int         mem_size_gb = 1
   Int         CPUs = 1
   Int         disk_size = 25

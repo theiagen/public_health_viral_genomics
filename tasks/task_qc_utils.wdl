@@ -44,7 +44,7 @@ task fastqc {
   }
 
   runtime {
-    docker:       "staphb/fastqc:0.11.8"
+    docker:       "quay.io/staphb/fastqc:0.11.9"
     memory:       "4 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -83,7 +83,7 @@ task fastqc_se {
   }
 
   runtime {
-    docker:       "staphb/fastqc:0.11.8"
+    docker:       "quay.io/staphb/fastqc:0.11.8"
     memory:       "4 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -131,7 +131,7 @@ task consensus_qc {
   }
 
   runtime {
-    docker:       "theiagen/utility:1.1"    
+    docker:       "quay.io/theiagen/utility:1.1"    
     memory:       "2 GB"
     cpu:          1
     disks:        "local-disk 100 SSD"

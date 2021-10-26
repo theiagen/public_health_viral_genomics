@@ -35,7 +35,7 @@ task bwa {
   }
 
   runtime {
-    docker:       "staphb/ivar:1.3.1-titan"
+    docker:       "quay.io/staphb/ivar:1.3.1-titan"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -68,7 +68,7 @@ task mafft {
   }
 
   runtime {
-    docker:       "staphb/mafft:7.450"
+    docker:       "quay.io/staphb/mafft:7.450"
     memory:       "32 GB"
     cpu:          16
     disks:        "local-disk 100 SSD"

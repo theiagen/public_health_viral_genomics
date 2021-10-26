@@ -55,7 +55,7 @@ task read_filtering {
 
   runtime {
 
-    docker:       "staphb/artic-ncov2019:1.3.0"
+    docker:       "quay.io/staphb/artic-ncov2019:1.3.0"
     memory:       "16 GB"
     cpu:          8
     disks:        "local-disk 100 SSD"
@@ -73,7 +73,7 @@ task consensus {
     Int?    normalise=20000
     Int?    cpu=8
     String  medaka_model="r941_min_high_g360"
-    String  docker="staphb/artic-ncov2019:1.3.0"
+    String  docker="quay.io/staphb/artic-ncov2019:1.3.0"
   }
   String primer_name = basename(primer_bed)
   
