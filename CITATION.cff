@@ -17,6 +17,6 @@ authors:
 - family-names: "Sevinsky"
   given-names: "Joel"
   orcid: "https://orcid.org/0000-0003-0512-2827"
-title: "Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of viral pathogens, especially the SARS-CoV-2 virus."
+title: "Public Health Viral Genomics: Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of viral pathogens, especially the SARS-CoV-2 virus."
 url: "https://github.com/theiagen/public_health_viral_genomics"
 version: 1.5.3
