@@ -49,7 +49,7 @@ task ncbi_prep_one_sample {
     Int maxlen = 30000
     
     #runtime
-    String docker_image = "staphb/vadr:1.3"
+    String docker_image = "quay.io/staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -168,7 +168,7 @@ task ncbi_prep_one_sample_se {
     Int maxlen = 30000
     
     #runtime
-    String docker_image = "staphb/vadr:1.3"
+    String docker_image = "quay.io/staphb/vadr:1.3"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -273,7 +273,7 @@ task gisaid_prep_one_sample {
     String? treatment
     
     #runtime
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "quay.io/theiagen/utility:1.1"
     Int  mem_size_gb = 1
     Int CPUs = 1
     Int disk_size = 25
@@ -332,7 +332,7 @@ task compile_assembly_n_meta {
     String repository
     String file_ext
     String date
-    String docker_image = "theiagen/utility:1.1"
+    String docker_image = "quay.io/theiagen/utility:1.1"
     Int mem_size_gb = 8
     Int CPUs = 4
     Int disk_size = 100
@@ -447,7 +447,7 @@ input {
   String date
   String? gcp_bucket
 
-  String      docker_image = "theiagen/utility:1.1"
+  String      docker_image = "quay.io/theiagen/utility:1.1"
   Int         mem_size_gb = 16
   Int         CPUs = 4
   Int         disk_size = 100

@@ -71,7 +71,7 @@ task ncbi_scrub_se {
   input {
     File        read1
     String      samplename
-    String      docker = "ncbi/sra-human-scrubber:1.0.2021-05-05"
+    String      docker = "gcr.io/ncbi-sys-gcr-public-research/sra-human-scrubber@sha256:b7dba71079344daea4ea3363e1a67fa54edb7ec65459d039669c68a66d38b140"
 
   }
   String r1_filename = basename(read1)
@@ -160,7 +160,7 @@ task seqyclean {
   }
 
   runtime {
-      docker:       "staphb/seqyclean:1.10.09"
+      docker:       "quay.io/staphb/seqyclean:1.10.09"
       memory:       "8 GB"
       cpu:          2
       disks:        "local-disk 100 SSD"
@@ -174,7 +174,7 @@ task trimmomatic {
     File        read1
     File        read2
     String      samplename
-    String      docker="staphb/trimmomatic:0.39"
+    String      docker="quay.io/staphb/trimmomatic:0.39"
     Int?        trimmomatic_minlen = 75
     Int?        trimmomatic_window_size=4
     Int?        trimmomatic_quality_trim_score=30
@@ -216,7 +216,7 @@ task trimmomatic_se {
   input {
     File        read1
     String      samplename
-    String      docker="staphb/trimmomatic:0.39"
+    String      docker="quay.io/staphb/trimmomatic:0.39"
     Int?        trimmomatic_minlen = 25
     Int?        trimmomatic_window_size=4
     Int?        trimmomatic_quality_trim_score=30
@@ -259,7 +259,7 @@ task bbduk {
     File        read2_trimmed
     String      samplename
     Int         mem_size_gb = 8
-    String      docker="staphb/bbtools:38.76"
+    String      docker="quay.io/staphb/bbtools:38.76"
   }
 
   command <<<
@@ -296,7 +296,7 @@ task bbduk_se {
   input {
     File        read1_trimmed
     String      samplename
-    String      docker="staphb/bbtools:38.76"
+    String      docker="quay.io/staphb/bbtools:38.76"
     Int         mem_size_gb = 8 
     }
 
