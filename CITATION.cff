@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use PHVG workflows, please cite it as below."
+authors:
+- family-names: "Libuit"
+  given-names: "Kevin"
+- family-names: "Sevinsky"
+  given-names: "Joel"
+- family-names: "Petit III"
+  given-names: "Robert A. "
+  orcid: "https://orcid.org/0000-0002-1350-9426"
+- family-names: "Ambrosio"
+  given-names: "Frank"
+title: "Bioinformatics workflows for genomic characterization, submission preparation, and genomic epidemiology of viral pathogens, especially the SARS-CoV-2 virus."
+url: "https://github.com/theiagen/public_health_viral_genomics"
+version: 1.5.3
