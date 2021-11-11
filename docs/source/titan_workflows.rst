@@ -290,7 +290,7 @@ Download CSV: :download:`Titan_FASTA_default_outputs.csv <tables/titan_workflows
 
 
 Titan Workflows for Genomic Epidemiology
---------------------------------------------
+----------------------------------------
 
 Genomic Epidemiology, i.e. generating phylogenetic trees from a set of consensus assemblies (FASTA format) to track the spread and evolution of viruses on a local, national or global scale, has been an important methodological approach in the effort to mitigate disease transmission.
 
