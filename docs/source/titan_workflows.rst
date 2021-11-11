@@ -288,7 +288,6 @@ Download CSV: :download:`Titan_FASTA_default_outputs.csv <tables/titan_workflows
 
 |
 
-
 Titan Workflows for Genomic Epidemiology
 ----------------------------------------
 
