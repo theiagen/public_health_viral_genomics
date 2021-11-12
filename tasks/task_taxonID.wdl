@@ -300,3 +300,48 @@ task nextclade_output_parser_one_sample {
         String nextclade_aa_dels  = read_string("NEXTCLADE_AADELS")
     }
 }
+
+task freyja_variants_one_sample {
+  input {
+    File primer_trimmed_bam
+    String samplename
+  }
+  command <<<
+    
+    freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants --depths ~{samplename}_freyja_depths
+
+  >>>
+  runtime {
+    memory: "32 GB"
+    cpu: 8
+    docker: "jlevy123/freyja:latest"
+    disks: "local-disk 10 HDD"
+  }
+  output {
+    File freyja_variants = "~{samplename}_freyja_variants"
+    File freyja_depths = "~{samplename}_freyja_depths"
+  }
+
+}
+
+task freyja_demix_one_sample {
+  input {
+    File freyja_variants
+    File freyja_depths
+    String samplename
+  }
+  command <<<
+    
+  freyja demix ~{freyja_variants} ~{freyja_depths} --output ~{samplename}_freyja_demixed
+
+  >>>
+  output {
+    File freyja_demixed = "~{samplename}_freyja_demixed"
+  }
+  runtime {
+    memory: "32 GB"
+    cpu: 8
+    docker: "jlevy123/freyja:latest"
+    disks: "local-disk 10 HDD"
+  }
+}
