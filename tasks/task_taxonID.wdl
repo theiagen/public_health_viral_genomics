@@ -307,19 +307,20 @@ task freyja_variants_one_sample {
     String samplename
   }
   command <<<
+  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
     
-    freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants --depths ~{samplename}_freyja_depths
+  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants --depths ~{samplename}_freyja_depths.tsv
 
   >>>
   runtime {
-    memory: "32 GB"
-    cpu: 8
+    memory: "4 GB"
+    cpu: 2
     docker: "jlevy123/freyja:latest"
-    disks: "local-disk 10 HDD"
+    disks: "local-disk 100 HDD"
   }
   output {
-    File freyja_variants = "~{samplename}_freyja_variants"
-    File freyja_depths = "~{samplename}_freyja_depths"
+    File freyja_variants = "~{samplename}_freyja_variants.tsv"
+    File freyja_depths = "~{samplename}_freyja_depths.tsv"
   }
 
 }
@@ -331,7 +332,8 @@ task freyja_demix_one_sample {
     String samplename
   }
   command <<<
-    
+  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
+
   freyja demix ~{freyja_variants} ~{freyja_depths} --output ~{samplename}_freyja_demixed
 
   >>>
@@ -339,9 +341,9 @@ task freyja_demix_one_sample {
     File freyja_demixed = "~{samplename}_freyja_demixed"
   }
   runtime {
-    memory: "32 GB"
-    cpu: 8
+    memory: "4 GB"
+    cpu: 2
     docker: "jlevy123/freyja:latest"
-    disks: "local-disk 10 HDD"
+    disks: "local-disk 100 HDD"
   }
 }
