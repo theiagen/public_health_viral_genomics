@@ -88,7 +88,5 @@ workflow titan_freyja_run {
     File freyja_variants = variants.freyja_variants
     File freyja_depths = variants.freyja_depths
     File freyja_demixed = demix.freyja_demixed
-    
-    
     }
 }
