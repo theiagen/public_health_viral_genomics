@@ -8,7 +8,7 @@ gisaid_prep_one_sample,CPUs,Int,CPUs allocated to the gisaid_prep_one_sample tas
 gisaid_prep_one_sample,preemptible_tries,Int,Number of preemptible tries for the gisaid_prep_one_sample task,0
 gisaid_prep_one_sample,outbreak,String,"Outbreak associated with this submision, e.g. date, place, family cluster",None
 gisaid_prep_one_sample,last_vaccinated,String,Date of last vaccine recieved,None
-gisaid_prep_one_sample,docker_image,String,Docker image utilized for the gisaid_prep_one_sample task,None
+gisaid_prep_one_sample,docker_image,String,Docker image utilized for the gisaid_prep_one_sample task,quay.io/theiagen/utility:1.1
 gisaid_prep_one_sample,passage_details,String,"Passage details of the sample being submitted, e.g. original, vero, etc ",original
 mercury_pe_prep,dehosting_method,String,Method utilized to dehost read data,NCBI Human Scrubber
 mercury_pe_prep,filetype,String,File type of the read data being submitted to SRA,fastq
@@ -28,8 +28,8 @@ mercury_pe_prep,treatment,String,"Treatment administered to the patient, e.g. dr
 mercury_pe_prep,patient_gender,String,Gender of the patient,unknown
 mercury_pe_prep,purpose_of_sampling,String,"Reason that the original specimen was taken, e.g. clinical diagnostics",None
 mercury_pe_prep,patient_age,String,Age of the patient,unknown
-ncbi_prep_one_sample,mem_size_gb,Int,Memory allocated to the ncbi_prep_one_sample task,
-ncbi_prep_one_sample,docker_image,String,Docker image utilized for the ncbi_prep_one_sample task,
+ncbi_prep_one_sample,mem_size_gb,Int,Memory allocated to the ncbi_prep_one_sample task,1
+ncbi_prep_one_sample,docker_image,String,Docker image utilized for the ncbi_prep_one_sample task,quay.io/staphb/vadr:1.3
 ncbi_prep_one_sample,maxlen,Int,VADR --maxlen input utilized when trimming terminal ambiguous ends,30000
 ncbi_prep_one_sample,preemptible_tries,Int,Number of preemptible tries for the ncbi_prep_one_sample task,0
 ncbi_prep_one_sample,CPUs,Int,CPUs allocated to the ncbi_prep_one_sample task,1
