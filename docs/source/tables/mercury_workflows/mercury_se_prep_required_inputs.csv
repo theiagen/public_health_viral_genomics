@@ -19,8 +19,7 @@ mercury_pe_prep,library_source,String,Source of the genomic material used to pre
 mercury_pe_prep,library_strategy,String,"Library preparation strategy, e.g., ""AMPLICON"" for data generated from tiling PCR amplicons"
 mercury_pe_prep,number_N,Int,Number of fully ambiguous basecalls within the consensus assembly
 mercury_pe_prep,organism,String,"Name of the organism sequenced, e.g. ""SARS-CoV-2"""
-mercury_pe_prep,read1_dehosted,File,Dehosted forward read file
-mercury_pe_prep,read2_dehosted,File,Dehosted reverse read file
+mercury_pe_prep,reads_dehosted,File,Dehosted read files
 mercury_pe_prep,seq_platform,String,Description of the sequencing methodology used to generate the input read data
 mercury_pe_prep,state,String,State the sample was collected in
 mercury_pe_prep,submission_id,String,Unique identfier for the sample utilized upon submission
