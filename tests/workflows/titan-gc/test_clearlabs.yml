@@ -14,7 +14,6 @@
     - path: titan/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
       md5sum: 1d537e1a17fabda77371ba22bdfb3d80
     - path: titan/clearlabs/cromwell-stderr.txt
-      md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: titan/clearlabs/cromwell-stdout.txt
     - path: titan/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
     - path: titan/clearlabs/kraken2_reports/clearlabs_dehosted_kraken2_report.txt

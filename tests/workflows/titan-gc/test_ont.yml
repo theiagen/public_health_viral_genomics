@@ -14,7 +14,6 @@
     - path: titan/ont/assemblies/ont.medaka.consensus.fasta
       md5sum: 02a04e9cf297acc8fc03667edab41fde
     - path: titan/ont/cromwell-stderr.txt
-      md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: titan/ont/cromwell-stdout.txt
     - path: titan/ont/dehosted_reads/ont_R1_dehosted.fastq.gz
     - path: titan/ont/kraken2_reports/ont_dehosted_kraken2_report.txt

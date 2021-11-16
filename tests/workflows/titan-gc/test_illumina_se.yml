@@ -14,7 +14,6 @@
     - path: titan/illumina_se/assemblies/ERR6319327.ivar.consensus.fasta
       md5sum: 45a6c6f18d5fa448e0aa811bdf934bab
     - path: titan/illumina_se/cromwell-stderr.txt
-      md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: titan/illumina_se/cromwell-stdout.txt
     - path: titan/illumina_se/kraken2_reports/ERR6319327_kraken2_report.txt
       md5sum: 7e4fc05efbbc3937b99420e6193be061
