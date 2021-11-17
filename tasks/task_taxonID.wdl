@@ -75,7 +75,7 @@ task pangolin3 {
       echo "unknown inference_engine designated: ~{inference_engine}; must be usher or pangolearn" >&2
       exit 1
     fi
-    
+
     # date and version capture
     date | tee DATE
 
@@ -202,7 +202,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.3.0"
+        String docker = "nextstrain/nextclade:1.4.5"
         String dataset_name
         String dataset_reference
         String dataset_tag
