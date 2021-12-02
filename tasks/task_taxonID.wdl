@@ -310,9 +310,10 @@ task freyja_one_sample {
   export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
   
   # Call variants and capture sequencing depth information
-  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants --depths ~{samplename}_freyja_depths.tsv
+  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv
+ 
   # Demix variants 
-  freyja demix ~{samplename}_freyja_variants ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
+  freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
   echo -e "\t~{samplename}" > ~{samplename}_freyja_demixed.tsv
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
