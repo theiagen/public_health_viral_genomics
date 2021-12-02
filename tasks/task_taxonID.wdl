@@ -307,7 +307,8 @@ task freyja_one_sample {
     String samplename
   }
   command <<<
-  
+  # set path (can remove once staphb container is available)
+  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
   # Call variants and capture sequencing depth information
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv
  
@@ -322,7 +323,7 @@ task freyja_one_sample {
   runtime {
     memory: "4 GB"
     cpu: 2
-    docker: "jlevy123/freyja:latest
+    docker: "jlevy123/freyja:latest"
     disks: "local-disk 100 HDD"
   }
   output {
