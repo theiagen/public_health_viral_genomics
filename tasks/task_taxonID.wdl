@@ -301,49 +301,34 @@ task nextclade_output_parser_one_sample {
     }
 }
 
-task freyja_variants_one_sample {
+task freyja_one_sample {
   input {
     File primer_trimmed_bam
     String samplename
   }
   command <<<
   export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
-    
+  
+  # Call variants and capture sequencing depth information
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants --depths ~{samplename}_freyja_depths.tsv
+  # Demix variants 
+  freyja demix ~{samplename}_freyja_variants ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
+  # Adjust output header
+  echo -e "\t~{samplename}" > ~{samplename}_freyja_demixed.tsv
+  tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
+
 
   >>>
   runtime {
     memory: "4 GB"
     cpu: 2
-    docker: "jlevy123/freyja:latest"
+    docker: "staphb/freyja:1.2.0"
     disks: "local-disk 100 HDD"
   }
   output {
     File freyja_variants = "~{samplename}_freyja_variants.tsv"
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
+    File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
   }
 
-}
-
-task freyja_demix_one_sample {
-  input {
-    File freyja_variants
-    File freyja_depths
-    String samplename
-  }
-  command <<<
-  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
-
-  freyja demix ~{freyja_variants} ~{freyja_depths} --output ~{samplename}_freyja_demixed
-
-  >>>
-  output {
-    File freyja_demixed = "~{samplename}_freyja_demixed"
-  }
-  runtime {
-    memory: "4 GB"
-    cpu: 2
-    docker: "jlevy123/freyja:latest"
-    disks: "local-disk 100 HDD"
-  }
 }

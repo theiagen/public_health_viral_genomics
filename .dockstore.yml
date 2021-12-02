@@ -75,8 +75,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_wwvc.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Freyja_Run
+ - name: Freyja_FASTQ
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_freyja_run.wdl
+   primaryDescriptorPath: /workflows/wf_freyja_fastq.wdl
    testParameterFiles:
     - empty.json

@@ -6,7 +6,7 @@ import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_freyja_run {
+workflow freyja_fastq {
   input {
     File read1_raw
     File read2_raw
@@ -16,32 +16,26 @@ workflow titan_freyja_run {
   }
   call read_qc.read_QC_trim {
     input:
-      samplename = "wastewater_sample",
+      samplename = samplename,
       read1_raw  = read1_raw,
       read2_raw  = read2_raw,
       trimmomatic_minlen = trimmomatic_minlen
   }
   call align.bwa {
     input:
-      samplename = "wastewater_sample",
+      samplename = samplename,
       read1 = read_QC_trim.read1_clean,
       read2 = read_QC_trim.read2_clean
   }
   call consensus_call.primer_trim {
     input:
-      samplename = "wastewater_sample",
+      samplename = samplename,
       primer_bed = primer_bed,
       bamfile = bwa.sorted_bam
   }
-  call taxon_id.freyja_variants_one_sample as variants {
+  call taxon_id.freyja_one_sample as freyja {
     input:
       primer_trimmed_bam = primer_trim.trim_sorted_bam,
-      samplename = samplename
-  }
-  call taxon_id.freyja_demix_one_sample as demix {
-    input:
-      freyja_variants = variants.freyja_variants,
-      freyja_depths = variants.freyja_depths,
       samplename = samplename
   }
   call versioning.version_capture{
@@ -85,8 +79,8 @@ workflow titan_freyja_run {
     String samtools_version_primtrim = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
 
-    File freyja_variants = variants.freyja_variants
-    File freyja_depths = variants.freyja_depths
-    File freyja_demixed = demix.freyja_demixed
+    File freyja_variants = freyja.freyja_variants
+    File freyja_depths = freyja.freyja_depths
+    File freyja_demixed = freyja.freyja_demixed
     }
 }
