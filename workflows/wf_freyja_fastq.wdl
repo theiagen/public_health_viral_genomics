@@ -42,8 +42,8 @@ workflow freyja_fastq {
     input:
   }
   output {
-    String titan_freyja_run_wf_version = version_capture.phvg_version
-    String titan_freyja_run_wf_analysis_date = version_capture.date
+    String freyja_fastq_wf_version = version_capture.phvg_version
+    String freyja_wf_analysis_date = version_capture.date
     
     File read1_dehosted = read_QC_trim.read1_dehosted
     File read2_dehosted = read_QC_trim.read2_dehosted
