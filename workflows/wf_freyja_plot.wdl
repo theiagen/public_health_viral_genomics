@@ -42,7 +42,7 @@ task freyja_plot_task {
   }
   command <<<
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
-  samplename_array="~{sep=' ' samplename}"
+  samplename_array=(~{sep=' ' samplename})
   samplename_array_len=$(echo "${#samplename_array[@]}")
 
   if ~{plot_time}; then
