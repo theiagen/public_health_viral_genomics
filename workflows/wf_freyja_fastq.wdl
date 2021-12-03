@@ -43,7 +43,7 @@ workflow freyja_fastq {
   }
   output {
     String freyja_fastq_wf_version = version_capture.phvg_version
-    String freyja_wf_analysis_date = version_capture.date
+    String freyja_fastq_wf_analysis_date = version_capture.date
     
     File read1_dehosted = read_QC_trim.read1_dehosted
     File read2_dehosted = read_QC_trim.read2_dehosted
@@ -82,5 +82,6 @@ workflow freyja_fastq {
     File freyja_variants = freyja.freyja_variants
     File freyja_depths = freyja.freyja_depths
     File freyja_demixed = freyja.freyja_demixed
+    String freyja_barcode_version = freyja.freyja_barcode_version
     }
 }

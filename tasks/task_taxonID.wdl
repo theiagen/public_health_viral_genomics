@@ -305,8 +305,30 @@ task freyja_one_sample {
   input {
     File primer_trimmed_bam
     String samplename
+    File? freyja_usher_barcodes
+    Boolean update_db = false
+    String docker = "staphb/freyja:1.2.0"
   }
   command <<<
+  # configure barcode settings and capture version  
+  if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
+    #capture database info 
+    freyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
+    echo "here"
+    #set environment with user-defined db
+    mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
+  else
+    # update db if specified
+    if ~{update_db}; then 
+      freyja update 
+      freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+    else 
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
+    fi
+  fi
+  
+  echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
+  
   # Call variants and capture sequencing depth information
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv
  
@@ -321,13 +343,14 @@ task freyja_one_sample {
   runtime {
     memory: "4 GB"
     cpu: 2
-    docker: "staphb/freyja:1.2.0"
+    docker: "~{docker}"
     disks: "local-disk 100 HDD"
   }
   output {
     File freyja_variants = "~{samplename}_freyja_variants.tsv"
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
+    String freyja_barcode_version = read_string("FREYJA_BARCODES")
   }
 
 }
