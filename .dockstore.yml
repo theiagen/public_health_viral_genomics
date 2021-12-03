@@ -80,3 +80,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_freyja_fastq.wdl
    testParameterFiles:
     - empty.json
+ - name: Freyja_Plot
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_plot.wdl
+   testParameterFiles:
+    - empty.json
