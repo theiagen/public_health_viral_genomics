@@ -67,9 +67,9 @@ task freyja_plot_task {
     plot_options="--times freyja_times_metadata.csv"
     
     if [ ~{plot_time_interval} == "D" ]; then
-      plot_options="${interval_option} --interval D --windowsize ~{plot_day_window}"
+      plot_options="${plot_options} --interval D --windowsize ~{plot_day_window}"
     elif [ ~{plot_time_interval} == "MS" ]; then
-      plot_options="${interval_option} --interval MS"
+      plot_options="${plot_options} --interval MS"
     else
       echo "ERROR: plot time interval value (~{plot_time_interval}) not recognized. Must be either \"D\" (days) or \"MS\" (months)" >&2
       exit 1
@@ -98,6 +98,7 @@ task freyja_plot_task {
   >>>
   output {
     File freyja_plot = "~{freyja_plot_name}.pdf"
+    File? freyja_times_metadata "freyja_times_metadata.csv"
   }
   runtime {
     memory: "4 GB"
