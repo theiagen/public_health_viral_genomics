@@ -24,6 +24,7 @@ workflow freyja_plot {
     String freyja_plot_wf_analysis_date = version_capture.date
     
     File freyja_plot = freyja_plot_task.freyja_plot
+    File? freyja_plot_metadata = freyja_plot_task.freyja_plot_metadata
     }
 }
 
@@ -98,7 +99,7 @@ task freyja_plot_task {
   >>>
   output {
     File freyja_plot = "~{freyja_plot_name}.pdf"
-    File? freyja_times_metadata "freyja_times_metadata.csv"
+    File? freyja_plot_metadata = "freyja_times_metadata.csv"
   }
   runtime {
     memory: "4 GB"
