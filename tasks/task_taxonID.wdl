@@ -335,7 +335,7 @@ task freyja_one_sample {
   # Demix variants 
   freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
-  echo -e "\t~{samplename}" > ~{samplename}_freyja_demixed.tsv
+  echo -e "\t/~{samplename}" > ~{samplename}_freyja_demixed.tsv
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
 
 
