@@ -36,12 +36,9 @@ task freyja_plot_task {
     String plot_time_interval="MS"
     Int plot_day_window=14 
     String freyja_plot_name
-    String docker = "jlevy123/freyja:latest"
+    String docker = "staphb/freyja:1.2"
   }
   command <<<
-  # set path (can remove once staphb container is available)
-  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
-  
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
   samplename_array="~{sep=' ' samplename}"
   samplename_array_len=$(echo "${#samplename_array[@]}")
