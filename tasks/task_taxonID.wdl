@@ -307,7 +307,7 @@ task freyja_one_sample {
     String samplename
     File? freyja_usher_barcodes
     Boolean update_db = false
-    String docker = "staphb/freyja:1.2.0"
+    String docker = "staphb/freyja:1.2"
   }
   command <<<
   # configure barcode settings and capture version  
