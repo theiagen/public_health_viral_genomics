@@ -1,0 +1,11 @@
+Task,Input Variable,Data Type,Description
+mercury_batch,biosample_attributes,Array[File],Array of sample metadata filescompiled and formatted to meet the BioSample submission requirements
+mercury_batch,genbank_assembly,Array[File],Array of assembly files reformatted to meet the GenBank submission requirements
+mercury_batch,genbank_modifier,Array[File],Array of sample metadata files compiled and formatted to meet the GenBank submission requirements; will need to be manually modified to include BioSample accession numbers
+mercury_batch,gisaid_assembly,Array[File],Array of metadata files compiled and formatted to meet the GISAID submission requirements
+mercury_batch,gisaid_metadata,Array[File],Array of assembly files reformatted to meet the GISAID submission requirements
+mercury_batch,samplename,Array[String],Array of sample identifiers
+mercury_batch,sra_metadata,Array[File],Array of sample and read metadata files compiled and formatted to meet the SRA submission requirements
+mercury_batch,sra_reads,Array[File],Array of forward and reverse reads formatted for submission to SRA
+mercury_batch,submission_id,Array[String],Array of submission identifiers
+mercury_batch,vadr_num_alerts,Array[String],Array of VADR number of alerts

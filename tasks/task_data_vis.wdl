@@ -54,7 +54,7 @@ task cluster_render {
   }
 
   runtime {
-    docker:       "theiagen/cluster-report-env:1.2"
+    docker:       "quay.io/theiagen/cluster-report-env:1.2"
     memory:       "2 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
