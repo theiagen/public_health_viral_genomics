@@ -307,9 +307,12 @@ task freyja_one_sample {
     String samplename
     File? freyja_usher_barcodes
     Boolean update_db = false
-    String docker = "staphb/freyja:1.2"
+    String docker = "jlevy123/freyja:latest"
   }
   command <<<
+  # set path (can remove once staphb container is available)
+  export PATH="/opt/conda/envs/freyja-env/bin:/opt/conda/condabin:$PATH"
+
   # configure barcode settings and capture version  
   if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
     #capture database info 
