@@ -32,6 +32,7 @@ task freyja_plot_task {
     Array[String] samplename
     Array[File] freyja_demixed
     Array[String]? collection_date
+    Boolean plot_lineages=true
     Boolean plot_time=false
     String plot_time_interval="MS"
     Int plot_day_window=14 
@@ -42,7 +43,6 @@ task freyja_plot_task {
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
   samplename_array="~{sep=' ' samplename}"
   samplename_array_len=$(echo "${#samplename_array[@]}")
-  plot_options=""
 
   if ~{plot_time}; then
     # create timedate metadata sheet
@@ -81,11 +81,18 @@ task freyja_plot_task {
   mkdir ./demixed_files/
   echo "mv ${freyja_demixed_array[@]} demixed_files/"
   mv ${freyja_demixed_array[@]} ./demixed_files/
-  freyja aggregate ./demixed_files/ --output demixed_aggregate.tsv
+  
+  freyja aggregate \
+      ./demixed_files/ \
+      --output demixed_aggregate.tsv
   
   # create freya plot 
   echo "Running: freyja plot demixed_aggregate.tsv --output ~{freyja_plot_name}.pdf ${plot_options}"
-  freyja plot demixed_aggregate.tsv --output ~{freyja_plot_name}.pdf ${plot_options}
+  freyja plot \
+      ~{true='--lineages' false ='' plot_lineages} \
+      demixed_aggregate.tsv \
+      --output ~{freyja_plot_name}.pdf \
+      ${plot_options}
       
   
   >>>
