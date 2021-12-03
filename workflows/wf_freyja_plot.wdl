@@ -69,7 +69,7 @@ task freyja_plot_task {
     if [ ~{plot_time_interval} == "D" ]; then
       plot_options="${interval_option} --interval D --windowsize ~{plot_day_window}"
     elif [ ~{plot_time_interval} == "MS" ]; then
-      plot_options="${interval_option} --interval MD"
+      plot_options="${interval_option} --interval MS"
     else
       echo "ERROR: plot time interval value (~{plot_time_interval}) not recognized. Must be either \"D\" (days) or \"MS\" (months)" >&2
       exit 1
