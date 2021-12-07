@@ -21,6 +21,7 @@ task bwa {
       reference="~{reference_genome}"
     else
       reference="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
+    fi
     # Map with BWA MEM
     bwa mem \
     -t ${cpus} \
