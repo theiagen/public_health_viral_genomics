@@ -6,7 +6,7 @@ task bwa {
     File        read1
     File?        read2
     String      samplename
-    String?     reference_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
+    File     reference_genome
     Int?        cpus=6
   }
 
@@ -15,7 +15,12 @@ task bwa {
     date | tee DATE
     echo "BWA $(bwa 2>&1 | grep Version )" | tee BWA_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
-
+    
+    # set reference genome
+    if [[ ! -z "~{reference_genome}" ]]; then
+      reference="~{reference_genome}"
+    else
+      reference="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
     # Map with BWA MEM
     bwa mem \
     -t ${cpus} \

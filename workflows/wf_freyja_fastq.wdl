@@ -11,6 +11,7 @@ workflow freyja_fastq {
     File read1_raw
     File read2_raw
     File primer_bed
+    File reference_genome
     Int trimmomatic_minlen = 25
     String samplename
   }
@@ -24,6 +25,7 @@ workflow freyja_fastq {
   call align.bwa {
     input:
       samplename = samplename,
+      reference_genome=reference_genome,
       read1 = read_QC_trim.read1_clean,
       read2 = read_QC_trim.read2_clean
   }
@@ -36,7 +38,8 @@ workflow freyja_fastq {
   call taxon_id.freyja_one_sample as freyja {
     input:
       primer_trimmed_bam = primer_trim.trim_sorted_bam,
-      samplename = samplename
+      samplename = samplename,
+      reference_genome = reference_genome
   }
   call versioning.version_capture{
     input:
