@@ -24,14 +24,15 @@ task bwa {
     fi
     
     # Map with BWA MEM
+    echo "Running bwa mem -t ~{cpus} ${reference} ~{read1} ~{read2} | samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam "
     bwa mem \
-    -t ${cpus} \
+    -t ~{cpus} \
     ${reference} \
     ~{read1} ~{read2} |\
     samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam
 
     # index BAMs
-    samtools index ${samplename}.sorted.bam
+    samtools index ~{samplename}.sorted.bam
   >>>
 
   output {
