@@ -305,6 +305,7 @@ task freyja_one_sample {
   input {
     File primer_trimmed_bam
     String samplename
+    File reference_genome
     File? freyja_usher_barcodes
     Boolean update_db = false
     String docker = "staphb/freyja:1.2"
@@ -330,7 +331,7 @@ task freyja_one_sample {
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
   
   # Call variants and capture sequencing depth information
-  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv
+  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
  
   # Demix variants 
   freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
