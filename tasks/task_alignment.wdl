@@ -6,7 +6,7 @@ task bwa {
     File        read1
     File?        read2
     String      samplename
-    File     reference_genome
+    File?     reference_genome
     Int?        cpus=6
   }
 
