@@ -70,6 +70,7 @@ task consensus {
     String  samplename
     File    filtered_reads
     File    primer_bed
+    File?   reference_genome
     Int?    normalise=20000
     Int?    cpu=8
     String  medaka_model="r941_min_high_g360"
@@ -77,22 +78,27 @@ task consensus {
   }
   String primer_name = basename(primer_bed)
   
-  command{
+  command <<<
     # setup custom primer scheme (/V is required by Artic)
     mkdir -p ./primer-schemes/nCoV-2019/Vuser
     cp /primer-schemes/nCoV-2019/V3/nCoV-2019.reference.fasta ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.reference.fasta
-    cp ${primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
+    cp ~{primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
+
+    # set reference genome if one is provided
+    if [[ ! -z "~{reference_genome}" ]]; then
+      cp "~{reference_genome}" ./primer_schemes/nCoV-2019/V1/nCoV-2019.reference.fasta
+    fi
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
-    echo "${primer_name}" | tee PRIMER_NAME
+    echo "~{primer_name}" | tee PRIMER_NAME
     artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
     gunzip ~{samplename}.pass.vcf.gz
 
     # clean up fasta header
     echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
     grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
-  }
+  >>>
 
   output {
     File    consensus_seq = "~{samplename}.medaka.consensus.fasta"
