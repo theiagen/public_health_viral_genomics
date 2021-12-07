@@ -10,7 +10,7 @@ task bwa {
     Int?        cpus=6
   }
 
-  command {
+  command <<<
     # date and version control
     date | tee DATE
     echo "BWA $(bwa 2>&1 | grep Version )" | tee BWA_VERSION
@@ -22,16 +22,17 @@ task bwa {
     else
       reference="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
     fi
+    
     # Map with BWA MEM
     bwa mem \
     -t ${cpus} \
-    ${reference_genome} \
-    ${read1} ${read2} |\
-    samtools sort | samtools view -F 4 -o ${samplename}.sorted.bam
+    ${reference} \
+    ~{read1} ~{read2} |\
+    samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam
 
     # index BAMs
     samtools index ${samplename}.sorted.bam
-  }
+  >>>
 
   output {
     String     bwa_version = read_string("BWA_VERSION")
