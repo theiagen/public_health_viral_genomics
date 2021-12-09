@@ -24,6 +24,7 @@ workflow freyja_plot {
     String freyja_plot_wf_analysis_date = version_capture.date
     
     File freyja_plot = freyja_plot_task.freyja_plot
+    File freyja_demixed_aggregate = freyja_plot_task.demixed_aggregate
     File? freyja_plot_metadata = freyja_plot_task.freyja_plot_metadata
     }
 }
@@ -47,7 +48,7 @@ task freyja_plot_task {
 
   if ~{plot_time}; then
     # create timedate metadata sheet
-    collection_date_array=(~{sep=' ' collection_date})
+    collection_date_array="~{sep=' ' collection_date}"
     collection_date_array_len=$(echo "${#collection_date_array[@]}")
 
     if [ "$samplename_array_len" -ne "$collection_date_array_len" ]; then
@@ -99,6 +100,7 @@ task freyja_plot_task {
   >>>
   output {
     File freyja_plot = "~{freyja_plot_name}.pdf"
+    File demixed_aggregate = "demixed_aggregate.tsv"
     File? freyja_plot_metadata = "freyja_times_metadata.csv"
   }
   runtime {
