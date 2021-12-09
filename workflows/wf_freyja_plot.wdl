@@ -48,7 +48,7 @@ task freyja_plot_task {
 
   if ~{plot_time}; then
     # create timedate metadata sheet
-    collection_date_array=[~{sep=' ' collection_date}]
+    collection_date_array=(~{sep=' ' collection_date})
     collection_date_array_len=$(echo "${#collection_date_array[@]}")
 
     if [ "$samplename_array_len" -ne "$collection_date_array_len" ]; then
