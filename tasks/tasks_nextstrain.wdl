@@ -221,6 +221,10 @@ task derived_cols {
         )
 
         CODE
+        
+        # remove duplicate strains
+        awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
+                
     >>>
     runtime {
         docker: docker
