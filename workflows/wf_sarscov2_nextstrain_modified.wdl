@@ -80,13 +80,11 @@ workflow sarscov2_nextstrain {
             min_non_N       = min_unambig_genome
     }
     
-    call nextstrain.mafft_one_chr as mafft {
+    call nextstrain.mafft_one_chr_chunked as mafft {
         input:
             sequences = filter_sequences_by_length.filtered_fasta,
             ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
-            basename  = "all_samples_aligned.fasta",
-            cpus      = mafft_cpu,
-            mem_size  = mafft_mem_size
+            basename  = "all_samples_aligned.fasta"
             
     }
 
