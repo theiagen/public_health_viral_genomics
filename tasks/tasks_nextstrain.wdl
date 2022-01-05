@@ -1,58 +1,175 @@
 version 1.0
 
-task concatenate {
+task nextclade_one_sample {
     meta {
-        description: "This is nothing more than unix cat."
+        description: "Nextclade classification of one sample. Leaving optional inputs unspecified will use SARS-CoV-2 defaults."
     }
     input {
-        Array[File] infiles
-        String      output_name
+        File  genome_fasta
+        File? root_sequence
+        File? auspice_reference_tree_json
+        File? qc_config_json
+        File? gene_annotations_json
+        File? pcr_primers_csv
+        String? dataset_name
+        String docker = "nextstrain/nextclade:1.7.0"
     }
+    String basename = basename(genome_fasta, ".fasta")
     command {
-        cat ~{sep=" " infiles} > "${output_name}"
+        set -e
+        apt-get update
+        apt-get -y install python3
+
+        export NEXTCLADE_VERSION="$(nextclade --version)"
+        echo $NEXTCLADE_VERSION > VERSION
+
+        # grab named nextclade dataset
+        if [ -n "~{default='' dataset_name}" ]; then
+            nextclade dataset get --name="~{default='' dataset_name}" --output-dir=.
+        python3<<CODE1
+        import json, os
+        with open('tag.json', 'rt') as inf:
+            datasetinfo = json.load(inf)
+        with open('VERSION', 'wt') as outf:
+            outf.write(os.environ['NEXTCLADE_VERSION'] + "; name=" + datasetinfo['name'] + "; tag=" + datasetinfo['tag'] + "\n")
+        CODE1
+        fi
+
+        nextclade \
+            --input-fasta "~{genome_fasta}" \
+            --input-root-seq ~{default="reference.fasta" root_sequence} \
+            --input-tree ~{default="tree.json" auspice_reference_tree_json} \
+            --input-qc-config ~{default="qc.json" qc_config_json} \
+            --input-gene-map ~{default="genemap.gff" gene_annotations_json} \
+            --input-pcr-primers ~{default="primers.csv" pcr_primers_csv} \
+            --output-json "~{basename}".nextclade.json \
+            --output-tsv  "~{basename}".nextclade.tsv \
+            --output-tree "~{basename}".nextclade.auspice.json
+        cp "~{basename}".nextclade.tsv input.tsv
+        python3 <<CODE
+        # transpose table
+        import codecs
+        with codecs.open('input.tsv', 'r', encoding='utf-8') as inf:
+            with codecs.open('transposed.tsv', 'w', encoding='utf-8') as outf:
+                for c in zip(*(l.rstrip().split('\t') for l in inf)):
+                    outf.write('\t'.join(c)+'\n')
+        CODE
+        grep ^clade transposed.tsv | cut -f 2 | grep -v clade > NEXTCLADE_CLADE
+        grep ^aaSubstitutions transposed.tsv | cut -f 2 | grep -v aaSubstitutions > NEXTCLADE_AASUBS
+        grep ^aaDeletions transposed.tsv | cut -f 2 | grep -v aaDeletions > NEXTCLADE_AADELS
     }
     runtime {
-        docker: "ubuntu"
-        memory: "1 GB"
-        cpu:    1
-        disks: "local-disk 375 LOCAL"
+        docker: docker
+        memory: "3 GB"
+        cpu:    2
+        disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File combined = "${output_name}"
+        String nextclade_version = read_string("VERSION")
+        File   nextclade_json    = "~{basename}.nextclade.json"
+        File   auspice_json      = "~{basename}.nextclade.auspice.json"
+        File   nextclade_tsv     = "~{basename}.nextclade.tsv"
+        String nextclade_clade   = read_string("NEXTCLADE_CLADE")
+        String aa_subs_csv       = read_string("NEXTCLADE_AASUBS")
+        String aa_dels_csv       = read_string("NEXTCLADE_AADELS")
     }
 }
 
-task gzcat {
+task nextclade_many_samples {
     meta {
-        description: "Glue together a bunch of text files that may or may not be compressed (autodetect among gz or uncompressed inputs). Optionally compress the output (depending on requested file extension)"
+        description: "Nextclade classification of many samples. Leaving optional inputs unspecified will use SARS-CoV-2 defaults."
     }
     input {
-        Array[File] infiles
-        String      output_name
+        Array[File]+ genome_fastas
+        File?        root_sequence
+        File?        auspice_reference_tree_json
+        File?        qc_config_json
+        File?        gene_annotations_json
+        File?        pcr_primers_csv
+        String?      dataset_name
+        String       basename
+        String       docker = "nextstrain/nextclade:1.7.0"
     }
     command <<<
+        set -e
+        apt-get update
+        apt-get -y install python3
+
+        export NEXTCLADE_VERSION="$(nextclade --version)"
+        echo $NEXTCLADE_VERSION > VERSION
+
+        # grab named nextclade dataset
+        if [ -n "~{default='' dataset_name}" ]; then
+            nextclade dataset get --name="~{default='' dataset_name}" --output-dir=.
+        python3<<CODE1
+        import json, os
+        with open('tag.json', 'rt') as inf:
+            datasetinfo = json.load(inf)
+        with open('VERSION', 'wt') as outf:
+            outf.write(os.environ['NEXTCLADE_VERSION'] + "; name=" + datasetinfo['name'] + "; tag=" + datasetinfo['tag'] + "\n")
+        CODE1
+        fi
+
+        cat ~{sep=" " genome_fastas} > genomes.fasta
+        nextclade \
+            --input-fasta genomes.fasta \
+            --input-root-seq ~{default="reference.fasta" root_sequence} \
+            --input-tree ~{default="tree.json" auspice_reference_tree_json} \
+            --input-qc-config ~{default="qc.json" qc_config_json} \
+            --input-gene-map ~{default="genemap.gff" gene_annotations_json} \
+            --input-pcr-primers ~{default="primers.csv" pcr_primers_csv} \
+            --output-json "~{basename}".nextclade.json \
+            --output-tsv  "~{basename}".nextclade.tsv \
+            --output-tree "~{basename}".nextclade.auspice.json
+
+        cp genomes.aligned.fasta "~{basename}".nextalign.msa.fasta
+
         python3 <<CODE
-        import gzip
-        open_or_gzopen = lambda *args, **kwargs: gzip.open(*args, **kwargs) if args[0].endswith('.gz') else open(*args, **kwargs)
-        with open_or_gzopen("~{output_name}", 'wt') as outf:
-            for infname in "~{sep=' ' infiles}".split(' '):
-                with open_or_gzopen(infname, 'rt') as inf:
-                    for line in inf:
-                        outf.write(line)
+        # transpose table
+        import codecs, csv, json
+        out_maps = {'clade':{}, 'aaSubstitutions':{}, 'aaDeletions':{}}
+        with codecs.open('~{basename}.nextclade.tsv', 'r', encoding='utf-8') as inf:
+            with codecs.open('IDLIST', 'w', encoding='utf-8') as outf_ids:
+                for row in csv.DictReader(inf, delimiter='\t'):
+                    for k in ('clade','aaSubstitutions','aaDeletions'):
+                        out_maps[k][row['seqName']] = row[k]
+                    outf_ids.write(row['seqName']+'\n')
+        with codecs.open('NEXTCLADE_CLADE.json', 'w', encoding='utf-8') as outf:
+            json.dump(out_maps['clade'], outf)
+        with codecs.open('NEXTCLADE_AASUBS.json', 'w', encoding='utf-8') as outf:
+            json.dump(out_maps['aaSubstitutions'], outf)
+        with codecs.open('NEXTCLADE_AADELS.json', 'w', encoding='utf-8') as outf:
+            json.dump(out_maps['aaDeletions'], outf)
         CODE
+
+        # gather runtime metrics
+        cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
+        cat /proc/loadavg > CPU_LOAD
+        cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes > MEM_BYTES
     >>>
     runtime {
-        docker: "python:slim"
-        memory: "1 GB"
-        cpu:    2
-        disks: "local-disk 375 LOCAL"
-        dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
+        docker: docker
+        memory: "3 GB"
+        cpu:    4
+        disks: "local-disk 100 HDD"
+        dx_instance_type: "mem1_ssd1_v2_x4"
+        maxRetries: 2
     }
     output {
-        File combined = "${output_name}"
+        Map[String,String] nextclade_clade   = read_json("NEXTCLADE_CLADE.json")
+        Map[String,String] aa_subs_csv       = read_json("NEXTCLADE_AASUBS.json")
+        Map[String,String] aa_dels_csv       = read_json("NEXTCLADE_AADELS.json")
+        Array[String]      genome_ids        = read_lines("IDLIST")
+        String             nextclade_version = read_string("VERSION")
+        File               nextalign_msa     = "~{basename}.nextalign.msa.fasta"
+        File               nextclade_json    = "~{basename}.nextclade.json"
+        File               auspice_json      = "~{basename}.nextclade.auspice.json"
+        File               nextclade_tsv     = "~{basename}.nextclade.tsv"
+        Int                max_ram_gb        = ceil(read_float("MEM_BYTES")/1000000000)
+        Int                runtime_sec       = ceil(read_float("UPTIME_SEC"))
+        String             cpu_load          = read_string("CPU_LOAD")
     }
 }
 
@@ -61,6 +178,7 @@ task nextmeta_prep {
     File   gisaid_meta
     File   assembly_meta
     String out_name
+    File?  filter_to_ids
   }
   command <<<
     python3 << CODE
@@ -72,39 +190,46 @@ task nextmeta_prep {
     sample_to_gisaid = {}
     sample_to_assembly = {}
     with open('~{gisaid_meta}', 'rt') as inf:
-      for row in csv.DictReader(inf, delimiter='\t'):
+      for row in csv.DictReader(inf):
         s = row['covv_virus_name'][len('hCoV-19/'):]
         samples.append(s)
         sample_to_gisaid[s] = row
     with open('~{assembly_meta}', 'rt') as inf:
       for row in csv.DictReader(inf, delimiter='\t'):
         sample_to_assembly[row['sample']] = row
+    filter_to_ids = "~{default='' filter_to_ids}"
+    if filter_to_ids:
+        with open(filter_to_ids, 'rt') as inf:
+            keep_list = set(x.strip() for x in inf)
+    else:
+        keep_list = None
 
     # write outputs
-    out_headers = ('strain', 'date', 'region', 'country', 'division', 'location', 'length', 'host', 'Nextstrain_clade', 'pangolin_lineage', 'originating_lab', 'submitting_lab', 'authors', 'purpose_of_sequencing')
+    out_headers = ('strain', 'date', 'region', 'country', 'division', 'location', 'length', 'host', 'Nextstrain_clade', 'pango_lineage', 'originating_lab', 'submitting_lab', 'authors', 'purpose_of_sequencing')
 
     with open('~{out_name}', 'wt') as outf:
       writer = csv.DictWriter(outf, out_headers, delimiter='\t', dialect=csv.unix_dialect, quoting=csv.QUOTE_MINIMAL)
       writer.writeheader()
 
       for sample in samples:
-        geoloc = sample_to_gisaid[sample]['covv_location'].split(' / ')
-        writer.writerow({
-          'strain': sample,
-          'host': 'Human',
-          'length': sample_to_assembly[sample]['assembly_length_unambiguous'],
-          'Nextstrain_clade': sample_to_assembly[sample]['nextclade_clade'],
-          'pangolin_lineage': sample_to_assembly[sample]['pango_lineage'],
-          'region': geoloc[0],
-          'country': geoloc[1] if len(geoloc)>1 else '',
-          'division': geoloc[2] if len(geoloc)>2 else '',
-          'location': geoloc[3] if len(geoloc)>3 else '',
-          'date': sample_to_gisaid[sample]['covv_collection_date'],
-          'originating_lab': sample_to_gisaid[sample]['covv_orig_lab'],
-          'submitting_lab': sample_to_gisaid[sample]['covv_subm_lab'],
-          'authors': sample_to_gisaid[sample]['covv_authors'],
-          'purpose_of_sequencing': sample_to_gisaid[sample]['covv_add_host_info'],
-        })
+        if not filter_to_ids or sample in keep_list:
+            geoloc = sample_to_gisaid[sample]['covv_location'].split(' / ')
+            writer.writerow({
+            'strain': sample,
+            'host': 'Human',
+            'length': sample_to_assembly[sample]['assembly_length_unambiguous'],
+            'Nextstrain_clade': sample_to_assembly[sample]['nextclade_clade'],
+            'pango_lineage': sample_to_assembly[sample]['pango_lineage'],
+            'region': geoloc[0],
+            'country': geoloc[1] if len(geoloc)>1 else '',
+            'division': geoloc[2] if len(geoloc)>2 else '',
+            'location': geoloc[3] if len(geoloc)>3 else '',
+            'date': sample_to_gisaid[sample]['covv_collection_date'],
+            'originating_lab': sample_to_gisaid[sample]['covv_orig_lab'],
+            'submitting_lab': sample_to_gisaid[sample]['covv_subm_lab'],
+            'authors': sample_to_gisaid[sample]['covv_authors'],
+            'purpose_of_sequencing': sample_to_gisaid[sample].get('covv_sampling_strategy', sample_to_gisaid[sample].get('covv_add_host_info')),
+            })
 
     CODE
   >>>
@@ -116,7 +241,7 @@ task nextmeta_prep {
     memory: "1 GB"
     cpu: 1
     dx_instance_type: "mem1_ssd1_v2_x2"
-    maxRetries: 3
+    maxRetries: 2
   }
 }
 
@@ -127,9 +252,9 @@ task derived_cols {
     input {
         File          metadata_tsv
         String?       lab_highlight_loc
-        Array[File]   table_map=[]
+        Array[File]   table_map = []
 
-        String        docker="quay.io/broadinstitute/viral-core:2.1.33"
+        String        docker = "quay.io/broadinstitute/viral-core:2.1.33"
     }
     parameter_meta {
         lab_highlight_loc: {
@@ -215,16 +340,16 @@ task derived_cols {
         table_map = list(x for x in "~{sep='*' table_map}".split('*') if x)
         tsv_derived_cols(
             "~{metadata_tsv}",
-            "~{basename}.derived_cols.tsv",
+            "~{basename}.derived_cols.txt",
             table_map = table_map,
             lab_highlight_loc = lab_highlight_loc if lab_highlight_loc else None
         )
 
         CODE
         
-        # remove duplicate strains
+        # remove duplicate strains 
         awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
-                
+        
     >>>
     runtime {
         docker: docker
@@ -232,34 +357,10 @@ task derived_cols {
         cpu:    1
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File derived_metadata = "~{basename}.derived_cols.tsv"
-    }
-}
-
-task fasta_to_ids {
-    meta {
-        description: "Return the headers only from a fasta file"
-    }
-    input {
-        File sequences_fasta
-    }
-    String basename = basename(sequences_fasta, ".fasta")
-    command {
-        cat "~{sequences_fasta}" | grep \> | cut -c 2- > "~{basename}.txt"
-    }
-    runtime {
-        docker: "ubuntu"
-        memory: "1 GB"
-        cpu:    1
-        disks: "local-disk 375 LOCAL"
-        dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
-    }
-    output {
-        File ids_txt = "~{basename}.txt"
+        File derived_metadata = "~{basename}.derived_cols.txt"
     }
 }
 
@@ -269,7 +370,7 @@ task filter_segments {
         Int?  segment = 1
         File? pre_assembled_samples_fasta
 
-        Int? machine_mem_gb
+        Int?  machine_mem_gb
     }
     command <<<
     python3 <<CODE
@@ -302,7 +403,7 @@ task filter_segments {
         cpu:    1
         disks: "local-disk 375 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File assembly_of_segment = stdout()
@@ -314,15 +415,16 @@ task nextstrain_build_subsample {
         description: "Filter and subsample a sequence set using a Nextstrain 'build.yaml' file. See https://docs.nextstrain.org/en/latest/tutorials/SARS-CoV-2/steps/customizing-analysis.html#custom-subsampling-schemes"
     }
     input {
-        File     alignment_msa_fasta
-        File     sample_metadata_tsv
-        String   build_name
-        File?    builds_yaml
-        File?    parameters_yaml
+        File   alignment_msa_fasta
+        File   sample_metadata_tsv
+        String build_name
+        File?  builds_yaml
+        File?  parameters_yaml
+        File?  keep_list
 
-        Int?     machine_mem_gb
-        String   docker = "nextstrain/base:build-20211012T204409Z"
-        String   nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
+        Int?   machine_mem_gb
+        String docker = "nextstrain/base:build-20211012T204409Z"
+        String nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
     }
     parameter_meta {
         alignment_msa_fasta: {
@@ -359,33 +461,58 @@ task nextstrain_build_subsample {
         cat > my_profiles/config.yaml <<CONFIG
         configfile:
           - ~{default="defaults/parameters.yaml" parameters_yaml}
-          - ~{default="my_profiles/example/builds.yaml" builds_yaml}
-        config:
-          - sequences=~{alignment_msa_fasta}
-          - metadata=~{sample_metadata_tsv}
+          - builds.yaml
         printshellcmds: True
         show-failed-logs: True
         reason: True
         stats: stats.json
         CONFIG
 
+        # point to input data in builds.yaml
+        cat > builds.yaml <<INPUTS
+        inputs:
+            - name: dataset
+              sequences: "~{alignment_msa_fasta}"
+              metadata: "~{sample_metadata_tsv}"
+        INPUTS
+        if [ -n "~{default='' builds_yaml}" ]; then
+            # user specifies own builds, merge with pointers to data
+            cat "~{default='' builds_yaml}" >> builds.yaml
+        else
+            # user does not specify their own builds.yaml file, so use example file from ncov repo
+            # strip away default pointers to example data in example builds
+            tail +20 my_profiles/example/builds.yaml >> builds.yaml
+        fi
+
+        # hard inclusion list
+        KEEP_LIST="~{default='' keep_list}"
+        if [ -n "$KEEP_LIST" ]; then
+            for i in $(cat defaults/include.txt); do echo $i; done > include-ncov-default-cleannewlines.txt
+            cat include-ncov-default-cleannewlines.txt $KEEP_LIST > defaults/include.txt
+        fi
+
         # seed input data (skip some upstream steps in the DAG)
         # strip away anything after a space (esp in fasta headers--they break priorities.py)
         mkdir -p results
-        cut -f 1 -d ' ' "~{alignment_msa_fasta}" > results/filtered.fasta
+        cut -f 1 -d ' ' "~{alignment_msa_fasta}" > results/masked_dataset.fasta
+        xz -2 results/masked_dataset.fasta
 
         # execute snakemake on pre-iqtree target
-        RAM_MB=$(free -m | head -2 | tail -1 | awk '{print $2}')
+        RAM_MB=$(cat /proc/meminfo | grep MemTotal | perl -lape 's/MemTotal:\s+(\d+)\d\d\d\s+kB/$1/')
         snakemake \
             -j $(nproc) \
             --resources mem_mb=$RAM_MB \
             --profile my_profiles \
-            results/"~{build_name}"/subsampled_alignment.fasta
+            results/"~{build_name}"/"~{build_name}"_subsampled_sequences.fasta.xz
+
+        # decompress xz's for downstream
+        xz -d results/"~{build_name}"/"~{build_name}"_subsampled_sequences.fasta.xz
+        xz -d results/"~{build_name}"/"~{build_name}"_subsampled_metadata.tsv.xz
 
         # grab logs and numbers
         set +o pipefail
         grep . logs/subsample_"~{build_name}"_* > ../augur.filter.logs.txt
-        grep \> "results/~{build_name}/subsampled_alignment.fasta" | wc -l | tee ../OUT_COUNT
+        grep \> "results/~{build_name}/~{build_name}_subsampled_sequences.fasta" | wc -l | tee ../OUT_COUNT
         for i in results/"~{build_name}"/sample-*.fasta; do
           group=$(basename $i .fasta | cut -f 2- -d -)
           n=$(grep \> $i | wc -l)
@@ -400,46 +527,46 @@ task nextstrain_build_subsample {
     >>>
     runtime {
         docker: docker
-        memory: select_first([machine_mem_gb, 200]) + " GB" # priorities.py on 700k genomes
+        memory: select_first([machine_mem_gb, 50]) + " GB"
         cpu :   4
         disks:  "local-disk 375 HDD"
-        dx_instance_type: "mem3_ssd1_v2_x16"
-        maxRetries: 3
+        dx_instance_type: "mem3_ssd1_v2_x8"
+        maxRetries: 2
     }
     output {
-        File   subsampled_msa = "ncov/results/~{build_name}/subsampled_alignment.fasta"
-        File   subsample_logs = "augur.filter.logs.txt"
-        File   job_stats_json = "ncov/stats.json"
-        Int    sequences_out  = read_int("OUT_COUNT")
+        File            subsampled_msa  = "ncov/results/~{build_name}/~{build_name}_subsampled_sequences.fasta"
+        File            subsampled_meta = "ncov/results/~{build_name}/~{build_name}_subsampled_metadata.tsv"
+        File            subsample_logs  = "augur.filter.logs.txt"
+        File            job_stats_json  = "ncov/stats.json"
+        Int             sequences_out   = read_int("OUT_COUNT")
         Map[String,Int] counts_by_group = read_map("counts_by_group")
-        String augur_version  = read_string("VERSION")
-        Int    max_ram_gb     = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec    = ceil(read_float("UPTIME_SEC"))
-        String cpu_load       = read_string("CPU_LOAD")
+        String          augur_version   = read_string("VERSION")
+        Int             max_ram_gb      = ceil(read_float("MEM_BYTES")/1000000000)
+        Int             runtime_sec     = ceil(read_float("UPTIME_SEC"))
+        String          cpu_load        = read_string("CPU_LOAD")
     }
 }
 
 task nextstrain_ncov_defaults {
     input {
-        String   nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
+        String docker                      = "nextstrain/base:build-20211012T204409Z"
     }
     command {
         set -e
         wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
         tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1
-        cat defaults/clades.tsv defaults/subclades.tsv > clades-with-subclades.tsv
     }
     runtime {
         docker: docker
         memory: "1 GB"
-        cpu :   1
+        cpu:   1
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries:   3
+        maxRetries: 2
     }
     output {
-        File clades_tsv      = "clades-with-subclades.tsv"
+        File clades_tsv      = "defaults/clades.tsv"
         File lat_longs_tsv   = "defaults/lat_longs.tsv"
         File reference_fasta = "defaults/reference_seq.fasta"
         File reference_gb    = "defaults/reference_seq.gb"
@@ -449,30 +576,143 @@ task nextstrain_ncov_defaults {
     }
 }
 
+task nextstrain_deduplicate_sequences {
+    meta {
+        description: "This uses the Nextstrain sanitize_sequences.py script to deduplicate sequences by sequence ID. If the sequences themselves differ, and error is optionally raised. See: https://github.com/nextstrain/ncov/blob/c4747c1f53cd84baaeacdbd044390604d1af2cfc/scripts/sanitize_sequences.py"
+    }
+
+    input {
+        File sequences_fasta
+        Boolean error_on_seq_diff = false
+
+        String nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
+        String docker                      = "nextstrain/base:build-20211012T204409Z"
+    }
+
+    parameter_meta {
+        sequences_fasta: {
+          description: "FASTA file with multiple sequences",
+          patterns: ["*.fasta","*.fasta.xz","*.fasta.gz"]
+        }
+        error_on_seq_diff: {
+            description: "If error_on_seq_diff=true, an error will be raised if duplicate sequence IDs exist but have different sequences. By default, use the first occurrence of each duplicated sequence."
+        }
+    }
+
+    String out_basename = basename(basename(basename(basename(sequences_fasta, '.xz'), '.gz'), '.tar'), '.fasta')
+    String out_filename = "~{out_basename}_sequences_deduplicated.fasta"
+    command {
+        set -e
+        ncov_path_prefix="/nextstrain/ncov"
+        wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
+        mkdir -p "$ncov_path_prefix"
+        tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
+
+        python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
+        --sequences "~{sequences_fasta}" \
+        ${true="--error-on-duplicate-strains" false="" error_on_seq_diff} \
+        --output "~{out_filename}"
+    }
+    runtime {
+        docker: docker
+        memory: "7 GB"
+        cpu:   1
+        disks:  "local-disk 375 LOCAL"
+        dx_instance_type: "mem2_ssd1_v2_x2"
+        maxRetries: 2
+    }
+    output {
+        File sequences_deduplicated_fasta = "~{out_filename}"
+    }
+}
+
+task nextstrain_ncov_sanitize_gisaid_data {
+    meta {
+        description: "Sanitize data downloaded from GISAID for use in Nextstrain/augur. See: https://nextstrain.github.io/ncov/data-prep#curate-data-from-the-full-gisaid-database"
+    }
+
+    input {
+        File sequences_gisaid_fasta
+        File metadata_gisaid_tsv
+
+        String? prefix_to_strip
+
+        String nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
+        String docker                      = "nextstrain/base:build-20211012T204409Z"
+    }
+
+    parameter_meta {
+        sequences_gisaid_fasta: {
+          description: "Multiple sequences downloaded from GISAID",
+          patterns: ["*.fasta","*.fasta.xz","*.fasta.gz"]
+        }
+        metadata_gisaid_tsv: {
+            description: "Tab-separated metadata file for sequences downloaded from GISAID and passed in via sequences_gisaid_fasta.",
+            patterns: ["*.txt", "*.tsv","*.tsv.xz","*.tsv.gz"]
+        }
+        prefix_to_strip: {
+            description: "String prefix to strip from sequence IDs in both the input fasta and metadata files"
+        }
+    }
+
+    String out_basename = basename(basename(basename(basename(sequences_gisaid_fasta, '.xz'), '.gz'), '.tar'), '.fasta')
+    command {
+        set -e
+        ncov_path_prefix="/nextstrain/ncov"
+        wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
+        mkdir -p "$ncov_path_prefix"
+        tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
+
+        python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
+        --sequences "~{sequences_gisaid_fasta}" \
+        ~{"--strip-prefixes=" + prefix_to_strip} \
+        --output "~{out_basename}_sequences_sanitized_for_nextstrain.fasta.gz"
+
+        python3 "$ncov_path_prefix/scripts/sanitize_metadata.py" \
+        --metadata "~{metadata_gisaid_tsv}" \
+        --parse-location-field Location \
+        --rename-fields 'Virus name=strain' 'Accession ID=gisaid_epi_isl' 'Collection date=date' 'Clade=GISAID_clade' 'Pango lineage=pango_lineage' 'Host=host' 'Type=virus' 'Patient age=age' \
+        ~{"--strip-prefixes=" + prefix_to_strip} \
+        --output "~{out_basename}_metadata_sanitized_for_nextstrain.tsv.gz"
+    }
+    runtime {
+        docker: docker
+        memory: "7 GB"
+        cpu:   1
+        disks:  "local-disk 375 LOCAL"
+        dx_instance_type: "mem2_ssd1_v2_x2"
+        maxRetries: 2
+    }
+    output {
+        File sequences_gisaid_sanitized_fasta = "~{out_basename}_sequences_sanitized_for_nextstrain.fasta.gz"
+        File metadata_gisaid_sanitized_tsv    = "~{out_basename}_metadata_sanitized_for_nextstrain.tsv.gz"
+    }
+}
+
 task filter_subsample_sequences {
     meta {
         description: "Filter and subsample a sequence set. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/filter.html"
     }
     input {
-        File     sequences_fasta
-        File     sample_metadata_tsv
+        File           sequences_fasta
+        File           sample_metadata_tsv
 
-        Int?     sequences_per_group
-        String?  group_by
-        File?    include
-        File?    exclude
+        Int?           sequences_per_group
+        String?        group_by
+        File?          include
+        File?          exclude
 
-        Boolean  non_nucleotide=true
+        Boolean        non_nucleotide = true
 
-        Float?   min_date
-        Float?   max_date
-        Int?     min_length
-        File?    priority
-        Int?     subsample_seed
-        Array[String]?  exclude_where
-        Array[String]?  include_where
+        Float?         min_date
+        Float?         max_date
+        Int?           min_length
+        File?          priority
+        Int?           subsample_seed
+        Array[String]? exclude_where
+        Array[String]? include_where
 
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String         docker = "nextstrain/base:build-20211012T204409Z"
     }
     parameter_meta {
         sequences_fasta: {
@@ -520,8 +760,8 @@ task filter_subsample_sequences {
         set +o pipefail
 
         #cat ~{sequences_fasta} | grep \> | wc -l > IN_COUNT
-        grep "sequences were dropped during filtering" STDOUT | cut -f 1 -d ' ' > DROP_COUNT
-        grep "sequences have been written out to" STDOUT | cut -f 1 -d ' ' > OUT_COUNT
+        grep "strains were dropped during filtering" STDOUT | cut -f 1 -d ' ' > DROP_COUNT
+        grep "strains passed all filters" STDOUT | cut -f 1 -d ' ' > OUT_COUNT
         cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
         cat /proc/loadavg > CPU_LOAD
         cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes > MEM_BYTES
@@ -533,76 +773,16 @@ task filter_subsample_sequences {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem1_ssd1_v2_x4"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   filtered_fasta    = out_fname
         String augur_version     = read_string("VERSION")
         Int    sequences_dropped = read_int("DROP_COUNT")
         Int    sequences_out     = read_int("OUT_COUNT")
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-    }
-}
-
-task filter_sequences_by_length {
-    meta {
-        description: "Filter sequences in a fasta file to enforce a minimum count of non-N bases."
-    }
-    input {
-        File    sequences_fasta
-        Int     min_non_N = 1
-
-        String  docker="quay.io/broadinstitute/viral-core:2.1.19"
-    }
-    parameter_meta {
-        sequences_fasta: {
-          description: "Set of sequences in fasta format",
-          patterns: ["*.fasta", "*.fa"]
-        }
-        min_non_N: {
-          description: "Minimum number of called bases (non-N, non-gap, A, T, C, G, and other non-N ambiguity codes accepted)"
-        }
-    }
-    String out_fname = sub(basename(sequences_fasta), ".fasta", ".filtered.fasta")
-    command <<<
-    python3 <<CODE
-    import Bio.SeqIO
-    import gzip
-    n_total = 0
-    n_kept = 0
-    open_or_gzopen = lambda *args, **kwargs: gzip.open(*args, **kwargs) if args[0].endswith('.gz') else open(*args, **kwargs)
-    with open_or_gzopen('~{sequences_fasta}', 'rt') as inf:
-        with open_or_gzopen('~{out_fname}', 'wt') as outf:
-            for seq in Bio.SeqIO.parse(inf, 'fasta'):
-                n_total += 1
-                ungapseq = seq.seq.ungap().upper()
-                if (len(ungapseq) - ungapseq.count('N')) >= ~{min_non_N}:
-                    n_kept += 1
-                    Bio.SeqIO.write(seq, outf, 'fasta')
-    n_dropped = n_total-n_kept
-    with open('IN_COUNT', 'wt') as outf:
-        outf.write(str(n_total)+'\n')
-    with open('OUT_COUNT', 'wt') as outf:
-        outf.write(str(n_kept)+'\n')
-    with open('DROP_COUNT', 'wt') as outf:
-        outf.write(str(n_dropped)+'\n')
-    CODE
-    >>>
-    runtime {
-        docker: docker
-        memory: "1 GB"
-        cpu :   1
-        disks:  "local-disk 300 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries: 3
-    }
-    output {
-        File   filtered_fasta    = out_fname
-        Int    sequences_in      = read_int("IN_COUNT")
-        Int    sequences_dropped = read_int("DROP_COUNT")
-        Int    sequences_out     = read_int("OUT_COUNT")
+        Int    max_ram_gb        = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec       = ceil(read_float("UPTIME_SEC"))
+        String cpu_load          = read_string("CPU_LOAD")
     }
 }
 
@@ -611,10 +791,11 @@ task filter_sequences_to_list {
         description: "Filter and subsample a sequence set to a specific list of ids in a text file (one id per line)."
     }
     input {
-        File          sequences
-        Array[File]?  keep_list
+        File         sequences
+        Array[File]? keep_list
 
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String       out_fname = sub(sub(basename(sequences), ".vcf", ".filtered.vcf"), ".fasta$", ".filtered.fasta")
+        String       docker = "nextstrain/base:build-20211012T204409Z"
     }
     parameter_meta {
         sequences: {
@@ -626,7 +807,6 @@ task filter_sequences_to_list {
           patterns: ["*.txt", "*.tsv"]
         }
     }
-    String out_fname = sub(sub(basename(sequences), ".vcf", ".filtered.vcf"), ".fasta$", ".filtered.fasta")
     command <<<
         set -e
         KEEP_LISTS="~{sep=' ' select_first([keep_list, []])}"
@@ -638,7 +818,6 @@ task filter_sequences_to_list {
                 echo filtering vcf file
                 bcftools view --samples-file keep_list.txt "~{sequences}" -Ou | bcftools filter -i "AC>1" -o "~{out_fname}"
                 echo "-1" > DROP_COUNT
-                bcftools view "~{out_fname}" | grep CHROM | awk -F'\t' '{print NF-9}' > OUT_COUNT
             else
                 # filter fasta file to keep_list.txt
                 echo filtering fasta file
@@ -667,8 +846,16 @@ task filter_sequences_to_list {
         else
             cp "~{sequences}" "~{out_fname}"
             echo "0" > DROP_COUNT
-            echo "-1" > OUT_COUNT
         fi
+
+        if [[ "~{sequences}" = *.vcf || "~{sequences}" = *.vcf.gz ]]; then
+            bcftools query -l "~{out_fname}" > kept_ids.txt
+            bcftools view "~{out_fname}" | grep CHROM | awk -F'\t' '{print NF-9}' > OUT_COUNT
+        else
+            cat "~{out_fname}" | grep \> | cut -c 2- > kept_ids.txt
+            cat kept_ids.txt | wc -l > OUT_COUNT
+        fi
+
         cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
         cat /proc/loadavg > CPU_LOAD
         cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes > MEM_BYTES
@@ -680,15 +867,16 @@ task filter_sequences_to_list {
         disks:  "local-disk 200 HDD"
         dx_instance_type: "mem1_ssd1_v2_x4"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   filtered_fasta    = out_fname
         Int    sequences_dropped = read_int("DROP_COUNT")
         Int    sequences_out     = read_int("OUT_COUNT")
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
+        File   ids_kept          = "kept_ids.txt"
+        Int    max_ram_gb        = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec       = ceil(read_float("UPTIME_SEC"))
+        String cpu_load          = read_string("CPU_LOAD")
     }
 }
 
@@ -725,6 +913,7 @@ task mafft_one_chr {
         echo "~{true='--large' false='' large}" >> args.txt
         echo "~{true='--memsavetree' false='' memsavetree}" >> args.txt
         echo "--auto" >> args.txt
+        echo "--preservecase" >> args.txt
 
         # if ref_fasta is specified, use "closely related" mode
         # see https://mafft.cbrc.jp/alignment/software/closelyrelatedviralgenomes.html
@@ -741,6 +930,8 @@ task mafft_one_chr {
             ~{true='--keeplength --mapout' false='' keep_length} \
             > msa.fasta
 
+        REMOVE_REF="~{true='--remove-reference' false='' remove_reference}"
+        if [ -n "$REMOVE_REF" -a -f "~{ref_fasta}" ]; then
         # remove reference sequence
         python3 <<CODE
         import Bio.SeqIO
@@ -748,8 +939,6 @@ task mafft_one_chr {
         print("dumping " + str(seq_it.__next__().id))
         Bio.SeqIO.write(seq_it, 'msa_drop_one.fasta', 'fasta')
         CODE
-        REMOVE_REF="~{true='--remove-reference' false='' remove_reference}"
-        if [ -n "$REMOVE_REF" -a -f "~{ref_fasta}" ]; then
             mv msa_drop_one.fasta "~{basename}_aligned.fasta"
         else
             mv msa.fasta "~{basename}_aligned.fasta"
@@ -764,16 +953,16 @@ task mafft_one_chr {
         docker: docker
         memory: mem_size + " GB"
         cpu :   cpus
-        disks:  "local-disk 375 LOCAL"
+        disks:  "local-disk 750 LOCAL"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x36"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   aligned_sequences = "~{basename}_aligned.fasta"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
+        Int    max_ram_gb        = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec       = ceil(read_float("UPTIME_SEC"))
+        String cpu_load          = read_string("CPU_LOAD")
     }
 }
 
@@ -873,6 +1062,7 @@ task mafft_one_chr_chunked {
         disks:  "local-disk 750 LOCAL"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x36"
+        maxRetries: 2
     }
     output {
         File   aligned_sequences = "~{basename}_aligned.fasta"
@@ -887,15 +1077,15 @@ task augur_mafft_align {
         description: "Align multiple sequences from FASTA. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/align.html"
     }
     input {
-        File     sequences
-        File     ref_fasta
-        String   basename
+        File    sequences
+        File    ref_fasta
+        String  basename
 
-        File?    existing_alignment
-        Boolean  fill_gaps = true
-        Boolean  remove_reference = true
+        File?   existing_alignment
+        Boolean fill_gaps = true
+        Boolean remove_reference = true
 
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String  docker = "nextstrain/base:build-20211012T204409Z"
     }
     command {
         set -e
@@ -919,22 +1109,22 @@ task augur_mafft_align {
         disks:  "local-disk 750 LOCAL"
         preemptible: 0
         dx_instance_type: "mem3_ssd2_v2_x32"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   aligned_sequences = "~{basename}_aligned.fasta"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
+        Int    max_ram_gb        = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec       = ceil(read_float("UPTIME_SEC"))
+        String cpu_load          = read_string("CPU_LOAD")
+        String augur_version     = read_string("VERSION")
     }
 }
 
 task snp_sites {
     input {
-        File   msa_fasta
-        Boolean allow_wildcard_bases=true
-        String docker = "quay.io/biocontainers/snp-sites:2.5.1--hed695b0_0"
+        File    msa_fasta
+        Boolean allow_wildcard_bases = true
+        String  docker = "quay.io/biocontainers/snp-sites:2.5.1--hed695b0_0"
     }
     String out_basename = basename(msa_fasta, ".fasta")
     command {
@@ -948,10 +1138,10 @@ task snp_sites {
         disks:  "local-disk 100 HDD"
         preemptible: 0
         dx_instance_type: "mem3_ssd1_v2_x4"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File   snps_vcf = "~{out_basename}.vcf"
+        File   snps_vcf          = "~{out_basename}.vcf"
         String snp_sites_version = read_string("VERSION")
     }
 }
@@ -961,10 +1151,10 @@ task augur_mask_sites {
         description: "Mask unwanted positions from alignment or SNP table. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/mask.html"
     }
     input {
-        File     sequences
-        File?    mask_bed
+        File   sequences
+        File?  mask_bed
 
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String docker = "nextstrain/base:build-20211012T204409Z"
     }
     parameter_meta {
         sequences: {
@@ -995,14 +1185,14 @@ task augur_mask_sites {
         disks:  "local-disk 100 HDD"
         preemptible: 1
         dx_instance_type: "mem1_ssd1_v2_x4"
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   masked_sequences = out_fname
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version  = read_string("VERSION")
+        Int    max_ram_gb       = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec      = ceil(read_float("UPTIME_SEC"))
+        String cpu_load         = read_string("CPU_LOAD")
+        String augur_version    = read_string("VERSION")
     }
 }
 
@@ -1011,16 +1201,16 @@ task draft_augur_tree {
         description: "Build a tree using iqTree. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/tree.html"
     }
     input {
-        File     msa_or_vcf
+        File    msa_or_vcf
 
-        String   method = "iqtree"
-        String   substitution_model = "GTR"
-        File?    exclude_sites
-        File?    vcf_reference
-        String?  tree_builder_args
+        String  method = "iqtree"
+        String  substitution_model = "GTR"
+        File?   exclude_sites
+        File?   vcf_reference
+        String? tree_builder_args
 
-        Int?     cpus
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        Int?    cpus
+        String  docker = "nextstrain/base:build-20211012T204409Z"
     }
     parameter_meta {
         msa_or_vcf: {
@@ -1051,13 +1241,13 @@ task draft_augur_tree {
         disks:  "local-disk 750 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x36"
         preemptible: 0
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File   aligned_tree = "~{out_basename}_~{method}.nwk"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
+        File   aligned_tree  = "~{out_basename}_~{method}.nwk"
+        Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
+        String cpu_load      = read_string("CPU_LOAD")
         String augur_version = read_string("VERSION")
     }
 }
@@ -1132,15 +1322,15 @@ task refine_augur_tree {
         disks:  "local-disk 100 HDD"
         dx_instance_type: "mem3_ssd1_v2_x8"
         preemptible: 0
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File   tree_refined  = "~{out_basename}_timetree.nwk"
+        File   tree_refined   = "~{out_basename}_timetree.nwk"
         File   branch_lengths = "~{out_basename}_branch_lengths.json"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
+        Int    max_ram_gb     = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec    = ceil(read_float("UPTIME_SEC"))
+        String cpu_load       = read_string("CPU_LOAD")
+        String augur_version  = read_string("VERSION")
     }
 }
 
@@ -1149,15 +1339,15 @@ task ancestral_traits {
         description: "Infer ancestral traits based on a tree. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/traits.html"
     }
     input {
-        File           tree
-        File           metadata
-        Array[String]  columns
+        File          tree
+        File          metadata
+        Array[String] columns
 
-        Boolean        confidence = true
-        File?          weights
-        Float?         sampling_bias_correction
+        Boolean       confidence = true
+        File?         weights
+        Float?        sampling_bias_correction
 
-        String   docker = "nextstrain/base:build-20211012T204409Z"
+        String        docker = "nextstrain/base:build-20211012T204409Z"
     }
     String out_basename = basename(tree, '.nwk')
     command {
@@ -1177,19 +1367,19 @@ task ancestral_traits {
     }
     runtime {
         docker: docker
-        memory: "3 GB"
-        cpu :   2
-        disks:  "local-disk 50 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
+        memory: "32 GB"
+        cpu :   4
+        disks:  "local-disk 100 HDD"
+        dx_instance_type: "mem3_ssd1_v2_x4"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   node_data_json = "~{out_basename}_ancestral_traits.json"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
+        Int    max_ram_gb     = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec    = ceil(read_float("UPTIME_SEC"))
+        String cpu_load       = read_string("CPU_LOAD")
+        String augur_version  = read_string("VERSION")
     }
 }
 
@@ -1242,14 +1432,14 @@ task ancestral_tree {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem3_ssd1_v2_x8"
         preemptible: 0
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File   nt_muts_json = "~{out_basename}_nt_muts.json"
-        File   sequences    = "~{out_basename}_ancestral_sequences.fasta"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
+        File   nt_muts_json  = "~{out_basename}_nt_muts.json"
+        File   sequences     = "~{out_basename}_ancestral_sequences.fasta"
+        Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
+        String cpu_load      = read_string("CPU_LOAD")
         String augur_version = read_string("VERSION")
     }
 }
@@ -1289,7 +1479,7 @@ task translate_augur_tree {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   aa_muts_json = "~{out_basename}_aa_muts.json"
@@ -1321,6 +1511,7 @@ task tip_frequencies {
         Boolean  censored = false
         Boolean  include_internal_nodes = false
 
+        Int?     machine_mem_gb
         String   docker = "nextstrain/base:build-20211012T204409Z"
         String   out_basename = basename(tree, '.nwk')
     }
@@ -1352,19 +1543,19 @@ task tip_frequencies {
     }
     runtime {
         docker: docker
-        memory: "3 GB"
-        cpu :   2
+        memory: select_first([machine_mem_gb, 30]) + " GB"
+        cpu :   4
         disks:  "local-disk 100 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
+        dx_instance_type: "mem3_ssd2_x4"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   node_data_json = "~{out_basename}_tip-frequencies.json"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
+        Int    max_ram_gb     = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec    = ceil(read_float("UPTIME_SEC"))
+        String cpu_load       = read_string("CPU_LOAD")
+        String augur_version  = read_string("VERSION")
     }
 }
 
@@ -1400,7 +1591,7 @@ task assign_clades_to_nodes {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   node_clade_data_json = "~{out_basename}_clades.json"
@@ -1447,15 +1638,15 @@ task augur_import_beast {
         disks:  "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
         preemptible: 1
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
         File   tree_newick    = "~{tree_basename}.nwk"
         File   node_data_json = "~{tree_basename}.json"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
+        Int    max_ram_gb     = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec    = ceil(read_float("UPTIME_SEC"))
+        String cpu_load       = read_string("CPU_LOAD")
+        String augur_version  = read_string("VERSION")
     }
 }
 
@@ -1464,10 +1655,10 @@ task export_auspice_json {
         description: "export augur files to json suitable for auspice visualization. The metadata tsv input is generally required unless the node_data_jsons comprehensively capture all of it. See https://nextstrain-augur.readthedocs.io/en/stable/usage/cli/export.html"
     }
     input {
-        File        auspice_config
-        File?       sample_metadata
-        File        tree
-        Array[File] node_data_jsons
+        File           auspice_config
+        File?          sample_metadata
+        File           tree
+        Array[File]    node_data_jsons
 
         File?          lat_longs_tsv
         File?          colors_tsv
@@ -1482,7 +1673,7 @@ task export_auspice_json {
 
         String docker = "nextstrain/base:build-20211012T204409Z"
     }
-
+    
     command {
         set -e -o pipefail
         augur version > VERSION
@@ -1541,117 +1732,19 @@ task export_auspice_json {
     }
     runtime {
         docker: docker
-        memory: "3 GB"
-        cpu :   2
+        memory: "32 GB"
+        cpu :   4
         disks:  "local-disk 100 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
+        dx_instance_type: "mem3_ssd1_v2_x4"
         preemptible: 0
-        maxRetries: 3
+        maxRetries: 2
     }
     output {
-        File   virus_json = "~{out_basename}_auspice.json"
+        File   virus_json         = "~{out_basename}_auspice.json"
         File   root_sequence_json = "~{out_basename}_auspice_root-sequence.json"
-        Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
-        Int    runtime_sec = ceil(read_float("UPTIME_SEC"))
-        String cpu_load = read_string("CPU_LOAD")
-        String augur_version = read_string("VERSION")
-    }
-}
-
-task prep_augur_metadata {
-
-  input {
-    File      assembly
-    String    collection_date
-    String    iso_country
-    String    iso_state
-    String    iso_continent
-    String    pango_lineage
-
-    String? iso_county=""
-
-
-    String    docker_image = "quay.io/staphb/seqyclean:1.10.09"
-    Int       mem_size_gb = 3
-    Int       CPUs = 1
-    Int       disk_size = 10
-    Int       preemptible_tries = 0
-  }
-
-  command {
-    # de-identified consensus/assembly sequence
-    year=$(echo ${collection_date} | cut -f 1 -d '-')
-
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage" > augur_metadata.tsv
-
-    # Set strain name by assembly header
-    assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//' |  sed 's/>//g' )
-
-    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pango_lineage}"" >> augur_metadata.tsv
-
-    echo $(ls )
-
-  }
-
-  output {
-    File     augur_metadata = "augur_metadata.tsv"
-  }
-
-  runtime {
-      docker:       docker_image
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries: 3
-  }
-}
-
-task nextstrain_deduplicate_sequences {
-    meta {
-        description: "This uses the Nextstrain sanitize_sequences.py script to deduplicate sequences by sequence ID. If the sequences themselves differ, and error is optionally raised. See: https://github.com/nextstrain/ncov/blob/c4747c1f53cd84baaeacdbd044390604d1af2cfc/scripts/sanitize_sequences.py"
-    }
-
-    input {
-        File sequences_fasta
-        Boolean error_on_seq_diff = false
-
-        String nextstrain_ncov_repo_commit = "30435fb9ec8de2f045167fb90adfec12f123e80a"
-        String docker                      = "nextstrain/base:build-20211012T204409Z"
-    }
-
-    parameter_meta {
-        sequences_fasta: {
-          description: "FASTA file with multiple sequences",
-          patterns: ["*.fasta","*.fasta.xz","*.fasta.gz"]
-        }
-        error_on_seq_diff: {
-            description: "If error_on_seq_diff=true, an error will be raised if duplicate sequence IDs exist but have different sequences. By default, use the first occurrence of each duplicated sequence."
-        }
-    }
-
-    String out_basename = basename(basename(basename(basename(sequences_fasta, '.xz'), '.gz'), '.tar'), '.fasta')
-    String out_filename = "~{out_basename}_sequences_deduplicated.fasta"
-    command {
-        set -e
-        ncov_path_prefix="/nextstrain/ncov"
-        wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
-        mkdir -p "$ncov_path_prefix"
-        tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
-
-        python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
-        --sequences "~{sequences_fasta}" \
-        ${true="--error-on-duplicate-strains" false="" error_on_seq_diff} \
-        --output "~{out_filename}"
-    }
-    runtime {
-        docker: docker
-        memory: "7 GB"
-        cpu:   1
-        disks:  "local-disk 375 LOCAL"
-        dx_instance_type: "mem2_ssd1_v2_x2"
-    }
-    output {
-        File sequences_deduplicated_fasta = "~{out_filename}"
+        Int    max_ram_gb         = ceil(read_float("MEM_BYTES")/1000000000)
+        Int    runtime_sec        = ceil(read_float("UPTIME_SEC"))
+        String cpu_load           = read_string("CPU_LOAD")
+        String augur_version      = read_string("VERSION")
     }
 }
