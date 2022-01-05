@@ -21,7 +21,7 @@ workflow titan_clearlabs {
     Int?    normalise  = 20000
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
+    String  nextclade_dataset_tag = "2021-12-16T20:57:35Z"
   }
   call qc_utils.fastqc_se as fastqc_se_raw {
     input:

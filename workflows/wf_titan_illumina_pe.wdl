@@ -22,7 +22,7 @@ workflow titan_illumina_pe {
     File    primer_bed
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
+    String  nextclade_dataset_tag = "2021-12-16T20:57:35Z"
 
   }
 
