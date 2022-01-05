@@ -348,7 +348,7 @@ task derived_cols {
         CODE
         
         # remove duplicate strains 
-        awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
+        awk '!a[$1]++' "~{basename}.derived_cols.txt" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.txt"
         
     >>>
     runtime {
