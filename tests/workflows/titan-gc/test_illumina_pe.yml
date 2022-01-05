@@ -14,7 +14,6 @@
     - path: titan/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
       md5sum: 5ef30a51925f1b2569f998ae12e1e186
     - path: titan/illumina_pe/cromwell-stderr.txt
-      md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: titan/illumina_pe/cromwell-stdout.txt
     - path: titan/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz
     - path: titan/illumina_pe/dehosted_reads/SRR13687078_R2_dehosted.fastq.gz

@@ -47,7 +47,7 @@ task stats_n_coverage {
   }
 
   runtime {
-    docker:       "staphb/samtools:1.10"
+    docker:       "quay.io/staphb/samtools:1.10"
     memory:       "8 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"

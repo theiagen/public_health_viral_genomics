@@ -23,7 +23,7 @@ task snp_dists {
   }
 
   runtime {
-    docker:       "staphb/snp-dists:0.6.2"
+    docker:       "quay.io/staphb/snp-dists:0.6.2"
     memory:       "2 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -62,7 +62,7 @@ task iqtree {
   }
 
   runtime {
-    docker:       "staphb/iqtree:1.6.7"
+    docker:       "quay.io/staphb/iqtree:1.6.7"
     memory:       "8 GB"
     cpu:          4
     disks:        "local-disk 100 SSD"

@@ -1571,7 +1571,7 @@ task prep_augur_metadata {
     String? iso_county=""
 
 
-    String    docker_image = "staphb/seqyclean:1.10.09"
+    String    docker_image = "quay.io/staphb/seqyclean:1.10.09"
     Int       mem_size_gb = 3
     Int       CPUs = 1
     Int       disk_size = 10
