@@ -1460,12 +1460,12 @@ task prep_augur_metadata {
     String    pango_lineage
 
     String? iso_county=""
-    String? extrafield1=""
-    String? extrafield2=""
-    String? extrafield3=""
-    String? extrafield1title=""
-    String? extrafield2title=""
-    String? extrafield3title=""
+    String? extra_field1=""
+    String? extra_field2=""
+    String? extra_field3=""
+    String? extra_field1_title=""
+    String? extra_field2_title=""
+    String? extra_field3_title=""
     
 
 
@@ -1480,12 +1480,12 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage\t\"${extrafieldtitle1}\"\t\"${extrafieldtitle2}\"\t\"${extrafieldtitle3}\"" > augur_metadata.tsv
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage\t\"${extra_field1_title}\"\t\"${extra_field2_title}\"\t\"${extra_field3_title}\"" > augur_metadata.tsv
 
     # Set strain name by assembly header
     assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//' |  sed 's/>//g' )
 
-    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\"\t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t\"${pango_lineage}\"\t\"${extrafield1}\"\t\"${extrafield2}\"\t\"${extrafield3}\"" >> augur_metadata.tsv
+    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\"\t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t\"${pango_lineage}\"\t\"${extra_field1}\"\t\"${extra_field2}\"\t\"${extra_field3}\"" >> augur_metadata.tsv
 
     echo $(ls )
 
