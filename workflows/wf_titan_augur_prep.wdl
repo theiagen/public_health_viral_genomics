@@ -14,9 +14,9 @@ workflow titan_augur_prep {
         String    iso_continent
         String?   iso_county
         String    pango_lineage
-        String?   age
-        String?   gender
-        String?   iso_city
+        String?   extrafield1
+        String?   extrafield2
+        String?   extrafield3
         
 
     }
@@ -30,9 +30,9 @@ workflow titan_augur_prep {
             iso_continent = iso_continent,
             iso_county = iso_county,
             pango_lineage = pango_lineage,
-            age = age,
-            gender = gender,
-            iso_city = iso_city
+            extrafield1 = extrafield1,
+            extrafield2 = extrafield2,
+            extrafield3 = extrafield3
             
         
     }
