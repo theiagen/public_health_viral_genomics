@@ -14,12 +14,12 @@ workflow titan_augur_prep {
         String    iso_continent
         String?   iso_county
         String    pango_lineage
-        String?   extrafield1
-        String?   extrafield1title
-        String?   extrafield2
-        String?   extrafield2title
-        String?   extrafield3
-        String?   extrafield13itle
+        String?   extra_field1
+        String?   extra_field1_title
+        String?   extra_field2
+        String?   extra_field2_title
+        String?   extra_field3
+        String?   extra_field3_title
         
 
     }
@@ -33,12 +33,12 @@ workflow titan_augur_prep {
             iso_continent = iso_continent,
             iso_county = iso_county,
             pango_lineage = pango_lineage,
-            extrafield1 = extrafield1,
-            extrafield2 = extrafield2,
-            extrafield3 = extrafield3,
-            extrafieldtitle1 = extrafieldtitle1,
-            extrafieldtitle2 = extrafieldtitle2,
-            extrafieldtitle3 = extrafieldtitle3
+            extra_field1 = extra_field1,
+            extra_field2 = extra_field2,
+            extra_field3 = extra_field3,
+            extra_field1_title = extra_field1_title,
+            extra_field2_title = extra_field2_title,
+            extra_field3_title = extra_field3_title
             
         
     }
