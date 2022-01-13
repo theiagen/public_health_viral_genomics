@@ -1480,7 +1480,7 @@ task prep_augur_metadata {
     # de-identified consensus/assembly sequence
     year=$(echo ${collection_date} | cut -f 1 -d '-')
 
-    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage\t\"${extra_field1_title}\"\t\"${extra_field2_title}\"\t\"${extra_field3_title}\"" > augur_metadata.tsv
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpangolin_lineage\t${extra_field1_title}\t${extra_field2_title}\t${extra_field3_title}" > augur_metadata.tsv
 
     # Set strain name by assembly header
     assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//' |  sed 's/>//g' )
