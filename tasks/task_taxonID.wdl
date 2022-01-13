@@ -202,7 +202,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.4.5"
+        String docker = "nextstrain/nextclade:1.9.0"
         String dataset_name
         String dataset_reference
         String dataset_tag
