@@ -91,6 +91,64 @@ task fastqc_se {
     maxRetries:   3
   }
 }
+task fastq_scan {
+
+  input {
+    File        read1
+    File?        read2
+    String      read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
+    String?      read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
+    Int?        cpus = 2
+  }
+
+  command <<<
+    # capture date and version
+    date | tee DATE
+    fastq-scan -v | tee VERSION
+
+    # set cat command based on compression
+    if [[ "~{read1}" == "*.gz" ]]'.gz'; then 
+      cat_reads="zcat"
+    else
+      cat_reads="cat"
+    fi
+    
+    # capture forward read stats
+    eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ1_SEQS)
+
+    # if a rev read is provided, capture rev read stats    
+    if [[ ! -z "~{read2}" ]]; then 
+      eval "${cat_reads} ~{read2}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ2_SEQS) 
+      
+      # capture number of read pairs
+      if [ $READ1_SEQS == $READ2_SEQS ]; then
+        read_pairs=$READ1_SEQS
+      else
+        read_pairs="Uneven pairs: R1=$READ1_SEQS, R2=$READ2_SEQS"
+      fi
+
+      echo $read_pairs | tee READ_PAIRS
+  >>>
+
+  output {
+    File       read1_fastq_scan_report = "~{read1_name}_fastq-scan.json"
+    File       read2_fastq_scan_report = "~{read2_name}_fastq-scan.json"
+    Int        read1_seq = read_string("READ1_SEQS")
+    Int        read2_seq = read_string("READ2_SEQS")
+    String     read_pairs = read_string("READ_PAIRS")
+    String     version = read_string("VERSION")
+    String     pipeline_date = read_string("DATE")
+  }
+
+  runtime {
+    docker:       "quay.io/staphb/fastq-scan:0.4.3"
+    memory:       "2 GB"
+    cpu:          2
+    disks:        "local-disk 100 SSD"
+    preemptible:  0
+    maxRetries:   3
+  }
+}
 task consensus_qc {
 
   input {
