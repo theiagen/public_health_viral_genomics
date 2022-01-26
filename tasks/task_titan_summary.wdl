@@ -133,11 +133,13 @@ task titan_summary {
 task merge_titan_summary {
     input {
         Array[File?] clearlabs_summaries
+        Array[File?] fasta_summaries
         Array[File?] illumina_pe_summaries
         Array[File?] illumina_se_summaries
         Array[File?] ont_summaries
     }
     Array[File] clearlabs = select_all(clearlabs_summaries)
+    Array[File] fasta = select_all(fasta_summaries)
     Array[File] illumina_pe = select_all(illumina_pe_summaries)
     Array[File] illumina_se = select_all(illumina_se_summaries)
     Array[File] ont = select_all(ont_summaries)
@@ -149,6 +151,7 @@ task merge_titan_summary {
         rows = []
         results = [
             *'~{sep=" " clearlabs}'.split(),
+            *'~{sep=" " fasta}'.split(),
             *'~{sep=" " illumina_pe}'.split(),
             *'~{sep=" " illumina_se}'.split(),
             *'~{sep=" " ont}'.split()

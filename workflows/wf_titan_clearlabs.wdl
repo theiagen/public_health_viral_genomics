@@ -16,9 +16,11 @@ workflow titan_clearlabs {
   input {
     String  samplename
     File    clear_lab_fastq
-    String  seq_method  = "OXFORD_NANOPORE"
+    String  seq_method = "OXFORD_NANOPORE"
     File    primer_bed
-    Int?    normalise  = 20000
+    Int?    normalise = 20000
+    Int?    min_length = 250
+    Int?    max_length = 1500
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
     String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
@@ -32,9 +34,16 @@ workflow titan_clearlabs {
       samplename = samplename,
       read1 = clear_lab_fastq
   }
+  call medaka.read_filtering {
+    input:
+      demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
+      samplename = samplename,
+      min_length = min_length,
+      max_length = max_length
+  }
   call qc_utils.fastqc_se as fastqc_se_clean {
     input:
-      read1 = ncbi_scrub_se.read1_dehosted
+      read1 = read_filtering.filtered_reads
   }
   call taxon_ID.kraken2 as kraken2_dehosted {
     input:
@@ -44,7 +53,7 @@ workflow titan_clearlabs {
   call medaka.consensus {
     input:
       samplename = samplename,
-      filtered_reads = ncbi_scrub_se.read1_dehosted,
+      filtered_reads = read_filtering.filtered_reads,
       primer_bed = primer_bed,
       normalise = normalise
   }

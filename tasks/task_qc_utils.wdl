@@ -3,11 +3,11 @@ version 1.0
 task fastqc {
 
   input {
-    File        read1
-    File        read2
-    String      read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
-    String      read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
-    Int?        cpus = 2
+    File   read1
+    File   read2
+    String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
+    String read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
+    Int?   cpus = 2
   }
 
   command {
@@ -32,15 +32,15 @@ task fastqc {
   }
 
   output {
-    File       fastqc1_html = "${read1_name}_fastqc.html"
-    File       fastqc1_zip = "${read1_name}_fastqc.zip"
-    File       fastqc2_html = "${read2_name}_fastqc.html"
-    File       fastqc2_zip = "${read2_name}_fastqc.zip"
-    Int        read1_seq = read_string("READ1_SEQS")
-    Int        read2_seq = read_string("READ2_SEQS")
-    String        read_pairs = read_string("READ_PAIRS")
-    String     version = read_string("VERSION")
-    String     pipeline_date = read_string("DATE")
+    File   fastqc1_html = "${read1_name}_fastqc.html"
+    File   fastqc1_zip = "${read1_name}_fastqc.zip"
+    File   fastqc2_html = "${read2_name}_fastqc.html"
+    File   fastqc2_zip = "${read2_name}_fastqc.zip"
+    Int    read1_seq = read_string("READ1_SEQS")
+    Int    read2_seq = read_string("READ2_SEQS")
+    String read_pairs = read_string("READ_PAIRS")
+    String version = read_string("VERSION")
+    String pipeline_date = read_string("DATE")
   }
 
   runtime {
@@ -55,9 +55,9 @@ task fastqc {
 task fastqc_se {
 
   input {
-    File        read1
-    String      read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
-    Int?        cpus = 2
+    File   read1
+    String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
+    Int?   cpus = 2
   }
 
   command {
@@ -75,11 +75,11 @@ task fastqc_se {
   }
 
   output {
-    File       fastqc_html = "${read1_name}_fastqc.html"
-    File       fastqc_zip = "${read1_name}_fastqc.zip"
-    Int        number_reads = read_string("READ1_SEQS")
-    String     version = read_string("VERSION")
-    String     pipeline_date = read_string("DATE")
+    File   fastqc_html = "${read1_name}_fastqc.html"
+    File   fastqc_zip = "${read1_name}_fastqc.zip"
+    Int    number_reads = read_string("READ1_SEQS")
+    String version = read_string("VERSION")
+    String pipeline_date = read_string("DATE")
   }
 
   runtime {
@@ -94,14 +94,13 @@ task fastqc_se {
 task consensus_qc {
 
   input {
-    File        assembly_fasta
-
+    File assembly_fasta
   }
 
   command <<<
     # capture date and version
     date | tee DATE
-    
+
     num_N=$( grep -v ">" ~{assembly_fasta} | grep -o 'N' | wc -l )
     if [ -z "$num_N" ] ; then num_N="0" ; fi
     echo $num_N | tee NUM_N
@@ -123,15 +122,15 @@ task consensus_qc {
   >>>
 
   output {
-    Int       number_N = read_string("NUM_N")
-    Int       number_ATCG = read_string("NUM_ACTG")
-    Int       number_Degenerate = read_string("NUM_DEGENERATE")
-    Int       number_Total = read_string("NUM_TOTAL")
-    Float     percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
+    Int   number_N = read_string("NUM_N")
+    Int   number_ATCG = read_string("NUM_ACTG")
+    Int   number_Degenerate = read_string("NUM_DEGENERATE")
+    Int   number_Total = read_string("NUM_TOTAL")
+    Float percent_reference_coverage = read_string("PERCENT_REF_COVERAGE")
   }
 
   runtime {
-    docker:       "quay.io/theiagen/utility:1.1"    
+    docker:       "quay.io/theiagen/utility:1.1"
     memory:       "2 GB"
     cpu:          1
     disks:        "local-disk 100 SSD"

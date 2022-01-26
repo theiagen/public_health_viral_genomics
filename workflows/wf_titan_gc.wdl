@@ -2,6 +2,7 @@ version 1.0
 
 # Workflows from Theiagen's public_health_viral_genomics
 # Source: https://github.com/theiagen/public_health_viral_genomics
+import "wf_titan_fasta.wdl" as fasta
 import "wf_titan_clearlabs.wdl" as clearlabs
 import "wf_titan_illumina_pe.wdl" as illumina_pe
 import "wf_titan_illumina_se.wdl" as illumina_se
@@ -18,7 +19,7 @@ struct parseJSON {
 
 workflow titan_gc {
     meta {
-        description: "Incorporates each of the Titan workflows (clearlabs, illumina_pe, illumina_se, ont) into a single run."
+        description: "Incorporates each of the Titan workflows (clearlabs, fasta,illumina_pe, illumina_se, ont) into a single run."
         author: "Robert A. Petit III"
         email:  "robert.petit@theiagen.com"
     }
@@ -28,6 +29,57 @@ workflow titan_gc {
     }
 
     scatter (sample in samples) {
+        if (sample.titan_wf == "fasta") {
+            call fasta.titan_fasta as titan_fasta { 
+                input:
+                    samplename = sample.sample,
+                    fasta = sample.r1,
+                    seq_method = sample.titan_wf,
+                    input_assembly_method = sample.primers
+            }
+
+           call summary.titan_summary as fasta_summary {
+                input:
+                    samplename = sample.sample,
+                    titan_workflow = 'titan_fasta',
+                    titan_version = titan_fasta.titan_fasta_version,
+                    titan_analysis_date = titan_fasta.titan_fasta_analysis_date,
+                    seq_platform = titan_fasta.seq_platform,
+                    primer_bed_name = "",
+                    percent_reference_coverage = titan_fasta.percent_reference_coverage,
+                    number_N = titan_fasta.number_N,
+                    pango_lineage = titan_fasta.pango_lineage,
+                    pangolin_conflicts = titan_fasta.pangolin_conflicts,
+                    pangolin_notes = titan_fasta.pangolin_notes,
+                    pangolin_assignment_version = titan_fasta.pangolin_assignment_version,
+                    pangolin_docker = titan_fasta.pangolin_docker,
+                    pangolin_versions = titan_fasta.pangolin_versions,
+                    nextclade_clade = titan_fasta.nextclade_clade,
+                    nextclade_aa_subs = titan_fasta.nextclade_aa_subs,
+                    nextclade_aa_dels = titan_fasta.nextclade_aa_dels,
+                    vadr_num_alerts = titan_fasta.vadr_num_alerts,
+                    assembly_length_unambiguous = titan_fasta.assembly_length_unambiguous,
+                    assembly_mean_coverage = 0,
+                    assembly_method = "fasta",
+                    number_Degenerate = titan_fasta.number_Degenerate,
+                    number_Total = titan_fasta.number_Total,
+                    meanbaseq_trim = 0.0,
+                    meanmapq_trim = 0.0,
+                    fastqc_clean1 = 0,
+                    fastqc_raw1 = 0,
+                    kraken_human = 0.0,
+                    kraken_human_dehosted = 0,
+                    kraken_sc2 = 0.0,
+                    kraken_sc2_dehosted = 0,
+                    artic_version = "",
+                    kraken_version = "",
+                    nextclade_version = titan_fasta.nextclade_version,
+                    samtools_version = "",
+                    vadr_docker = titan_fasta.vadr_docker
+            }
+        }
+
+
         if (sample.titan_wf == "clearlabs") {
             call clearlabs.titan_clearlabs as titan_clearlabs { 
                 input:
@@ -251,6 +303,7 @@ workflow titan_gc {
     call summary.merge_titan_summary {
         input:
             clearlabs_summaries = clearlabs_summary.summary,
+            fasta_summaries = fasta_summary.summary,
             illumina_pe_summaries = illumina_pe_summary.summary,
             illumina_se_summaries = illumina_se_summary.summary,
             ont_summaries = ont_summary.summary
@@ -273,8 +326,9 @@ workflow titan_gc {
                                                 select_all(titan_illumina_se.aligned_bai), select_all(titan_ont.aligned_bai)
                                             ])
         Array[File] assembly_fasta        = flatten([
-                                                select_all(titan_clearlabs.assembly_fasta), select_all(titan_illumina_pe.assembly_fasta),
-                                                select_all(titan_illumina_se.assembly_fasta), select_all(titan_ont.assembly_fasta)
+                                                select_all(titan_clearlabs.assembly_fasta), select_all(titan_fasta.assembly_fasta),
+                                                select_all(titan_illumina_pe.assembly_fasta), select_all(titan_illumina_se.assembly_fasta),
+                                                select_all(titan_ont.assembly_fasta)
                                             ])
         Array[File] consensus_stats       = flatten([
                                                 select_all(titan_clearlabs.consensus_stats), select_all(titan_illumina_pe.consensus_stats),
@@ -289,24 +343,29 @@ workflow titan_gc {
                                                 select_all(titan_illumina_se.ivar_vcf), select_all(titan_ont.variants_from_ref_vcf)
                                             ])
         Array[File] pango_lineage_report  = flatten([
-                                                select_all(titan_clearlabs.pango_lineage_report), select_all(titan_illumina_pe.pango_lineage_report),
-                                                select_all(titan_illumina_se.pango_lineage_report), select_all(titan_ont.pango_lineage_report)
+                                                select_all(titan_clearlabs.pango_lineage_report), select_all(titan_fasta.pango_lineage_report),
+                                                select_all(titan_illumina_pe.pango_lineage_report), select_all(titan_illumina_se.pango_lineage_report),
+                                                select_all(titan_ont.pango_lineage_report)
                                             ])
         Array[File] nextclade_json        = flatten([
-                                                select_all(titan_clearlabs.nextclade_json), select_all(titan_illumina_pe.nextclade_json),
-                                                select_all(titan_illumina_se.nextclade_json), select_all(titan_ont.nextclade_json)
+                                                select_all(titan_clearlabs.nextclade_json), select_all(titan_fasta.nextclade_json),
+                                                select_all(titan_illumina_pe.nextclade_json), select_all(titan_illumina_se.nextclade_json),
+                                                select_all(titan_ont.nextclade_json)
                                             ])
         Array[File] auspice_json          = flatten([
-                                                select_all(titan_clearlabs.auspice_json), select_all(titan_illumina_pe.auspice_json),
-                                                select_all(titan_illumina_se.auspice_json), select_all(titan_ont.auspice_json)
+                                                select_all(titan_clearlabs.auspice_json), select_all(titan_fasta.auspice_json),
+                                                select_all(titan_illumina_pe.auspice_json), select_all(titan_illumina_se.auspice_json),
+                                                select_all(titan_ont.auspice_json)
                                             ])
         Array[File] nextclade_tsv         = flatten([
-                                                select_all(titan_clearlabs.nextclade_tsv), select_all(titan_illumina_pe.nextclade_tsv),
-                                                select_all(titan_illumina_se.nextclade_tsv), select_all(titan_ont.nextclade_tsv)
+                                                select_all(titan_clearlabs.nextclade_tsv), select_all(titan_fasta.nextclade_tsv),
+                                                select_all(titan_illumina_pe.nextclade_tsv), select_all(titan_illumina_se.nextclade_tsv),
+                                                select_all(titan_ont.nextclade_tsv)
                                             ])
         Array[File] vadr_alerts_list      = flatten([
-                                                select_all(titan_clearlabs.vadr_alerts_list), select_all(titan_illumina_pe.vadr_alerts_list),
-                                                select_all(titan_illumina_se.vadr_alerts_list), select_all(titan_ont.vadr_alerts_list)
+                                                select_all(titan_clearlabs.vadr_alerts_list), select_all(titan_fasta.vadr_alerts_list),
+                                                select_all(titan_illumina_pe.vadr_alerts_list), select_all(titan_illumina_se.vadr_alerts_list),
+                                                select_all(titan_ont.vadr_alerts_list)
                                             ])
         Array[File] kraken_report         = flatten([
                                                 select_all(titan_clearlabs.kraken_report), select_all(titan_illumina_pe.kraken_report),
@@ -317,8 +376,9 @@ workflow titan_gc {
                                                 select_all(titan_ont.kraken_report_dehosted)
                                             ])
         Array[File] json_summary           = flatten([
-                                                select_all(clearlabs_summary.summary), select_all(illumina_pe_summary.summary),
-                                                select_all(illumina_se_summary.summary), select_all(ont_summary.summary)
-                                            ])             
+                                                select_all(clearlabs_summary.summary), select_all(fasta_summary.summary),
+                                                select_all(illumina_pe_summary.summary), select_all(illumina_se_summary.summary),
+                                                select_all(ont_summary.summary)
+                                            ])
     }
 }

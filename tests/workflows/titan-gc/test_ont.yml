@@ -5,16 +5,18 @@
     - titan_ont
   files:
     - path: titan/ont/alignments/ont.flagstat.txt
-      md5sum: 4115fec57a52e330a96280f3afa5f89b
+      contains: ['total', 'singletons', 'mapped', 'different']
     - path: titan/ont/alignments/ont.pass.vcf
-      md5sum: 236260cacd4f4efa8f4a0fe93dc5ea02
+      contains: ['VCF', 'MN908947', 'CHROM']
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
     - path: titan/ont/alignments/ont.stats.txt
     - path: titan/ont/assemblies/ont.medaka.consensus.fasta
-      md5sum: 02a04e9cf297acc8fc03667edab41fde
+      contains: ['>', 'A', 'T', 'G', 'C', 'N']
     - path: titan/ont/cromwell-stderr.txt
+      contains: ['INFO', 'changelog', 'Successfully']
     - path: titan/ont/cromwell-stdout.txt
+      contains: ['cromwellId', 'pangolin', 'titan_workflow', 'Final Outputs']
     - path: titan/ont/dehosted_reads/ont_R1_dehosted.fastq.gz
     - path: titan/ont/kraken2_reports/ont_dehosted_kraken2_report.txt
       md5sum: 5780753ae61523a3621fbe2635b04b70
@@ -24,9 +26,14 @@
     - path: titan/ont/nextclade/ont.medaka.consensus.nextclade.json
     - path: titan/ont/nextclade/ont.medaka.consensus.nextclade.tsv
     - path: titan/ont/pangolin_reports/ont.pangolin_report.csv
+      contains: ['taxon', 'scorpio']
     - path: titan/ont/results/ont.results.json
+      contains: ['titan_ont', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/ont/titan-metadata.json
+      contains: ['titan_gc', 'submittedFiles', 'Succeeded']
     - path: titan/ont/titan-results.json
+      contains: ['titan_ont', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/ont/titan-results.tsv
+      contains: ['titan_ont', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/ont/vadr_alerts/ont.medaka.consensus.vadr.alt.list
       md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

@@ -46,11 +46,10 @@ task read_filtering {
     cp ~{demultiplexed_reads} ~{samplename}/
     echo "DIRNAME: $(dirname)"
     artic guppyplex --min-length ${min_length} --max-length ${max_length} --directory ~{samplename} --prefix ${run_prefix}
-
   }
 
   output {
-    File       filtered_reads = "${run_prefix}_~{samplename}.fastq"
+    File filtered_reads = "${run_prefix}_~{samplename}.fastq"
   }
 
   runtime {

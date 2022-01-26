@@ -5,16 +5,19 @@
     - titan_illumina_pe
   files:
     - path: titan/illumina_pe/alignments/SRR13687078.flagstat.txt
-      md5sum: 7cd08dcf0ccb7cf5b1f445852673fe94
+      contains: ['total', 'singletons', 'mapped', 'different']
     - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
     - path: titan/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
     - path: titan/illumina_pe/alignments/SRR13687078.stats.txt
     - path: titan/illumina_pe/alignments/SRR13687078.variants.vcf
+      contains: ['VCF', 'MN908947', 'CHROM']
       md5sum: 19e716097dcbad1a20f177d8a2590ef5
     - path: titan/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
-      md5sum: 5ef30a51925f1b2569f998ae12e1e186
+      contains: ['>', 'A', 'T', 'G', 'C', 'N']
     - path: titan/illumina_pe/cromwell-stderr.txt
+      contains: ['INFO', 'changelog', 'Successfully']
     - path: titan/illumina_pe/cromwell-stdout.txt
+      contains: ['cromwellId', 'pangolin', 'titan_workflow', 'Final Outputs']
     - path: titan/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz
     - path: titan/illumina_pe/dehosted_reads/SRR13687078_R2_dehosted.fastq.gz
     - path: titan/illumina_pe/kraken2_reports/SRR13687078_dehosted_kraken2_report.txt
@@ -25,9 +28,14 @@
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.json
     - path: titan/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
     - path: titan/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
+      contains: ['taxon', 'scorpio']
     - path: titan/illumina_pe/results/SRR13687078.results.json
+      contains: ['titan_illumina_pe', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/illumina_pe/titan-metadata.json
+      contains: ['titan_gc', 'submittedFiles', 'Succeeded']
     - path: titan/illumina_pe/titan-results.json
+      contains: ['titan_illumina_pe', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/illumina_pe/titan-results.tsv
+      contains: ['titan_illumina_pe', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
     - path: titan/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
       md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

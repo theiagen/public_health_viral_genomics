@@ -1,0 +1,27 @@
+- name: titan_fasta
+  command: titan-gc -i titan/fasta.json -o titan/fasta
+  tags:
+    - titan_gc
+    - titan_fasta
+  files:
+    - path: titan/fasta/assemblies/assembly.fasta
+      contains: ['>', 'A', 'T', 'G', 'C', 'N']
+    - path: titan/fasta/cromwell-stderr.txt
+      contains: ['INFO', 'changelog', 'Successfully']
+    - path: titan/fasta/cromwell-stdout.txt
+      contains: ['cromwellId', 'pangolin', 'titan_workflow', 'Final Outputs']
+    - path: titan/fasta/nextclade/assembly.nextclade.auspice.json
+    - path: titan/fasta/nextclade/assembly.nextclade.json
+    - path: titan/fasta/nextclade/assembly.nextclade.tsv
+    - path: titan/fasta/pangolin_reports/assembly.pangolin_report.csv
+      contains: ['taxon', 'scorpio']
+    - path: titan/fasta/results/assembly.results.json
+      contains: ['titan_fasta', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
+    - path: titan/fasta/titan-metadata.json
+      contains: ['titan_gc', 'submittedFiles', 'Succeeded']
+    - path: titan/fasta/titan-results.json
+      contains: ['titan_fasta', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
+    - path: titan/fasta/titan-results.tsv
+      contains: ['titan_fasta', 'percent_reference_coverage', 'number_total', 'quay.io', 'staphb']
+    - path: titan/fasta/vadr_alerts/assembly.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
