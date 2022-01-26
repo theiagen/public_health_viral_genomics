@@ -19,8 +19,6 @@ workflow titan_clearlabs {
     String  seq_method = "OXFORD_NANOPORE"
     File    primer_bed
     Int?    normalise = 20000
-    Int?    min_length = 250
-    Int?    max_length = 1500
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
     String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
@@ -34,16 +32,9 @@ workflow titan_clearlabs {
       samplename = samplename,
       read1 = clear_lab_fastq
   }
-  call medaka.read_filtering {
-    input:
-      demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
-      samplename = samplename,
-      min_length = min_length,
-      max_length = max_length
-  }
   call qc_utils.fastqc_se as fastqc_se_clean {
     input:
-      read1 = read_filtering.filtered_reads
+      read1 = ncbi_scrub_se.read1_dehosted
   }
   call taxon_ID.kraken2 as kraken2_dehosted {
     input:
@@ -53,7 +44,7 @@ workflow titan_clearlabs {
   call medaka.consensus {
     input:
       samplename = samplename,
-      filtered_reads = read_filtering.filtered_reads,
+      filtered_reads = ncbi_scrub_se.read1_dehosted,
       primer_bed = primer_bed,
       normalise = normalise
   }
@@ -136,10 +127,10 @@ workflow titan_clearlabs {
     String pango_lineage                    = pangolin3.pangolin_lineage
     String pangolin_conflicts               = pangolin3.pangolin_conflicts
     String pangolin_notes                   = pangolin3.pangolin_notes
-    String pangolin_assignment_version                 = pangolin3.pangolin_assignment_version
+    String pangolin_assignment_version      = pangolin3.pangolin_assignment_version
     File   pango_lineage_report             = pangolin3.pango_lineage_report
     String pangolin_docker                  = pangolin3.pangolin_docker
-    String pangolin_versions           = pangolin3.pangolin_versions
+    String pangolin_versions                = pangolin3.pangolin_versions
 
     File   consensus_stats                  = stats_n_coverage.stats
     File   consensus_flagstat               = stats_n_coverage.flagstat
