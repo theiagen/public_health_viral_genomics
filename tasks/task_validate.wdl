@@ -7,7 +7,6 @@ task export_two_tsvs {
     String        terra_workspace
     String        datatable1
     String        datatable2
-    String        docker="broadinstitute/terra-tools:tqdm"
   }
   command {
     python3 scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable1} --tsv_filename ~{datatable1}
@@ -15,7 +14,7 @@ task export_two_tsvs {
     python3 scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable2} --tsv_filename ~{datatable2}
   }
   runtime {
-      docker: "~{docker}"
+      docker: "broadinstitute/terra-tools:tqdm"
       memory: "1 GB"
       cpu: 1
       disks: "local-disk 10 HDD"
@@ -28,7 +27,7 @@ task export_two_tsvs {
   }
 }
 
-task compare_two_tsv {
+task compare_two_tsvs {
   input {
     File  datatable1_tsv
     File  datatable2_tsv
@@ -47,6 +46,7 @@ task compare_two_tsv {
       maxRetries:   3
   }
   output {
-      File  pdf_report     = ~{out_dir}/~{out_prefix}
+      File  pdf_report = "~{out_dir}/~{out_prefix}.pdf"
+      File xl_report = "~{out_dir}/~{out_prefix}.xlsx"
   }
 }
