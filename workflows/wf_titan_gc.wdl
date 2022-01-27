@@ -33,7 +33,7 @@ workflow titan_gc {
             call fasta.titan_fasta as titan_fasta { 
                 input:
                     samplename = sample.sample,
-                    fasta = sample.r1,
+                    assembly_fasta = sample.r1,
                     seq_method = sample.titan_wf,
                     input_assembly_method = sample.primers
             }

@@ -55,6 +55,7 @@ workflow titan_fasta {
     String titan_fasta_analysis_date = version_capture.date
     String seq_platform              = seq_method
     String assembly_method           = input_assembly_method
+    String assembly_fasta            = assembly_fasta
 
     Int    number_N                    = consensus_qc.number_N
     Int    assembly_length_unambiguous = consensus_qc.number_ATCG
