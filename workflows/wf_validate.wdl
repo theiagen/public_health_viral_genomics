@@ -1,3 +1,5 @@
+version 1.0
+
 import "../tasks/task_validate.wdl" as validation
 import "../tasks/task_versioning.wdl" as versioning
 
@@ -19,8 +21,8 @@ workflow validate {
     }
     call validation.compare_two_tsvs {
     input:
-      datatable1 = export_two_tsvs.datatable1_tsv,
-      datatable2 = export_two_tsvs.datatable2_tsv,
+      datatable1_tsv = export_two_tsvs.datatable1_tsv,
+      datatable2_tsv = export_two_tsvs.datatable2_tsv,
       out_dir = out_dir,
       out_prefix = out_prefix
     }
