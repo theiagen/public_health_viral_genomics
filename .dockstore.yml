@@ -70,3 +70,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
    testParameterFiles:
     - empty.json
+ - name: TheiaCov_Validate
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_validate.wdl
+   testParameterFiles:
+    - empty.json
