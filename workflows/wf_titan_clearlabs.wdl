@@ -23,7 +23,7 @@ workflow titan_clearlabs {
     String  nextclade_dataset_reference = "MN908947"
     String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
   }
-  call qc_utils.fastqc_se as fastqc_se_raw {
+  call qc_utils.fastq_scan as fastq_scan_raw_reads {
     input:
       read1 = clear_lab_fastq
   }
@@ -32,7 +32,7 @@ workflow titan_clearlabs {
       samplename = samplename,
       read1 = clear_lab_fastq
   }
-  call qc_utils.fastqc_se as fastqc_se_clean {
+  call qc_utils.fastq_scan as fastq_scan_clean_reads {
     input:
       read1 = ncbi_scrub_se.read1_dehosted
   }
@@ -98,9 +98,9 @@ workflow titan_clearlabs {
 
     File   reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
-    Int    fastqc_raw                  = fastqc_se_raw.number_reads
-    Int    fastqc_clean                = fastqc_se_clean.number_reads
-    String fastqc_version              = fastqc_se_clean.version
+    Int    fastq_scan_raw                  = fastq_scan_raw_reads.read1_seq
+    Int    fastq_scan_clean                = fastq_scan_clean_reads.read1_seq
+    String fastq_scan_version              = fastq_scan_clean_reads.version
 
     String kraken_version                   = kraken2_raw.version
     Float  kraken_human                     = kraken2_raw.percent_human

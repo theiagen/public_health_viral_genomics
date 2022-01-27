@@ -101,14 +101,14 @@ workflow titan_illumina_pe {
     File    read2_dehosted              = read_QC_trim.read2_dehosted
     File    read1_clean                 = read_QC_trim.read1_clean
     File    read2_clean                 = read_QC_trim.read2_clean
-    Int     fastqc_raw1                 = read_QC_trim.fastqc_raw1
-    Int     fastqc_raw2                 = read_QC_trim.fastqc_raw2
-    String  fastqc_raw_pairs            = read_QC_trim.fastqc_raw_pairs
-    String  fastqc_version              = read_QC_trim.fastqc_version
+    Int     fastq_scan_raw1                 = read_QC_trim.fastq_scan_raw1
+    Int?     fastq_scan_raw2                 = read_QC_trim.fastq_scan_raw2
+    String?  fastq_scan_raw_pairs            = read_QC_trim.fastq_scan_raw_pairs
+    String  fastq_scan_version              = read_QC_trim.fastq_scan_version
 
-    Int     fastqc_clean1               = read_QC_trim.fastqc_clean1
-    Int     fastqc_clean2               = read_QC_trim.fastqc_clean2
-    String  fastqc_clean_pairs          = read_QC_trim.fastqc_clean_pairs
+    Int     fastq_scan_clean1               = read_QC_trim.fastq_scan_clean1
+    Int?     fastq_scan_clean2               = read_QC_trim.fastq_scan_clean2
+    String?  fastq_scan_clean_pairs          = read_QC_trim.fastq_scan_clean_pairs
     String  trimmomatic_version         = read_QC_trim.trimmomatic_version
     String  bbduk_docker                = read_QC_trim.bbduk_docker
 
