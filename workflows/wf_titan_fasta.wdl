@@ -44,7 +44,7 @@ workflow titan_fasta {
   }
   call ncbi.vadr {
     input:
-      genome_fasta = fasta,
+      genome_fasta = assembly_fasta,
       assembly_length_unambiguous = consensus_qc.number_ATCG
   }
   call versioning.version_capture{
