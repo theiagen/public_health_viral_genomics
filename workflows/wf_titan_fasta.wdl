@@ -15,7 +15,7 @@ workflow titan_fasta {
 
   input {
     String  samplename
-    File    fasta
+    File    assembly_fasta
     String  seq_method
     String  input_assembly_method
     String  nextclade_dataset_name = "sars-cov-2"
@@ -24,16 +24,16 @@ workflow titan_fasta {
   }
   call qc_utils.consensus_qc {
     input:
-      assembly_fasta = fasta
+      assembly_fasta = assembly_fasta
   }
   call taxon_ID.pangolin3 {
     input:
       samplename = samplename,
-      fasta = fasta
+      fasta = assembly_fasta
   }
   call taxon_ID.nextclade_one_sample {
     input:
-      genome_fasta = fasta,
+      genome_fasta = assembly_fasta,
       dataset_name = nextclade_dataset_name,
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
@@ -55,7 +55,6 @@ workflow titan_fasta {
     String titan_fasta_analysis_date = version_capture.date
     String seq_platform              = seq_method
     String assembly_method           = input_assembly_method
-    File   assembly_fasta            = fasta
 
     Int    number_N                    = consensus_qc.number_N
     Int    assembly_length_unambiguous = consensus_qc.number_ATCG
