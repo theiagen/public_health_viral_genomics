@@ -9,7 +9,7 @@ task titan_summary {
         String  seq_platform
         String  primer_bed_name
         Float   percent_reference_coverage
-        Float   s_gene_mean_coverage
+        Float?  s_gene_mean_coverage
         Int     number_N
         String  pango_lineage
         String  pangolin_conflicts
