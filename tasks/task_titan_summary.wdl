@@ -42,7 +42,7 @@ task titan_summary {
         String? artic_version
         String? bbduk_docker = ""
         String? bwa_version = ""
-        String? fastqc_version = ""
+        String? fastq_scan_version = ""
         String? ivar_variant_version = ""
         String? ivar_version_consensus = ""
         String? ivar_version_primtrim = ""
@@ -101,7 +101,7 @@ task titan_summary {
             ('artic_version', '~{artic_version}'),
             ('bbduk_docker', '~{bbduk_docker}'),
             ('bwa_version', '~{bwa_version}'),
-            ('fastqc_version', '~{fastqc_version}'),
+            ('fastq_scan_version', '~{fastq_scan_version}'),
             ('ivar_variant_version', '~{ivar_variant_version}'),
             ('ivar_version_consensus', '~{ivar_version_consensus}'),
             ('ivar_version_primtrim', '~{ivar_version_primtrim}'),
