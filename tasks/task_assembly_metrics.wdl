@@ -5,6 +5,8 @@ task stats_n_coverage {
   input {
     File        bamfile
     String      samplename
+    Int         s_gene_start=21563
+    Int         s_gene_end=25384
   }
 
   command{
@@ -22,7 +24,9 @@ task stats_n_coverage {
     meanbaseq=$(cut -f 8 ${samplename}.cov.txt | tail -n 1)
     meanmapq=$(cut -f 9 ${samplename}.cov.txt | tail -n 1)
     
-    samtools index ${bamfile} && samtools coverage -r "MN908947.3:21563-25384" ${bamfile} >> ${samplename}.cov.txt
+    samtools index ${bamfile} 
+    chr=$(samtools idxstats ${bamfile}  cut -f 1 | head -1)
+    samtools coverage -r "${chr}:${s_gene_start}-${s_gene_end}" ${bamfile} >> ${samplename}.cov.txt
     s_gene_depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
 
     if [ -z "$coverage" ] ; then coverage="0" ; fi
