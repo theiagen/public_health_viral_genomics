@@ -3,6 +3,7 @@ version 1.0
 import "../tasks/tasks_nextstrain.wdl" as nextstrain
 import "../tasks/tasks_reports.wdl" as reports
 import "../tasks/tasks_intrahost.wdl" as intrahost
+import "../tasks/tasks_utils.wdl" as utils
 
 workflow sarscov2_nextstrain {
     meta {
@@ -14,8 +15,10 @@ workflow sarscov2_nextstrain {
     input {
         Array[File]+    assembly_fastas
         Array[File]+    sample_metadata_tsvs
+        String          tree_root_seq_id = "Wuhan-Hu-1/2019"
 
         String          build_name
+        File?           builds_yaml
 
         Array[String]?  ancestral_traits_to_infer
 
@@ -26,6 +29,7 @@ workflow sarscov2_nextstrain {
         Float?          clock_rate
         Float?          clock_std_dev
         Int             mafft_cpu=64
+        Int             mafft_mem_size=500
 
         Int             min_unambig_genome = 27000
     }
@@ -59,33 +63,34 @@ workflow sarscov2_nextstrain {
 
     #### mafft_and_snp
 
-    call nextstrain.gzcat {
+    call utils.zcat {
         input:
             infiles     = assembly_fastas,
             output_name = "all_samples_combined_assembly.fasta"
     }
-    call nextstrain.filter_sequences_by_length {
-        input:
-            sequences_fasta = gzcat.combined,
-            min_non_N = min_unambig_genome
+    
+    call nextstrain.nextstrain_deduplicate_sequences as dedup_seqs {
+    input:
+        sequences_fasta = zcat.combined
     }
-    call nextstrain.mafft_one_chr as mafft {
+    
+    call utils.filter_sequences_by_length {
+        input:
+            sequences_fasta = dedup_seqs.sequences_deduplicated_fasta,
+            min_non_N       = min_unambig_genome
+    }
+    
+    call nextstrain.mafft_one_chr_chunked as mafft {
         input:
             sequences = filter_sequences_by_length.filtered_fasta,
             ref_fasta = select_first([ref_fasta, nextstrain_ncov_defaults.reference_fasta]),
-            basename  = "all_samples_aligned.fasta",
-            cpus      = mafft_cpu
+            basename  = "all_samples_aligned.fasta"
             
     }
-    call nextstrain.snp_sites {
-        input:
-            msa_fasta = mafft.aligned_sequences
-    }
-
 
     #### merge metadata, compute derived cols
     if(length(sample_metadata_tsvs)>1) {
-        call reports.tsv_join {
+        call utils.tsv_join {
             input:
                 input_tsvs = sample_metadata_tsvs,
                 id_col = 'strain',
@@ -96,19 +101,33 @@ workflow sarscov2_nextstrain {
         input:
             metadata_tsv = select_first(flatten([[tsv_join.out_tsv], sample_metadata_tsvs]))
     }
-
-
-    call nextstrain.fasta_to_ids {
-        input:
-            sequences_fasta = mafft.aligned_sequences
+    
+    ## Subsample if builds.yaml file provided
+    if(defined(builds_yaml)) {
+      call nextstrain.nextstrain_build_subsample as subsample {
+         input:
+             alignment_msa_fasta = mafft.aligned_sequences,
+             sample_metadata_tsv = derived_cols.derived_metadata,
+             build_name          = build_name,
+             builds_yaml         = builds_yaml
+      }
     }
-
+    
+    call utils.fasta_to_ids {
+        input:
+            sequences_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
+    }
+    
+    call nextstrain.snp_sites {
+        input:
+            msa_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
+    }
 
     #### augur_from_msa
 
     call nextstrain.augur_mask_sites {
         input:
-            sequences = mafft.aligned_sequences
+            sequences = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     }
     call nextstrain.draft_augur_tree {
         input:
@@ -118,10 +137,11 @@ workflow sarscov2_nextstrain {
     call nextstrain.refine_augur_tree {
         input:
             raw_tree    = draft_augur_tree.aligned_tree,
-            msa_or_vcf  = augur_mask_sites.masked_sequences,
+            msa_or_vcf  = select_first([subsample.subsampled_msa, augur_mask_sites.masked_sequences]),
             metadata    = derived_cols.derived_metadata,
             clock_rate  = clock_rate,
-            clock_std_dev = clock_std_dev
+            clock_std_dev = clock_std_dev,
+            root = tree_root_seq_id
     }
     if(defined(ancestral_traits_to_infer) && length(select_first([ancestral_traits_to_infer,[]]))>0) {
         call nextstrain.ancestral_traits {
@@ -145,7 +165,7 @@ workflow sarscov2_nextstrain {
     call nextstrain.ancestral_tree {
         input:
             tree        = refine_augur_tree.tree_refined,
-            msa_or_vcf  = augur_mask_sites.masked_sequences
+            msa_or_vcf  = select_first([subsample.subsampled_msa, augur_mask_sites.masked_sequences])
     }
     call nextstrain.translate_augur_tree {
         input:

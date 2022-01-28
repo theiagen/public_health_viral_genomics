@@ -58,7 +58,7 @@ task pangolin3 {
     String      samplename
     Int         min_length=10000
     Float       max_ambig=0.5
-    String      docker="quay.io/staphb/pangolin:3.1.14-pangolearn-2021-10-13"
+    String      docker="quay.io/staphb/pangolin:3.1.17-pangolearn-2022-01-05"
     String      inference_engine="usher"
   }
 
@@ -202,7 +202,7 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.4.5"
+        String docker = "nextstrain/nextclade:1.9.0"
         String dataset_name
         String dataset_reference
         String dataset_tag

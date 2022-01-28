@@ -443,7 +443,7 @@ task compile_biosamp_n_sra {
 input {
   Array[File] single_submission_biosample_attirbutes
   Array[File] single_submission_sra_metadata
-  Array[File] single_submission_sra_reads
+  Array[String] single_submission_sra_reads
   String date
   String? gcp_bucket
 

@@ -20,7 +20,7 @@ workflow titan_fasta {
     String  input_assembly_method
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2021-06-25T00:00:00Z"
+    String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
   }
   call qc_utils.consensus_qc {
     input:
