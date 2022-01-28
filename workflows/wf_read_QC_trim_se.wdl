@@ -6,7 +6,7 @@ import "../tasks/task_taxonID.wdl" as taxonID
 
 workflow read_QC_trim {
   meta {
-    description: "Runs basic QC (fastq_scan), trimming (SeqyClean), and taxonomic ID (Kraken2) on illumina PE reads"
+    description: "Runs basic QC (fastq-scan), trimming (SeqyClean), and taxonomic ID (Kraken2) on illumina PE reads"
   }
 
   input {
