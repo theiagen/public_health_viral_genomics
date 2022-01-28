@@ -6,28 +6,28 @@ task stats_n_coverage {
     File        bamfile
     String      samplename
     Int         s_gene_start=21563
-    Int         s_gene_end=25384
+    Int         s_gene_stop=25384
   }
 
-  command{
+  command <<<
     date | tee DATE
     samtools --version | head -n1 | tee VERSION
 
-    samtools stats ${bamfile} > ${samplename}.stats.txt
+    samtools stats ~{bamfile} > ~{samplename}.stats.txt
 
-    samtools coverage ${bamfile} -m -o ${samplename}.cov.hist
-    samtools coverage ${bamfile} -o ${samplename}.cov.txt
-    samtools flagstat ${bamfile} > ${samplename}.flagstat.txt
+    samtools coverage ~{bamfile} -m -o ~{samplename}.cov.hist
+    samtools coverage ~{bamfile} -o ~{samplename}.cov.txt
+    samtools flagstat ~{bamfile} > ~{samplename}.flagstat.txt
     
-    coverage=$(cut -f 6 ${samplename}.cov.txt | tail -n 1)
-    depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
-    meanbaseq=$(cut -f 8 ${samplename}.cov.txt | tail -n 1)
-    meanmapq=$(cut -f 9 ${samplename}.cov.txt | tail -n 1)
+    coverage=$(cut -f 6 ~{samplename}.cov.txt | tail -n 1)
+    depth=$(cut -f 7 ~{samplename}.cov.txt | tail -n 1)
+    meanbaseq=$(cut -f 8 ~{samplename}.cov.txt | tail -n 1)
+    meanmapq=$(cut -f 9 ~{samplename}.cov.txt | tail -n 1)
     
-    samtools index ${bamfile} 
-    chr=$(samtools idxstats ${bamfile}  cut -f 1 | head -1)
-    samtools coverage -r "${chr}:${s_gene_start}-${s_gene_end}" ${bamfile} >> ${samplename}.cov.txt
-    s_gene_depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
+    samtools index ~{bamfile} 
+    chr=$(samtools idxstats ~{bamfile}  cut -f 1 | head -1)
+    samtools coverage -r "${chr}:~{s_gene_start}-~{s_gene_stop}" ~{bamfile} >> ~{samplename}.cov.txt
+    s_gene_depth=$(cut -f 7 ~{samplename}.cov.txt | tail -n 1)
 
     if [ -z "$coverage" ] ; then coverage="0" ; fi
     if [ -z "s_gene_depth" ] ; then s_gene_depth="0"; fi
@@ -40,15 +40,15 @@ task stats_n_coverage {
     echo $s_gene_depth | tee S_GENE_DEPTH
     echo $meanbaseq | tee MEANBASEQ 
     echo $meanmapq | tee MEANMAPQ 
-  }
+  >>>
 
   output {
     String     date = read_string("DATE")
     String     samtools_version = read_string("VERSION") 
-    File       stats = "${samplename}.stats.txt"
-    File       cov_hist = "${samplename}.cov.hist"
-    File       cov_stats = "${samplename}.cov.txt"
-    File       flagstat = "${samplename}.flagstat.txt"
+    File       stats = "~{samplename}.stats.txt"
+    File       cov_hist = "~{samplename}.cov.hist"
+    File       cov_stats = "~{samplename}.cov.txt"
+    File       flagstat = "~{samplename}.flagstat.txt"
     Float      coverage = read_string("COVERAGE")
     Float      depth = read_string("DEPTH")
     Float      s_gene_depth = read_string("S_GENE_DEPTH")
