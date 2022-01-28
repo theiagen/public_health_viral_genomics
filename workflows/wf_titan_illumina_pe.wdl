@@ -104,7 +104,7 @@ workflow titan_illumina_pe {
     Int     fastq_scan_raw1             = read_QC_trim.fastq_scan_raw1
     Int?    fastq_scan_raw2             = read_QC_trim.fastq_scan_raw2
     String? fastq_scan_raw_pairs        = read_QC_trim.fastq_scan_raw_pairs
-    String  fastq_scan_version          = read_QC_trim.fastq_scan_raw_version
+    String  fastq_scan_version          = read_QC_trim.fastq_scan_version
 
     Int     fastq_scan_clean1           = read_QC_trim.fastq_scan_clean1
     Int     fastq_scan_clean2           = read_QC_trim.fastq_scan_clean2
