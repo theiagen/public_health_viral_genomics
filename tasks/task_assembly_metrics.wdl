@@ -44,7 +44,6 @@ task stats_n_coverage {
     File       stats = "${samplename}.stats.txt"
     File       cov_hist = "${samplename}.cov.hist"
     File       cov_stats = "${samplename}.cov.txt"
-    File       s_gene_cov_stats = "${samplename}.s_gene.cov.txt"
     File       flagstat = "${samplename}.flagstat.txt"
     Float      coverage = read_string("COVERAGE")
     Float      depth = read_string("DEPTH")
