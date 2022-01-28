@@ -114,14 +114,15 @@ task fastq_scan {
     
     # capture forward read stats
     eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ1_SEQS)
-
-    eval "${cat_reads} ~{read2}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ2_SEQS) 
+    num_read1=$(cat READ1_SEQS)
+    eval "${cat_reads} ~{read2}" | fastq-scan | tee ~{read2_name}_fastq-scan.json >(jq .qc_stats.read_total > READ2_SEQS)
+    num_read2=$(cat READ2_SEQS) 
       
     # capture number of read pairs
-    if [ $READ1_SEQS == $READ2_SEQS ]; then
-      read_pairs=$READ1_SEQS
+    if [ ${num_read1} == $num_read2]; then
+      read_pairs=${num_read1}
     else
-      read_pairs="Uneven pairs: R1=$READ1_SEQS, R2=$READ2_SEQS"
+      read_pairs="Uneven pairs: R1=${num_read1}, R2=${num_read2}"
     fi
 
     echo $read_pairs | tee READ_PAIRS
