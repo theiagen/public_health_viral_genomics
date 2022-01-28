@@ -95,8 +95,8 @@ workflow titan_illumina_se {
     String  seq_platform = seq_method
 
     File    read1_clean                 = read_QC_trim.read1_clean
-    Int     fastq_scan_raw              = read_QC_trim.fastq_scan_raw_number_reads
-    String  fastq_scan_version          = read_QC_trim.fastq_scan_raw_version
+    Int     fastq_scan_raw              = read_QC_trim.fastq_scan_number_reads
+    String  fastq_scan_version          = read_QC_trim.fastq_scan_version
 
     Int     fastq_scan_clean            = read_QC_trim.fastq_scan_clean_number_reads
     String  trimmomatic_version         = read_QC_trim.trimmomatic_version
