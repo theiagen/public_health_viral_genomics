@@ -106,7 +106,7 @@ task fastq_scan {
     fastq-scan -v | tee VERSION
 
     # set cat command based on compression
-    if [[ "~{read1}" == "*.gz" ]]'.gz'; then 
+    if [[ "~{read1}" == "*.gz" ]] ; then 
       cat_reads="zcat"
     else
       cat_reads="cat"
@@ -159,7 +159,7 @@ task fastq_scan_se {
     fastq-scan -v | tee VERSION
 
     # set cat command based on compression
-    if [[ "~{read1}" == "*.gz" ]]'.gz'; then 
+    if [[ "~{read1}" == "*.gz" ]] ; then 
       cat_reads="zcat"
     else
       cat_reads="cat"
