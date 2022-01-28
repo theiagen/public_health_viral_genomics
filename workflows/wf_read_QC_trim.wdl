@@ -72,12 +72,12 @@ workflow read_QC_trim {
     File   read2_clean               = bbduk.read2_clean
 
     Int    fastq_scan_raw1               = fastq_scan_raw.read1_seq
-    Int?    fastq_scan_raw2               = fastq_scan_raw.read2_seq
-    String? fastq_scan_raw_pairs          = fastq_scan_raw.read_pairs
+    Int    fastq_scan_raw2               = fastq_scan_raw.read2_seq
+    String fastq_scan_raw_pairs          = fastq_scan_raw.read_pairs
 
     Int    fastq_scan_clean1             = fastq_scan_clean.read1_seq
-    Int?    fastq_scan_clean2             = fastq_scan_clean.read2_seq
-    String? fastq_scan_clean_pairs        = fastq_scan_clean.read_pairs
+    Int    fastq_scan_clean2             = fastq_scan_clean.read2_seq
+    String fastq_scan_clean_pairs        = fastq_scan_clean.read_pairs
 
     String kraken_version            = kraken2_raw.version
     Float  kraken_human              = kraken2_raw.percent_human

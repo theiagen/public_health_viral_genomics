@@ -107,8 +107,8 @@ workflow titan_illumina_pe {
     String  fastq_scan_version              = read_QC_trim.fastq_scan_version
 
     Int     fastq_scan_clean1               = read_QC_trim.fastq_scan_clean1
-    Int?     fastq_scan_clean2               = read_QC_trim.fastq_scan_clean2
-    String?  fastq_scan_clean_pairs          = read_QC_trim.fastq_scan_clean_pairs
+    Int     fastq_scan_clean2               = read_QC_trim.fastq_scan_clean2
+    String  fastq_scan_clean_pairs          = read_QC_trim.fastq_scan_clean_pairs
     String  trimmomatic_version         = read_QC_trim.trimmomatic_version
     String  bbduk_docker                = read_QC_trim.bbduk_docker
 

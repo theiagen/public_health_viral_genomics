@@ -23,7 +23,7 @@ workflow titan_clearlabs {
     String  nextclade_dataset_reference = "MN908947"
     String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
   }
-  call qc_utils.fastq_scan as fastq_scan_raw_reads {
+  call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
       read1 = clear_lab_fastq
   }
@@ -32,7 +32,7 @@ workflow titan_clearlabs {
       samplename = samplename,
       read1 = clear_lab_fastq
   }
-  call qc_utils.fastq_scan as fastq_scan_clean_reads {
+  call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
     input:
       read1 = ncbi_scrub_se.read1_dehosted
   }

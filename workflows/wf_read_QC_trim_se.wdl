@@ -36,11 +36,11 @@ workflow read_QC_trim {
       read1_trimmed = trimmomatic_se.read1_trimmed,
       mem_size_gb = bbduk_mem
   }
-  call qc_utils.fastq_scan as fastq_scan_raw {
+  call qc_utils.fastq_scan_se as fastq_scan_raw {
     input:
       read1 = read1_raw
   }
-  call qc_utils.fastq_scan as fastq_scan_clean {
+  call qc_utils.fastq_scan_se as fastq_scan_clean {
     input:
       read1 = bbduk_se.read1_clean
   }

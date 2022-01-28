@@ -24,7 +24,7 @@ workflow titan_ont {
     String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
 
   }
-  call qc_utils.fastq_scan as fastq_scan_raw_reads {
+  call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
       read1 = demultiplexed_reads
   }
@@ -38,7 +38,7 @@ workflow titan_ont {
       demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
       samplename = samplename
   }
-  call qc_utils.fastq_scan as fastq_scan_clean_reads {
+  call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
     input:
       read1 = read_filtering.filtered_reads
   }
