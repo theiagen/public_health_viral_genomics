@@ -16,13 +16,14 @@ task stats_n_coverage {
     samtools coverage ${bamfile} -m -o ${samplename}.cov.hist
     samtools coverage ${bamfile} -o ${samplename}.cov.txt
     samtools flagstat ${bamfile} > ${samplename}.flagstat.txt
-    samtools coverage -r "MN908947.3:21563-25384" ${bamfile} > ${samplename}.s_gene.cov.txt
-
+    
     coverage=$(cut -f 6 ${samplename}.cov.txt | tail -n 1)
     depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
-    s_gene_depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
     meanbaseq=$(cut -f 8 ${samplename}.cov.txt | tail -n 1)
     meanmapq=$(cut -f 9 ${samplename}.cov.txt | tail -n 1)
+    
+    samtools index ${bamfile} && samtools coverage -r "MN908947.3:21563-25384" ${bamfile} >> ${samplename}.cov.txt
+    s_gene_depth=$(cut -f 7 ${samplename}.cov.txt | tail -n 1)
 
     if [ -z "$coverage" ] ; then coverage="0" ; fi
     if [ -z "s_gene_depth" ] ; then s_gene_depth="0"; fi
@@ -43,6 +44,7 @@ task stats_n_coverage {
     File       stats = "${samplename}.stats.txt"
     File       cov_hist = "${samplename}.cov.hist"
     File       cov_stats = "${samplename}.cov.txt"
+    File       s-gene_cov_stats = "${samplename}.s_gene.cov.txt"
     File       flagstat = "${samplename}.flagstat.txt"
     Float      coverage = read_string("COVERAGE")
     Float      depth = read_string("DEPTH")
