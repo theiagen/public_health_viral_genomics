@@ -25,7 +25,7 @@ task stats_n_coverage {
     meanmapq=$(cut -f 9 ~{samplename}.cov.txt | tail -n 1)
     
     samtools index ~{bamfile} 
-    chr=$(samtools idxstats ~{bamfile}  cut -f 1 | head -1)
+    chr=$(samtools idxstats ~{bamfile} | cut -f 1 | head -1)
     samtools coverage -r "${chr}:~{s_gene_start}-~{s_gene_stop}" ~{bamfile} >> ~{samplename}.cov.txt
     s_gene_depth=$(cut -f 7 ~{samplename}.cov.txt | tail -n 1)
 
