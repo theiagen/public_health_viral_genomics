@@ -100,7 +100,7 @@ workflow titan_clearlabs {
 
     Int    fastq_scan_raw                  = fastq_scan_raw_reads.read1_seq
     Int    fastq_scan_clean                = fastq_scan_clean_reads.read1_seq
-    String fastq_scan_version              = fastq_scan_clean_reads.version
+    String fastq_scan_version              = fastq_scan_raw_reads.version
 
     String kraken_version                   = kraken2_raw.version
     Float  kraken_human                     = kraken2_raw.percent_human
