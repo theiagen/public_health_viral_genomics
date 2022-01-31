@@ -139,7 +139,7 @@ task fastq_scan {
   }
 
   runtime {
-    docker:       "quay.io/staphb/fastq-scan:0.4.3"
+    docker:       "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
     memory:       "2 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
@@ -180,7 +180,7 @@ task fastq_scan_se {
   }
 
   runtime {
-    docker:       "quay.io/staphb/fastq-scan:0.4.3"
+    docker:       "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
     memory:       "2 GB"
     cpu:          2
     disks:        "local-disk 100 SSD"
