@@ -72,8 +72,10 @@ workflow titan_gc {
                     kraken_sc2 = titan_clearlabs.kraken_sc2,
                     kraken_sc2_dehosted = titan_clearlabs.kraken_sc2_dehosted,
                     artic_version = titan_clearlabs.artic_version,
+                    artic_docker = titan_clearlabs.artic_docker,
                     kraken_version = titan_clearlabs.kraken_version,
                     nextclade_version = titan_clearlabs.nextclade_version,
+                    nextclade_docker = titan_clearlabs.nextclade_docker,
                     samtools_version = titan_clearlabs.samtools_version,
                     vadr_docker = titan_clearlabs.vadr_docker
             }
@@ -135,6 +137,7 @@ workflow titan_gc {
                     ivar_version_primtrim = titan_illumina_pe.ivar_version_primtrim,
                     kraken_version = titan_illumina_pe.kraken_version,
                     nextclade_version = titan_illumina_pe.nextclade_version,
+                    nextclade_docker = titan_illumina_pe.nextclade_docker,
                     samtools_version = titan_illumina_pe.samtools_version,
                     samtools_version_consensus = titan_illumina_pe.samtools_version_consensus,
                     samtools_version_primtrim = titan_illumina_pe.samtools_version_primtrim,
@@ -194,6 +197,7 @@ workflow titan_gc {
                     ivar_version_primtrim = titan_illumina_se.ivar_version_primtrim,
                     kraken_version = titan_illumina_se.kraken_version,
                     nextclade_version = titan_illumina_se.nextclade_version,
+                    nextclade_docker = titan_illumina_se.nextclade_docker,
                     samtools_version = titan_illumina_se.samtools_version,
                     samtools_version_consensus = titan_illumina_se.samtools_version_consensus,
                     samtools_version_primtrim = titan_illumina_se.samtools_version_primtrim,
@@ -247,8 +251,10 @@ workflow titan_gc {
                     kraken_sc2 = titan_ont.kraken_sc2,
                     kraken_sc2_dehosted = titan_ont.kraken_sc2_dehosted,
                     artic_version = titan_ont.artic_version,
+                    artic_docker = titan_ont.artic_docker,
                     kraken_version = titan_ont.kraken_version,
                     nextclade_version = titan_ont.nextclade_version,
+                    nextclade_docker = titan_ont.nextclade_docker,
                     samtools_version = titan_ont.samtools_version,
                     vadr_docker = titan_ont.vadr_docker
             }

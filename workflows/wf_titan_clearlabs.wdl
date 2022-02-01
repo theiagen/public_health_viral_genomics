@@ -21,7 +21,7 @@ workflow titan_clearlabs {
     Int?    normalise  = 20000
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
+    String  nextclade_dataset_tag = "2022-01-18T12:00:00Z"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
@@ -114,6 +114,7 @@ workflow titan_clearlabs {
     File   aligned_bai                      = consensus.trim_sorted_bai
     File   variants_from_ref_vcf            = consensus.medaka_pass_vcf
     String artic_version                    = consensus.artic_pipeline_version
+    String artic_docker           = consensus.artic_pipeline_docker
     String primer_bed_name                  = consensus.primer_bed_name
     File   assembly_fasta                   = consensus.consensus_seq
     String assembly_method                  = consensus.artic_pipeline_version
@@ -144,6 +145,7 @@ workflow titan_clearlabs {
     File   auspice_json                     = nextclade_one_sample.auspice_json
     File   nextclade_tsv                    = nextclade_one_sample.nextclade_tsv
     String  nextclade_version               = nextclade_one_sample.nextclade_version
+    String nextclade_docker                 = nextclade_one_sample.nextclade_docker
     String  nextclade_aa_subs               = nextclade_output_parser_one_sample.nextclade_aa_subs
     String  nextclade_aa_dels               = nextclade_output_parser_one_sample.nextclade_aa_dels
     String  nextclade_clade                 = nextclade_output_parser_one_sample.nextclade_clade

@@ -20,7 +20,7 @@ workflow titan_fasta {
     String  input_assembly_method
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
+    String  nextclade_dataset_tag = "2022-01-18T12:00:00Z"
   }
   call qc_utils.consensus_qc {
     input:
@@ -74,7 +74,7 @@ workflow titan_fasta {
     File   auspice_json                     = nextclade_one_sample.auspice_json
     File   nextclade_tsv                    = nextclade_one_sample.nextclade_tsv
     String nextclade_version                = nextclade_one_sample.nextclade_version
-
+    String nextclade_docker                 = nextclade_one_sample.nextclade_docker
     String nextclade_clade                  = nextclade_output_parser_one_sample.nextclade_clade
     String nextclade_aa_subs                = nextclade_output_parser_one_sample.nextclade_aa_subs
     String nextclade_aa_dels                = nextclade_output_parser_one_sample.nextclade_aa_dels

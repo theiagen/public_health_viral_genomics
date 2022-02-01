@@ -40,6 +40,7 @@ task titan_summary {
         String? kraken_sc2_dehosted = ""
         String? primer_trimmed_read_percent
         String? artic_version
+        String? artic_docker
         String? bbduk_docker = ""
         String? bwa_version = ""
         String? fastq_scan_version = ""
@@ -48,6 +49,7 @@ task titan_summary {
         String? ivar_version_primtrim = ""
         String? kraken_version = ""
         String? nextclade_version = ""
+        String? nextclade_docker = ""
         String  samtools_version
         String? samtools_version_consensus = ""
         String? samtools_version_primtrim = ""
@@ -99,6 +101,7 @@ task titan_summary {
             ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
             ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
             ('artic_version', '~{artic_version}'),
+            ('artic_docker', '~{artic_docker}'),
             ('bbduk_docker', '~{bbduk_docker}'),
             ('bwa_version', '~{bwa_version}'),
             ('fastq_scan_version', '~{fastq_scan_version}'),
@@ -107,6 +110,7 @@ task titan_summary {
             ('ivar_version_primtrim', '~{ivar_version_primtrim}'),
             ('kraken_version', '~{kraken_version}'),
             ('nextclade_version', '~{nextclade_version}'),
+            ('nextclade_docker', '~{nextclade_docker}'),
             ('samtools_version', '~{samtools_version}'),
             ('samtools_version_consensus', '~{samtools_version_consensus}'),
             ('samtools_version_primtrim', '~{samtools_version_primtrim}'),
