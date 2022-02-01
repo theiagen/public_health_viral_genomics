@@ -120,6 +120,7 @@ workflow titan_ont {
     File    aligned_bai                 = consensus.trim_sorted_bai
     File    variants_from_ref_vcf       = consensus.medaka_pass_vcf
     String  artic_version               = consensus.artic_pipeline_version
+    String  artic_pipeline_docker       = consensus.artic_pipeline_docker
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
     String  assembly_method             = consensus.artic_pipeline_version

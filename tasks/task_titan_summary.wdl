@@ -40,6 +40,7 @@ task titan_summary {
         String? kraken_sc2_dehosted = ""
         String? primer_trimmed_read_percent
         String? artic_version
+        String? artic_pipeline_docker
         String? bbduk_docker = ""
         String? bwa_version = ""
         String? fastq_scan_version = ""
@@ -99,6 +100,7 @@ task titan_summary {
             ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
             ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
             ('artic_version', '~{artic_version}'),
+            ('artic_pipeline_docker', '~{artic_pipeline_docker}')
             ('bbduk_docker', '~{bbduk_docker}'),
             ('bwa_version', '~{bwa_version}'),
             ('fastq_scan_version', '~{fastq_scan_version}'),
