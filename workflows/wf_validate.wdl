@@ -9,8 +9,8 @@ workflow validate {
       String        terra_workspace
       String        datatable1
       String        datatable2
-      String        out_dir
-      String        out_prefix
+      String        out_dir="./"
+      String        out_prefix"VALIDATION_OUTPUT_FILE"
     }
     call validation.export_two_tsvs {
     input:

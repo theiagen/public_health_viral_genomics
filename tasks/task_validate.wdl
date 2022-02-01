@@ -9,9 +9,9 @@ task export_two_tsvs {
     String        datatable2
   }
   command {
-    python3 scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable1} --tsv_filename ~{datatable1}
+    python3 /scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable1} --tsv_filename ~{datatable1}
 
-    python3 scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable2} --tsv_filename ~{datatable2}
+    python3 /scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable2} --tsv_filename ~{datatable2}
   }
   runtime {
       docker: "broadinstitute/terra-tools:tqdm"
@@ -31,8 +31,8 @@ task compare_two_tsvs {
   input {
     File  datatable1_tsv
     File  datatable2_tsv
-    String out_dir
-    String out_prefix
+      String? out_dir
+    String? out_prefix
   }
   command{
     python3 compare_data_tables.py ~{datatable1_tsv} ~{datatable2_tsv} --outdir ~{out_dir} --prefix ~{out_prefix}
