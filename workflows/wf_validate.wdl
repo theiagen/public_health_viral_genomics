@@ -10,7 +10,7 @@ workflow validate {
       String        datatable1
       String        datatable2
       String        out_dir="./"
-      String        out_prefix"VALIDATION_OUTPUT_FILE"
+      String        out_prefix="VALIDATION_OUTPUT_FILE"
     }
     call validation.export_two_tsvs {
     input:
