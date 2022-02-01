@@ -93,22 +93,22 @@ workflow titan_illumina_pe {
     input:
   }
   output {
-    String  titan_illumina_pe_version            = version_capture.phvg_version
-    String  titan_illumina_pe_analysis_date      = version_capture.date
-    String  seq_platform                = seq_method
+    String  titan_illumina_pe_version       = version_capture.phvg_version
+    String  titan_illumina_pe_analysis_date = version_capture.date
+    String  seq_platform                    = seq_method
 
     File    read1_dehosted              = read_QC_trim.read1_dehosted
     File    read2_dehosted              = read_QC_trim.read2_dehosted
     File    read1_clean                 = read_QC_trim.read1_clean
     File    read2_clean                 = read_QC_trim.read2_clean
-    Int     fastqc_raw1                 = read_QC_trim.fastqc_raw1
-    Int     fastqc_raw2                 = read_QC_trim.fastqc_raw2
-    String  fastqc_raw_pairs            = read_QC_trim.fastqc_raw_pairs
-    String  fastqc_version              = read_QC_trim.fastqc_version
+    Int     fastq_scan_raw1             = read_QC_trim.fastq_scan_raw1
+    Int?    fastq_scan_raw2             = read_QC_trim.fastq_scan_raw2
+    String? fastq_scan_raw_pairs        = read_QC_trim.fastq_scan_raw_pairs
+    String  fastq_scan_version          = read_QC_trim.fastq_scan_version
 
-    Int     fastqc_clean1               = read_QC_trim.fastqc_clean1
-    Int     fastqc_clean2               = read_QC_trim.fastqc_clean2
-    String  fastqc_clean_pairs          = read_QC_trim.fastqc_clean_pairs
+    Int     fastq_scan_clean1           = read_QC_trim.fastq_scan_clean1
+    Int     fastq_scan_clean2           = read_QC_trim.fastq_scan_clean2
+    String  fastq_scan_clean_pairs      = read_QC_trim.fastq_scan_clean_pairs
     String  trimmomatic_version         = read_QC_trim.trimmomatic_version
     String  bbduk_docker                = read_QC_trim.bbduk_docker
 
@@ -147,15 +147,16 @@ workflow titan_illumina_pe {
     Float   meanbaseq_trim              = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim               = stats_n_coverage_primtrim.meanmapq
     Float   assembly_mean_coverage      = stats_n_coverage_primtrim.depth
+    Float   s_gene_mean_coverage        = stats_n_coverage_primtrim.s_gene_depth
     String  samtools_version_stats      = stats_n_coverage.samtools_version
 
     String  pango_lineage               = pangolin3.pangolin_lineage
     String  pangolin_conflicts          = pangolin3.pangolin_conflicts
     String  pangolin_notes              = pangolin3.pangolin_notes
-    String  pangolin_assignment_version            = pangolin3.pangolin_assignment_version
+    String  pangolin_assignment_version = pangolin3.pangolin_assignment_version
     File    pango_lineage_report        = pangolin3.pango_lineage_report
     String  pangolin_docker             = pangolin3.pangolin_docker
-    String  pangolin_versions      = pangolin3.pangolin_versions
+    String  pangolin_versions           = pangolin3.pangolin_versions
 
     File    nextclade_json              = nextclade_one_sample.nextclade_json
     File    auspice_json                = nextclade_one_sample.auspice_json

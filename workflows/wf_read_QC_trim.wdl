@@ -40,12 +40,12 @@ workflow read_QC_trim {
       read2_trimmed = trimmomatic.read2_trimmed,
       mem_size_gb   = bbduk_mem
   }
-  call qc_utils.fastqc as fastqc_raw {
+  call qc_utils.fastq_scan as fastq_scan_raw {
     input:
       read1 = read1_raw,
       read2 = read2_raw,
   }
-  call qc_utils.fastqc as fastqc_clean {
+  call qc_utils.fastq_scan as fastq_scan_clean {
     input:
       read1 = bbduk.read1_clean,
       read2 = bbduk.read2_clean
@@ -71,13 +71,13 @@ workflow read_QC_trim {
     File   read1_clean               = bbduk.read1_clean
     File   read2_clean               = bbduk.read2_clean
 
-    Int    fastqc_raw1               = fastqc_raw.read1_seq
-    Int    fastqc_raw2               = fastqc_raw.read2_seq
-    String fastqc_raw_pairs          = fastqc_raw.read_pairs
+    Int    fastq_scan_raw1               = fastq_scan_raw.read1_seq
+    Int    fastq_scan_raw2               = fastq_scan_raw.read2_seq
+    String fastq_scan_raw_pairs          = fastq_scan_raw.read_pairs
 
-    Int    fastqc_clean1             = fastqc_clean.read1_seq
-    Int    fastqc_clean2             = fastqc_clean.read2_seq
-    String fastqc_clean_pairs        = fastqc_clean.read_pairs
+    Int    fastq_scan_clean1             = fastq_scan_clean.read1_seq
+    Int    fastq_scan_clean2             = fastq_scan_clean.read2_seq
+    String fastq_scan_clean_pairs        = fastq_scan_clean.read_pairs
 
     String kraken_version            = kraken2_raw.version
     Float  kraken_human              = kraken2_raw.percent_human
@@ -87,7 +87,7 @@ workflow read_QC_trim {
     Float  kraken_sc2_dehosted       = kraken2_dehosted.percent_sc2
     String kraken_report_dehosted    = kraken2_dehosted.kraken_report
 
-    String fastqc_version            = fastqc_raw.version
+    String fastq_scan_version            = fastq_scan_raw.version
     String bbduk_docker              = bbduk.bbduk_docker
     String trimmomatic_version       = trimmomatic.version
   }
