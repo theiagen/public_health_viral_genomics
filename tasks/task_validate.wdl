@@ -22,8 +22,8 @@ task export_two_tsvs {
       maxRetries: 3
   }
   output {
-      File   datatable1_tsv     = "datatable1.tsv"
-      File   datatable2_tsv     = "datatable2.tsv"
+      File   datatable1_tsv     = "~{datatable1}.tsv"
+      File   datatable2_tsv     = "~{datatable2}.tsv"
   }
 }
 
