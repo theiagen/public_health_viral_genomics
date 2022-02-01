@@ -110,7 +110,7 @@ task titan_summary {
             ('ivar_version_primtrim', '~{ivar_version_primtrim}'),
             ('kraken_version', '~{kraken_version}'),
             ('nextclade_version', '~{nextclade_version}'),
-            ('nextclade_docker', ~{nextclade_docker}),
+            ('nextclade_docker', '~{nextclade_docker}'),
             ('samtools_version', '~{samtools_version}'),
             ('samtools_version_consensus', '~{samtools_version_consensus}'),
             ('samtools_version_primtrim', '~{samtools_version_primtrim}'),
