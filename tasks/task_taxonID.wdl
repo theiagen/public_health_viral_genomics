@@ -239,13 +239,14 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries:   3
+        maxRetries:   
     }
     output {
         String nextclade_version  = read_string("NEXTCLADE_VERSION")
         File   nextclade_json     = "~{basename}.nextclade.json"
         File   auspice_json       = "~{basename}.nextclade.auspice.json"
         File   nextclade_tsv      = "~{basename}.nextclade.tsv"
+        String nextclade_docker   = docker
     }
 }
 

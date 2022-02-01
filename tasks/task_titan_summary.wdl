@@ -49,6 +49,7 @@ task titan_summary {
         String? ivar_version_primtrim = ""
         String? kraken_version = ""
         String? nextclade_version = ""
+        String? nextclade_docker = ""
         String  samtools_version
         String? samtools_version_consensus = ""
         String? samtools_version_primtrim = ""
@@ -109,6 +110,7 @@ task titan_summary {
             ('ivar_version_primtrim', '~{ivar_version_primtrim}'),
             ('kraken_version', '~{kraken_version}'),
             ('nextclade_version', '~{nextclade_version}'),
+            ('nextclade_docker', ~{nextclade_docker}),
             ('samtools_version', '~{samtools_version}'),
             ('samtools_version_consensus', '~{samtools_version_consensus}'),
             ('samtools_version_primtrim', '~{samtools_version_primtrim}'),

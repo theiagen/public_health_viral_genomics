@@ -251,6 +251,7 @@ workflow titan_gc {
                     artic_docker = titan_ont.artic_docker,
                     kraken_version = titan_ont.kraken_version,
                     nextclade_version = titan_ont.nextclade_version,
+                    nextclade_docker = titan_ont.nextclade_docker,
                     samtools_version = titan_ont.samtools_version,
                     vadr_docker = titan_ont.vadr_docker
             }
