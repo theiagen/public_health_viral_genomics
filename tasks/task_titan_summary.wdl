@@ -100,7 +100,7 @@ task titan_summary {
             ('kraken_sc2_dehosted', '~{kraken_sc2_dehosted}'),
             ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
             ('artic_version', '~{artic_version}'),
-            ('artic_docker', '~{artic_docker}')
+            ('artic_docker', '~{artic_docker}'),
             ('bbduk_docker', '~{bbduk_docker}'),
             ('bwa_version', '~{bwa_version}'),
             ('fastq_scan_version', '~{fastq_scan_version}'),
