@@ -208,7 +208,7 @@ task nextclade_one_sample {
         File? gene_annotations_json
         File? pcr_primers_csv
         File? virus_properties
-        String docker = "nextstrain/nextclade:1.10.1"
+        String docker = "nextstrain/nextclade:1.10.2"
         String dataset_name
         String dataset_reference
         String dataset_tag
