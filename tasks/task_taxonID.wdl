@@ -227,7 +227,7 @@ task nextclade_one_sample {
             --input-qc-config ~{default="nextclade_dataset_dir/qc.json" qc_config_json} \
             --input-gene-map ~{default="nextclade_dataset_dir/genemap.gff" gene_annotations_json} \
             --input-pcr-primers ~{default="nextclade_dataset_dir/primers.csv" pcr_primers_csv} \
-            --input-virus-properties ~{default="virus_properties.json" virus_properties} \
+            --input-virus-properties ~{default="nextclade_dataset_dir/virus_properties.json" virus_properties} \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
