@@ -221,7 +221,7 @@ task nextclade_one_sample {
         nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
         set -e
         nextclade run --input-fasta "~{genome_fasta}" \
-            --input-dataset "nextclade_dataset_dir"
+            --input-dataset "nextclade_dataset_dir" \
             --input-root-seq ~{default="nextclade_dataset_dir/reference.fasta" root_sequence} \
             --input-tree ~{default="nextclade_dataset_dir/tree.json" auspice_reference_tree_json} \
             --input-qc-config ~{default="nextclade_dataset_dir/qc.json" qc_config_json} \
