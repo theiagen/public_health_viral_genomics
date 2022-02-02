@@ -70,3 +70,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
    testParameterFiles:
     - empty.json
+ - name: TheiaCoV_Augur_DistanceTree
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_theiacov_augur_distance_tree.wdl
+   testParameterFiles:
+    - empty.json
