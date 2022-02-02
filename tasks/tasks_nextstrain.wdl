@@ -360,7 +360,7 @@ task derived_cols {
         maxRetries: 2
     }
     output {
-        File derived_metadata = "~{basename}.derived_cols.txt"
+        File derived_metadata = "~{basename}.derived_cols.tsv"
     }
 }
 
