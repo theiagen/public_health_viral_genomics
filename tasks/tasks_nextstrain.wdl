@@ -340,7 +340,7 @@ task derived_cols {
         table_map = list(x for x in "~{sep='*' table_map}".split('*') if x)
         tsv_derived_cols(
             "~{metadata_tsv}",
-            "~{basename}.derived_cols.txt",
+            "~{basename}.derived_cols.tsv",
             table_map = table_map,
             lab_highlight_loc = lab_highlight_loc if lab_highlight_loc else None
         )
@@ -348,7 +348,7 @@ task derived_cols {
         CODE
         
         # remove duplicate strains 
-        awk '!a[$1]++' "~{basename}.derived_cols.txt" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.txt"
+        awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
         
     >>>
     runtime {
