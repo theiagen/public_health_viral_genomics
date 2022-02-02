@@ -1748,3 +1748,52 @@ task export_auspice_json {
         String augur_version      = read_string("VERSION")
     }
 }
+
+task prep_augur_metadata {
+
+  input {
+    File      assembly
+    String    collection_date
+    String    iso_country
+    String    iso_state
+    String    iso_continent
+    String    pango_lineage
+
+    String? iso_county=""
+
+
+    String    docker_image = "quay.io/theiagen/utility:1.1"
+    Int       mem_size_gb = 3
+    Int       CPUs = 1
+    Int       disk_size = 10
+    Int       preemptible_tries = 0
+  }
+
+  command {
+    # de-identified consensus/assembly sequence
+    year=$(echo ${collection_date} | cut -f 1 -d '-')
+
+    echo -e "strain\tvirus\tdate\tregion\tcountry\tdivision\tlocation\tpango_lineage" > augur_metadata.tsv
+
+    # Set strain name by assembly header
+    assembly_header=$(grep -e ">" ~{assembly} | sed 's/\s.*$//' |  sed 's/>//g' )
+
+    echo -e "\"$assembly_header\"\t\"ncov\"\t\"${collection_date}\"\t\"${iso_continent}\" \t\"${iso_country}\"\t\"${iso_state}\"\t\"${iso_county}\"\t"${pango_lineage}"" >> augur_metadata.tsv
+
+    echo $(ls )
+
+  }
+
+  output {
+    File     augur_metadata = "augur_metadata.tsv"
+  }
+
+  runtime {
+      docker:       docker_image
+      memory:       "~{mem_size_gb} GB"
+      cpu:          CPUs
+      disks:        "local-disk ~{disk_size} SSD"
+      preemptible:  preemptible_tries
+      maxRetries: 3
+  }
+}
