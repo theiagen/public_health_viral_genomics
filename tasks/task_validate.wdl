@@ -35,7 +35,7 @@ task compare_two_tsvs {
     String out_prefix
   }
   command{
-    compare_data_tables.py ~{datatable1_tsv} ~{datatable2_tsv} --outdir ~{out_dir} --prefix ~{out_prefix}
+    compare-data-tables.py ~{datatable1_tsv} ~{datatable2_tsv} --outdir ~{out_dir} --prefix ~{out_prefix}
   }
   runtime {
       docker: "quay.io/theiagen/utility:1.2"
