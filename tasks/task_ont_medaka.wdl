@@ -98,7 +98,7 @@ task consensus {
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "~{primer_name}" | tee PRIMER_NAME
-    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer_schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
+    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
     gunzip ~{samplename}.pass.vcf.gz
 
     # clean up fasta header
