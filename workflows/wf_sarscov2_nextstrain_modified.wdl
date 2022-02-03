@@ -204,7 +204,7 @@ workflow sarscov2_nextstrain {
 
       File  metadata_merged       = derived_cols.derived_metadata
       File  keep_list             = fasta_to_ids.ids_txt
-      File  mafft_alignment  = mafft.aligned_sequences
+      File  mafft_alignment  = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
 
 
       File  ml_tree               = draft_augur_tree.aligned_tree
