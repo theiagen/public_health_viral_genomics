@@ -202,7 +202,13 @@ task nextclade_one_sample {
     }
     input {
         File   genome_fasta
-        String docker = "nextstrain/nextclade:1.9.0"
+        File? root_sequence
+        File? auspice_reference_tree_json
+        File? qc_config_json
+        File? gene_annotations_json
+        File? pcr_primers_csv
+        File? virus_properties
+        String docker = "nextstrain/nextclade:1.10.2"
         String dataset_name
         String dataset_reference
         String dataset_tag
@@ -215,11 +221,13 @@ task nextclade_one_sample {
         nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
         set -e
         nextclade run --input-fasta "~{genome_fasta}" \
-            --input-root-seq nextclade_dataset_dir/reference.fasta \
-            --input-tree nextclade_dataset_dir/tree.json \
-            --input-qc-config nextclade_dataset_dir/qc.json \
-            --input-gene-map nextclade_dataset_dir/genemap.gff \
-            --input-pcr-primers nextclade_dataset_dir/primers.csv \
+            --input-dataset "nextclade_dataset_dir" \
+            --input-root-seq ~{default="nextclade_dataset_dir/reference.fasta" root_sequence} \
+            --input-tree ~{default="nextclade_dataset_dir/tree.json" auspice_reference_tree_json} \
+            --input-qc-config ~{default="nextclade_dataset_dir/qc.json" qc_config_json} \
+            --input-gene-map ~{default="nextclade_dataset_dir/genemap.gff" gene_annotations_json} \
+            --input-pcr-primers ~{default="nextclade_dataset_dir/primers.csv" pcr_primers_csv} \
+            --input-virus-properties ~{default="nextclade_dataset_dir/virus_properties.json" virus_properties} \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
@@ -231,13 +239,14 @@ task nextclade_one_sample {
         cpu:    2
         disks: "local-disk 50 HDD"
         dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries:   3
+        maxRetries:  3 
     }
     output {
         String nextclade_version  = read_string("NEXTCLADE_VERSION")
         File   nextclade_json     = "~{basename}.nextclade.json"
         File   auspice_json       = "~{basename}.nextclade.auspice.json"
         File   nextclade_tsv      = "~{basename}.nextclade.tsv"
+        String nextclade_docker   = docker
     }
 }
 
