@@ -90,14 +90,14 @@ task consensus {
       echo "No user-defined reference genome; setting reference to ${ref_genome}"
     fi
     cat "${ref_genome}" | head -n1 | sed 's/>//' | tee REFERENCE_GENOME
-    cp "${ref_genome}"  ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
+    cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
     
     ## set primers
-    cp ${primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
+    cp ~{primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
-    echo "${primer_name}" | tee PRIMER_NAME
+    echo "~{primer_name}" | tee PRIMER_NAME
     artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer_schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
     gunzip ~{samplename}.pass.vcf.gz
 
