@@ -49,7 +49,7 @@ workflow titan_augur_run {
       String titan_augur_run_analysis_date      = version_capture.date
       
       File  combined_assemblies   = sarscov2_nextstrain.combined_assemblies
-      File  MAFFT_alignment    = select_first([subsample.subsampled_msa, mafft.aligned_sequences])sarscov2_nextstrain.mafft_alignment
+      File  MAFFT_alignment    = sarscov2_nextstrain.mafft_alignment
       File  unmasked_snps         = sarscov2_nextstrain.unmasked_snps
       File  metadata_merged       = sarscov2_nextstrain.metadata_merged
       File  keep_list             = sarscov2_nextstrain.keep_list
