@@ -121,6 +121,7 @@ workflow titan_ont {
     File    variants_from_ref_vcf       = consensus.medaka_pass_vcf
     String  artic_version               = consensus.artic_pipeline_version
     String  artic_docker                = consensus.artic_pipeline_docker
+    String  medaka_reference            = consensus.medaka_reference
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
     String  assembly_method             = consensus.artic_pipeline_version
