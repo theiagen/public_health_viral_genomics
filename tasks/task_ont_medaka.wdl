@@ -93,7 +93,7 @@ task consensus {
     cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
     
     ## set primers
-    cp ~{primer_bed} ../primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+    cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
