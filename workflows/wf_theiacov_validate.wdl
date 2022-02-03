@@ -3,7 +3,7 @@ version 1.0
 import "../tasks/task_validate.wdl" as validation
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow validate {
+workflow theiacov_validate {
     input {
       String        terra_project
       String        terra_workspace

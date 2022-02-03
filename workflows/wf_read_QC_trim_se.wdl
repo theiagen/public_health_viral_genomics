@@ -6,7 +6,7 @@ import "../tasks/task_taxonID.wdl" as taxonID
 
 workflow read_QC_trim {
   meta {
-    description: "Runs basic QC (FastQC), trimming (SeqyClean), and taxonomic ID (Kraken2) on illumina PE reads"
+    description: "Runs basic QC (fastq-scan), trimming (SeqyClean), and taxonomic ID (Kraken2) on illumina PE reads"
   }
 
   input {
@@ -36,11 +36,11 @@ workflow read_QC_trim {
       read1_trimmed = trimmomatic_se.read1_trimmed,
       mem_size_gb = bbduk_mem
   }
-  call qc_utils.fastqc_se as fastqc_raw {
+  call qc_utils.fastq_scan_se as fastq_scan_raw {
     input:
       read1 = read1_raw
   }
-  call qc_utils.fastqc_se as fastqc_clean {
+  call qc_utils.fastq_scan_se as fastq_scan_clean {
     input:
       read1 = bbduk_se.read1_clean
   }
@@ -58,8 +58,8 @@ workflow read_QC_trim {
   output {
     File    read1_clean               = bbduk_se.read1_clean
 
-    Int     fastqc_number_reads       = fastqc_raw.number_reads
-    Int     fastqc_clean_number_reads = fastqc_clean.number_reads
+    Int     fastq_scan_number_reads       = fastq_scan_raw.read1_seq
+    Int     fastq_scan_clean_number_reads = fastq_scan_clean.read1_seq
 
     String  kraken_version            = kraken2_raw.version
     Float   kraken_human              = kraken2_raw.percent_human
@@ -69,7 +69,7 @@ workflow read_QC_trim {
 #    Float    kraken_sc2_dehosted    =    kraken2_dehosted.percent_sc2
 #    String    kraken_report_dehosted    =    kraken2_dehosted.kraken_report
 
-    String  fastqc_version          = fastqc_raw.version
+    String  fastq_scan_version          = fastq_scan_raw.version
     String  bbduk_docker            = bbduk_se.bbduk_docker
     String  trimmomatic_version     = trimmomatic_se.version
   }

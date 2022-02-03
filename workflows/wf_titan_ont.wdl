@@ -21,10 +21,10 @@ workflow titan_ont {
     Int?   normalise = 200
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
-    String  nextclade_dataset_tag = "2022-01-05T19:54:31Z"
+    String  nextclade_dataset_tag = "2022-01-18T12:00:00Z"
 
   }
-  call qc_utils.fastqc_se as fastqc_se_raw {
+  call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
       read1 = demultiplexed_reads
   }
@@ -38,7 +38,7 @@ workflow titan_ont {
       demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
       samplename = samplename
   }
-  call qc_utils.fastqc_se as fastqc_se_clean {
+  call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
     input:
       read1 = read_filtering.filtered_reads
   }
@@ -104,9 +104,9 @@ workflow titan_ont {
 
     File    reads_dehosted              = ncbi_scrub_se.read1_dehosted
 
-    Int     fastqc_raw                  = fastqc_se_raw.number_reads
-    Int     fastqc_clean                = fastqc_se_clean.number_reads
-    String  fastqc_version              = fastqc_se_clean.version
+    Int     fastq_scan_raw                  = fastq_scan_raw_reads.read1_seq
+    Int     fastq_scan_clean                = fastq_scan_clean_reads.read1_seq
+    String  fastq_scan_version              = fastq_scan_clean_reads.version
 
     String  kraken_version              = kraken2_raw.version
     Float   kraken_human                = kraken2_raw.percent_human
@@ -120,6 +120,7 @@ workflow titan_ont {
     File    aligned_bai                 = consensus.trim_sorted_bai
     File    variants_from_ref_vcf       = consensus.medaka_pass_vcf
     String  artic_version               = consensus.artic_pipeline_version
+    String  artic_docker                = consensus.artic_pipeline_docker
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
     String  assembly_method             = consensus.artic_pipeline_version
@@ -135,6 +136,7 @@ workflow titan_ont {
     Float   meanbaseq_trim              = stats_n_coverage_primtrim.meanbaseq
     Float   meanmapq_trim               = stats_n_coverage_primtrim.meanmapq
     Float   assembly_mean_coverage      = stats_n_coverage_primtrim.depth
+    Float   s_gene_mean_coverage        = stats_n_coverage_primtrim.s_gene_depth
     String  samtools_version            = stats_n_coverage.samtools_version
 
     String  pango_lineage               = pangolin3.pangolin_lineage
@@ -149,6 +151,7 @@ workflow titan_ont {
     File    auspice_json                = nextclade_one_sample.auspice_json
     File    nextclade_tsv               = nextclade_one_sample.nextclade_tsv
     String  nextclade_version           = nextclade_one_sample.nextclade_version
+    String  nextclade_docker            = nextclade_one_sample.nextclade_docker
     String  nextclade_aa_subs           = nextclade_output_parser_one_sample.nextclade_aa_subs
     String  nextclade_aa_dels           = nextclade_output_parser_one_sample.nextclade_aa_dels
     String  nextclade_clade             = nextclade_output_parser_one_sample.nextclade_clade

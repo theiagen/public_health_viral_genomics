@@ -6,7 +6,7 @@ import "../tasks/task_versioning.wdl" as versioning
 
 workflow titan_augur_run {
     meta {
-        description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances and create a static PDF report"
+        description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances"
         author: "Kevin G Libuit"
         email:  "kevin.libuit@theiagen.com"
     }
@@ -53,6 +53,7 @@ workflow titan_augur_run {
       File  unmasked_snps         = sarscov2_nextstrain.unmasked_snps
       File  metadata_merged       = sarscov2_nextstrain.metadata_merged
       File  keep_list             = sarscov2_nextstrain.keep_list
+      File  distance_tree         = sarscov2_nextstrain.ml_tree
       File  time_tree             = sarscov2_nextstrain.time_tree
       File  auspice_input_json    = sarscov2_nextstrain.auspice_input_json
 
