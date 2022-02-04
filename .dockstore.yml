@@ -83,11 +83,10 @@ workflows:
  - name: Freyja_Plot
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_freyja_plot.wdl
- - name: TheiaCoV_Augur_DistanceTree
-   subclass: WDL
    testParameterFiles:
     - empty.json
+ - name: TheiaCoV_Augur_DistanceTree
+   subclass: WDL
    primaryDescriptorPath: /workflows/wf_theiacov_augur_distance_tree.wdl
-  subclass: WDL
    testParameterFiles:
     - empty.json
