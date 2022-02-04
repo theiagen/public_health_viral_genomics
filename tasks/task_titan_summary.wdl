@@ -41,6 +41,7 @@ task titan_summary {
         String? primer_trimmed_read_percent
         String? artic_version
         String? artic_docker
+        String? medaka_reference
         String? bbduk_docker = ""
         String? bwa_version = ""
         String? fastq_scan_version = ""
@@ -102,6 +103,7 @@ task titan_summary {
             ('primer_trimmed_read_percent', '~{primer_trimmed_read_percent}'),
             ('artic_version', '~{artic_version}'),
             ('artic_docker', '~{artic_docker}'),
+            ('medaka_reference', '~{medaka_reference}'),
             ('bbduk_docker', '~{bbduk_docker}'),
             ('bwa_version', '~{bwa_version}'),
             ('fastq_scan_version', '~{fastq_scan_version}'),
