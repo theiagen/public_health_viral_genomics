@@ -93,7 +93,7 @@ task consensus {
        fi
        echo "No user-defined reference genome; setting reference to ${ref_genome}"
     fi
-    cat "${ref_genome}" | head -n1 | sed 's/>//' | tee REFERENCE_GENOME
+    head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
     cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
     
     ## set primers
@@ -116,7 +116,7 @@ task consensus {
     File    trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File    trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
     File    medaka_pass_vcf = "~{samplename}.pass.vcf" 
-    File    medaka_reference = read_string("REFERENCE_GENOME")
+    String    medaka_reference = read_string("REFERENCE_GENOME")
     String  artic_pipeline_version = read_string("VERSION")
     String  artic_pipeline_docker = docker
     String  primer_bed_name = read_string("PRIMER_NAME")
