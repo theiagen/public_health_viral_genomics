@@ -86,7 +86,7 @@ task consensus {
     if [[ ! -z "~{reference_genome}" ]]; then 
       ref_genome="~{reference_genome}"
     else
-       if [[ -f "/fieldbioinformatics" ]]; then 
+       if [[ -d "/fieldbioinformatics" ]]; then 
          ref_genome="/fieldbioinformatics/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
        else
          ref_genome="/wf-artic*/data/primer_schemes/SARS-CoV-2/V4/SARS-CoV-2.reference.fasta"
