@@ -7,6 +7,7 @@
     - path: titan/clearlabs/alignments/clearlabs.flagstat.txt
       md5sum: 81aaa3b9972d4610e07967553805e65d
     - path: titan/clearlabs/alignments/clearlabs.pass.vcf
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
     - path: titan/clearlabs/alignments/clearlabs.stats.txt
