@@ -7,7 +7,7 @@
     - path: titan/ont/alignments/ont.flagstat.txt
       md5sum: 85c7b4e3985735fd2a45f7f5a09b529f
     - path: titan/ont/alignments/ont.pass.vcf
-      md5sum: e2dcdd936d42f2898549a9e7deae78bc
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
     - path: titan/ont/alignments/ont.stats.txt
