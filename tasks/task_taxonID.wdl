@@ -316,26 +316,30 @@ task freyja_one_sample {
     String samplename
     File reference_genome
     File? freyja_usher_barcodes
-    Boolean update_db = false
+    Boolean update_db = true
     String docker = "staphb/freyja:1.2"
   }
   command <<<
   # configure barcode settings and capture version  
-  if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
-    #capture database info 
-    freyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
-    echo "here"
-    #set environment with user-defined db
-    mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
-  else
-    # update db if specified
-    if ~{update_db}; then 
-      freyja update 
-      freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
-    else 
-      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
-    fi
-  fi
+  #if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
+  #  #capture database info 
+  #  azfreyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
+  #  echo "here"
+  #  #set environment with user-defined db
+  #  mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
+  #else
+  #  # update db if specified
+  #  if ~{update_db}; then 
+  #    freyja update 
+  #    freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+  #  else 
+  #    freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
+  #  fi
+  #fi
+  
+  # always update freyja barcodes until v1.3.1 release (will allow user-defined ref files)
+  freyja update 
+  freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
   
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
   
