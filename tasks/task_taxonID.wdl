@@ -309,3 +309,62 @@ task nextclade_output_parser_one_sample {
         String nextclade_aa_dels  = read_string("NEXTCLADE_AADELS")
     }
 }
+
+task freyja_one_sample {
+  input {
+    File primer_trimmed_bam
+    String samplename
+    File reference_genome
+    File? freyja_usher_barcodes
+    Boolean update_db = true
+    String docker = "staphb/freyja:1.2"
+  }
+  command <<<
+  # configure barcode settings and capture version  
+  #if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
+  #  #capture database info 
+  #  azfreyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
+  #  echo "here"
+  #  #set environment with user-defined db
+  #  mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
+  #else
+  #  # update db if specified
+  #  if ~{update_db}; then 
+  #    freyja update 
+  #    freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+  #  else 
+  #    freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
+  #  fi
+  #fi
+  
+  # always update freyja barcodes until v1.3.1 release (will allow user-defined ref files)
+  freyja update 
+  freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+  
+  echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
+  
+  # Call variants and capture sequencing depth information
+  freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
+ 
+  # Demix variants 
+  freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
+  # Adjust output header
+  echo -e "\t/~{samplename}" > ~{samplename}_freyja_demixed.tsv
+  tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
+
+
+  >>>
+  runtime {
+    memory: "4 GB"
+    cpu: 2
+    docker: "~{docker}"
+    disks: "local-disk 100 HDD"
+  }
+  output {
+    File freyja_variants = "~{samplename}_freyja_variants.tsv"
+    File freyja_depths = "~{samplename}_freyja_depths.tsv"
+    File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
+    String freyja_barcode_version = read_string("FREYJA_BARCODES")
+  }
+
+}

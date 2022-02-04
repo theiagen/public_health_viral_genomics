@@ -70,6 +70,21 @@ workflows:
    primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
    testParameterFiles:
     - empty.json
+ - name: Titan_WWVC
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_titan_wwvc.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Freyja_FASTQ
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_fastq.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Freyja_Plot
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_plot.wdl
+   testParameterFiles:
+    - empty.json
  - name: TheiaCoV_Validate
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_theiacov_validate.wdl
