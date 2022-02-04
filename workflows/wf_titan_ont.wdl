@@ -22,6 +22,8 @@ workflow titan_ont {
     String  nextclade_dataset_name = "sars-cov-2"
     String  nextclade_dataset_reference = "MN908947"
     String  nextclade_dataset_tag = "2022-01-18T12:00:00Z"
+    Int?    max_length = 700
+    Int?    min_length = 400
 
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
@@ -36,7 +38,9 @@ workflow titan_ont {
   call medaka.read_filtering {
     input:
       demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
-      samplename = samplename
+      samplename = samplename,
+      min_length = min_length,
+      max_length = max_length
   }
   call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
     input:
@@ -121,6 +125,7 @@ workflow titan_ont {
     File    variants_from_ref_vcf       = consensus.medaka_pass_vcf
     String  artic_version               = consensus.artic_pipeline_version
     String  artic_docker                = consensus.artic_pipeline_docker
+    String  medaka_reference            = consensus.medaka_reference
     String  primer_bed_name             = consensus.primer_bed_name
     File    assembly_fasta              = consensus.consensus_seq
     String  assembly_method             = consensus.artic_pipeline_version

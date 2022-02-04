@@ -5,9 +5,9 @@
     - titan_ont
   files:
     - path: titan/ont/alignments/ont.flagstat.txt
-      md5sum: 4115fec57a52e330a96280f3afa5f89b
+      md5sum: 85c7b4e3985735fd2a45f7f5a09b529f
     - path: titan/ont/alignments/ont.pass.vcf
-      md5sum: 236260cacd4f4efa8f4a0fe93dc5ea02
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam
     - path: titan/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
     - path: titan/ont/alignments/ont.stats.txt

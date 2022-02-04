@@ -5,14 +5,14 @@
     - titan_clearlabs
   files:
     - path: titan/clearlabs/alignments/clearlabs.flagstat.txt
-      md5sum: b5af0b1c2721c004f8f476d9ca540a35
+      md5sum: 81aaa3b9972d4610e07967553805e65d
     - path: titan/clearlabs/alignments/clearlabs.pass.vcf
-      md5sum: 0847aeb9ba60cbc1b0f0ab9f19b01f96
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
     - path: titan/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
     - path: titan/clearlabs/alignments/clearlabs.stats.txt
     - path: titan/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
-      md5sum: 1d537e1a17fabda77371ba22bdfb3d80
+      md5sum: ff8bf729b73fd7d34200100957b6f92d
     - path: titan/clearlabs/cromwell-stderr.txt
     - path: titan/clearlabs/cromwell-stdout.txt
     - path: titan/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
@@ -29,4 +29,4 @@
     - path: titan/clearlabs/titan-results.json
     - path: titan/clearlabs/titan-results.tsv
     - path: titan/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
-      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
+      md5sum: 3d858fa350d36dbcdfc1a52180ec9d87
