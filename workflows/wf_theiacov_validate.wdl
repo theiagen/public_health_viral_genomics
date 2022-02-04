@@ -30,9 +30,9 @@ workflow theiacov_validate {
       input:
     }
     output {
-        String validation_version = version_capture.phvg_version
-        String validation_date = version_capture.date
-        File  validation_report_pdf = compare_two_tsvs.pdf_report
-        File  validation_report_xl = compare_two_tsvs.xl_report
+        String theiacov_validation_version = version_capture.phvg_version
+        String theiacov_validation_date = version_capture.date
+        File  theiacov_validation_report_pdf = compare_two_tsvs.pdf_report
+        File  theiacov_validation_report_xl = compare_two_tsvs.xl_report
     }
 }
