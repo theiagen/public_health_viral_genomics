@@ -10,7 +10,7 @@ task primer_trim {
   String primer_name = basename(primer_bed)
   command <<<
     # date and version control
-    echo "${primer_name}" | tee PRIMER_NAME
+    echo "~{primer_name}" | tee PRIMER_NAME
     date | tee DATE
     ivar version | head -n1 | tee IVAR_VERSION
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
@@ -137,7 +137,7 @@ task consensus {
 
     # call consensus
     samtools mpileup \
-    ${true = "--count-orphans" false = "" count_orphans} \
+    ~{true = "--count-orphans" false = "" count_orphans} \
     -d ~{max_depth} \
     ~{true = "--no-BAQ" false = "" disable_baq} \
     -Q ~{min_bq} \
