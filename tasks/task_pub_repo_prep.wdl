@@ -6,7 +6,6 @@ task ncbi_prep_one_sample {
     File assembly_fasta
     File read1_dehosted
     File read2_dehosted
-    
     #required metadata
     String assembly_method
     String bioproject_accession
@@ -30,7 +29,6 @@ task ncbi_prep_one_sample {
     String seq_platform
     String state
     String submission_id
-    
     #optional metadata
     String? amplicon_primer_scheme
     String? amplicon_size
@@ -43,15 +41,13 @@ task ncbi_prep_one_sample {
     String? purpose_of_sequencing
     String? submitter_email
     String? treatment
-    
     #GenBank formatting
     Int minlen = 50
     Int maxlen = 30000
-    
     #runtime
     String docker_image = "quay.io/staphb/vadr:1.3"
-    Int  mem_size_gb = 1
-    Int CPUs = 1
+    Int  memory = 1
+    Int cpu = 1
     Int disk_size = 25
     Int preemptible_tries = 0
   }
@@ -100,7 +96,6 @@ task ncbi_prep_one_sample {
     echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t~{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
     
   >>>
-
   output {
     File biosample_attributes = "~{submission_id}_biosample_attributes.tsv"
     File sra_metadata = "~{submission_id}_sra_metadata.tsv"
@@ -110,22 +105,21 @@ task ncbi_prep_one_sample {
     File sra_read2 = "~{submission_id}_R2.fastq.gz"
     Array[File] sra_reads = ["~{submission_id}_R1.fastq.gz","~{submission_id}_R2.fastq.gz"]
   }
-
   runtime {
-      docker:       "~{docker_image}"
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries:   3
+    docker: "~{docker_image}"
+    memory: "~{memory} GB"
+    cpu: cpu
+    disks: "local-disk ~{disk_size} SSD"
+    preemptible: preemptible_tries
+    maxRetries: 3
   }
 }
+
 task ncbi_prep_one_sample_se {
   input {
     #required files
     File assembly_fasta
     File reads_dehosted
-    
     #required metadata
     String assembly_method
     String bioproject_accession
@@ -149,7 +143,6 @@ task ncbi_prep_one_sample_se {
     String seq_platform
     String state
     String submission_id
-    
     #optional metadata
     String? amplicon_primer_scheme
     String? amplicon_size
@@ -162,15 +155,13 @@ task ncbi_prep_one_sample_se {
     String? purpose_of_sequencing
     String? submitter_email
     String? treatment
-    
     #GenBank formatting
     Int minlen = 50
     Int maxlen = 30000
-    
     #runtime
-    String docker_image = "quay.io/staphb/vadr:1.3"
-    Int  mem_size_gb = 1
-    Int CPUs = 1
+    String docker = "quay.io/staphb/vadr:1.3"
+    Int  memory = 1
+    Int cpu = 1
     Int disk_size = 25
     Int preemptible_tries = 0
   }
@@ -216,9 +207,7 @@ task ncbi_prep_one_sample_se {
     ##GenBank modifier
     echo -e "Sequence_ID\tcountry\thost\tisolate\tcollection-date\tisolation-source\tBioSample\tBioProject\tnote" > ~{submission_id}_genbank_modifier.tsv
     echo -e "~{submission_id}\t~{country}\t~{host_sci_name}\t${isolate}\t~{collection_date}\t~{isolation_source}\t~{biosample_accession}\t~{bioproject_accession}"  >> ~{submission_id}_genbank_modifier.tsv
-    
   >>>
-
   output {
     File biosample_attributes = "~{submission_id}_biosample_attributes.tsv"
     File sra_metadata = "~{submission_id}_sra_metadata.tsv"
@@ -226,21 +215,20 @@ task ncbi_prep_one_sample_se {
     File genbank_modifier = "~{submission_id}_genbank_modifier.tsv"
     File sra_reads = "~{submission_id}_R1.fastq.gz"
   }
-
   runtime {
-      docker:       "~{docker_image}"
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries:   3
+    docker: "~{docker}"
+    memory: "~{memory} GB"
+    cpu: cpu
+    disks: "local-disk ~{disk_size} SSD"
+    preemptible: preemptible_tries
+    maxRetries: 3
   }
 }
+
 task gisaid_prep_one_sample {
   input {
     #required files
     File assembly_fasta
-   
     #required metadata
     String authors
     String assembly_method
@@ -259,7 +247,6 @@ task gisaid_prep_one_sample {
     String submitting_lab
     String submitting_lab_address
     String type="betacoronavirus"
-    
     #optional metadata
     String? county
     String? patient_gender = "unknown"
@@ -271,13 +258,12 @@ task gisaid_prep_one_sample {
     String? outbreak
     String? specimen_source
     String? treatment
-    
     #runtime
-    String docker_image = "quay.io/theiagen/utility:1.1"
-    Int  mem_size_gb = 1
-    Int CPUs = 1
+    String docker = "quay.io/theiagen/utility:1.1"
+    Int  memory = 1
+    Int cpu = 1
     Int disk_size = 25
-    Int preemptible_tries = 0
+    Int preemptible = 0
   }
   command <<<
     #Check date format
@@ -301,44 +287,38 @@ task gisaid_prep_one_sample {
     echo "Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ~{submission_id}_gisaid_metadata.csv
 
     echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ~{submission_id}_gisaid_metadata.csv
-
   >>>
-
   output {
     File gisaid_assembly = "~{submission_id}_gisaid.fasta"
     File gisaid_metadata = "~{submission_id}_gisaid_metadata.csv"
   }
-
   runtime {
-      docker:       "~{docker_image}"
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries:   3
+    docker: "~{docker}"
+    memory: "~{memory} GB"
+    cpu: cpu
+    disks: "local-disk ~{disk_size} SSD"
+    preemptible: preemptible
+    maxRetries:   3
   }
 }
 
-
 task compile_assembly_n_meta {
-
   input {
     Array[File] single_submission_fasta
     Array[File] single_submission_meta
     Array[String] samplename
     Array[String] submission_id
     Array[String] vadr_num_alerts
-    Int vadr_threshold=0
+    Int vadr_threshold = 0
     String repository
     String file_ext
     String date
-    String docker_image = "quay.io/theiagen/utility:1.1"
-    Int mem_size_gb = 8
-    Int CPUs = 4
+    String docker = "quay.io/theiagen/utility:1.1"
+    Int memory = 8
+    Int cpu = 4
     Int disk_size = 100
-    Int preemptible_tries = 0
+    Int preemptible = 0
   }
-
   command <<<
   assembly_array=(~{sep=' ' single_submission_fasta})
   assembly_array_len=$(echo "${#assembly_array[@]}")
@@ -419,26 +399,23 @@ task compile_assembly_n_meta {
   done
 
   cat ${passed_assemblies[*]} > ~{repository}_upload_~{date}.fasta
-
   >>>
-
   output {
-    File?   upload_meta   = "${repository}_upload_meta_~{date}.~{file_ext}"
-    File?   upload_fasta  = "${repository}_upload_~{date}.fasta"
-    File    batched_samples = "${repository}_batched_samples_~{date}.~{file_ext}"
-    File    excluded_samples = "${repository}_excluded_samples_~{date}.~{file_ext}"
-
+    File? upload_meta   = "${repository}_upload_meta_~{date}.~{file_ext}"
+    File? upload_fasta  = "${repository}_upload_~{date}.fasta"
+    File batched_samples = "${repository}_batched_samples_~{date}.~{file_ext}"
+    File excluded_samples = "${repository}_excluded_samples_~{date}.~{file_ext}"
   }
-
   runtime {
-      docker:       docker_image
-      memory:       "~{mem_size_gb} GB"
-      cpu:          CPUs
-      disks:        "local-disk ~{disk_size} SSD"
-      preemptible:  preemptible_tries
-      maxRetries:   3
+    docker: docker
+    memory: "~{memory} GB"
+    cpu: cpu
+    disks: "local-disk ~{disk_size} SSD"
+    preemptible: preemptible
+    maxRetries: 3
   }
 }
+
 task compile_biosamp_n_sra {
 input {
   Array[File] single_submission_biosample_attirbutes
@@ -446,14 +423,12 @@ input {
   Array[String] single_submission_sra_reads
   String date
   String? gcp_bucket
-
-  String      docker_image = "quay.io/theiagen/utility:1.1"
-  Int         mem_size_gb = 16
-  Int         CPUs = 4
-  Int         disk_size = 100
-  Int         preemptible_tries = 0
+  String docker = "quay.io/theiagen/utility:1.1"
+  Int memory = 16
+  Int cpu = 4
+  Int disk_size = 100
+  Int preemptible = 0
 }
-
   command <<<
   biosample_attributes_array=(~{sep=' ' single_submission_biosample_attirbutes})
   biosample_attributes_array_len=$(echo "${#biosample_attributes_array[@]}")
@@ -507,11 +482,11 @@ input {
     File? sra_zipped = "sra_reads_~{date}.zip"
   }
   runtime {
-    docker: docker_image
-    memory: "~{mem_size_gb} GB"
-    cpu: CPUs
+    docker: docker
+    memory: "~{memory} GB"
+    cpu: cpu
     disks: "local-disk ~{disk_size} SSD"
-    preemptible: preemptible_tries
+    preemptible: preemptible
     maxRetries: 3
   }
 }
