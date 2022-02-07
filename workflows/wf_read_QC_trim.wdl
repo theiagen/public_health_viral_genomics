@@ -23,7 +23,7 @@ workflow read_QC_trim {
       samplename = samplename,
       read1 = read1_raw,
       read2 = read2_raw
-  }  
+  }
   call read_clean.trimmomatic {
     input:
       samplename = samplename,
@@ -38,7 +38,7 @@ workflow read_QC_trim {
       samplename = samplename,
       read1_trimmed = trimmomatic.read1_trimmed,
       read2_trimmed = trimmomatic.read2_trimmed,
-      mem_size_gb   = bbduk_mem
+      memory   = bbduk_mem
   }
   call qc_utils.fastq_scan as fastq_scan_raw {
     input:
@@ -67,7 +67,7 @@ workflow read_QC_trim {
     File   read2_dehosted            = ncbi_scrub_pe.read2_dehosted
     Int    read1_human_spots_removed = ncbi_scrub_pe.read1_human_spots_removed
     Int    read2_human_spots_removed = ncbi_scrub_pe.read2_human_spots_removed
-    
+
     File   read1_clean               = bbduk.read1_clean
     File   read2_clean               = bbduk.read2_clean
 
