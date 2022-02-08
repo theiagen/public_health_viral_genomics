@@ -50,7 +50,7 @@ workflow mercury_batch {
       cpu = cpu,
       disk_size = disk_size,
       memory = memory
-    }
+  }
   call submission_prep.compile_biosamp_n_sra {
     input:
       single_submission_biosample_attirbutes = biosample_attributes,
@@ -61,27 +61,28 @@ workflow mercury_batch {
       cpu = cpu,
       disk_size = disk_size,
       memory = memory
-    }
-    call versioning.version_capture{
-      input:
-    }
-    output {
-      String mercury_batch_version = version_capture.phvg_version
-      String mercury_batch_analysis_date = version_capture.date
-      
-      File? GenBank_modifier  = genbank_compile.upload_meta
-      File? GenBank_assembly = genbank_compile.upload_fasta
-      File GenBank_batched_samples = genbank_compile.batched_samples
-      File GenBank_excluded_samples = genbank_compile.excluded_samples
-      
-      File? GISAID_metadata  = gisaid_compile.upload_meta
-      File? GISAID_assembly = gisaid_compile.upload_fasta
-      File GISAID_batched_samples = gisaid_compile.batched_samples
-      File GISAID_excluded_samples = gisaid_compile.excluded_samples
-      
-      File BioSample_attributes = compile_biosamp_n_sra.biosample_attributes
-      File SRA_metadata = compile_biosamp_n_sra.sra_metadata
-      File? SRA_zipped_reads = compile_biosamp_n_sra.sra_zipped
-      String? SRA_gcp_bucket = gcp_bucket
-    }
+  }
+  call versioning.version_capture{
+    input:
+  }
+  output {
+    # Version Capture
+    String mercury_batch_version = version_capture.phvg_version
+    String mercury_batch_analysis_date = version_capture.date
+    # GenBank Submission Files
+    File? GenBank_modifier  = genbank_compile.upload_meta
+    File? GenBank_assembly = genbank_compile.upload_fasta
+    File GenBank_batched_samples = genbank_compile.batched_samples
+    File GenBank_excluded_samples = genbank_compile.excluded_samples
+    # GISAID Submission Files
+    File? GISAID_metadata  = gisaid_compile.upload_meta
+    File? GISAID_assembly = gisaid_compile.upload_fasta
+    File GISAID_batched_samples = gisaid_compile.batched_samples
+    File GISAID_excluded_samples = gisaid_compile.excluded_samples
+    # BioSample and SRA Submission Files
+    File BioSample_attributes = compile_biosamp_n_sra.biosample_attributes
+    File SRA_metadata = compile_biosamp_n_sra.sra_metadata
+    File? SRA_zipped_reads = compile_biosamp_n_sra.sra_zipped
+    String? SRA_gcp_bucket = gcp_bucket
+  }
 }
