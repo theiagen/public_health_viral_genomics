@@ -45,9 +45,10 @@ workflow freyja_fastq {
     input:
   }
   output {
+    # Version Capture
     String freyja_fastq_wf_version = version_capture.phvg_version
     String freyja_fastq_wf_analysis_date = version_capture.date
-    
+    # Raw Read QC
     File read1_dehosted = read_QC_trim.read1_dehosted
     File read2_dehosted = read_QC_trim.read2_dehosted
     File read1_clean = read_QC_trim.read1_clean
@@ -56,13 +57,13 @@ workflow freyja_fastq {
     Int fastq_scan_raw2 = read_QC_trim.fastq_scan_raw2
     String fastq_scan_raw_pairs = read_QC_trim.fastq_scan_raw_pairs
     String fastq_scan_version = read_QC_trim.fastq_scan_version
-
+    # Read Trim
     Int fastq_scan_clean1 = read_QC_trim.fastq_scan_clean1
     Int fastq_scan_clean2 = read_QC_trim.fastq_scan_clean2
     String fastq_scan_clean_pairs = read_QC_trim.fastq_scan_clean_pairs
     String trimmomatic_version = read_QC_trim.trimmomatic_version
     String bbduk_docker = read_QC_trim.bbduk_docker
-
+    # Contaminent Check
     String kraken_version = read_QC_trim.kraken_version
     Float kraken_human = read_QC_trim.kraken_human
     Float kraken_sc2 = read_QC_trim.kraken_sc2
@@ -70,18 +71,17 @@ workflow freyja_fastq {
     Float kraken_human_dehosted = read_QC_trim.kraken_human_dehosted
     Float kraken_sc2_dehosted = read_QC_trim.kraken_sc2_dehosted
     String kraken_report_dehosted = read_QC_trim.kraken_report_dehosted
-    
+    # Mapping and Alignment
     String bwa_version = bwa.bwa_version
     String samtools_version = bwa.sam_version
     String alignment_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
-
     File aligned_bam = primer_trim.trim_sorted_bam
     File aligned_bai = primer_trim.trim_sorted_bai
     Float primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String ivar_version_primtrim = primer_trim.ivar_version
     String samtools_version_primtrim = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
-
+    # Freyja Analysis
     File freyja_variants = freyja.freyja_variants
     File freyja_depths = freyja.freyja_depths
     File freyja_demixed = freyja.freyja_demixed
