@@ -5,16 +5,14 @@ import "../tasks/task_pub_repo_prep.wdl" as submission_prep
 
 workflow mercury_pe_prep {
   input {
-    #required files
+    # Required Files
     File assembly_fasta
     File read1_dehosted
     File read2_dehosted
-    
-    #required metadata (titan gc outputs)
+    # Required Metadata (Titan GC Outputs)
     String assembly_method
     Float assembly_mean_coverage
-    
-    #required metadata (user inputs)
+    # Required Metadata (User Inputs)
     String authors
     String bioproject_accession
     String collecting_lab
@@ -42,9 +40,8 @@ workflow mercury_pe_prep {
     String state
     String submission_id
     String submitting_lab
-    String submitting_lab_address  
-    
-    #optional metadata
+    String submitting_lab_address
+    # Optional Metadata
     String? amplicon_primer_scheme
     String? amplicon_size
     String? biosample_accession
@@ -56,14 +53,12 @@ workflow mercury_pe_prep {
     String? purpose_of_sequencing
     String? submitter_email
     String? treatment
-
-    # Optional user-defined thresholds for generating submission files
+    # Optional User-Defined Thresholds for Generating Submission Files
     Int number_N_threshold = 5000
   }
-  
   if (number_N <= number_N_threshold) {
     call submission_prep.ncbi_prep_one_sample {
-      input: 
+      input:
         amplicon_primer_scheme = amplicon_primer_scheme,
         amplicon_size = amplicon_size,
         assembly_fasta = assembly_fasta,
@@ -99,10 +94,10 @@ workflow mercury_pe_prep {
         state = state,
         submission_id = submission_id,
         submitter_email = submitter_email,
-        treatment = treatment	 
+        treatment = treatment
     }
     call submission_prep.gisaid_prep_one_sample {
-      input: 
+      input:
         assembly_fasta = assembly_fasta,
         authors = authors,
         assembly_method = assembly_method,
@@ -127,14 +122,14 @@ workflow mercury_pe_prep {
         treatment = treatment
     }
   }
-
   call versioning.version_capture{
     input:
   }
   output {
+    # Version Capture
     String mercury_pe_prep_version = version_capture.phvg_version
     String mercury_pe_prep_analysis_date = version_capture.date
-    
+    # NCBI Submission Files
     File? biosample_attributes = ncbi_prep_one_sample.biosample_attributes
     File? sra_metadata = ncbi_prep_one_sample.sra_metadata
     File? genbank_assembly = ncbi_prep_one_sample.genbank_assembly
@@ -142,11 +137,8 @@ workflow mercury_pe_prep {
     File? sra_read1 = ncbi_prep_one_sample.sra_read1
     File? sra_read2 = ncbi_prep_one_sample.sra_read2
     Array[File]? sra_reads = ncbi_prep_one_sample.sra_reads
-    
+    # GISAID Submission Files
     File? gisaid_assembly = gisaid_prep_one_sample.gisaid_assembly
     File? gisaid_metadata = gisaid_prep_one_sample.gisaid_metadata
   }
 }
-
-
-#coverage >= coverage_gisaid && number_N <= number_N_gisaid &&
