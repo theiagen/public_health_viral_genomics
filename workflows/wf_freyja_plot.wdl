@@ -27,7 +27,7 @@ workflow freyja_plot {
     File freyja_plot = freyja_plot_task.freyja_plot
     File freyja_demixed_aggregate = freyja_plot_task.demixed_aggregate
     File? freyja_plot_metadata = freyja_plot_task.freyja_plot_metadata
-    }
+  }
 }
 
 task freyja_plot_task {
