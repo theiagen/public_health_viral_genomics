@@ -126,6 +126,9 @@ workflow titan_illumina_pe {
     String ivar_version_primtrim = primer_trim.ivar_version
     String samtools_version_primtrim   = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
+    File ivar_tsv = variant_call.sample_variants_tsv
+    File ivar_vcf = variant_call.sample_variants_vcf
+    String ivar_variant_version = variant_call.ivar_version
     # Assembly QC
     File assembly_fasta = consensus.consensus_seq
     String ivar_version_consensus = consensus.ivar_version
@@ -143,9 +146,6 @@ workflow titan_illumina_pe {
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
     String samtools_version_stats = stats_n_coverage.samtools_version
-    File ivar_tsv = variant_call.sample_variants_tsv
-    File ivar_vcf = variant_call.sample_variants_vcf
-    String ivar_variant_version = variant_call.ivar_version
     # Lineage Assignment
     String pango_lineage = pangolin3.pangolin_lineage
     String pangolin_conflicts = pangolin3.pangolin_conflicts
