@@ -8,15 +8,14 @@ workflow read_QC_trim {
   meta {
     description: "Runs basic QC (FastQC), trimming (SeqyClean), and taxonomic ID (Kraken2) on illumina PE reads"
   }
-
   input {
-    String  samplename
-    File    read1_raw
-    File    read2_raw
-    Int?    trimmomatic_minlen = 75
-    Int?    trimmomatic_quality_trim_score = 30
-    Int?    trimmomatic_window_size = 4
-    Int     bbduk_mem = 8
+    String samplename
+    File read1_raw
+    File read2_raw
+    Int? trimmomatic_minlen = 75
+    Int? trimmomatic_quality_trim_score = 30
+    Int? trimmomatic_window_size = 4
+    Int bbduk_mem = 8
   }
   call read_clean.ncbi_scrub_pe {
     input:
@@ -38,7 +37,7 @@ workflow read_QC_trim {
       samplename = samplename,
       read1_trimmed = trimmomatic.read1_trimmed,
       read2_trimmed = trimmomatic.read2_trimmed,
-      memory   = bbduk_mem
+      memory = bbduk_mem
   }
   call qc_utils.fastq_scan as fastq_scan_raw {
     input:
@@ -63,32 +62,27 @@ workflow read_QC_trim {
       read2 = ncbi_scrub_pe.read2_dehosted
   }
   output {
-    File   read1_dehosted            = ncbi_scrub_pe.read1_dehosted
-    File   read2_dehosted            = ncbi_scrub_pe.read2_dehosted
-    Int    read1_human_spots_removed = ncbi_scrub_pe.read1_human_spots_removed
-    Int    read2_human_spots_removed = ncbi_scrub_pe.read2_human_spots_removed
-
-    File   read1_clean               = bbduk.read1_clean
-    File   read2_clean               = bbduk.read2_clean
-
-    Int    fastq_scan_raw1               = fastq_scan_raw.read1_seq
-    Int    fastq_scan_raw2               = fastq_scan_raw.read2_seq
-    String fastq_scan_raw_pairs          = fastq_scan_raw.read_pairs
-
-    Int    fastq_scan_clean1             = fastq_scan_clean.read1_seq
-    Int    fastq_scan_clean2             = fastq_scan_clean.read2_seq
-    String fastq_scan_clean_pairs        = fastq_scan_clean.read_pairs
-
-    String kraken_version            = kraken2_raw.version
-    Float  kraken_human              = kraken2_raw.percent_human
-    Float  kraken_sc2                = kraken2_raw.percent_sc2
-    String kraken_report             = kraken2_raw.kraken_report
-    Float  kraken_human_dehosted     = kraken2_dehosted.percent_human
-    Float  kraken_sc2_dehosted       = kraken2_dehosted.percent_sc2
-    String kraken_report_dehosted    = kraken2_dehosted.kraken_report
-
-    String fastq_scan_version            = fastq_scan_raw.version
-    String bbduk_docker              = bbduk.bbduk_docker
-    String trimmomatic_version       = trimmomatic.version
+    File read1_dehosted = ncbi_scrub_pe.read1_dehosted
+    File read2_dehosted = ncbi_scrub_pe.read2_dehosted
+    Int read1_human_spots_removed = ncbi_scrub_pe.read1_human_spots_removed
+    Int read2_human_spots_removed = ncbi_scrub_pe.read2_human_spots_removed
+    File read1_clean = bbduk.read1_clean
+    File read2_clean = bbduk.read2_clean
+    Int fastq_scan_raw1 = fastq_scan_raw.read1_seq
+    Int fastq_scan_raw2 = fastq_scan_raw.read2_seq
+    String fastq_scan_raw_pairs = fastq_scan_raw.read_pairs
+    Int fastq_scan_clean1 = fastq_scan_clean.read1_seq
+    Int fastq_scan_clean2 = fastq_scan_clean.read2_seq
+    String fastq_scan_clean_pairs = fastq_scan_clean.read_pairs
+    String kraken_version = kraken2_raw.version
+    Float kraken_human = kraken2_raw.percent_human
+    Float kraken_sc2 = kraken2_raw.percent_sc2
+    String kraken_report = kraken2_raw.kraken_report
+    Float kraken_human_dehosted = kraken2_dehosted.percent_human
+    Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
+    String kraken_report_dehosted = kraken2_dehosted.kraken_report
+    String fastq_scan_version = fastq_scan_raw.version
+    String bbduk_docker = bbduk.bbduk_docker
+    String trimmomatic_version = trimmomatic.version
   }
 }
