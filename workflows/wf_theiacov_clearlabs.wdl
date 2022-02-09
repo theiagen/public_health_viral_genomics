@@ -45,7 +45,8 @@ workflow theiacov_clearlabs {
       samplename = samplename,
       filtered_reads = ncbi_scrub_se.read1_dehosted,
       primer_bed = primer_bed,
-      normalise = normalise
+      normalise = normalise,
+      docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   call assembly_metrics.stats_n_coverage {
     input:
