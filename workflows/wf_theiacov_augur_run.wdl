@@ -6,7 +6,7 @@ import "../tasks/task_versioning.wdl" as versioning
 
 workflow theiacov_augur_run {
   meta {
-    description: "Workflow for SC2 cluster investigations. Theiacov_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances"
+    description: "Workflow for SC2 cluster investigations. TheiaCoV_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances"
     author: "Kevin G Libuit"
     email:  "kevin.libuit@theiagen.com"
   }
