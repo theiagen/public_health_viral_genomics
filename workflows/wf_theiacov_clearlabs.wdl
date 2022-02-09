@@ -21,6 +21,7 @@ workflow theiacov_clearlabs {
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-01-18T12:00:00Z"
+    String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
@@ -46,7 +47,7 @@ workflow theiacov_clearlabs {
       filtered_reads = ncbi_scrub_se.read1_dehosted,
       primer_bed = primer_bed,
       normalise = normalise,
-      docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
+      docker = medaka_docker
   }
   call assembly_metrics.stats_n_coverage {
     input:
