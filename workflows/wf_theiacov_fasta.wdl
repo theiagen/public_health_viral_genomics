@@ -8,14 +8,14 @@ import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_fasta {
+workflow theiacov_fasta {
   meta {
     description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on the Clear Labs platform."
   }
   input {
     String samplename
     File assembly_fasta
-    String seq_method  
+    String seq_method
     String input_assembly_method
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
@@ -51,8 +51,8 @@ workflow titan_fasta {
   }
   output {
     # Version Capture
-    String titan_fasta_version = version_capture.phvg_version
-    String titan_fasta_analysis_date = version_capture.date
+    String theiacov_fasta_version = version_capture.phvg_version
+    String theiacov_fasta_analysis_date = version_capture.date
     # Read & Assembly Metadata
     String seq_platform = seq_method
     String assembly_method = input_assembly_method
@@ -70,7 +70,7 @@ workflow titan_fasta {
     File pango_lineage_report = pangolin3.pango_lineage_report
     String pangolin_docker = pangolin3.pangolin_docker
     String pangolin_versions = pangolin3.pangolin_versions
-    # Clade Assigment 
+    # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
     File auspice_json = nextclade_one_sample.auspice_json
     File nextclade_tsv = nextclade_one_sample.nextclade_tsv
