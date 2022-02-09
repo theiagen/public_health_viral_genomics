@@ -8,7 +8,7 @@ import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_ont {
+workflow theiacov_ont {
   meta {
     description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on ONT NGS platforms."
   }
@@ -101,8 +101,8 @@ workflow titan_ont {
   }
   output {
     # Version Capture
-    String titan_ont_version = version_capture.phvg_version
-    String titan_ont_analysis_date = version_capture.date
+    String theiacov_ont_version = version_capture.phvg_version
+    String theiacov_ont_analysis_date = version_capture.date
     # Read Metadata
     String seq_platform = seq_method
     # Read QC
