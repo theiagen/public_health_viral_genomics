@@ -1,11 +1,11 @@
 version 1.0
 
-task titan_summary {
+task theiacov_summary {
   input {
     String samplename
-    String titan_workflow
-    String titan_version
-    String titan_analysis_date
+    String theiacov_workflow
+    String theiacov_version
+    String theiacov_analysis_date
     String seq_platform
     String primer_bed_name
     Float percent_reference_coverage
@@ -64,9 +64,9 @@ task titan_summary {
       import json
       data = OrderedDict((
           ('sample', '~{samplename}'),
-          ('titan_workflow', '~{titan_workflow}'),
-          ('titan_version', '~{titan_version}'),
-          ('titan_analysis_date', '~{titan_analysis_date}'),
+          ('theiacov_workflow', '~{theiacov_workflow}'),
+          ('theiacov_version', '~{theiacov_version}'),
+          ('theiacov_analysis_date', '~{theiacov_analysis_date}'),
           ('seq_platform', '~{seq_platform}'),
           ('primer_bed_name', '~{primer_bed_name}'),
           ('percent_reference_coverage', '~{percent_reference_coverage}'),
@@ -135,7 +135,7 @@ task titan_summary {
   }
 }
 
-task merge_titan_summary {
+task merge_theiacov_summary {
   input {
     Array[File?] clearlabs_summaries
     Array[File?] illumina_pe_summaries
@@ -157,7 +157,7 @@ task merge_titan_summary {
           *'~{sep=" " illumina_se}'.split(),
           *'~{sep=" " ont}'.split()
       ]
-      with open("titan-results.json", 'wt') as results_fh:
+      with open("theiacov-results.json", 'wt') as results_fh:
           for result in results:
               with open(result, 'rt') as json_fh:
                   row = []
@@ -170,14 +170,14 @@ task merge_titan_summary {
                       row.append(json_data[col])
                   rows.append("\t".join(row))
 
-      with open("titan-results.tsv", "wt") as tsv_fh:
+      with open("theiacov-results.tsv", "wt") as tsv_fh:
           for row in rows:
               tsv_fh.write(f'{row}\n')
       CODE
   >>>
   output {
-    File summaries_tsv  = "titan-results.tsv"
-    File summaries_json = "titan-results.json"
+    File summaries_tsv  = "theiacov-results.tsv"
+    File summaries_json = "theiacov-results.json"
   }
   runtime {
     docker: "python:3.9.5-slim"
