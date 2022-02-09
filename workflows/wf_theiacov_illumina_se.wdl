@@ -94,9 +94,9 @@ workflow theiacov_illumina_se {
     String seq_platform = seq_method
     # Read QC
     File read1_clean = read_QC_trim.read1_clean
-    Int fastq_scan_raw = read_QC_trim.fastq_scan_number_reads
+    Int num_reads_raw = read_QC_trim.fastq_scan_number_reads
     String fastq_scan_version = read_QC_trim.fastq_scan_version
-    Int fastq_scan_clean = read_QC_trim.fastq_scan_clean_number_reads
+    Int num_reads_clean = read_QC_trim.fastq_scan_clean_number_reads
     String trimmomatic_version = read_QC_trim.trimmomatic_version
     String bbduk_docker = read_QC_trim.bbduk_docker
     Float kraken_human = read_QC_trim.kraken_human

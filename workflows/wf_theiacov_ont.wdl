@@ -107,8 +107,8 @@ workflow theiacov_ont {
     String seq_platform = seq_method
     # Read QC
     File reads_dehosted = ncbi_scrub_se.read1_dehosted
-    Int fastq_scan_raw = fastq_scan_raw_reads.read1_seq
-    Int fastq_scan_clean = fastq_scan_clean_reads.read1_seq
+    Int num_reads_raw = fastq_scan_raw_reads.read1_seq
+    Int num_reads_clean = fastq_scan_clean_reads.read1_seq
     String fastq_scan_version = fastq_scan_clean_reads.version
     String kraken_version = kraken2_raw.version
     Float kraken_human = kraken2_raw.percent_human

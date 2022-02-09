@@ -28,12 +28,12 @@ task theiacov_summary {
     Int number_Total
     Float meanbaseq_trim
     Float meanmapq_trim
-    Int fastq_scan_clean1
-    String? fastq_scan_clean2 = ""
-    String? fastq_scan_clean_pairs = ""
-    Int fastq_scan_raw1
-    String? fastq_scan_raw2 = ""
-    String? fastq_scan_raw_pairs = ""
+    Int num_reads_clean1
+    String? num_reads_clean2 = ""
+    String? num_reads_clean_pairs = ""
+    Int num_reads_raw1
+    String? num_reads_raw2 = ""
+    String? num_reads_raw_pairs = ""
     Float kraken_human
     String? kraken_human_dehosted = ""
     Float kraken_sc2
@@ -89,12 +89,12 @@ task theiacov_summary {
           ('number_total', '~{number_Total}'),
           ('meanbaseq_trim', '~{meanbaseq_trim}'),
           ('meanmapq_trim', '~{meanmapq_trim}'),
-          ('fastq_scan_clean1', '~{fastq_scan_clean1}'),
-          ('fastq_scan_clean2', '~{fastq_scan_clean2}'),
-          ('fastq_scan_clean_pairs', '~{fastq_scan_clean_pairs}'),
-          ('fastq_scan_raw1', '~{fastq_scan_raw1}'),
-          ('fastq_scan_raw2', '~{fastq_scan_raw2}'),
-          ('fastq_scan_raw_pairs', '~{fastq_scan_raw_pairs}'),
+          ('num_reads_clean1', '~{num_reads_clean1}'),
+          ('num_reads_clean2', '~{num_reads_clean2}'),
+          ('num_reads_clean_pairs', '~{num_reads_clean_pairs}'),
+          ('num_reads_raw1', '~{num_reads_raw1}'),
+          ('num_reads_raw2', '~{num_reads_raw2}'),
+          ('num_reads_raw_pairs', '~{num_reads_raw_pairs}'),
           ('kraken_human', '~{kraken_human}'),
           ('kraken_human_dehosted', '~{kraken_human_dehosted}'),
           ('kraken_sc2', '~{kraken_sc2}'),
