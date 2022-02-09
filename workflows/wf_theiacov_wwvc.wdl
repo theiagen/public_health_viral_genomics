@@ -6,7 +6,7 @@ import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_versioning.wdl" as versioning
 import "../workflows/wf_WasteWaterVariantCalling_modified.wdl" as wastewater
 
-workflow titan_illumina_wwvc {
+workflow theiacov_illumina_wwvc {
   meta {
     description: "Reference-based consensus calling for viral amplicon sequencing data"
   }
@@ -54,8 +54,8 @@ workflow titan_illumina_wwvc {
   }
   output {
     # Version Capture
-    String titan_wwvc_version = version_capture.phvg_version
-    String titan_wwcv_date = version_capture.date
+    String theiacov_wwvc_version = version_capture.phvg_version
+    String theiacov_wwcv_date = version_capture.date
     # Waste Water Variant Calling
     Array[File] addrg_bam = WasteWaterVariantCalling.addrg_bam
     Array[File] variants = WasteWaterVariantCalling.variants
