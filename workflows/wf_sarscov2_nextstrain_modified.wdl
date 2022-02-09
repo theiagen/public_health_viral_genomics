@@ -184,7 +184,7 @@ workflow sarscov2_nextstrain {
     File keep_list = fasta_to_ids.ids_txt
     File mafft_alignment = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     File ml_tree = draft_augur_tree.aligned_tree
-    File time_tre = refine_augur_tree.tree_refined
+    File time_tree = refine_augur_tree.tree_refined
     Array[File] node_data_jsons = select_all([
                   refine_augur_tree.branch_lengths,
                   ancestral_traits.node_data_json,
