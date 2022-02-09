@@ -179,7 +179,7 @@ workflow theiacov_gc {
           meanmapq_trim = theiacov_illumina_se.meanmapq_trim,
           num_reads_clean1 = theiacov_illumina_se.num_reads_clean,
           num_reads_raw1 = theiacov_illumina_se.num_reads_raw,
-          num_reads_version = theiacov_illumina_se.num_reads_version,
+          fastq_scan_version = theiacov_illumina_se.fastq_scan_version,
           kraken_human = theiacov_illumina_se.kraken_human,
           kraken_sc2 = theiacov_illumina_se.kraken_sc2,
           primer_trimmed_read_percent = theiacov_illumina_se.primer_trimmed_read_percent,
