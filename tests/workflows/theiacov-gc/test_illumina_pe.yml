@@ -10,9 +10,9 @@
     - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
     - path: theiacov/illumina_pe/alignments/SRR13687078.stats.txt
     - path: theiacov/illumina_pe/alignments/SRR13687078.variants.vcf
-      md5sum: 19e716097dcbad1a20f177d8a2590ef5
+      md5sum: 285abef3eca1928504afcdaed801a7ad
     - path: theiacov/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
-      md5sum: 5ef30a51925f1b2569f998ae12e1e186
+      md5sum: 6923b89d36bc66e1cdfabfd1dedbea71
     - path: theiacov/illumina_pe/cromwell-stderr.txt
     - path: theiacov/illumina_pe/cromwell-stdout.txt
     - path: theiacov/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz

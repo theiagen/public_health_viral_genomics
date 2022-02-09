@@ -10,9 +10,9 @@
     - path: theiacov/illumina_se/alignments/ERR6319327.primertrim.sorted.bam.bai
     - path: theiacov/illumina_se/alignments/ERR6319327.stats.txt
     - path: theiacov/illumina_se/alignments/ERR6319327.variants.vcf
-      md5sum: 01d93a6a37b9598c594a780a6996d08e
+      md5sum: 9c0f25e6f486f8b8731ac87aed283d23
     - path: theiacov/illumina_se/assemblies/ERR6319327.ivar.consensus.fasta
-      md5sum: 45a6c6f18d5fa448e0aa811bdf934bab
+      md5sum: cb2c2f900d2942b30b762bf3b7a0a17a
     - path: theiacov/illumina_se/cromwell-stderr.txt
     - path: theiacov/illumina_se/cromwell-stdout.txt
     - path: theiacov/illumina_se/kraken2_reports/ERR6319327_kraken2_report.txt
