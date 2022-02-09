@@ -4,9 +4,9 @@ import "wf_sarscov2_nextstrain_modified.wdl" as augur
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_augur_run {
+workflow theiacov_augur_run {
   meta {
-    description: "Workflow for SC2 cluster investigations. Titan_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances"
+    description: "Workflow for SC2 cluster investigations. Theiacov_Augur_Run will run Augur without a subsampling module using a modified version of The Broad Institute's sarscov2_nextstrain WDL workflow to create an Auspice JSON file; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances"
     author: "Kevin G Libuit"
     email:  "kevin.libuit@theiagen.com"
   }
@@ -41,8 +41,8 @@ workflow titan_augur_run {
   }
   output {
     # Version Capture
-    String titan_augur_run_version = version_capture.phvg_version
-    String titan_augur_run_analysis_date = version_capture.date
+    String theiacov_augur_run_version = version_capture.phvg_version
+    String theiacov_augur_run_analysis_date = version_capture.date
     # Augur outputs
     File combined_assemblies = sarscov2_nextstrain.combined_assemblies
     File MAFFT_alignment = sarscov2_nextstrain.mafft_alignment
