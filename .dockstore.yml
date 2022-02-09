@@ -1,23 +1,23 @@
 version: 1.2
 workflows:
- - name: Titan_ClearLabs
+ - name: TheiaCoV_ClearLabs
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_clearlabs.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_clearlabs.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_ONT
+ - name: TheiaCoV_ONT
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_ont.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_ont.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Illumina_PE
+ - name: TheiaCoV_Illumina_PE
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_illumina_pe.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_illumina_pe.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Illumina_SE
+ - name: TheiaCoV_Illumina_SE
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_illumina_se.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_illumina_se.wdl
    testParameterFiles:
     - empty.json
  - name: Mercury_PE_Prep
@@ -35,14 +35,14 @@ workflows:
    primaryDescriptorPath: /workflows/wf_mercury_batch.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Augur_Prep
+ - name: TheiaCoV_Augur_Prep
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_augur_prep.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_augur_prep.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_Augur_Run
+ - name: TheiaCoV_Augur_Run
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_augur_run.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_augur_run.wdl
    testParameterFiles:
     - empty.json
  - name: Pangolin_Update
@@ -65,14 +65,14 @@ workflows:
    primaryDescriptorPath: /workflows/wf_ncbi_scrub_pe.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_FASTA
+ - name: TheiaCoV_FASTA
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_fasta.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_fasta.wdl
    testParameterFiles:
     - empty.json
- - name: Titan_WWVC
+ - name: TheiaCoV_WWVC
    subclass: WDL
-   primaryDescriptorPath: /workflows/wf_titan_wwvc.wdl
+   primaryDescriptorPath: /workflows/wf_theiacov_wwvc.wdl
    testParameterFiles:
     - empty.json
  - name: Freyja_FASTQ
