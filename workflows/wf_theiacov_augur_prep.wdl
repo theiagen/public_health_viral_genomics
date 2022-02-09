@@ -3,7 +3,7 @@ version 1.0
 import "../tasks/tasks_nextstrain.wdl" as nextstrain
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_augur_prep {
+workflow theiacov_augur_prep {
   input {
     String assembly
     String collection_date
@@ -27,8 +27,8 @@ workflow titan_augur_prep {
     input:
   }
   output {
-    String titan_augur_run_version = version_capture.phvg_version
-    String titan_augur_run_analysis_date = version_capture.date
+    String theiacov_augur_run_version = version_capture.phvg_version
+    String theiacov_augur_run_analysis_date = version_capture.date
     File augur_metadata = prep_augur_metadata.augur_metadata
   }
 }
