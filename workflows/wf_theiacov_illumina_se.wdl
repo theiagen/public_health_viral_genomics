@@ -9,7 +9,7 @@ import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_qc_utils.wdl" as qc_utils
 
-workflow titan_illumina_se {
+workflow theiacov_illumina_se {
   meta {
     description: "Reference-based consensus calling for viral amplicon sequencing data"
   }
@@ -88,8 +88,8 @@ workflow titan_illumina_se {
   }
   output {
     # Version Capture
-    String titan_illumina_se_version = version_capture.phvg_version
-    String titan_illumina_se_analysis_date = version_capture.date
+    String theiacov_illumina_se_version = version_capture.phvg_version
+    String theiacov_illumina_se_analysis_date = version_capture.date
     # Read Metadata
     String seq_platform = seq_method
     # Read QC
