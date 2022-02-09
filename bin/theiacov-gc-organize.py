@@ -1,18 +1,18 @@
 #! /usr/bin/env python3
 """
-usage: titan-gc-organize [-h] [--outdir STR] [--debug] METADATA_JSON
+usage: theiacov-gc-organize [-h] [--outdir STR] [--debug] METADATA_JSON
 
-titan-gc-organize- Read Cromwell metadata to organize files into readable structure
+theiacov-gc-organize- Read Cromwell metadata to organize files into readable structure
 
 positional arguments:
-  METADATA_JSON  The metadata.json output (-m) from the Titan GC run.
+  METADATA_JSON  The metadata.json output (-m) from the TheiaCoV GC run.
 
 optional arguments:
   -h, --help     show this help message and exit
-  --outdir STR   Directory to copy files to. (Default: ./titan-gc).
+  --outdir STR   Directory to copy files to. (Default: ./theiacov-gc).
   --debug        Print helpful information
 """
-# Known file extensions from Titan-GC outputs
+# Known file extensions from TheiaCoV-GC outputs
 OUTPUTS = {
     'aligned_bam': {'ext': ['.primertrim.sorted.bam', '.primertrimmed.rg.sorted.bam'], 'folder': 'alignments'},
     'aligned_bai': {'ext': ['.primertrim.sorted.bam.bai', '.primertrimmed.rg.sorted.bam.bai'], 'folder': 'alignments'},
@@ -36,7 +36,7 @@ def mkdir(path):
     from pathlib import Path
     Path(path).mkdir(parents=True, exist_ok=True)
 
-def read_titan_results(tsv, is_json=False):
+def read_theiacov_results(tsv, is_json=False):
     results = {}
     with open(tsv, 'rt') as tsv_fh:
         for line in tsv_fh:
@@ -60,16 +60,16 @@ if __name__ == '__main__':
     import sys
 
     parser = ap.ArgumentParser(
-        prog='titan-gc-organize',
+        prog='theiacov-gc-organize',
         conflict_handler='resolve',
         description=(
-            f'titan-gc-organize- Read Cromwell metadata to organize files into readable structure'
+            f'theiacov-gc-organize- Read Cromwell metadata to organize files into readable structure'
         )
     )
     parser.add_argument('metadata', metavar="METADATA_JSON", type=str,
-                        help='The metadata.json output (-m) from the Titan GC run.')
-    parser.add_argument('--outdir', metavar='STR', type=str, default="./titan-gc",
-                        help='Directory to copy files to. (Default: ./titan-gc).')
+                        help='The metadata.json output (-m) from the TheiaCoV GC run.')
+    parser.add_argument('--outdir', metavar='STR', type=str, default="./theiacov-gc",
+                        help='Directory to copy files to. (Default: ./theiacov-gc).')
     parser.add_argument('--debug', action='store_true', help='Print helpful information')
     if len(sys.argv) == 1:
         parser.print_help()
@@ -105,41 +105,41 @@ if __name__ == '__main__':
     """
     Start moving files: metadata["outputs"]
     Output keys:
-        "titan_gc.reads_dehosted"
-        "titan_gc.kraken_report"
-        "titan_gc.pango_lineage_report"
-        "titan_gc.nextclade_json"
-        "titan_gc.consensus_flagstat"
-        "titan_gc.kraken_report_dehosted"
-        "titan_gc.vadr_alerts_list"
-        "titan_gc.aligned_bam"
-        "titan_gc.assembly_fasta"
-        "titan_gc.nextclade_tsv"
-        "titan_gc.consensus_stats"
-        "titan_gc.auspice_json"
-        "titan_gc.aligned_bai"
-        "titan_gc.json_summary"
+        "theiacov_gc.reads_dehosted"
+        "theiacov_gc.kraken_report"
+        "theiacov_gc.pango_lineage_report"
+        "theiacov_gc.nextclade_json"
+        "theiacov_gc.consensus_flagstat"
+        "theiacov_gc.kraken_report_dehosted"
+        "theiacov_gc.vadr_alerts_list"
+        "theiacov_gc.aligned_bam"
+        "theiacov_gc.assembly_fasta"
+        "theiacov_gc.nextclade_tsv"
+        "theiacov_gc.consensus_stats"
+        "theiacov_gc.auspice_json"
+        "theiacov_gc.aligned_bai"
+        "theiacov_gc.json_summary"
 
-    The merged summary is under: "titan_gc.summaries_tsv" and "titan_gc.summaries_json"
+    The merged summary is under: "theiacov_gc.summaries_tsv" and "theiacov_gc.summaries_json"
     Output files should start with the sample name (sample01.file or sample01_file)
     """
     mkdir(f"{args.outdir}")
-    titan_results = None
-    titan_json = None
+    theiacov_results = None
+    theiacov_json = None
     for key, outputs in metadata["outputs"].items():
-        task_name = key.replace("titan_gc.", "")
+        task_name = key.replace("theiacov_gc.", "")
         if args.debug:
             print(f"Working on {task_name} outputs", file=sys.stderr)
         if task_name == "summaries_tsv":
             if args.debug:
-                print(f"Copying {outputs} to {args.outdir}/complete-titan-results.tsv", file=sys.stderr)
-            copy2(outputs, f"{args.outdir}/titan-results.tsv")
-            titan_results = read_titan_results(outputs)
+                print(f"Copying {outputs} to {args.outdir}/complete-theiacov-results.tsv", file=sys.stderr)
+            copy2(outputs, f"{args.outdir}/theiacov-results.tsv")
+            theiacov_results = read_theiacov_results(outputs)
         elif task_name == "summaries_json":
             if args.debug:
-                print(f"Copying {outputs} to {args.outdir}/complete-titan-results.json", file=sys.stderr)
-            copy2(outputs, f"{args.outdir}/titan-results.json")
-            titan_json = read_titan_results(outputs, is_json=True)
+                print(f"Copying {outputs} to {args.outdir}/complete-theiacov-results.json", file=sys.stderr)
+            copy2(outputs, f"{args.outdir}/theiacov-results.json")
+            theiacov_json = read_theiacov_results(outputs, is_json=True)
         else:
             for output in outputs:
                 samplename = os.path.basename(output)

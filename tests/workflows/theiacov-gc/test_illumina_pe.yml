@@ -1,0 +1,33 @@
+- name: theiacov_illumina_pe
+  command: theiacov-gc -i theiacov/illumina_pe.json -o theiacov/illumina_pe
+  tags:
+    - theiacov_gc
+    - theiacov_illumina_pe
+  files:
+    - path: theiacov/illumina_pe/alignments/SRR13687078.flagstat.txt
+      md5sum: 7cd08dcf0ccb7cf5b1f445852673fe94
+    - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
+    - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
+    - path: theiacov/illumina_pe/alignments/SRR13687078.stats.txt
+    - path: theiacov/illumina_pe/alignments/SRR13687078.variants.vcf
+      md5sum: 19e716097dcbad1a20f177d8a2590ef5
+    - path: theiacov/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
+      md5sum: 5ef30a51925f1b2569f998ae12e1e186
+    - path: theiacov/illumina_pe/cromwell-stderr.txt
+    - path: theiacov/illumina_pe/cromwell-stdout.txt
+    - path: theiacov/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz
+    - path: theiacov/illumina_pe/dehosted_reads/SRR13687078_R2_dehosted.fastq.gz
+    - path: theiacov/illumina_pe/kraken2_reports/SRR13687078_dehosted_kraken2_report.txt
+      md5sum: 3544d9ca35d45093c03cdead46677765
+    - path: theiacov/illumina_pe/kraken2_reports/SRR13687078_kraken2_report.txt
+      md5sum: 3544d9ca35d45093c03cdead46677765
+    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.auspice.json
+    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.json
+    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
+    - path: theiacov/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
+    - path: theiacov/illumina_pe/results/SRR13687078.results.json
+    - path: theiacov/illumina_pe/theiacov-metadata.json
+    - path: theiacov/illumina_pe/theiacov-results.json
+    - path: theiacov/illumina_pe/theiacov-results.tsv
+    - path: theiacov/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

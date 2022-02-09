@@ -5,7 +5,7 @@ import "../tasks/tasks_utils.wdl" as utils
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_distance_tree {
+workflow theiacov_distance_tree {
   meta {
     description: "Workflow for SC2 cluster investigations. TheiaCoV_Augur_DistanceTree is will generate a ML distance tree using select tasks incorporated in the ThieaCoV_Augur_Run workflow; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances. The ML distance tree output can be visualized using the Auspice web application https://auspice.us/"
     author: "Kevin G Libuit"

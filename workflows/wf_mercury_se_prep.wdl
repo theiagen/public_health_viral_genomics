@@ -8,7 +8,7 @@ workflow mercury_se_prep {
     # Required Files
     File assembly_fasta
     File reads_dehosted
-    # Required Metadata (Titan GC Outputs)
+    # Required Metadata (TheiaCoV GC Outputs)
     String assembly_method
     Float assembly_mean_coverage
     # Required Metadata (User Inputs)

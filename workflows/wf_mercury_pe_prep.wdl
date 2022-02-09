@@ -9,7 +9,7 @@ workflow mercury_pe_prep {
     File assembly_fasta
     File read1_dehosted
     File read2_dehosted
-    # Required Metadata (Titan GC Outputs)
+    # Required Metadata (TheiaCoV GC Outputs)
     String assembly_method
     Float assembly_mean_coverage
     # Required Metadata (User Inputs)

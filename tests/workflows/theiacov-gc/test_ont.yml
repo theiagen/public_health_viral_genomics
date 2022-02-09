@@ -1,0 +1,32 @@
+- name: theiacov_ont
+  command: theiacov-gc -i theiacov/ont.json -o theiacov/ont
+  tags:
+    - theiacov_gc
+    - theiacov_ont
+  files:
+    - path: theiacov/ont/alignments/ont.flagstat.txt
+      md5sum: 85c7b4e3985735fd2a45f7f5a09b529f
+    - path: theiacov/ont/alignments/ont.pass.vcf
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
+    - path: theiacov/ont/alignments/ont.primertrimmed.rg.sorted.bam
+    - path: theiacov/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
+    - path: theiacov/ont/alignments/ont.stats.txt
+    - path: theiacov/ont/assemblies/ont.medaka.consensus.fasta
+      md5sum: 02a04e9cf297acc8fc03667edab41fde
+    - path: theiacov/ont/cromwell-stderr.txt
+    - path: theiacov/ont/cromwell-stdout.txt
+    - path: theiacov/ont/dehosted_reads/ont_R1_dehosted.fastq.gz
+    - path: theiacov/ont/kraken2_reports/ont_dehosted_kraken2_report.txt
+      md5sum: 5780753ae61523a3621fbe2635b04b70
+    - path: theiacov/ont/kraken2_reports/ont_kraken2_report.txt
+      md5sum: f2c6f26b1ef2786d124eae2ab3fe80c1
+    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.auspice.json
+    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.json
+    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.tsv
+    - path: theiacov/ont/pangolin_reports/ont.pangolin_report.csv
+    - path: theiacov/ont/results/ont.results.json
+    - path: theiacov/ont/theiacov-metadata.json
+    - path: theiacov/ont/theiacov-results.json
+    - path: theiacov/ont/theiacov-results.tsv
+    - path: theiacov/ont/vadr_alerts/ont.medaka.consensus.vadr.alt.list
+      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad

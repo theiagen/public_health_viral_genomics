@@ -1,17 +1,17 @@
 #! /usr/bin/env python3
 """
-usage: titan-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR]
+usage: theiacov-gc-prepare [-h] [-f STR] [--fastq_separator STR] [--fastq_pattern STR] [--pe1_pattern STR] [--pe2_pattern STR]
                         [-r] [--prefix STR] [--tsv] [--pangolin_docker STR] [--clearlabs_normalise INT] [--ont_normalise INT]
                         [--seq_method STR] FASTQ_PATH WORKFLOW PRIMER
 
-titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC
+theiacov-gc-prepare - Read a directory and prepare a JSON for input to TheiaCoV GC
 
 optional arguments:
   -h, --help            show this help message and exit
 
-Titan-GC Prepare Parameters:
+TheiaCoV-GC Prepare Parameters:
   FASTQ_PATH            Directory where FASTQ files are stored
-  WORKFLOW              The TItan-GC workflow to use for anlaysis. Options: clearlabs, illumina_pe, illumina_se, ont
+  WORKFLOW              The TheiaCoV-GC workflow to use for anlaysis. Options: clearlabs, illumina_pe, illumina_se, ont
   PRIMERS               A file containing primers (bed format) used during sequencing.
   -f STR, --fastq_ext STR
                         Extension of the FASTQs. Default: .fastq.gz
@@ -24,7 +24,7 @@ Titan-GC Prepare Parameters:
   --prefix STR          Replace the absolute path with a given string. Default: Use absolute path
   --tsv                 Output FOFN as a TSV (Default JSON)
 
-Optional Titan-GC Workflow Parameters:
+Optional TheiaCoV-GC Workflow Parameters:
   --pangolin_docker STR
                         Docker image used to run Pangolin
   --clearlabs_normalise INT
@@ -60,18 +60,18 @@ if __name__ == '__main__':
     import sys
 
     parser = ap.ArgumentParser(
-        prog='titan-gc-prepare',
+        prog='theiacov-gc-prepare',
         conflict_handler='resolve',
         description=(
-            f'titan-gc-prepare - Read a directory and prepare a JSON for input to Titan GC'
+            f'theiacov-gc-prepare - Read a directory and prepare a JSON for input to TheiaCoV GC'
         )
     )
-    group1 = parser.add_argument_group('Titan-GC Prepare Parameters')
+    group1 = parser.add_argument_group('TheiaCoV-GC Prepare Parameters')
     group1.add_argument('path', metavar="FASTQ_PATH", type=str,
                         help='Directory where FASTQ files are stored')
     group1.add_argument(
         'workflow', metavar='WORKFLOW', type=str, choices=['clearlabs', 'illumina_pe', 'illumina_se', 'ont'],
-        help='The Titan-GC workflow to use for analysis. Options: clearlabs, illumina_pe, illumina_se, ont'
+        help='The TheiaCoV-GC workflow to use for analysis. Options: clearlabs, illumina_pe, illumina_se, ont'
     )
     group1.add_argument(
         'primers', metavar='PRIMER', type=str, default="",
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     )
     group1.add_argument('--tsv', action='store_true', help='Output FOFN as a TSV (Default JSON)')
 
-    group2 = parser.add_argument_group('Optional Titan-GC Workflow Parameters')
+    group2 = parser.add_argument_group('Optional TheiaCoV-GC Workflow Parameters')
     group2.add_argument(
         '--pangolin_docker', metavar='STR', type=str,
         help='Docker image used to run Pangolin (takes priority over --params)'
@@ -123,9 +123,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
     abspath = os.path.abspath(args.path)
     SAMPLES = {}
-    EMPTY_FASTQ = f"{str(Path.home())}/.titan/EMPTY.fastq.gz"
+    EMPTY_FASTQ = f"{str(Path.home())}/.theiacov/EMPTY.fastq.gz"
     if not os.path.exists(EMPTY_FASTQ):
-        Path(f"{str(Path.home())}/.titan").mkdir(parents=True, exist_ok=True)
+        Path(f"{str(Path.home())}/.theiacov").mkdir(parents=True, exist_ok=True)
         with open(EMPTY_FASTQ, 'a'):
             pass
 
@@ -206,7 +206,7 @@ if __name__ == '__main__':
 
                 FOFN.append({
                     'sample': sample, 
-                    'titan_wf': args.workflow,
+                    'theiacov_wf': args.workflow,
                     'r1': r1,
                     'r2': r2,
                     'primers': get_path(Path(args.primers), abspath, args.prefix)
@@ -217,12 +217,12 @@ if __name__ == '__main__':
                 needs_header = True
                 for f in FOFN:
                     if needs_header:
-                        print("\t".join(['sample', 'titan_wf', 'r1', 'r2', 'primers']))
+                        print("\t".join(['sample', 'theiacov_wf', 'r1', 'r2', 'primers']))
                         needs_header = False
-                    print("\t".join([f['sample'], f['titan_wf'], f['r1'], f['r2'], f['primers']]))
+                    print("\t".join([f['sample'], f['theiacov_wf'], f['r1'], f['r2'], f['primers']]))
             else:
                 inputs_json = {
-                    "titan_gc.samples": FOFN
+                    "theiacov_gc.samples": FOFN
                 }
                 params_json = {}
 
@@ -233,10 +233,10 @@ if __name__ == '__main__':
                         params_json = json.load(json_fh)
 
                 if args.pangolin_docker:
-                    params_json['titan_gc.titan_clearlabs.pangolin3.pangolin_docker_image'] = args.pangolin_docker
-                    params_json['titan_gc.titan_illumina_pe.pangolin3.pangolin_docker_image'] = args.pangolin_docker
-                    params_json['titan_gc.titan_illumina_se.pangolin3.pangolin_docker_image'] = args.pangolin_docker
-                    params_json['titan_gc.titan_ont.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['theiacov_gc.theiacov_clearlabs.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['theiacov_gc.theiacov_illumina_pe.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['theiacov_gc.theiacov_illumina_se.pangolin3.pangolin_docker_image'] = args.pangolin_docker
+                    params_json['theiacov_gc.theiacov_ont.pangolin3.pangolin_docker_image'] = args.pangolin_docker
                 
                 print(json.dumps({**inputs_json, **params_json}, indent = 4))
     else:
