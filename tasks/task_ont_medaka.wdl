@@ -74,8 +74,9 @@ task consensus {
     if [[ ! -z "~{reference_genome}" ]]; then
       ref_genome="~{reference_genome}"
     else
+       # use reference file in docker--different paths depending on image specified 
        if [[ -d "/fieldbioinformatics" ]]; then
-         ref_genome="/fieldbioinformatics/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"
+         ref_genome=$(find /fieldbioinformatics/*/primer*schemes/nCoV-2019/V3/ -name "nCoV-2019.reference.fasta")
        else
          ref_genome=$(find /wf-artic*/data/primer_schemes/SARS-CoV-2/V4/ -name "SARS-CoV-2.reference.fasta")
        fi
