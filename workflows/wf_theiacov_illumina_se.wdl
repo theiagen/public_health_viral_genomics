@@ -21,6 +21,7 @@ workflow theiacov_illumina_se {
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-01-18T12:00:00Z"
+    File? reference_genome
   }
   call read_qc.read_QC_trim {
     input:
@@ -30,7 +31,8 @@ workflow theiacov_illumina_se {
   call align.bwa {
     input:
       samplename = samplename,
-      read1 = read_QC_trim.read1_clean
+      read1 = read_QC_trim.read1_clean,
+      reference_genome = reference_genome
   }
   call consensus_call.primer_trim {
     input:
@@ -41,12 +43,14 @@ workflow theiacov_illumina_se {
   call consensus_call.variant_call {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam
+      bamfile = primer_trim.trim_sorted_bam,
+      reference_genome = reference_genome
   }
   call consensus_call.consensus {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam
+      bamfile = primer_trim.trim_sorted_bam,
+      reference_genome = reference_genome
   }
   call qc_utils.consensus_qc {
     input:

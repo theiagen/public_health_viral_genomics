@@ -17,15 +17,18 @@ task bwa {
     # set reference genome
     if [[ ! -z "~{reference_genome}" ]]; then
       echo "User reference identified; ~{reference_genome} will be utilized for alignement"
+      ref_genome="~{reference_genome}"
+      bwa index "~{reference_genome}"
       # move to primer_schemes dir; bwa fails if reference file not in this location
-      cp "~{reference_genome}" "/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
+    else
+      ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
     fi
 
     # Map with BWA MEM
-    echo "Running bwa mem -t ~{cpu} bwa_reference.bwa ~{read1} ~{read2} | samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam "
+    echo "Running bwa mem -t ~{cpu} ${ref_genome} ~{read1} ~{read2} | samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam "
     bwa mem \
     -t ~{cpu} \
-    "/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta" \
+    "${ref_genome}" \
     ~{read1} ~{read2} |\
     samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam
 
