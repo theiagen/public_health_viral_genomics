@@ -307,7 +307,7 @@ task freyja_one_sample {
     File reference_genome
     File? freyja_usher_barcodes
     File? freyja_lineage_metadata
-    Float? eps=0.003
+    Float? eps=0.001
     Boolean update_db = true
     String docker = "staphb/freyja:1.3.2"
   }
