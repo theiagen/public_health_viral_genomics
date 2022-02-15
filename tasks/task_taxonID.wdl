@@ -306,38 +306,44 @@ task freyja_one_sample {
     String samplename
     File reference_genome
     File? freyja_usher_barcodes
+    File? freyja_lineage_metadata
+    Float? eps=1e-3
     Boolean update_db = true
-    String docker = "staphb/freyja:1.2"
+    String docker = "staphb/freyja:1.3.2"
   }
   command <<<
-  # configure barcode settings and capture version  
-  #if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
-  #  #capture database info 
-  #  azfreyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
-  #  echo "here"
-  #  #set environment with user-defined db
-  #  mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
-  #else
-  #  # update db if specified
-  #  if ~{update_db}; then 
-  #    freyja update 
-  #    freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
-  #  else 
-  #    freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
-  #  fi
-  #fi
-  
-  # always update freyja barcodes until v1.3.1 release (will allow user-defined ref files)
-  freyja update 
-  freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
-  
+  # update freyja reference files if specified
+  if ~{update_db}; then 
+      freyja update 
+      freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+      freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
+  else
+  # configure barcode    
+    if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
+      echo "User freyja usher barcodes identified; ~{freyja_usher_barcodes} will be utilized fre freyja demixing"
+      freyja_barcode="--barcodes ~{freyja_usher_barcodes}"
+      freyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
+    else
+      freyja_barcode=""
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"  
+    fi
+    # configure lineage metadata
+    if [[ ! -z "~{freyja_lineage_metadata}" ]]; then
+      echo "User lineage metadata; ~{freyja_lineage_metadata} will be utilized fre freyja demixing"
+      freyja_metadata="--meta ~{freyja_lineage_metadata}"
+      freyja_metadata_version=$(basename -- "~{freyja_lineage_metadata}")
+    else
+      freyja_metadata=""  
+      freyja_metadata_version="unmodified from freyja container: ~{docker}"
+    fi
+  fi
+  # Capture reference file versions
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
-  
+  echo ${freyja_metadata_version} | tee FERYJA_METADATA
   # Call variants and capture sequencing depth information
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
- 
   # Demix variants 
-  freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
+  freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
   echo -e "\t/~{samplename}" > ~{samplename}_freyja_demixed.tsv
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
@@ -353,5 +359,6 @@ task freyja_one_sample {
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
+    String freyja_metadata_version = read_string("FREYJA_METADATA")
   }
 }
