@@ -341,7 +341,7 @@ task freyja_one_sample {
   fi
   # Capture reference file versions
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
-  echo ${freyja_metadata_version} | tee FERYJA_METADATA
+  echo ${freyja_metadata_version} | tee FREYJA_METADATA
   # Call variants and capture sequencing depth information
   echo "Running: freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}"
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
