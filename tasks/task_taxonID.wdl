@@ -316,7 +316,9 @@ task freyja_one_sample {
   if ~{update_db}; then 
       freyja update 
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+      freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
+      freyja_metadata=""  
   else
   # configure barcode    
     if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
@@ -341,8 +343,10 @@ task freyja_one_sample {
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
   echo ${freyja_metadata_version} | tee FERYJA_METADATA
   # Call variants and capture sequencing depth information
+  echo "RUnning: freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}"
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
   # Demix variants 
+  echo "Running: freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp"
   freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
   echo -e "\t/~{samplename}" > ~{samplename}_freyja_demixed.tsv
