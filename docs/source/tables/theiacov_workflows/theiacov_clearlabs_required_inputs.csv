@@ -1,4 +1,4 @@
 Task,Input Variable ,Data Type ,Description 
-titan_clearlabs,clear_lab_fastq ,File ,Clear Labs FASTQ read files
-titan_clearlabs,primer_bed ,File ,Primer sequence coordinates of the PCR scheme utilized in BED file format
-titan_clearlabs,samplename ,String ,Name of the sample being analyzed 
+theiacov_clearlabs,clear_lab_fastq ,File ,Clear Labs FASTQ read files
+theiacov_clearlabs,primer_bed ,File ,Primer sequence coordinates of the PCR scheme utilized in BED file format
+theiacov_clearlabs,samplename ,String ,Name of the sample being analyzed 

@@ -1,4 +1,4 @@
 Task,Input Variable ,Data Type ,Description 
-titan_ont,demultiplexed_reads ,File ,Basecalled and demultiplexed ONT read data (single FASTQ file per sample)
-titan_ont,primer_bed ,File ,Primer sequence coordinates of the PCR scheme utilized in BED file format
-titan_ont,samplename ,String ,Name of the sample being analyzed 
+theiacov_ont,demultiplexed_reads ,File ,Basecalled and demultiplexed ONT read data (single FASTQ file per sample)
+theiacov_ont,primer_bed ,File ,Primer sequence coordinates of the PCR scheme utilized in BED file format
+theiacov_ont,samplename ,String ,Name of the sample being analyzed 
