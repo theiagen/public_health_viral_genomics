@@ -22,7 +22,7 @@ copyright = '2021, Theiagen Genomics, LLC'
 author = 'Kevin G. Libuit'
 
 # The full version, including alpha/beta/rc tags
-release = '1.4.3'
+release = '2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -56,4 +56,3 @@ html_static_path = ['_static']
 
 def setup(app):
     app.add_css_file('my_theme.css')
-

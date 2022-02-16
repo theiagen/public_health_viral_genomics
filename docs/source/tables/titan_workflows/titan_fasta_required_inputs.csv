@@ -1,6 +1,0 @@
-Task,Input Variable,Data Type,Description
-titan_fasta,assembly_fasta,File,SARS-CoV-2 assemly file in fasta format
-titan_fasta,input_assembly_method,String,Description of the method utilized to generate the input assembly fasta file; if unknown "NA" will be accepted
-titan_fasta,samplename,String,Name of the sample being analyzed
-titan_fasta,seq_method,String,Description of the sequencing method utilized to generate the raw sequencing data; if unknown "NA" will be accepted
-

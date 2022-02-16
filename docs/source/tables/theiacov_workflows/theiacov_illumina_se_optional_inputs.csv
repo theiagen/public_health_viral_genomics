@@ -23,10 +23,10 @@ read_QC_trim,bbduk_mem,Int,Memory allocated to the BBDuk VM,8
 read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,25
 read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
 read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
-titan_illumina_se,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
-titan_illumina_se,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
-titan_illumina_se,nextclade_dataset_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
-titan_illumina_se,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
+theiacov_illumina_se,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
+theiacov_illumina_se,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
+theiacov_illumina_se,nextclade_dataset_tag,Nextclade dataset tag,2021-06-25T00:00:00Z
+theiacov_illumina_se,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
 vadr,docker,String,Docker tag used for running VADR,staphb/vadr:1.2.1
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
