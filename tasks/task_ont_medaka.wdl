@@ -45,9 +45,9 @@ task read_filtering {
     File filtered_reads = "~{run_prefix}_~{samplename}.fastq"
   }
   runtime {
-    docker: "quay.io/staphb/artic-ncov2019:1.3.0"
+    docker: "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
     memory: "16 GB"
-    cpu: 8
+    cpu: cpu
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
