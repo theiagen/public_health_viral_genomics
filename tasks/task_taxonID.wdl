@@ -309,7 +309,7 @@ task freyja_one_sample {
     File? freyja_lineage_metadata
     Float? eps=0.001
     Boolean update_db = true
-    String docker = "staphb/freyja:1.3.2"
+    String docker = "quay.io/staphb/freyja:1.3.2"
   }
   command <<<
   # update freyja reference files if specified
