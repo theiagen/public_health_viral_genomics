@@ -21,7 +21,7 @@ workflow theiacov_illumina_pe {
     File primer_bed
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-01-18T12:00:00Z"
+    String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
     File? reference_genome
   }
   call read_qc.read_QC_trim {
