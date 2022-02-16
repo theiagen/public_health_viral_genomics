@@ -238,7 +238,7 @@ task fill_NA {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 2500 HDD"
+    disks: "local-disk 200 HDD"
   }
 }
 
@@ -263,7 +263,7 @@ task allele_freq {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 2500 HDD"
+    disks: "local-disk 200 HDD"
   }
 }
 
@@ -297,7 +297,7 @@ task reformat_tsv {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 2500 HDD"
+    disks: "local-disk 200 HDD"
   }
 }
 
@@ -334,7 +334,7 @@ task summary_prep {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 2500 HDD"
+    disks: "local-disk 200 HDD"
   }
 }
 task dashboard_tsv {
