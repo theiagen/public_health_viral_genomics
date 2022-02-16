@@ -315,7 +315,7 @@ task freyja_one_sample {
   # update freyja reference files if specified
   if ~{update_db}; then 
       mkdir ./freyja_updates
-      cd ./freyja_updates && freyja update && cd
+      cd ./freyja_updates && freyja update && cd ..
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
