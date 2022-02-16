@@ -13,7 +13,7 @@ Contents
    :maxdepth: 2
 
    overview
-   titan_workflows
+   theiacov_workflows
    mercury_workflows
    terra_resources
    license
