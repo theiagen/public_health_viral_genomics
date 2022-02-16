@@ -112,7 +112,7 @@ task consensus {
   runtime {
     docker: "~{docker}"
     memory: "16 GB"
-    cpu: 8
+    cpu: cpu
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
