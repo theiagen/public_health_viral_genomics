@@ -323,17 +323,11 @@ task freyja_one_sample {
       cd ./freyja_updates 
       echo "freyja_updates permissions"
       ls -ld
-      python3 /opt/conda/envs/freyja-env/bin/freyja freyja update 
-      echo "ls lh cwd: "
-      ls
-      echo "ls lh /:"
-      ls /
-      
+      python3 /opt/conda/envs/freyja-env/bin/freyja freyja update
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_metadata=""  
-      find / -name "lineagePaths.txt"
   else
   # configure barcode    
     if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
