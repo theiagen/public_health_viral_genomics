@@ -323,7 +323,8 @@ task freyja_one_sample {
       cd ./freyja_updates 
       echo "freyja_updates permissions"
       ls -ld
-      python3 /opt/conda/envs/freyja-env/bin/freyja update
+      freyja update
+      find / -name "lineagePaths.txt"
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
