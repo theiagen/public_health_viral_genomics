@@ -72,4 +72,4 @@ task task_02 {
   }
 }
 ```
-Style guide inspired by [scottfrazer](https://gist.github.com/scottfrazer)'s' (WDL Best Pratcices Style Guide)[https://gist.github.com/scottfrazer/aa4ab1945a6a4c331211]
+Style guide inspired by [scottfrazer](https://gist.github.com/scottfrazer)'s [WDL Best Pratcices Style Guide](https://gist.github.com/scottfrazer/aa4ab1945a6a4c331211)
