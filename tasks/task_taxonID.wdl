@@ -314,10 +314,9 @@ task freyja_one_sample {
   command <<<
   # update freyja reference files if specified
   if ~{update_db}; then 
-      cd /data
       freyja update
-      find / -name "lineagePaths.txt"
-      freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
+      # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_metadata=""  
