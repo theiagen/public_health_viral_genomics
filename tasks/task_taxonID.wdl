@@ -323,11 +323,11 @@ task freyja_one_sample {
       cd ./freyja_updates 
       echo "freyja_updates permissions"
       ls -ld
-      freyja update 
+      python3 /opt/conda/envs/freyja-env/bin/freyja freyja update 
       echo "ls lh cwd: "
       ls
       echo "ls lh /:"
-      /
+      ls /
       
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
