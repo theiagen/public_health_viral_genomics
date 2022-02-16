@@ -308,7 +308,7 @@ task freyja_one_sample {
     File? freyja_usher_barcodes
     File? freyja_lineage_metadata
     Float? eps=0.001
-    Boolean update_db = true
+    Boolean update_db = false
     String docker = "quay.io/staphb/freyja:1.3.2"
   }
   command <<<
