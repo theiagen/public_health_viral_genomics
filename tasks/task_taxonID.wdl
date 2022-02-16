@@ -315,11 +315,14 @@ task freyja_one_sample {
   # update freyja reference files if specified
   if ~{update_db}; then 
       mkdir -m 777 ./freyja_updates
-      cd ./freyja_updates && freyja update && cd /
+      pushd ./freyja_updates 
+      freyja update 
+      popd
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_metadata=""  
+      find / -name "lineagePaths.txt"
   else
   # configure barcode    
     if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
