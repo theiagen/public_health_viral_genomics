@@ -313,16 +313,8 @@ task freyja_one_sample {
   }
   command <<<
   # update freyja reference files if specified
-  echo "create test text file:"
-  echo "FILE CONTENTS" >> test.txt
-  cat test.txt
   if ~{update_db}; then 
-      echo "cwd permissions"
-      ls -ld
-      mkdir -m 777 ./freyja_updates
-      cd ./freyja_updates 
-      echo "freyja_updates permissions"
-      ls -ld
+      cd /data
       freyja update
       find / -name "lineagePaths.txt"
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
