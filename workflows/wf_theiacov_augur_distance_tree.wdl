@@ -5,7 +5,7 @@ import "../tasks/tasks_utils.wdl" as utils
 import "../tasks/task_phylo.wdl" as phylo
 import "../tasks/task_versioning.wdl" as versioning
 
-workflow titan_distance_tree {
+workflow theiacov_distance_tree {
   meta {
     description: "Workflow for SC2 cluster investigations. TheiaCoV_Augur_DistanceTree is will generate a ML distance tree using select tasks incorporated in the ThieaCoV_Augur_Run workflow; output from the modified sarscov2_nextstrain workflow will also be used to infer SNP distances. The ML distance tree output can be visualized using the Auspice web application https://auspice.us/"
     author: "Kevin G Libuit"
@@ -17,7 +17,7 @@ workflow titan_distance_tree {
     String build_name
     File? builds_yaml
     File? ref_fasta
-   Int min_unambig_genome = 27000
+    Int min_unambig_genome = 27000
   }
   parameter_meta {
     assembly_fastas: {
@@ -53,7 +53,7 @@ workflow titan_distance_tree {
   call nextstrain.nextstrain_deduplicate_sequences as dedup_seqs {
     input:
       sequences_fasta = zcat.combined
-    }  
+    }
   call utils.filter_sequences_by_length {
     input:
       sequences_fasta = dedup_seqs.sequences_deduplicated_fasta,
@@ -72,12 +72,12 @@ workflow titan_distance_tree {
         input_tsvs = sample_metadata_tsvs,
         id_col = 'strain',
         out_basename = "metadata-merged"
-      }
+    }
   }
   call nextstrain.derived_cols {
     input:
       metadata_tsv = select_first(flatten([[tsv_join.out_tsv], sample_metadata_tsvs]))
-    }
+  }
   ## Subsample if builds.yaml file provided
   if(defined(builds_yaml)) {
     call nextstrain.nextstrain_build_subsample as subsample {
@@ -86,12 +86,12 @@ workflow titan_distance_tree {
         sample_metadata_tsv = derived_cols.derived_metadata,
         build_name = build_name,
         builds_yaml = builds_yaml
-      }
     }
+  }
   call utils.fasta_to_ids {
     input:
       sequences_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
-    }
+  }
   call nextstrain.snp_sites {
     input:
       msa_fasta = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
@@ -114,19 +114,19 @@ workflow titan_distance_tree {
     input:
   }
   output {
-    #version capture
+    # Version Capture
     String TheiaCoV_Augur_DistanceTree_version = version_capture.phvg_version
-    String TheiaCoV_Augur_DistanceTree_analysis_date = version_capture.date 
-    #tree, intermediates, and metadata
-    File  combined_assemblies = filter_sequences_by_length.filtered_fasta
-    File  multiple_alignment = mafft.aligned_sequences
-    File  unmasked_snps = snp_sites.snps_vcf
-    File  masked_alignment = augur_mask_sites.masked_sequences
-    File  metadata_merged = derived_cols.derived_metadata
-    File  keep_list = fasta_to_ids.ids_txt
-    File  mafft_alignment = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
-    File  distance_tree = draft_augur_tree.aligned_tree
-    #SNP matrix
+    String TheiaCoV_Augur_DistanceTree_analysis_date = version_capture.date
+    # Tree, Intermediates, and Metadata
+    File combined_assemblies = filter_sequences_by_length.filtered_fasta
+    File multiple_alignment = mafft.aligned_sequences
+    File unmasked_snps = snp_sites.snps_vcf
+    File masked_alignment = augur_mask_sites.masked_sequences
+    File metadata_merged = derived_cols.derived_metadata
+    File keep_list = fasta_to_ids.ids_txt
+    File mafft_alignment = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
+    File distance_tree = draft_augur_tree.aligned_tree
+    # SNP Matrix
     File snp_matrix = snp_dists.snp_matrix
   }
 }

@@ -1,0 +1,119 @@
+#! /bin/bash
+# usage: theiacov-gc [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--verbose]
+#
+# theiacov-gc - Run theiacov GC on a set of samples.
+#
+# required arguments:
+#   -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs.
+#   -o STR, --outdir STR  Output directory to store the final results in.
+#
+# optional arguments:
+#   -h, --help            show this help message and exit
+# 
+#   --options STR         JSON file containing Cromwell options
+#   --verbose             Print out all STDOUT from Cromwell and theiacov-organize
+set -e
+set -u
+OPTIONS="0"
+QUIET="0"
+PROFILE="docker"
+CONFIG="0"
+THEIACOV_PATH=$(which theiacov-gc | sed 's=bin/theiacov-gc==')
+THEIACOV_SHARE=${THEIACOV_PATH}/share/theiacov-gc-${THEIACOV_GC_VERSION}
+CROMWELL_JAR=$(which cromwell | sed 's=bin/cromwell=share/cromwell/cromwell.jar=')
+LOG_LEVEL=ERROR
+SINGULARITY_CACHE="${HOME}/.singularity/theiacov-cache"
+CROMWELL_OPTS="${THEIACOV_SHARE}/conf/options.json"
+
+version() {
+    echo "theiacov-gc ${THEIACOV_GC_VERSION}"
+    exit 0
+}
+
+usage() {
+    echo "usage: theiacov-gc [-h] [-i STR] [--inputs STR] [-o STR] [--outdir STR] [--options STR] [--quiet]"
+    echo ""
+    echo "theiacov-gc - Run TheiaCoV GC on a set of samples."
+    echo ""
+    echo "required arguments:"
+    echo "  -i STR, --inputs STR  The JSON file to be used with Cromwell for inputs."
+    echo "  -o STR, --outdir STR  Output directory to store the final results in."
+    echo ""
+    echo "optional arguments:"
+    echo "  -h, --help              Show this help message and exit"
+    echo "  -v, --version           Print the version"
+    echo "  --options STR           JSON file containing Cromwell options"
+    echo "  --profile STR           The backend profile to use [options: docker, singularity]"
+    echo "  --config STR            Custom backend profile to use"
+    echo "  --cromwell_jar STR      Path to cromwell.jar (Default use conda install)"
+    echo "  --quiet                 Silence all STDOUT from Cromwell and theiacov-gc-organize"
+
+    if [ -n "$1" ]; then
+        exit "$1"
+    fi
+}
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -i|--inputs) INPUTS="$2"; shift ;;
+        -o|--outdir) OUTDIR="$2"; shift ;;
+        -h|--help) usage 0 ;;
+        -v|--version) version ;;
+        --options) OPTIONS="$2"; shift ;;
+        --profile) PROFILE="$2" ; shift ;;
+        --config) CONFIG="$2" ; shift ;;
+        --cromwell_jar) CROMWELL_JAR="$2" ; shift ;;
+        --quiet) QUIET="1" ;;
+        *) echo "Unknown parameter passed: $1"; usage 1 ;;
+    esac
+    shift
+done
+
+if [[ -z ${INPUTS+x} ]]; then
+    echo "ERROR: -i/--inputs is required"
+    usage 1
+elif [[ -z ${OUTDIR+x} ]]; then
+    echo "ERROR: -o/--outdir is required"
+    usage 1
+fi
+
+# CONFIG != means user provided config
+CONFIG_PATH="${CONFIG}"
+if [[ "${CONFIG}" == "0" ]]; then
+    # Use built in config
+    if [[ "${PROFILE}" == "docker" ]]; then
+        # Default
+        CONFIG_PATH="${THEIACOV_SHARE}/conf/docker.config"
+    elif [[ "${PROFILE}" == "singularity" ]]; then
+        CONFIG_PATH="${THEIACOV_SHARE}/conf/singularity.config"
+    else
+        echo "Uknown profile: ${PROFILE}, exiting..."
+        usage 1
+    fi
+fi
+
+if [[ "${OPTIONS}" != "0" ]]; then
+    CROMWELL_OPTS="${OPTIONS}"
+fi
+
+mkdir -p ${OUTDIR}
+echo "Running TheiaCoV GC (use --quiet to quiet things down a bit)" 1>&2
+if [[ ${QUIET} == "0" ]]; then 
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run \
+        -i ${INPUTS} \
+        -m ${OUTDIR}/theiacov-metadata.json \
+        -o ${CROMWELL_OPTS} \
+        ${THEIACOV_SHARE}/workflows/wf_theiacov_gc.wdl 2> ${OUTDIR}/cromwell-stderr.txt | tee ${OUTDIR}/cromwell-stdout.txt
+else
+    java -Dconfig.file=${CONFIG_PATH} -jar ${CROMWELL_JAR} run \
+        -i ${INPUTS} \
+        -m ${OUTDIR}/theiacov-metadata.json \
+        -o ${CROMWELL_OPTS} ${THEIACOV_SHARE}/workflows/wf_theiacov_gc.wdl > ${OUTDIR}/cromwell-stdout.txt 2> ${OUTDIR}/cromwell-stderr.txt
+fi
+
+if [[ -f "${OUTDIR}/theiacov-metadata.json" ]]; then
+    echo "TheiaCoV GC complete, organizing outputs" 1>&2
+    theiacov-gc-organize.py ${OUTDIR}/theiacov-metadata.json --outdir ${OUTDIR}
+else
+    echo "TheiaCoV GC did not complete sucessfully, please review the logs (${OUTDIR}/cromwell-std{err|out}.txt)" 1>&2
+fi

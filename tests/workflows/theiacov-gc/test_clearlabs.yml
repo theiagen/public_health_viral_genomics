@@ -1,0 +1,32 @@
+- name: theiacov_clearlabs
+  command: theiacov-gc -i theiacov/clearlabs.json -o theiacov/clearlabs
+  tags:
+    - theiacov_gc
+    - theiacov_clearlabs
+  files:
+    - path: theiacov/clearlabs/alignments/clearlabs.flagstat.txt
+      md5sum: b5af0b1c2721c004f8f476d9ca540a35
+    - path: theiacov/clearlabs/alignments/clearlabs.pass.vcf
+      contains: ["VCF", "medaka", "CHROM", "PASS"]
+    - path: theiacov/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
+    - path: theiacov/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
+    - path: theiacov/clearlabs/alignments/clearlabs.stats.txt
+    - path: theiacov/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
+      md5sum: ff8bf729b73fd7d34200100957b6f92d
+    - path: theiacov/clearlabs/cromwell-stderr.txt
+    - path: theiacov/clearlabs/cromwell-stdout.txt
+    - path: theiacov/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
+    - path: theiacov/clearlabs/kraken2_reports/clearlabs_dehosted_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: theiacov/clearlabs/kraken2_reports/clearlabs_kraken2_report.txt
+      md5sum: 35841fa2d77ec202c275b1de548b8d98
+    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.auspice.json
+    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.json
+    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.tsv
+    - path: theiacov/clearlabs/pangolin_reports/clearlabs.pangolin_report.csv
+    - path: theiacov/clearlabs/results/clearlabs.results.json
+    - path: theiacov/clearlabs/theiacov-metadata.json
+    - path: theiacov/clearlabs/theiacov-results.json
+    - path: theiacov/clearlabs/theiacov-results.tsv
+    - path: theiacov/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
+      md5sum: 3d858fa350d36dbcdfc1a52180ec9d87

@@ -1,14 +1,12 @@
-version 1.0 
+version 1.0
 
 task stats_n_coverage {
-
   input {
-    File        bamfile
-    String      samplename
-    Int         s_gene_start=21563
-    Int         s_gene_stop=25384
+    File bamfile
+    String samplename
+    Int s_gene_start = 21563
+    Int s_gene_stop = 25384
   }
-
   command <<<
     date | tee DATE
     samtools --version | head -n1 | tee VERSION
@@ -18,13 +16,13 @@ task stats_n_coverage {
     samtools coverage ~{bamfile} -m -o ~{samplename}.cov.hist
     samtools coverage ~{bamfile} -o ~{samplename}.cov.txt
     samtools flagstat ~{bamfile} > ~{samplename}.flagstat.txt
-    
+
     coverage=$(cut -f 6 ~{samplename}.cov.txt | tail -n 1)
     depth=$(cut -f 7 ~{samplename}.cov.txt | tail -n 1)
     meanbaseq=$(cut -f 8 ~{samplename}.cov.txt | tail -n 1)
     meanmapq=$(cut -f 9 ~{samplename}.cov.txt | tail -n 1)
-    
-    samtools index ~{bamfile} 
+
+    samtools index ~{bamfile}
     chr=$(samtools idxstats ~{bamfile} | cut -f 1 | head -1)
     samtools coverage -r "${chr}:~{s_gene_start}-~{s_gene_stop}" ~{bamfile} >> ~{samplename}.cov.txt
     s_gene_depth=$(cut -f 7 ~{samplename}.cov.txt | tail -n 1)
@@ -36,32 +34,30 @@ task stats_n_coverage {
     if [ -z "$meanmapq" ] ; then meanmapq="0" ; fi
 
     echo $coverage | tee COVERAGE
-    echo $depth | tee DEPTH 
+    echo $depth | tee DEPTH
     echo $s_gene_depth | tee S_GENE_DEPTH
-    echo $meanbaseq | tee MEANBASEQ 
-    echo $meanmapq | tee MEANMAPQ 
+    echo $meanbaseq | tee MEANBASEQ
+    echo $meanmapq | tee MEANMAPQ
   >>>
-
   output {
-    String     date = read_string("DATE")
-    String     samtools_version = read_string("VERSION") 
-    File       stats = "~{samplename}.stats.txt"
-    File       cov_hist = "~{samplename}.cov.hist"
-    File       cov_stats = "~{samplename}.cov.txt"
-    File       flagstat = "~{samplename}.flagstat.txt"
-    Float      coverage = read_string("COVERAGE")
-    Float      depth = read_string("DEPTH")
-    Float      s_gene_depth = read_string("S_GENE_DEPTH")
-    Float      meanbaseq = read_string("MEANBASEQ")
-    Float      meanmapq = read_string("MEANMAPQ")
+    String date = read_string("DATE")
+    String samtools_version = read_string("VERSION")
+    File stats = "~{samplename}.stats.txt"
+    File cov_hist = "~{samplename}.cov.hist"
+    File cov_stats = "~{samplename}.cov.txt"
+    File flagstat = "~{samplename}.flagstat.txt"
+    Float coverage = read_string("COVERAGE")
+    Float depth = read_string("DEPTH")
+    Float s_gene_depth = read_string("S_GENE_DEPTH")
+    Float meanbaseq = read_string("MEANBASEQ")
+    Float meanmapq = read_string("MEANMAPQ")
   }
-
   runtime {
-    docker:       "quay.io/staphb/samtools:1.10"
-    memory:       "8 GB"
-    cpu:          2
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
+    docker: "quay.io/staphb/samtools:1.10"
+    memory: "8 GB"
+    cpu: 2
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
   }
 }

@@ -2,66 +2,62 @@ version 1.0
 
 task kraken2 {
   input {
-  	File        read1
-	  File? 		  read2
-	  String      samplename
-	  String?     kraken2_db = "/kraken2-db"
-    Int?        cpus=4
+    File read1
+    File? read2
+    String samplename
+    String? kraken2_db = "/kraken2-db"
+    Int? cpu = 4
   }
-
-  command{
+  command <<<
     # date and version control
     date | tee DATE
     kraken2 --version | head -n1 | tee VERSION
     num_reads=$(ls *fastq.gz 2> /dev/nul | wc -l)
-    if ! [ -z ${read2} ]; then
+    if ! [ -z ~{read2} ]; then
       mode="--paired"
     fi
     echo $mode
     kraken2 $mode \
-      --threads ${cpus} \
-      --db ${kraken2_db} \
-      ${read1} ${read2} \
-      --report ${samplename}_kraken2_report.txt >/dev/null
+      --threads ~{cpu} \
+      --db ~{kraken2_db} \
+      ~{read1} ~{read2} \
+      --report ~{samplename}_kraken2_report.txt >/dev/null
 
-    percentage_human=$(grep "Homo sapiens" ${samplename}_kraken2_report.txt | cut -f 1)
+    percentage_human=$(grep "Homo sapiens" ~{samplename}_kraken2_report.txt | cut -f 1)
      # | tee PERCENT_HUMAN
-    percentage_sc2=$(grep "Severe acute respiratory syndrome coronavirus 2" ${samplename}_kraken2_report.txt | cut -f1 )
+    percentage_sc2=$(grep "Severe acute respiratory syndrome coronavirus 2" ~{samplename}_kraken2_report.txt | cut -f1 )
      # | tee PERCENT_COV
     if [ -z "$percentage_human" ] ; then percentage_human="0" ; fi
     if [ -z "$percentage_sc2" ] ; then percentage_sc2="0" ; fi
     echo $percentage_human | tee PERCENT_HUMAN
     echo $percentage_sc2 | tee PERCENT_SC2
-  }
-
+  >>>
   output {
-    String     date          = read_string("DATE")
-    String     version       = read_string("VERSION")
-    File 	     kraken_report = "${samplename}_kraken2_report.txt"
-    Float 	   percent_human = read_string("PERCENT_HUMAN")
-    Float 	   percent_sc2   = read_string("PERCENT_SC2")
+    String date = read_string("DATE")
+    String version = read_string("VERSION")
+    File kraken_report = "~{samplename}_kraken2_report.txt"
+    Float percent_human = read_string("PERCENT_HUMAN")
+    Float percent_sc2 = read_string("PERCENT_SC2")
   }
-
   runtime {
-    docker:       "quay.io/staphb/kraken2:2.0.8-beta_hv"
-    memory:       "8 GB"
-    cpu:          4
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
+    docker: "quay.io/staphb/kraken2:2.0.8-beta_hv"
+    memory: "8 GB"
+    cpu: cpu
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
   }
 }
 
 task pangolin3 {
   input {
-    File        fasta
-    String      samplename
-    Int         min_length=10000
-    Float       max_ambig=0.5
-    String      docker="quay.io/staphb/pangolin:3.1.17-pangolearn-2022-01-05"
-    String      inference_engine="usher"
+    File fasta
+    String samplename
+    Int min_length = 10000
+    Float max_ambig = 0.5
+    String docker = "quay.io/staphb/pangolin:3.1.20-pangolearn-2022-02-02"
+    String inference_engine = "usher"
   }
-
   command <<<
     set -e
     # set inference inference_engine
@@ -104,29 +100,27 @@ task pangolin3 {
         with open("PANGOLIN_NOTES", 'wt') as lineage:
           lineage.write(line["note"])
     CODE
-
   >>>
-
   output {
-    String     date                 = read_string("DATE")
-    String     pangolin_lineage     = read_string("PANGOLIN_LINEAGE")
-    String     pangolin_conflicts    = read_string("PANGOLIN_CONFLICTS")
-    String     pangolin_notes       = read_string("PANGOLIN_NOTES")
-    String     pangolin_assignment_version              = read_string("PANGO_ASSIGNMENT_VERSION")
-    String     pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
-    String     pangolin_docker      = docker
-    File       pango_lineage_report = "${samplename}.pangolin_report.csv"
+    String date = read_string("DATE")
+    String pangolin_lineage = read_string("PANGOLIN_LINEAGE")
+    String pangolin_conflicts = read_string("PANGOLIN_CONFLICTS")
+    String pangolin_notes = read_string("PANGOLIN_NOTES")
+    String pangolin_assignment_version = read_string("PANGO_ASSIGNMENT_VERSION")
+    String pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
+    String pangolin_docker = docker
+    File pango_lineage_report = "~{samplename}.pangolin_report.csv"
   }
-
   runtime {
-    docker:     "~{docker}"
-    memory:       "8 GB"
-    cpu:          4
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
+    docker: "~{docker}"
+    memory: "8 GB"
+    cpu: 4
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
   }
 }
+
 task pangolin_update_log {
   input {
     String samplename
@@ -139,9 +133,8 @@ task pangolin_update_log {
     String updated_pangolin_assignment_version
     String updated_pangolin_versions
     String? timezone
-    File?  lineage_log
+    File? lineage_log
   }
-
   command <<<
     # set timezone for date outputs
     ~{default='' 'export TZ=' + timezone}
@@ -178,21 +171,18 @@ task pangolin_update_log {
      echo -e "${DATE}\t${UPDATE_STATUS}\t~{current_lineage}\t~{current_pangolin_docker}\t~{current_pangolin_assignment_version}\t~{current_pangolin_versions}\t~{updated_lineage}\t~{updated_pangolin_docker}\t~{updated_pangolin_assignment_version}\t~{updated_pangolin_versions}" >> "${lineage_log_file}"
 
     echo "${UPDATE_STATUS} (${DATE})"  | tee PANGOLIN_UPDATE
-
   >>>
-
   output {
-    String     pangolin_updates = read_string("PANGOLIN_UPDATE")
-    File       pango_lineage_log = "~{samplename}_pango_lineage_log.tsv"
+    String pangolin_updates = read_string("PANGOLIN_UPDATE")
+    File pango_lineage_log = "~{samplename}_pango_lineage_log.tsv"
   }
-
   runtime {
-    docker:     "quay.io/theiagen/utility:1.1"
-    memory:       "8 GB"
-    cpu:          4
-    disks:        "local-disk 100 SSD"
-    preemptible:  0
-    maxRetries:   3
+    docker: "quay.io/theiagen/utility:1.1"
+    memory: "8 GB"
+    cpu: 4
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
   }
 }
 
@@ -201,20 +191,20 @@ task nextclade_one_sample {
         description: "Nextclade classification of one sample. Leaving optional inputs unspecified will use SARS-CoV-2 defaults."
     }
     input {
-        File   genome_fasta
-        File? root_sequence
-        File? auspice_reference_tree_json
-        File? qc_config_json
-        File? gene_annotations_json
-        File? pcr_primers_csv
-        File? virus_properties
-        String docker = "nextstrain/nextclade:1.10.2"
-        String dataset_name
-        String dataset_reference
-        String dataset_tag
+      File genome_fasta
+      File? root_sequence
+      File? auspice_reference_tree_json
+      File? qc_config_json
+      File? gene_annotations_json
+      File? pcr_primers_csv
+      File? virus_properties
+      String docker = "nextstrain/nextclade:1.10.3"
+      String dataset_name
+      String dataset_reference
+      String dataset_tag
     }
     String basename = basename(genome_fasta, ".fasta")
-    command {
+    command <<<
         NEXTCLADE_VERSION="$(nextclade --version)"
         echo $NEXTCLADE_VERSION > NEXTCLADE_VERSION
 
@@ -232,33 +222,33 @@ task nextclade_one_sample {
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
             --verbose
-    }
+    >>>
     runtime {
-        docker: "~{docker}"
-        memory: "4 GB"
-        cpu:    2
-        disks: "local-disk 50 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries:  3 
+      docker: "~{docker}"
+      memory: "4 GB"
+      cpu: 2
+      disks: "local-disk 50 HDD"
+      dx_instance_type: "mem1_ssd1_v2_x2"
+      maxRetries: 3 
     }
     output {
-        String nextclade_version  = read_string("NEXTCLADE_VERSION")
-        File   nextclade_json     = "~{basename}.nextclade.json"
-        File   auspice_json       = "~{basename}.nextclade.auspice.json"
-        File   nextclade_tsv      = "~{basename}.nextclade.tsv"
-        String nextclade_docker   = docker
+      String nextclade_version = read_string("NEXTCLADE_VERSION")
+      File nextclade_json = "~{basename}.nextclade.json"
+      File auspice_json = "~{basename}.nextclade.auspice.json"
+      File nextclade_tsv = "~{basename}.nextclade.tsv"
+      String nextclade_docker = docker
     }
 }
 
 task nextclade_output_parser_one_sample {
     meta {
-        description: "Python and bash codeblocks for parsing the output files from Nextclade."
+      description: "Python and bash codeblocks for parsing the output files from Nextclade."
     }
     input {
-        File   nextclade_tsv
-        String docker = "python:slim"
+      File nextclade_tsv
+      String docker = "python:slim"
     }
-    command {
+    command <<<
       # Set WDL input variable to input.tsv file
       cat "~{nextclade_tsv}" > input.tsv
       # Parse outputs using python3
@@ -294,19 +284,19 @@ task nextclade_output_parser_one_sample {
             nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
       CODE
-    }
+    >>>
     runtime {
-        docker: "~{docker}"
-        memory: "4 GB"
-        cpu:    2
-        disks: "local-disk 50 HDD"
-        dx_instance_type: "mem1_ssd1_v2_x2"
-        maxRetries:   3
+      docker: "~{docker}"
+      memory: "4 GB"
+      cpu: 2
+      disks: "local-disk 50 HDD"
+      dx_instance_type: "mem1_ssd1_v2_x2"
+      maxRetries: 3
     }
     output {
-        String nextclade_clade    = read_string("NEXTCLADE_CLADE")
-        String nextclade_aa_subs  = read_string("NEXTCLADE_AASUBS")
-        String nextclade_aa_dels  = read_string("NEXTCLADE_AADELS")
+      String nextclade_clade = read_string("NEXTCLADE_CLADE")
+      String nextclade_aa_subs = read_string("NEXTCLADE_AASUBS")
+      String nextclade_aa_dels = read_string("NEXTCLADE_AADELS")
     }
 }
 
@@ -316,43 +306,53 @@ task freyja_one_sample {
     String samplename
     File reference_genome
     File? freyja_usher_barcodes
-    Boolean update_db = true
-    String docker = "staphb/freyja:1.2"
+    File? freyja_lineage_metadata
+    Float? eps=0.001
+    Boolean update_db = false
+    String docker = "quay.io/staphb/freyja:1.3.2"
   }
   command <<<
-  # configure barcode settings and capture version  
-  #if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
-  #  #capture database info 
-  #  azfreyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
-  #  echo "here"
-  #  #set environment with user-defined db
-  #  mv ~{freyja_usher_barcodes} /opt/conda/envs/freyja-env/lib/python3.7/site-packages/freyja/data/usher_barcodes.csv
-  #else
-  #  # update db if specified
-  #  if ~{update_db}; then 
-  #    freyja update 
-  #    freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
-  #  else 
-  #    freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
-  #  fi
-  #fi
-  
-  # always update freyja barcodes until v1.3.1 release (will allow user-defined ref files)
-  freyja update 
-  freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
-  
+  # update freyja reference files if specified
+  if ~{update_db}; then 
+      freyja update
+      # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
+      freyja_barcode=""
+      freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
+      freyja_metadata=""  
+  else
+  # configure barcode    
+    if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
+      echo "User freyja usher barcodes identified; ~{freyja_usher_barcodes} will be utilized fre freyja demixing"
+      freyja_barcode="--barcodes ~{freyja_usher_barcodes}"
+      freyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
+    else
+      freyja_barcode=""
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"  
+    fi
+    # configure lineage metadata
+    if [[ ! -z "~{freyja_lineage_metadata}" ]]; then
+      echo "User lineage metadata; ~{freyja_lineage_metadata} will be utilized fre freyja demixing"
+      freyja_metadata="--meta ~{freyja_lineage_metadata}"
+      freyja_metadata_version=$(basename -- "~{freyja_lineage_metadata}")
+    else
+      freyja_metadata=""  
+      freyja_metadata_version="unmodified from freyja container: ~{docker}"
+    fi
+  fi
+  # Capture reference file versions
   echo ${freyja_usher_barcode_version} | tee FREYJA_BARCODES
-  
+  echo ${freyja_metadata_version} | tee FREYJA_METADATA
+  echo $PWD
   # Call variants and capture sequencing depth information
+  echo "Running: freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}"
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
- 
   # Demix variants 
-  freyja demix ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
+  echo "Running: freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp"
+  freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
   echo -e "\t/~{samplename}" > ~{samplename}_freyja_demixed.tsv
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
-
-
   >>>
   runtime {
     memory: "4 GB"
@@ -365,6 +365,6 @@ task freyja_one_sample {
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
+    String freyja_metadata_version = read_string("FREYJA_METADATA")
   }
-
 }
