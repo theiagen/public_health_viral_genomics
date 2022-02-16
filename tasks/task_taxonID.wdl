@@ -314,7 +314,7 @@ task freyja_one_sample {
   command <<<
   # update freyja reference files if specified
   if ~{update_db}; then 
-      mkdir ./freyja_updates
+      mkdir -m 777 ./freyja_updates
       cd ./freyja_updates && freyja update && cd ..
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_barcode=""
