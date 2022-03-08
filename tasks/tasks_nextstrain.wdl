@@ -608,6 +608,8 @@ task nextstrain_deduplicate_sequences {
         mkdir -p "$ncov_path_prefix"
         tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
 
+        sed  -i.bak -e '/>/s/\s.*$//g' "~{sequences_fasta}"
+
         python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
         --sequences "~{sequences_fasta}" \
         ${true="--error-on-duplicate-strains" false="" error_on_seq_diff} \
