@@ -65,7 +65,7 @@ task variant_call {
     Int? min_bq = "0"
     Int? min_qual = "20"
     Float? min_freq = "0.6"
-    Int? min_depth = "100"
+    Int? variant_min_depth 
   }
   command <<<
     # date and version control
@@ -104,7 +104,7 @@ task variant_call {
     -p ~{samplename}.variants \
     -q ~{min_qual} \
     -t ~{min_freq} \
-    -m ~{min_depth} \
+    -m ~{variant_min_depth} \
     -r ${ref_genome} \
     -g ${ref_gff}
 
@@ -144,7 +144,7 @@ task consensus {
     Int? min_bq = "0"
     Int? min_qual = "20"
     Float? min_freq = "0.6"
-    Int? min_depth = "100"
+    Int? consensus_min_depth
     String? char_unknown = "N"
   }
   command <<<
@@ -175,7 +175,7 @@ task consensus {
     -p ~{samplename}.consensus \
     -q ~{min_qual} \
     -t ~{min_freq} \
-    -m ~{min_depth} \
+    -m ~{consensus_min_depth} \
     -n ~{char_unknown}
 
     # clean up fasta header

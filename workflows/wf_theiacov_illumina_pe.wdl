@@ -23,6 +23,7 @@ workflow theiacov_illumina_pe {
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
     File? reference_genome
+    Int? min_depth = "100"
   }
   call read_qc.read_QC_trim {
     input:
@@ -42,18 +43,22 @@ workflow theiacov_illumina_pe {
       samplename = samplename,
       primer_bed = primer_bed,
       bamfile = bwa.sorted_bam
+      
   }
   call consensus_call.variant_call {
     input:
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      variant_min_depth = min_depth
   }
   call consensus_call.consensus {
     input:
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      consensus_min_depth = min_depth
+
   }
   call qc_utils.consensus_qc {
     input:
