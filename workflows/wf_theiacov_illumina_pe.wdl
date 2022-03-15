@@ -71,7 +71,8 @@ workflow theiacov_illumina_pe {
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam
+      bamfile = primer_trim.trim_sorted_bam,
+      min_depth = min_depth
   }
   call taxon_ID.pangolin3 {
     input:
