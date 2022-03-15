@@ -38,9 +38,9 @@ task stats_n_coverage {
     orf6=$(samtools depth -J -r "${chr}:27202-27387" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     orf7a=$(samtools depth -J -r "${chr}:27394-27759" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     orf7b=$(samtools depth -J -r "${chr}:27756-27887" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
-		orf8=$(samtools depth -J -r "${chr}:27894-28259" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
+    orf8=$(samtools depth -J -r "${chr}:27894-28259" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     ngene=$(samtools depth -J -r "${chr}:28274-29533" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
-		orf10=$(samtools depth -J -r "${chr}:29558-29674" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
+    orf10=$(samtools depth -J -r "${chr}:29558-29674" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
 
     orf1ab_pc=$(python3 -c "print ( round( ($orf1ab / 21290 ) * 100, 2 ) )")
     sgene_pc=$(python3 -c "print ( round( ($sgene / 3822 ) * 100, 2 ) )")
