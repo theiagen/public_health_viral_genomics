@@ -43,7 +43,6 @@ workflow theiacov_illumina_pe {
       samplename = samplename,
       primer_bed = primer_bed,
       bamfile = bwa.sorted_bam
-      
   }
   call consensus_call.variant_call {
     input:
@@ -58,7 +57,6 @@ workflow theiacov_illumina_pe {
       bamfile = primer_trim.trim_sorted_bam,
       reference_genome = reference_genome,
       consensus_min_depth = min_depth
-
   }
   call qc_utils.consensus_qc {
     input:
@@ -67,7 +65,8 @@ workflow theiacov_illumina_pe {
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
-      bamfile = bwa.sorted_bam
+      bamfile = bwa.sorted_bam,
+      min_depth = min_depth
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
@@ -154,6 +153,8 @@ workflow theiacov_illumina_pe {
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
     # Lineage Assignment
     String pango_lineage = pangolin3.pangolin_lineage
