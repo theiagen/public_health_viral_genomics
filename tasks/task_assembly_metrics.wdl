@@ -30,7 +30,7 @@ task stats_n_coverage {
 
     # samtools outputs 3 columns; column 3 is the depth of coverage per nucleotide position, piped to awk to count the positions
     #  above min_depth, then wc -l counts them all
-    orf1ab=$(samtools depth -J -r "${chr}:21563-25384" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth} print;}' | wc -l )
+    orf1ab=$(samtools depth -J -r "${chr}:21563-25384" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     sgene=$(samtools depth -J -r "${chr}:~{s_gene_start}-~{s_gene_stop}" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     orf3a=$(samtools depth -J -r "${chr}:25393-26220" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     egene=$(samtools depth -J -r "${chr}:26245-26472" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
