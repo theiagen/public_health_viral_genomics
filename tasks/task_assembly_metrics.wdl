@@ -54,7 +54,8 @@ task stats_n_coverage {
     ngene_pc=$(python3 -c "print ( round( ($ngene / 1260 ) * 100, 2 ) )")
     orf10_pc=$(python3 -c "print ( round( ($orf6 / 117 ) * 100, 2 ) )")
 
-    echo -e "Gene\tPercent_Coverage" > ~{samplename}.percent_gene_coverage.tsv
+    echo -e "#NOTE: THE VALUES BELOW ASSUME WUHAN-1 REFERENCE GENOME" > ~{samplename}.percent_gene_coverage.tsv
+    echo -e "Gene\tPercent_Coverage" >> ~{samplename}.percent_gene_coverage.tsv
     echo -e "ORF1ab\t" $orf1ab_pc >> ~{samplename}.percent_gene_coverage.tsv
     echo -e "S_gene\t" $sgene_pc >> ~{samplename}.percent_gene_coverage.tsv
     echo -e "ORF3a\t" $orf3a_pc >> ~{samplename}.percent_gene_coverage.tsv
