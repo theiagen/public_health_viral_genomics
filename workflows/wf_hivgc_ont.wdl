@@ -25,14 +25,9 @@ workflow hivgc_ont {
     input:
       read1 = demultiplexed_reads
   }
-  call read_clean.ncbi_scrub_se {
-    input:
-      samplename = samplename,
-      read1 = demultiplexed_reads
-  }
   call medaka.read_filtering {
     input:
-      demultiplexed_reads = ncbi_scrub_se.read1_dehosted,
+      demultiplexed_reads = demultiplexed_reads,
       samplename = samplename,
       min_length = min_length,
       max_length = max_length
@@ -40,11 +35,6 @@ workflow hivgc_ont {
   call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
     input:
       read1 = read_filtering.filtered_reads
-  }
-  call taxon_ID.kraken2 as kraken2_dehosted {
-    input:
-      samplename = samplename,
-      read1 = ncbi_scrub_se.read1_dehosted
   }
   call medaka.consensus as consensus {
     input:
@@ -84,8 +74,8 @@ workflow hivgc_ont {
 
   output {
     # Version Capture
-    String theiahiv_version = version_capture.phvg_version
-    String theiahiv_ont_analysis_date = version_capture.date
+    String hivgc_ont_version = version_capture.phvg_version
+    String hivgc_ont_analysis_date = version_capture.date
     # Read Metadata
     String seq_platform = seq_method
     # Read QC
