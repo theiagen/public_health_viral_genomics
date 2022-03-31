@@ -62,11 +62,6 @@ workflow hivgc_ont {
       samplename = samplename,
       bamfile = consensus.trim_sorted_bam
   }
-  call taxon_ID.kraken2 as kraken2_raw {
-    input:
-      samplename = samplename,
-      read1 = demultiplexed_reads
-  }
   call versioning.version_capture{
     input:
   }
@@ -79,15 +74,9 @@ workflow hivgc_ont {
     # Read Metadata
     String seq_platform = seq_method
     # Read QC
-    File reads_dehosted = ncbi_scrub_se.read1_dehosted
     Int num_reads_raw = fastq_scan_raw_reads.read1_seq
     Int num_reads_clean = fastq_scan_clean_reads.read1_seq
     String fastq_scan_version = fastq_scan_clean_reads.version
-    String kraken_version = kraken2_raw.version
-    Float kraken_human = kraken2_raw.percent_human
-    String kraken_report = kraken2_raw.kraken_report
-    Float kraken_human_dehosted = kraken2_dehosted.percent_human
-    String kraken_report_dehosted = kraken2_dehosted.kraken_report
     # Read Alignment
     File aligned_bam = consensus.trim_sorted_bam
     File aligned_bai = consensus.trim_sorted_bai
