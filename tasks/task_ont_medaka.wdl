@@ -104,6 +104,7 @@ task consensus {
     File sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
     File trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
+    File trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
     File medaka_pass_vcf = "~{samplename}.pass.vcf"
     String medaka_reference = read_string("REFERENCE_GENOME")
     String artic_pipeline_version = read_string("VERSION")
