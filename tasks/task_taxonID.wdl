@@ -229,7 +229,7 @@ task nextclade_one_sample {
       cpu: 2
       disks: "local-disk 50 HDD"
       dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 3 
+      maxRetries: 3
     }
     output {
       String nextclade_version = read_string("NEXTCLADE_VERSION")
@@ -313,22 +313,22 @@ task freyja_one_sample {
   }
   command <<<
   # update freyja reference files if specified
-  if ~{update_db}; then 
+  if ~{update_db}; then
       freyja update
       # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
       freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
       freyja_barcode=""
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
-      freyja_metadata=""  
+      freyja_metadata=""
   else
-  # configure barcode    
+  # configure barcode
     if [[ ! -z "~{freyja_usher_barcodes}" ]]; then
       echo "User freyja usher barcodes identified; ~{freyja_usher_barcodes} will be utilized fre freyja demixing"
       freyja_barcode="--barcodes ~{freyja_usher_barcodes}"
       freyja_usher_barcode_version=$(basename -- "~{freyja_usher_barcodes}")
     else
       freyja_barcode=""
-      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"  
+      freyja_usher_barcode_version="unmodified from freyja container: ~{docker}"
     fi
     # configure lineage metadata
     if [[ ! -z "~{freyja_lineage_metadata}" ]]; then
@@ -336,7 +336,7 @@ task freyja_one_sample {
       freyja_metadata="--meta ~{freyja_lineage_metadata}"
       freyja_metadata_version=$(basename -- "~{freyja_lineage_metadata}")
     else
-      freyja_metadata=""  
+      freyja_metadata=""
       freyja_metadata_version="unmodified from freyja container: ~{docker}"
     fi
   fi
@@ -347,7 +347,7 @@ task freyja_one_sample {
   # Call variants and capture sequencing depth information
   echo "Running: freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}"
   freyja variants ~{primer_trimmed_bam} --variants ~{samplename}_freyja_variants.tsv --depths ~{samplename}_freyja_depths.tsv --ref ~{reference_genome}
-  # Demix variants 
+  # Demix variants
   echo "Running: freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp"
   freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp
   # Adjust output header
@@ -366,5 +366,39 @@ task freyja_one_sample {
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
+  }
+}
+
+task quasitools_one_sample {
+  input {
+    File   read1
+    String samplename
+    String docker = "quay.io/biocontainers/quasitools:0.7.0--pyh864c0ab_1"
+  }
+  command {
+    # date and version capture
+    date | tee DATE
+    # Print and save version
+    quasitools --version > QUASITOOLS_VERSION && sed -i -e 's/^/quasitools /' QUASITOOLS_VERSION
+    # Run hydra
+    set -e
+    quasitools hydra "~{read1}" -gc -o "~{samplename}"
+  }
+  runtime {
+    docker: "~{docker}"
+      memory: "4 GB"
+      cpu:    4
+      disks: "local-disk 50 HDD"
+      dx_instance_type: "mem1_ssd1_v2_x2"
+      maxRetries:   3
+  }
+  output {
+    String quasitools_version = read_string("QUASITOOLS_VERSION")
+    String quasitools_date = read_string("DATE")
+    File   consensus_fasta = "consensus.fa"
+    File   coverage_file = "coverage_file.csv"
+    File   dr_report = "dr_report.csv"
+    File   hydra_vcf = "hydra.vcf"
+    File   mutations_report = "mutation_report.aavf"
   }
 }
