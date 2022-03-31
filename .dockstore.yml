@@ -95,3 +95,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_theiacov_augur_distance_tree.wdl
    testParameterFiles:
     - empty.json
+ - name: HIV_GC_ONT
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_hivgc_ont.wdl
+   testParameterFiles:
+    - empty.json
