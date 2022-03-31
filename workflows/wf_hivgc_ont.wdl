@@ -46,7 +46,7 @@ workflow hivgc_ont {
       samplename = samplename,
       read1 = ncbi_scrub_se.read1_dehosted
   }
-  call medaka.consensus {
+  call medaka.consensus as consensus {
     input:
       samplename = samplename,
       filtered_reads = read_filtering.filtered_reads,
@@ -56,7 +56,7 @@ workflow hivgc_ont {
   call taxon_ID.quasitools_one_sample as quasitools {
     input:
       samplename = samplename,
-      read1 = ncbi_scrub_se.read1_dehosted
+      read1 = consensus.trim_fastq
   }
   call qc_utils.consensus_qc {
     input:
