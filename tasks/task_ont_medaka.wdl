@@ -97,7 +97,7 @@ task consensus {
     # clean up fasta header
     echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
     grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
-    samtools fastq -F4 "~{samplename}.primertrimmed.rg.sorted.bam" > "~{samplename}.primertrimmed.rg.fastq"
+    ##samtools fastq -F4 "~{samplename}.primertrimmed.rg.sorted.bam" > "~{samplename}.primertrimmed.rg.fastq"
   >>>
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
