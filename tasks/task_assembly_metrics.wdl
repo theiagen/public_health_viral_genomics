@@ -30,7 +30,7 @@ task stats_n_coverage {
 
     # samtools outputs 3 columns; column 3 is the depth of coverage per nucleotide position, piped to awk to count the positions
     #  above min_depth, then wc -l counts them all
-    orf1ab=$(samtools depth -J -r "${chr}:21563-25384" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
+    orf1ab=$(samtools depth -J -r "${chr}:266-21555" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     sgene=$(samtools depth -J -r "${chr}:~{s_gene_start}-~{s_gene_stop}" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     orf3a=$(samtools depth -J -r "${chr}:25393-26220" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
     egene=$(samtools depth -J -r "${chr}:26245-26472" ~{bamfile} | awk -F "\t" '{if ($3 > ~{min_depth}) print;}' | wc -l )
@@ -48,11 +48,11 @@ task stats_n_coverage {
     egene_pc=$(python3 -c "print ( round( ($egene / 228 ) * 100, 2 ) )")
     mgene_pc=$(python3 -c "print ( round( ($mgene / 669 ) * 100, 2 ) )")
     orf6_pc=$(python3 -c "print ( round( ($orf6 / 186 ) * 100, 2 ) )")
-    orf7a_pc=$(python3 -c "print ( round( ($orf7a / 266 ) * 100, 2 ) )")
+    orf7a_pc=$(python3 -c "print ( round( ($orf7a / 366 ) * 100, 2 ) )")
     orf7b_pc=$(python3 -c "print ( round( ($orf7b / 132 ) * 100, 2 ) )")
     orf8_pc=$(python3 -c "print ( round( ($orf8 / 366 ) * 100, 2 ) )")
     ngene_pc=$(python3 -c "print ( round( ($ngene / 1260 ) * 100, 2 ) )")
-    orf10_pc=$(python3 -c "print ( round( ($orf6 / 117 ) * 100, 2 ) )")
+    orf10_pc=$(python3 -c "print ( round( ($orf10 / 117 ) * 100, 2 ) )")
 
     echo -e "#NOTE: THE VALUES BELOW ASSUME WUHAN-1 REFERENCE GENOME" > ~{samplename}.percent_gene_coverage.tsv
     echo -e "Gene\tPercent_Coverage" >> ~{samplename}.percent_gene_coverage.tsv
