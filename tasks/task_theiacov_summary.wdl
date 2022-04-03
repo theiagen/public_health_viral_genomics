@@ -9,7 +9,7 @@ task theiacov_summary {
     String seq_platform
     String primer_bed_name
     Float percent_reference_coverage
-    Int consensus_n_variant_min_depth
+    Int? consensus_n_variant_min_depth
     Float? s_gene_mean_coverage
     Float? s_gene_percent_coverage
     Int number_N
