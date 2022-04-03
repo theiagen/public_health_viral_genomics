@@ -51,6 +51,7 @@ task theiacov_summary {
     String? kraken_version = ""
     String? nextclade_version = ""
     String? nextclade_docker = ""
+    String? nextclade_ds_tag = ""
     String samtools_version
     String? samtools_version_consensus = ""
     String? samtools_version_primtrim = ""
@@ -112,6 +113,7 @@ task theiacov_summary {
           ('kraken_version', '~{kraken_version}'),
           ('nextclade_version', '~{nextclade_version}'),
           ('nextclade_docker', '~{nextclade_docker}'),
+          ('nextclade_ds_tag', '~{nextclade_ds_tag}'),
           ('samtools_version', '~{samtools_version}'),
           ('samtools_version_consensus', '~{samtools_version_consensus}'),
           ('samtools_version_primtrim', '~{samtools_version_primtrim}'),
