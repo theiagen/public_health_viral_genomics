@@ -9,6 +9,7 @@ task theiacov_summary {
     String seq_platform
     String primer_bed_name
     Float percent_reference_coverage
+    Int consensus_n_variant_min_depth
     Float? s_gene_mean_coverage
     Float? s_gene_percent_coverage
     Int number_N
@@ -71,8 +72,9 @@ task theiacov_summary {
           ('seq_platform', '~{seq_platform}'),
           ('primer_bed_name', '~{primer_bed_name}'),
           ('percent_reference_coverage', '~{percent_reference_coverage}'),
+          ('consensus_n_variant_min_depth', '~{consensus_n_variant_min_depth}'),
           ('s_gene_mean_coverage', '~{s_gene_mean_coverage}'),
-          ('s_gene_percent_coverage', '~{s_gene_percent_coverage}')
+          ('s_gene_percent_coverage', '~{s_gene_percent_coverage}'),
           ('number_n', '~{number_N}'),
           ('pangolin_lineage', '~{pango_lineage}'),
           ('pangolin_conflicts', '~{pangolin_conflicts}'),
