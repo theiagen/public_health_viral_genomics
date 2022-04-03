@@ -22,7 +22,7 @@ workflow theiacov_illumina_se {
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
     File? reference_genome
-    Int? min_depth = 100
+    Int min_depth = 100
   }
   call read_qc.read_QC_trim {
     input:
@@ -137,6 +137,7 @@ workflow theiacov_illumina_se {
     Int number_Degenerate = consensus_qc.number_Degenerate
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
+    Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
