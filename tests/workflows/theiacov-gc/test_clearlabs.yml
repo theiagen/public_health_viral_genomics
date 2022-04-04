@@ -5,7 +5,7 @@
     - theiacov_clearlabs
   files:
     - path: theiacov/clearlabs/alignments/clearlabs.flagstat.txt
-      md5sum: b5af0b1c2721c004f8f476d9ca540a35
+      md5sum: e0b5f095ba646f1a697acd6d8ec5a54c
     - path: theiacov/clearlabs/alignments/clearlabs.pass.vcf
       contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: theiacov/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam

@@ -23,6 +23,7 @@ workflow theiacov_illumina_pe {
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
     File? reference_genome
+    Int min_depth = 100
   }
   call read_qc.read_QC_trim {
     input:
@@ -47,13 +48,15 @@ workflow theiacov_illumina_pe {
     input:
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      variant_min_depth = min_depth
   }
   call consensus_call.consensus {
     input:
       samplename = samplename,
       bamfile = primer_trim.trim_sorted_bam,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      consensus_min_depth = min_depth
   }
   call qc_utils.consensus_qc {
     input:
@@ -62,12 +65,14 @@ workflow theiacov_illumina_pe {
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
-      bamfile = bwa.sorted_bam
+      bamfile = bwa.sorted_bam,
+      min_depth = min_depth
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam
+      bamfile = primer_trim.trim_sorted_bam,
+      min_depth = min_depth
   }
   call taxon_ID.pangolin3 {
     input:
@@ -142,6 +147,7 @@ workflow theiacov_illumina_pe {
     Int number_Degenerate = consensus_qc.number_Degenerate
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
+    Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
@@ -149,6 +155,8 @@ workflow theiacov_illumina_pe {
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
     # Lineage Assignment
     String pango_lineage = pangolin3.pangolin_lineage

@@ -5,7 +5,7 @@
     - theiacov_illumina_pe
   files:
     - path: theiacov/illumina_pe/alignments/SRR13687078.flagstat.txt
-      md5sum: 7cd08dcf0ccb7cf5b1f445852673fe94
+      md5sum: 6ee6edfa11b24818f5c16f73b1dcf211
     - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
     - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
     - path: theiacov/illumina_pe/alignments/SRR13687078.stats.txt
