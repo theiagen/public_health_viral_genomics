@@ -5,7 +5,7 @@
     - theiacov_ont
   files:
     - path: theiacov/ont/alignments/ont.flagstat.txt
-      md5sum: 85c7b4e3985735fd2a45f7f5a09b529f
+      md5sum: 971b1ac6888b860c629d4b727ce59e3c
     - path: theiacov/ont/alignments/ont.pass.vcf
       contains: ["VCF", "medaka", "CHROM", "PASS"]
     - path: theiacov/ont/alignments/ont.primertrimmed.rg.sorted.bam

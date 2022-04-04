@@ -5,7 +5,7 @@
     - theiacov_illumina_se
   files:
     - path: theiacov/illumina_se/alignments/ERR6319327.flagstat.txt
-      md5sum: 63f3429dcb99b85bcc0e525ef19c8471
+      md5sum: 607170bcd36b984168eea6b6a9d9cd37
     - path: theiacov/illumina_se/alignments/ERR6319327.primertrim.sorted.bam
     - path: theiacov/illumina_se/alignments/ERR6319327.primertrim.sorted.bam.bai
     - path: theiacov/illumina_se/alignments/ERR6319327.stats.txt
