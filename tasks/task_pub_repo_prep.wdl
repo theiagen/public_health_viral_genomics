@@ -336,8 +336,8 @@ task compile_assembly_n_meta {
   passed_meta=""
 
   #Create files to capture batched and excluded samples
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples_~{date}.~{file_ext}
-  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples_~{date}.~{file_ext}
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_batched_samples_~{date}.tsv
+  echo -e "~{repository} Identifier\tSamplename\tNumber of Vadr Alerts\tNote" > ~{repository}_excluded_samples_~{date}.tsv
 
   #Ensure assembly, meta, and vadr arrays are of equal length
   echo "Samples: $samplename_array_len, Assemblies: $assembly_array_len, Metadata: $meta_array_len, Vadr: $vadr_array_len, Submission_IDs: $submission_id_array_len"
@@ -367,22 +367,22 @@ task compile_assembly_n_meta {
       if ! [[ "${vadr}" =~ $re ]] ; then
         batch_note="No VADR value to evaluate"
         echo -e "\t$submission_id removed: ${batch_note}"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
       elif [ "${vadr}" -le "~{vadr_threshold}" ] ; then
         passed_assemblies=( "${passed_assemblies[@]}" "${assembly}")
         passed_meta=( "${passed_meta[@]}" "${metadata}")
         echo -e "\t$submission_id added to batch"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples_~{date}.~{file_ext}
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_batched_samples_~{date}.tsv
       else 
         batch_note="Number of vadr alerts (${vadr}) exceeds threshold ~{vadr_threshold}"
         echo -e "\t$submission_id removed: ${batch_note}"
-        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
+        echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
       fi
     else 
       batch_note="Assembly or metadata file missing" 
       repository_identifier="NA"
       echo -e "\t$submission_id removed: ${batch_note}"
-      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.~{file_ext}
+      echo -e "$repository_identifier\t$samplename\t$vadr\t$batch_note" >> ~{repository}_excluded_samples_~{date}.tsv
     fi
 
   done
@@ -403,8 +403,8 @@ task compile_assembly_n_meta {
   output {
     File? upload_meta   = "${repository}_upload_meta_~{date}.~{file_ext}"
     File? upload_fasta  = "${repository}_upload_~{date}.fasta"
-    File batched_samples = "${repository}_batched_samples_~{date}.~{file_ext}"
-    File excluded_samples = "${repository}_excluded_samples_~{date}.~{file_ext}"
+    File batched_samples = "${repository}_batched_samples_~{date}.tsv"
+    File excluded_samples = "${repository}_excluded_samples_~{date}.tsv"
   }
   runtime {
     docker: docker

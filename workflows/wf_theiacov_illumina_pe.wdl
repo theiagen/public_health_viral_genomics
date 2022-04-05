@@ -172,6 +172,7 @@ workflow theiacov_illumina_pe {
     File nextclade_tsv = nextclade_one_sample.nextclade_tsv
     String nextclade_version = nextclade_one_sample.nextclade_version
     String nextclade_docker = nextclade_one_sample.nextclade_docker
+    String nextclade_ds_tag = nextclade_dataset_tag
     String  nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
     String  nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
     String  nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade

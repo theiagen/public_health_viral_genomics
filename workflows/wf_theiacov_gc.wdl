@@ -74,6 +74,7 @@ workflow theiacov_gc {
           kraken_version = theiacov_clearlabs.kraken_version,
           nextclade_version = theiacov_clearlabs.nextclade_version,
           nextclade_docker = theiacov_clearlabs.nextclade_docker,
+          nextclade_ds_tag = theiacov_clearlabs.nextclade_ds_tag,
           samtools_version = theiacov_clearlabs.samtools_version,
           vadr_docker = theiacov_clearlabs.vadr_docker
       }
@@ -136,6 +137,7 @@ workflow theiacov_gc {
           kraken_version = theiacov_illumina_pe.kraken_version,
           nextclade_version = theiacov_illumina_pe.nextclade_version,
           nextclade_docker = theiacov_illumina_pe.nextclade_docker,
+          nextclade_ds_tag = theiacov_illumina_pe.nextclade_ds_tag,
           samtools_version = theiacov_illumina_pe.samtools_version,
           samtools_version_consensus = theiacov_illumina_pe.samtools_version_consensus,
           samtools_version_primtrim = theiacov_illumina_pe.samtools_version_primtrim,
@@ -196,6 +198,7 @@ workflow theiacov_gc {
           kraken_version = theiacov_illumina_se.kraken_version,
           nextclade_version = theiacov_illumina_se.nextclade_version,
           nextclade_docker = theiacov_illumina_se.nextclade_docker,
+          nextclade_ds_tag = theiacov_illumina_se.nextclade_ds_tag,
           samtools_version = theiacov_illumina_se.samtools_version,
           samtools_version_consensus = theiacov_illumina_se.samtools_version_consensus,
           samtools_version_primtrim = theiacov_illumina_se.samtools_version_primtrim,
@@ -252,6 +255,7 @@ workflow theiacov_gc {
           kraken_version = theiacov_ont.kraken_version,
           nextclade_version = theiacov_ont.nextclade_version,
           nextclade_docker = theiacov_ont.nextclade_docker,
+          nextclade_ds_tag = theiacov_ont.nextclade_ds_tag,
           samtools_version = theiacov_ont.samtools_version,
           vadr_docker = theiacov_ont.vadr_docker
       }
