@@ -349,6 +349,9 @@ task derived_cols {
         
         # remove duplicate strains 
         awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
+
+        # convert to csv
+        tr '\t' ',' < "~{basename}.derived_cols.tsv" > "~{basename}.derived_cols.csv"
         
     >>>
     runtime {
@@ -360,7 +363,7 @@ task derived_cols {
         maxRetries: 2
     }
     output {
-        File derived_metadata = "~{basename}.derived_cols.tsv"
+        File derived_metadata = "~{basename}.derived_cols.csv"
     }
 }
 
