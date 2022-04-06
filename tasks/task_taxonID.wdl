@@ -121,6 +121,68 @@ task pangolin3 {
   }
 }
 
+task pangolin4 {
+  input {
+    File fasta
+    String samplename
+    Int min_length = 10000
+    Float max_ambig = 0.5
+    String docker = "quay.io/staphb/pangolin:4.0.2-pdata-1.2.133"
+    String? analysis_mode
+  }
+  command <<<
+    set -e
+
+    # date and version capture
+    date | tee DATE
+
+    { pangolin --all-versions && usher --version; } | tr '\n' ';'  | cut -f -6 -d ';' | tee VERSION_PANGOLIN_ALL
+
+    pangolin "~{fasta}" \
+       ~{'--analysis-mode ' + analysis_mode} \
+       ~{'--min-length ' + min_length} \
+       ~{'--max-ambig ' + max_ambig} \
+       --outfile "~{samplename}.pangolin_report.csv" \
+       --verbose
+
+    python3 <<CODE
+    import csv
+    #grab output values by column header
+    with open("~{samplename}.pangolin_report.csv",'r') as csv_file:
+      csv_reader = list(csv.DictReader(csv_file, delimiter=","))
+      for line in csv_reader:
+        with open("PANGO_ASSIGNMENT_VERSION", 'wt') as assignment_version:
+          pangolin_version=line["pangolin_version"]
+          version=line["version"]
+          assignment_version.write(f"pangolin {pangolin_version}; {version}")
+        with open("PANGOLIN_LINEAGE", 'wt') as lineage:
+          lineage.write(line["lineage"])
+        with open("PANGOLIN_CONFLICTS", 'wt') as pangolin_conflicts:
+          pangolin_conflicts.write(line["conflict"])
+        with open("PANGOLIN_NOTES", 'wt') as pangolin_notes:
+          pangolin_notes.write(line["note"])
+    CODE
+  >>>
+  output {
+    String date = read_string("DATE")
+    String pangolin_lineage = read_string("PANGOLIN_LINEAGE")
+    String pangolin_conflicts = read_string("PANGOLIN_CONFLICTS")
+    String pangolin_notes = read_string("PANGOLIN_NOTES")
+    String pangolin_assignment_version = read_string("PANGO_ASSIGNMENT_VERSION")
+    String pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
+    String pangolin_docker = docker
+    File pango_lineage_report = "~{samplename}.pangolin_report.csv"
+  }
+  runtime {
+    docker: "~{docker}"
+    memory: "8 GB"
+    cpu: 4
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 3
+  }
+}
+
 task pangolin_update_log {
   input {
     String samplename
