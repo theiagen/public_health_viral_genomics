@@ -20,7 +20,7 @@ workflow theiacov_ont {
     Int? normalise = 200
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
+    String nextclade_dataset_tag = "2022-03-31T12:00:00Z"
     Int? max_length = 700
     Int? min_length = 400
   }
@@ -70,7 +70,7 @@ workflow theiacov_ont {
       samplename = samplename,
       bamfile = consensus.trim_sorted_bam
   }
-  call taxon_ID.pangolin3 {
+  call taxon_ID.pangolin4 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq
@@ -142,13 +142,13 @@ workflow theiacov_ont {
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
     String samtools_version = stats_n_coverage.samtools_version
     # Lineage Assignment
-    String pango_lineage = pangolin3.pangolin_lineage
-    String pangolin_conflicts = pangolin3.pangolin_conflicts
-    String pangolin_notes = pangolin3.pangolin_notes
-    String pangolin_assignment_version = pangolin3.pangolin_assignment_version
-    File pango_lineage_report = pangolin3.pango_lineage_report
-    String pangolin_docker = pangolin3.pangolin_docker
-    String pangolin_versions = pangolin3.pangolin_versions
+    String pango_lineage = pangolin4.pangolin_lineage
+    String pangolin_conflicts = pangolin4.pangolin_conflicts
+    String pangolin_notes = pangolin4.pangolin_notes
+    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File pango_lineage_report = pangolin4.pango_lineage_report
+    String pangolin_docker = pangolin4.pangolin_docker
+    String pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
     File auspice_json = nextclade_one_sample.auspice_json

@@ -19,13 +19,13 @@ workflow theiacov_fasta {
     String input_assembly_method
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
+    String nextclade_dataset_tag = "2022-03-31T12:00:00Z"
   }
   call qc_utils.consensus_qc {
     input:
       assembly_fasta = assembly_fasta
   }
-  call taxon_ID.pangolin3 {
+  call taxon_ID.pangolin4 {
     input:
       samplename = samplename,
       fasta = assembly_fasta
@@ -63,13 +63,13 @@ workflow theiacov_fasta {
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
-    String pango_lineage = pangolin3.pangolin_lineage
-    String pangolin_conflicts = pangolin3.pangolin_conflicts
-    String pangolin_notes = pangolin3.pangolin_notes
-    String pangolin_assignment_version = pangolin3.pangolin_assignment_version
-    File pango_lineage_report = pangolin3.pango_lineage_report
-    String pangolin_docker = pangolin3.pangolin_docker
-    String pangolin_versions = pangolin3.pangolin_versions
+    String pango_lineage = pangolin4.pangolin_lineage
+    String pangolin_conflicts = pangolin4.pangolin_conflicts
+    String pangolin_notes = pangolin4.pangolin_notes
+    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File pango_lineage_report = pangolin4.pango_lineage_report
+    String pangolin_docker = pangolin4.pangolin_docker
+    String pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
     File auspice_json = nextclade_one_sample.auspice_json
