@@ -24,9 +24,7 @@ task freyja_update_refs {
     String docker = "staphb/freyja:1.3.4"
   }
   command <<<
-  # Create date tag 
-  date_tag=$(date +"%Y-%m-%d")
-  
+  # Create updated refrence files
   freyja update --outdir .
   
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > update_log.txt
