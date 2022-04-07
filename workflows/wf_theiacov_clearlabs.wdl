@@ -20,7 +20,7 @@ workflow theiacov_clearlabs {
     Int? normalise = 20000
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-02-07T12:00:00Z"
+    String nextclade_dataset_tag = "2022-03-31T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
@@ -63,7 +63,7 @@ workflow theiacov_clearlabs {
       samplename = samplename,
       bamfile = consensus.trim_sorted_bam
   }
-  call taxon_ID.pangolin3 {
+  call taxon_ID.pangolin4 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq
@@ -127,13 +127,13 @@ workflow theiacov_clearlabs {
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
-    String pango_lineage = pangolin3.pangolin_lineage
-    String pangolin_conflicts = pangolin3.pangolin_conflicts
-    String pangolin_notes = pangolin3.pangolin_notes
-    String pangolin_assignment_version = pangolin3.pangolin_assignment_version
-    File pango_lineage_report= pangolin3.pango_lineage_report
-    String pangolin_docker = pangolin3.pangolin_docker
-    String pangolin_versions = pangolin3.pangolin_versions
+    String pango_lineage = pangolin4.pangolin_lineage
+    String pangolin_conflicts = pangolin4.pangolin_conflicts
+    String pangolin_notes = pangolin4.pangolin_notes
+    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File pango_lineage_report= pangolin4.pango_lineage_report
+    String pangolin_docker = pangolin4.pangolin_docker
+    String pangolin_versions = pangolin4.pangolin_versions
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
@@ -141,6 +141,8 @@ workflow theiacov_clearlabs {
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version = stats_n_coverage.samtools_version
     # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
