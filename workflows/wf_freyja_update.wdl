@@ -25,10 +25,10 @@ task freyja_update_refs {
   }
   command <<<
   # Create updated refrence files
-  mkdir freyja_ref_files
-  freyja update --outdir freyja_ref_files 
+  freyja update --outdir $PWD 
   
-  echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > freyja_ref_files/update_log.txt
+  find / -name "lineagePaths.txt"
+  echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
   >>>
   runtime {
     memory: "4 GB"
@@ -37,9 +37,9 @@ task freyja_update_refs {
     disks: "local-disk 100 HDD"
   }
   output {
-    File updated_barcodes = "freyja_ref_files/usher_barcodes.csv"
-    File updated_lineages = "freyja_ref_files/curated_lineages.json"
-    File update_log = "freyja_ref_files/update_log.txt"
+    File updated_barcodes = "usher_barcodes.csv"
+    File updated_lineages = "curated_lineages.json"
+    File update_log = "update_log.txt"
   }
 }
 task transfer_files {
