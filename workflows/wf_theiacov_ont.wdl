@@ -140,6 +140,8 @@ workflow theiacov_ont {
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
     Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage    
     String samtools_version = stats_n_coverage.samtools_version
     # Lineage Assignment
     String pango_lineage = pangolin4.pangolin_lineage
