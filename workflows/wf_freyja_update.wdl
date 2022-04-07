@@ -21,13 +21,12 @@ workflow freyja_update {
 task freyja_update_refs {
   input {
     String gcp_uri
-    String docker = "quay.io/staphb/freyja:1.3.4"
+    String docker = "staphb/freyja:1.3.4"
   }
   command <<<
   # Create date tag 
   date_tag=$(date +"%Y-%m-%d")
   
-  mkdir freyja_reference_files
   freyja update --outdir .
   
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > update_log.txt
