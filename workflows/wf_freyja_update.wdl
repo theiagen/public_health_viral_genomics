@@ -29,7 +29,6 @@ task freyja_update_refs {
   echo "PWD: $PWD"
   freyja update --outdir $PWD
   
-  find / -name "lineagePaths.txt"
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
   >>>
   runtime {
