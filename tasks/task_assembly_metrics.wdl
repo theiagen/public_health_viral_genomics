@@ -6,7 +6,7 @@ task stats_n_coverage {
     String samplename
     Int s_gene_start = 21563
     Int s_gene_stop = 25384
-    Int? min_depth
+    Int min_depth
   }
   command <<<
     date | tee DATE

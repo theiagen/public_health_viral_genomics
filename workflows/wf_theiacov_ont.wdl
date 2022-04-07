@@ -63,12 +63,14 @@ workflow theiacov_ont {
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
-      bamfile = consensus.sorted_bam
+      bamfile = consensus.sorted_bam,
+      min_depth = 20
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = consensus.trim_sorted_bam
+      bamfile = consensus.trim_sorted_bam,
+      min_depth = 20
   }
   call taxon_ID.pangolin4 {
     input:
