@@ -127,7 +127,7 @@ task pangolin4 {
     String samplename
     Int min_length = 10000
     Float max_ambig = 0.5
-    String docker = "quay.io/staphb/pangolin:4.0.3-pdata-1.2.133"
+    String docker = "quay.io/staphb/pangolin:4.0.4-pdata-1.2.133"
     String? analysis_mode
   }
   command <<<
