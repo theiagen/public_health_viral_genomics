@@ -16,7 +16,7 @@ workflow hivgc_ont {
     String samplename
     String seq_method = "OXFORD_NANOPORE"
     File primer_bed="gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
-    File? reference_genome="gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
+    File reference_genome="gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
     File demultiplexed_reads
     Int? normalise = 200
     Int max_length = 10000
