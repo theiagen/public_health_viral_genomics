@@ -338,7 +338,7 @@ task MultiQC {
   # get the basename in all wdl use the filename specified (sans ".html" extension, if specified)
   String report_filename = if (defined(file_name)) then basename(select_first([file_name]), ".html") else "multiqc"
 
-  command {
+  command <<<
       set -ex -o pipefail
 
       echo "${sep='\n' input_files}" > input-filenames.txt
@@ -378,7 +378,7 @@ task MultiQC {
       fi
 
       tar -c "${out_dir}/${report_filename}_data" | gzip -c > "${report_filename}_data.tar.gz"
-  }
+  >>>
 
   output {
       File multiqc_report            = "${out_dir}/${report_filename}.html"
@@ -399,13 +399,11 @@ task tsv_join {
   meta {
       description: "Perform a full left outer join on multiple TSV tables. Each input tsv must have a header row, and each must must contain the value of id_col in its header. Inputs may or may not be gzipped. Unix/Mac/Win line endings are tolerated on input, Unix line endings are emitted as output. Unicode text safe."
   }
-
   input {
     Array[File]+   input_tsvs
     String         id_col
     String         out_basename = "merged"
   }
-
   command <<<
     python3<<CODE
     import collections
@@ -449,11 +447,9 @@ task tsv_join {
         writer.writerows(out_row_by_id[row_id] for row_id in out_ids)
     CODE
   >>>
-
   output {
     File   out_tsv = "${out_basename}.tsv"
   }
-
   runtime {
     memory: "7 GB"
     cpu: 1
@@ -470,18 +466,15 @@ task tsv_stack {
     String         out_basename
     String         docker="quay.io/broadinstitute/viral-core:2.1.19"
   }
-
-  command {
+  command <<<
     csvstack -t --filenames \
       ${sep=' ' input_tsvs} \
       | tr , '\t' \
       > ${out_basename}.txt
-  }
-
+  >>>
   output {
     File   out_tsv = "${out_basename}.txt"
   }
-
   runtime {
     memory: "1 GB"
     cpu: 1
@@ -490,7 +483,6 @@ task tsv_stack {
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
-
 }
 
 task compare_two_genomes {
@@ -501,16 +493,14 @@ task compare_two_genomes {
 
     String        docker="quay.io/broadinstitute/viral-assemble:2.1.16.1"
   }
-
-  command {
+  command <<<
     set -ex -o pipefail
     assembly.py --version | tee VERSION
     assembly.py alignment_summary "${genome_one}" "${genome_two}" --outfileName "${out_basename}.txt" --printCounts --loglevel=DEBUG
     cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
     cat /proc/loadavg > CPU_LOAD
-    cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes > MEM_BYTES
-  }
-
+    { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
+  >>>
   output {
     File   comparison_table = "${out_basename}.txt"
     Int    max_ram_gb = ceil(read_float("MEM_BYTES")/1000000000)
@@ -518,7 +508,6 @@ task compare_two_genomes {
     String cpu_load = read_string("CPU_LOAD")
     String viralngs_version = read_string("VERSION")
   }
-
   runtime {
     memory: "3 GB"
     cpu: 2
