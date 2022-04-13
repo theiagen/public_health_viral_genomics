@@ -604,7 +604,7 @@ task nextstrain_deduplicate_sequences {
 
     String out_basename = basename(basename(basename(basename(sequences_fasta, '.xz'), '.gz'), '.tar'), '.fasta')
     String out_filename = "~{out_basename}_sequences_deduplicated.fasta"
-    command <<<
+    command {
         set -e
         ncov_path_prefix="/nextstrain/ncov"
         wget -q "https://github.com/nextstrain/ncov/archive/~{nextstrain_ncov_repo_commit}.tar.gz"
@@ -617,7 +617,7 @@ task nextstrain_deduplicate_sequences {
         --sequences "~{sequences_fasta}" \
         ${true="--error-on-duplicate-strains" false="" error_on_seq_diff} \
         --output "~{out_filename}"
-    >>>
+    }
     runtime {
         docker: docker
         memory: "7 GB"
