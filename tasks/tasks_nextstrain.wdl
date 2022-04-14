@@ -350,12 +350,8 @@ task derived_cols {
         # remove duplicate strains 
         awk '!a[$1]++' "~{basename}.derived_cols.tsv" > temp.tsv && mv temp.tsv "~{basename}.derived_cols.tsv"
 
-        ## double quote the author list
-        csvformat --tabs "~{basename}.derived_cols.tsv" > "~{basename}.derived_cols.csv"
-
         # convert to csv
-        #tr '\t' ',' < "~{basename}.derived_cols.tsv" > "~{basename}.derived_cols.csv"
-        
+        csvformat --tabs "~{basename}.derived_cols.tsv" > "~{basename}.derived_cols.csv"
     >>>
     runtime {
         docker: docker
