@@ -15,12 +15,12 @@ workflow hivgc_ont {
   input {
     String samplename
     String seq_method = "OXFORD_NANOPORE"
-    File primer_bed="gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
-    File reference_genome="gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
+    File primer_bed = "gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
     File demultiplexed_reads
-    Int? normalise = 200
-    Int max_length = 10000
-    Int min_length = 200
+    Int? normalise = 100
+    Int? max_length = 10000
+    Int? min_length = 10
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:

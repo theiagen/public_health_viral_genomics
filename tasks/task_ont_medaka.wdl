@@ -28,9 +28,9 @@ task read_filtering {
   input {
     File demultiplexed_reads
     String samplename
-    String? run_prefix = "artic_ncov2019"
-    Int? min_length = 400
-    Int? max_length = 700
+    String? run_prefix = "hiv"
+    Int? min_length = 10
+    Int? max_length = 10000
     Int? cpu = 8
   }
   command <<<
@@ -58,9 +58,9 @@ task consensus {
   input {
     String samplename
     File filtered_reads
-    File primer_bed
-    File? reference_genome
-    Int? normalise = 20000
+    File primer_bed = "gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
+    Int? normalise = 200
     Int? cpu = 8
     String medaka_model = "r941_min_high_g360"
     String docker = "quay.io/staphb/artic-ncov2019-epi2me"
@@ -71,22 +71,15 @@ task consensus {
     mkdir -p ./primer-schemes/SARS-CoV-2/Vuser
 
     ## set reference genome
-    if [[ ! -z "~{reference_genome}" ]]; then
-      ref_genome="~{reference_genome}"
-    else
-       # use reference file in docker--different paths depending on image specified
-       if [[ -d "/fieldbioinformatics" ]]; then
-         ref_genome=$(find /fieldbioinformatics/*/primer*schemes/nCoV-2019/V3/ -name "nCoV-2019.reference.fasta")
-       else
-         ref_genome=$(find /wf-artic*/data/primer_schemes/SARS-CoV-2/V4/ -name "SARS-CoV-2.reference.fasta")
-       fi
-       echo "No user-defined reference genome; setting reference to ${ref_genome}"
-    fi
+    ref_genome="~{reference_genome}"
+
     head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
     cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
 
     ## set primers
-    cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+    #cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+    #p_bed="~{primer_bed}"
+    cp "~{primer_bed}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
@@ -94,10 +87,12 @@ task consensus {
     artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
     gunzip -f ~{samplename}.pass.vcf.gz
 
+    samp_name="~{samplename}"
     # clean up fasta header
-    echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
-    grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
-    ##samtools fastq -F4 "~{samplename}.primertrimmed.rg.sorted.bam" > "~{samplename}.primertrimmed.rg.fastq"
+    echo ">${samp_name}" > "${samp_name}".medaka.consensus.fasta
+    grep -v ">" "${samp_name}".consensus.fasta >> "${samp_name}".medaka.consensus.fasta
+    # produce fastq from bam
+    #samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam > ~{samplename}.primertrimmed.rg.fastq
   >>>
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
