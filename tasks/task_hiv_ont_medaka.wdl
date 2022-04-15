@@ -3,9 +3,9 @@ version 1.0
 task demultiplexing {
   input {
     Array[File] basecalled_reads
-    String? run_prefix="artic_ncov2019"
-    Int? normalise=200
-    Int? cpu=8
+    String? run_prefix = "artic_hiv"
+    Int? normalise = 200
+    Int? cpu = 8
   }
   command{
     guppy_barcoder -t \$cpus --require_barcodes_both_ends -i . -s . --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg  barcode_arrs_nb96.cfg" -q 0 -r
@@ -24,14 +24,13 @@ task demultiplexing {
 }
 
 task read_filtering {
-
   input {
     File demultiplexed_reads
     String samplename
-    String? run_prefix="artic_ncov2019"
-    Int? min_length=400
-    Int? max_length=700
-    Int? cpu=8
+    String? run_prefix = "artic_hiv"
+    Int? min_length = 50
+    Int? max_length = 1500
+    Int? cpu = 8
   }
   command{
     # date and version control
@@ -82,7 +81,6 @@ task consensus {
     echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
     grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
   }
-
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
     File sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
