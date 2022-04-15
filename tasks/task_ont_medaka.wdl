@@ -68,23 +68,23 @@ task consensus {
   String primer_name = basename(primer_bed)
   command <<<
     # setup custom primer scheme (/V is required by Artic)
-    mkdir -p ./primer-schemes/SARS-CoV-2/Vuser
+    mkdir -p ./primer-schemes/HIV/Vuser
 
     ## set reference genome
     ref_genome="~{reference_genome}"
 
     head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
-    cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
+    cp "${ref_genome}" ./primer-schemes/HIV/Vuser/HIV.reference.fasta
 
     ## set primers
     #cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
     #p_bed="~{primer_bed}"
-    cp "~{primer_bed}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+    cp "~{primer_bed}" ./primer-schemes/HIV/Vuser/HIV.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "~{primer_name}" | tee PRIMER_NAME
-    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
+    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} HIV/Vuser "~{samplename}"
     gunzip -f ~{samplename}.pass.vcf.gz
 
     samp_name="~{samplename}"
