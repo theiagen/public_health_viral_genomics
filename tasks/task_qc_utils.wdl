@@ -156,10 +156,10 @@ task fastq_scan_se {
     fi
 
     # capture forward read stats
-    eval "${cat_reads} ~{read1}" | fastq-scan | jq .qc_stats.read_total > READ1_SEQS
+    eval "${cat_reads} ~{read1}" | fastq-scan | jq .qc_stats.read_total >(jq .qc_stats.read_total > READ1_SEQS)
   >>>
   output {
-    #File fastq_scan_report = "~{read1_name}_fastq-scan.json"
+    File fastq_scan_report = "~{read1_name}_fastq-scan.json"
     Int read1_seq = read_string("READ1_SEQS")
     String version = read_string("VERSION")
     String pipeline_date = read_string("DATE")
