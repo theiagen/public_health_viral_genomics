@@ -92,14 +92,14 @@ task consensus {
     echo ">${samp_name}" > "${samp_name}".medaka.consensus.fasta
     grep -v ">" "${samp_name}".consensus.fasta >> "${samp_name}".medaka.consensus.fasta
     # produce fastq from bam
-    #samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam > ~{samplename}.primertrimmed.rg.fastq
+    samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam > ~{samplename}.primertrimmed.rg.fastq
   >>>
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
     File sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
     File trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
-    #File trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
+    File trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
     File medaka_pass_vcf = "~{samplename}.pass.vcf"
     String medaka_reference = read_string("REFERENCE_GENOME")
     String artic_pipeline_version = read_string("VERSION")
