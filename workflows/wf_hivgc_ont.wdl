@@ -16,6 +16,7 @@ workflow hivgc_ont {
     File primer_bed
     File reference_genome
     File demultiplexed_reads
+    File mutation_db
     Int normalise = 200
     Int max_length = 600
     Int min_length = 50
@@ -46,7 +47,8 @@ workflow hivgc_ont {
   call taxon_ID.quasitools_one_sample as quasitools {
     input:
       samplename = samplename,
-      sorted_bam = consensus.sorted_bam
+      read1 = read_filtering.filtered_reads,
+      mutation_db = mutation_db
   }
   call qc_utils.consensus_qc {
     input:
@@ -103,7 +105,6 @@ workflow hivgc_ont {
     ## Put Quasitools stuff here
     String quasitools_version = quasitools.quasitools_version
     String quasitools_date = quasitools.quasitools_date
-    File quasitools_consensus_fasta = quasitools.consensus_fasta
     File quasitools_coverage_file = quasitools.coverage_file
     File quasitools_dr_report = quasitools.dr_report
     File quasitools_hydra_vcf = quasitools.hydra_vcf

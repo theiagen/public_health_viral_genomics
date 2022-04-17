@@ -371,7 +371,8 @@ task freyja_one_sample {
 
 task quasitools_one_sample {
   input {
-    File   sorted_bam
+    File read1
+    File mutation_db
     String samplename
     String docker = "quay.io/biocontainers/quasitools:0.7.0--pyh864c0ab_1"
   }
@@ -382,7 +383,7 @@ task quasitools_one_sample {
     quasitools --version > QUASITOOLS_VERSION && sed -i -e 's/^/quasitools /' QUASITOOLS_VERSION
     # Run hydra
     set -e
-    quasitools hydra "~{sorted_bam}" -gc -o "~{samplename}"
+    quasitools hydra -m "~{mutation_db}" "~{read1}" -o ./
   }
   runtime {
     docker: "~{docker}"
@@ -395,7 +396,6 @@ task quasitools_one_sample {
   output {
     String quasitools_version = read_string("QUASITOOLS_VERSION")
     String quasitools_date = read_string("DATE")
-    File   consensus_fasta = "consensus.fa"
     File   coverage_file = "coverage_file.csv"
     File   dr_report = "dr_report.csv"
     File   hydra_vcf = "hydra.vcf"
