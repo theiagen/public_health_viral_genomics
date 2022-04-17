@@ -372,7 +372,7 @@ task freyja_one_sample {
 task quasitools_one_sample {
   input {
     File read1
-    File mutation_db = "gs://theiagen-public-files/terra/hivgc-files/mutation_db.tsv"
+    File mutation_db =  "gs://theiagen-public-files/terra/hivgc-files/mutation_db.tsv"
     String samplename
     String docker = "quay.io/biocontainers/quasitools:0.7.0--pyh864c0ab_1"
   }
@@ -383,7 +383,7 @@ task quasitools_one_sample {
     quasitools --version > QUASITOOLS_VERSION && sed -i -e 's/^/quasitools /' QUASITOOLS_VERSION
     # Run hydra
     set -e
-    quasitools hydra -m "~{mutation_db}" "~{read1}" -o ./
+    quasitools hydra -m "~{mutation_db}" -mf 0.05 -sc 7 -lc 50 -vq 7 -md 10 -ma 1 -me "~{read1}" -o "~{samplename}"
   }
   runtime {
     docker: "~{docker}"
@@ -396,9 +396,9 @@ task quasitools_one_sample {
   output {
     String quasitools_version = read_string("QUASITOOLS_VERSION")
     String quasitools_date = read_string("DATE")
-    File   coverage_file = "coverage_file.csv"
-    File   dr_report = "dr_report.csv"
-    File   hydra_vcf = "hydra.vcf"
-    File   mutations_report = "mutation_report.aavf"
+    File coverage_file = "~{samplename}/coverage_file.csv"
+    File dr_report = "~{samplename}/dr_report.csv"
+    File hydra_vcf = "~{samplename}/hydra.vcf"
+    File mutations_report = "~{samplename}/mutation_report.aavf"
   }
 }
