@@ -3,8 +3,6 @@ version 1.0
 import "../tasks/task_ont_medaka.wdl" as medaka
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_ncbi.wdl" as ncbi
-import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
@@ -15,18 +13,18 @@ workflow hivgc_ont {
   input {
     String samplename
     String seq_method = "OXFORD_NANOPORE"
-    File primer_bed = "gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
-    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
+    File primer_bed
+    File reference_genome
     File demultiplexed_reads
-    Int? normalise = 100
-    Int? max_length = 10000
-    Int? min_length = 10
+    Int normalise = 200
+    Int max_length = 600
+    Int min_length = 50
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
     input:
       read1 = demultiplexed_reads
   }
-  call medaka.read_filtering {
+  call medaka.read_filtering as read_filtering {
     input:
       demultiplexed_reads = demultiplexed_reads,
       samplename = samplename,
@@ -48,7 +46,7 @@ workflow hivgc_ont {
   call taxon_ID.quasitools_one_sample as quasitools {
     input:
       samplename = samplename,
-      read1 = consensus.trim_fastq
+      sorted_bam = consensus.sorted_bam
   }
   call qc_utils.consensus_qc {
     input:
@@ -67,8 +65,6 @@ workflow hivgc_ont {
   call versioning.version_capture{
     input:
   }
-
-
   output {
     # Version Capture
     String hivgc_ont_version = version_capture.phvg_version

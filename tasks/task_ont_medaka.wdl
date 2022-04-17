@@ -3,9 +3,9 @@ version 1.0
 task demultiplexing {
   input {
     Array[File] basecalled_reads
-    String? run_prefix = "artic_ncov2019"
-    Int? normalise = 200
-    Int? cpu = 8
+    String run_prefix = "artic_hiv"
+    Int normalise = 200
+    Int cpu = 8
   }
   command <<<
     guppy_barcoder -t \~cpu --require_barcodes_both_ends -i . -s . --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg  barcode_arrs_nb96.cfg" -q 0 -r
@@ -28,10 +28,11 @@ task read_filtering {
   input {
     File demultiplexed_reads
     String samplename
-    String? run_prefix = "hiv"
-    Int? min_length = 10
-    Int? max_length = 10000
-    Int? cpu = 8
+    String run_prefix = "artic_hiv"
+    Int min_length = 200
+    Int max_length = 600
+    Int cpu = 8
+    String docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   command <<<
     # date and version control
@@ -45,7 +46,8 @@ task read_filtering {
     File filtered_reads = "~{run_prefix}_~{samplename}.fastq"
   }
   runtime {
-    docker: "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
+    
+    docker: "~{docker}"
     memory: "16 GB"
     cpu: cpu
     disks: "local-disk 100 SSD"
@@ -59,8 +61,8 @@ task consensus {
     String samplename
     File filtered_reads
     File primer_bed = "gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
-    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/hiv-1_ref.fasta"
-    Int? normalise = 200
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.fasta"
+    Int? normalise = 20000
     Int? cpu = 8
     String medaka_model = "r941_min_high_g360"
     String docker = "quay.io/staphb/artic-ncov2019-epi2me"
@@ -89,8 +91,8 @@ task consensus {
 
     samp_name="~{samplename}"
     # clean up fasta header
-    echo ">${samp_name}" > "${samp_name}".medaka.consensus.fasta
-    grep -v ">" "${samp_name}".consensus.fasta >> "${samp_name}".medaka.consensus.fasta
+    echo ">" "~{samplename}" > "~{samplename}".medaka.consensus.fasta
+    grep -v ">" "~{samplename}".consensus.fasta >> "~{samplename}".medaka.consensus.fasta
     # produce fastq from bam
     samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam > ~{samplename}.primertrimmed.rg.fastq
   >>>

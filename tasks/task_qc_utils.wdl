@@ -77,8 +77,8 @@ task fastqc_se {
   }
   runtime {
     docker: "quay.io/staphb/fastqc:0.11.8"
-    memory: "4 GB"
-    cpu: 2
+    memory: "8 GB"
+    cpu: 4
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
@@ -156,7 +156,7 @@ task fastq_scan_se {
     fi
 
     # capture forward read stats
-    eval "${cat_reads} ~{read1}" | fastq-scan | jq .qc_stats.read_total >(jq .qc_stats.read_total > READ1_SEQS)
+    eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json >(jq .qc_stats.read_total > READ1_SEQS)
   >>>
   output {
     File fastq_scan_report = "~{read1_name}_fastq-scan.json"
