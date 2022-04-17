@@ -372,7 +372,7 @@ task freyja_one_sample {
 task quasitools_one_sample {
   input {
     File read1
-    File mutation_db
+    File mutation_db = "gs://theiagen-public-files/terra/hivgc-files/mutation_db.tsv"
     String samplename
     String docker = "quay.io/biocontainers/quasitools:0.7.0--pyh864c0ab_1"
   }

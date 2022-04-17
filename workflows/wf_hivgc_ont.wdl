@@ -99,7 +99,7 @@ workflow hivgc_ont {
     Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
-    Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    # Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
     String samtools_version = stats_n_coverage.samtools_version
     # Lineage Assignment
     ## Put Quasitools stuff here
