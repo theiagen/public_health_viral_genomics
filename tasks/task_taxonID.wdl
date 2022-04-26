@@ -129,6 +129,7 @@ task pangolin4 {
     Float max_ambig = 0.5
     String docker = "quay.io/staphb/pangolin:4.0.4-pdata-1.2.133"
     String? analysis_mode
+    String? pangolin_arguments
   }
   command <<<
     set -e
@@ -143,7 +144,8 @@ task pangolin4 {
        ~{'--min-length ' + min_length} \
        ~{'--max-ambig ' + max_ambig} \
        --outfile "~{samplename}.pangolin_report.csv" \
-       --verbose
+       --verbose \
+       ~{pangolin_arguments}
 
     python3 <<CODE
     import csv
