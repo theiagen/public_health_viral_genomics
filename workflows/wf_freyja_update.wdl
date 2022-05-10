@@ -26,7 +26,7 @@ task freyja_update_refs {
   command <<<
   # Create updated refrence files
   mkdir /freyja_update_refs 
-  freyja update --outdir freyja_update_refs
+  freyja update --outdir /freyja_update_refs
   
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
   
