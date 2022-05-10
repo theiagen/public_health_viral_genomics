@@ -30,6 +30,11 @@ task freyja_update_refs {
   freyja update --outdir $PWD
   
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
+  
+  echo "in PWD:"
+  ls $PWD
+  echo "in freyja_update_refs:"
+  ls freyja_update_refs
   >>>
   runtime {
     memory: "4 GB"
