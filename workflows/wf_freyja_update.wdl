@@ -43,8 +43,8 @@ task freyja_update_refs {
   find / -name "lineagePaths.txt"
   >>>
   runtime {
-    memory: "4 GB"
-    cpu: 2
+    memory: "16 GB"
+    cpu: 4
     docker: "~{docker}"
     disks: "local-disk 100 HDD"
   }
