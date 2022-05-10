@@ -6,7 +6,6 @@ workflow freyja_update {
   }
   call freyja_update_refs {
     input:
-      gcp_uri = gcp_uri
   }
   call transfer_files {
     input:
