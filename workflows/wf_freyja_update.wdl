@@ -36,6 +36,11 @@ task freyja_update_refs {
   ls /freyja_update_refs
   
   find / -name "lineagePaths.txt"
+  
+  echo "Try matUtils"
+  matUtils extract -i /freyja_update_refs/public-latest.all.masked.pb.gz -C lineagePaths.txt
+  
+  find / -name "lineagePaths.txt"
   >>>
   runtime {
     memory: "4 GB"
