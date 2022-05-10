@@ -20,26 +20,15 @@ workflow freyja_update {
 }
 task freyja_update_refs {
   input {
-    String gcp_uri
     String docker = "staphb/freyja:1.3.4"
   }
   command <<<
   # Create updated refrence files
-  mkdir /freyja_update_refs 
-  freyja update --outdir /freyja_update_refs
+  mkdir freyja_update_refs 
+  freyja update --outdir freyja_update_refs
   
   echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
-  
-  #echo "in PWD:"
-  #ls $PWD
-  #echo "in freyja_update_refs:"
-  #ls /freyja_update_refs
-  
-  #find / -name "lineagePaths.txt"
-  
-  #echo "Try matUtils"
-  #matUtils extract -i /freyja_update_refs/public-latest.all.masked.pb.gz -C lineagePaths.txt
-  
+   
   find / -name "lineagePaths.txt"
   >>>
   runtime {
