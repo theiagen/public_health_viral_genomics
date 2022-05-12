@@ -1,14 +1,14 @@
 version 1.0
 
-import "../tasks/task_ont_medaka.wdl" as medaka
+import "../tasks/task_hiv_ont_medaka.wdl" as medaka
 import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/task_hiv_qc_utils.wdl" as qc_utils
 import "../tasks/task_versioning.wdl" as versioning
 
 workflow hivgc_ont {
   meta {
-    description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on ONT NGS platforms."
+    description: "Reference-based consensus calling for HIV amplicon sequencing data generated on ONT NGS platforms."
   }
   input {
     String samplename

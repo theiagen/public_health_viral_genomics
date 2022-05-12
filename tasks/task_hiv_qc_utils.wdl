@@ -77,8 +77,8 @@ task fastqc_se {
   }
   runtime {
     docker: "quay.io/staphb/fastqc:0.11.8"
-    memory: "4 GB"
-    cpu: 2
+    memory: "8 GB"
+    cpu: 4
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
@@ -191,7 +191,7 @@ task consensus_qc {
     echo $num_ACTG | tee NUM_ACTG
 
     # calculate percent coverage (Wu Han-1 genome length: 29903bp)
-    python3 -c "print ( round( ($num_ACTG / 29903 ) * 100, 2 ) )" | tee PERCENT_REF_COVERAGE
+    python3 -c "print ( round( ($num_ACTG / 9181 ) * 100, 2 ) )" | tee PERCENT_REF_COVERAGE
 
     num_degenerate=$( grep -v ">" ~{assembly_fasta} | grep -o -E "B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|U|V|W|X|Y|Z" | wc -l )
     if [ -z "$num_degenerate" ] ; then num_degenerate="0" ; fi

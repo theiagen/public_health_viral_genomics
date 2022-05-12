@@ -3,13 +3,14 @@ version 1.0
 task demultiplexing {
   input {
     Array[File] basecalled_reads
-    String? run_prefix = "artic_hiv"
-    Int? normalise = 200
-    Int? cpu = 8
+    String run_prefix = "artic_hiv"
+    Int normalise = 200
+    Int cpu = 8
   }
-  command{
-    guppy_barcoder -t \$cpus --require_barcodes_both_ends -i . -s . --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg  barcode_arrs_nb96.cfg" -q 0 -r
-  }
+  command <<<
+    guppy_barcoder -t \~cpu --require_barcodes_both_ends -i . -s . --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg  barcode_arrs_nb96.cfg" -q 0 -r
+
+  >>>
   output {
     Array[File] demultiplexed_reads = glob("*.fq.gz")
   }
@@ -27,25 +28,28 @@ task read_filtering {
   input {
     File demultiplexed_reads
     String samplename
-    String? run_prefix = "artic_hiv"
-    Int? min_length = 50
-    Int? max_length = 1500
-    Int? cpu = 8
+    String run_prefix = "artic_hiv"
+    Int min_length = 200
+    Int max_length = 600
+    Int cpu = 8
+    String docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
-  command{
+  command <<<
     # date and version control
     mkdir ~{samplename}
     cp ~{demultiplexed_reads} ~{samplename}/
     echo "DIRNAME: $(dirname)"
-    artic guppyplex --min-length ${min_length} --max-length ${max_length} --directory ~{samplename} --prefix ${run_prefix}
-  }
+    artic guppyplex --min-length ~{min_length} --max-length ~{max_length} --directory ~{samplename} --prefix ~{run_prefix}
+
+  >>>
   output {
-    File filtered_reads = "${run_prefix}_~{samplename}.fastq"
+    File filtered_reads = "~{run_prefix}_~{samplename}.fastq"
   }
   runtime {
-    docker: "quay.io/staphb/artic-ncov2019:1.3.0"
+    
+    docker: "~{docker}"
     memory: "16 GB"
-    cpu: 8
+    cpu: cpu
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
@@ -53,47 +57,61 @@ task read_filtering {
 }
 
 task consensus {
-  ## Need to output multiple directories
   input {
     String samplename
     File filtered_reads
-    File primer_bed
+    File primer_bed = "gs://theiagen-public-files/terra/hivgc-files/HIV-1_v1.0.primer.bed"
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.fasta"
     Int? normalise = 20000
     Int? cpu = 8
     String medaka_model = "r941_min_high_g360"
-    String docker = "quay.io/staphb/artic-ncov2019:1.3.0"
+    String docker = "quay.io/staphb/artic-ncov2019-epi2me"
   }
   String primer_name = basename(primer_bed)
-
-  command{
+  command <<<
     # setup custom primer scheme (/V is required by Artic)
-    mkdir -p ./primer-schemes/nCoV-2019/Vuser
-    cp /primer-schemes/nCoV-2019/V3/nCoV-2019.reference.fasta ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.reference.fasta
-    cp ${primer_bed} ./primer-schemes/nCoV-2019/Vuser/nCoV-2019.scheme.bed
+    mkdir -p ./primer-schemes/HIV/Vuser
+
+    ## set reference genome
+    ref_genome="~{reference_genome}"
+
+    head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
+    cp "${ref_genome}" ./primer-schemes/HIV/Vuser/HIV.reference.fasta
+
+    ## set primers
+    #cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+    #p_bed="~{primer_bed}"
+    cp "~{primer_bed}" ./primer-schemes/HIV/Vuser/HIV.scheme.bed
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
-    echo "${primer_name}" | tee PRIMER_NAME
-    artic minion --medaka --medaka-mode ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} nCoV-2019/Vuser ~{samplename}
-    gunzip ~{samplename}.pass.vcf.gz
+    echo "~{primer_name}" | tee PRIMER_NAME
+    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} HIV/Vuser "~{samplename}"
+    gunzip -f ~{samplename}.pass.vcf.gz
 
+    samp_name="~{samplename}"
     # clean up fasta header
-    echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
-    grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
-  }
+    echo ">" "~{samplename}" > "~{samplename}".medaka.consensus.fasta
+    grep -v ">" "~{samplename}".consensus.fasta >> "~{samplename}".medaka.consensus.fasta
+    # produce fastq from bam
+    samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam > ~{samplename}.primertrimmed.rg.fastq
+  >>>
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
     File sorted_bam = "~{samplename}.trimmed.rg.sorted.bam"
     File trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
+    File trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
     File medaka_pass_vcf = "~{samplename}.pass.vcf"
+    String medaka_reference = read_string("REFERENCE_GENOME")
     String artic_pipeline_version = read_string("VERSION")
+    String artic_pipeline_docker = docker
     String primer_bed_name = read_string("PRIMER_NAME")
   }
   runtime {
     docker: "~{docker}"
     memory: "16 GB"
-    cpu: 8
+    cpu: cpu
     disks: "local-disk 100 SSD"
     preemptible: 0
     maxRetries: 3
