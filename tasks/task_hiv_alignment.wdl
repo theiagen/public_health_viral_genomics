@@ -3,9 +3,9 @@ version 1.0
 task bwa {
   input {
     File read1
-    File? read2
+    File read2
     String samplename
-    File? reference_genome
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.fasta"
     Int cpu = 6
   }
   command <<<
@@ -15,14 +15,8 @@ task bwa {
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
 
     # set reference genome
-    if [[ ! -z "~{reference_genome}" ]]; then
-      echo "User reference identified; ~{reference_genome} will be utilized for alignement"
-      ref_genome="~{reference_genome}"
-      bwa index "~{reference_genome}"
-      # move to primer_schemes dir; bwa fails if reference file not in this location
-    else
-      ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
-    fi
+    ref_genome="~{reference_genome}"
+    bwa index "~{reference_genome}"
 
     # Map with BWA MEM
     echo "Running bwa mem -t ~{cpu} ${ref_genome} ~{read1} ~{read2} | samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam "

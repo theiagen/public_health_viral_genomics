@@ -57,15 +57,15 @@ task variant_call {
   input {
     File bamfile
     String samplename
-    File? reference_genome
-    File? reference_gff 
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.fasta"
+    File reference_gff = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.gff3"
     Boolean? count_orphans = true
     Int? max_depth = "600000"
     Boolean? disable_baq = true
     Int? min_bq = "0"
     Int? min_qual = "20"
     Float? min_freq = "0.6"
-    Int? variant_min_depth 
+    Int? min_depth = "30"
   }
   command <<<
     # date and version control
@@ -74,23 +74,10 @@ task variant_call {
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
 
     # set reference genome
-    if [[ ! -z "~{reference_genome}" ]]; then
-      echo "User reference identified; ~{reference_genome} will be utilized for alignement"
-      ref_genome="~{reference_genome}"
-      bwa index "~{reference_genome}"
-      # move to primer_schemes dir; bwa fails if reference file not in this location
-    else
-      ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
-    fi
+    ref_genome="~{reference_genome}"
     
     # set reference gff
-    if [[ ! -z "~{reference_gff}" ]]; then
-      echo "User reference identified; ~{reference_genome} will be utilized for alignement"
-      ref_gff="~{reference_gff}"
-      # move to primer_schemes dir; bwa fails if reference file not in this location
-    else
-      ref_gff="/reference/GCF_009858895.2_ASM985889v3_genomic.gff"  
-    fi
+    ref_gff="{reference_gff}"
     
     # call variants
     samtools mpileup \
@@ -104,7 +91,7 @@ task variant_call {
     -p ~{samplename}.variants \
     -q ~{min_qual} \
     -t ~{min_freq} \
-    -m ~{variant_min_depth} \
+    -m ~{min_depth} \
     -r ${ref_genome} \
     -g ${ref_gff}
 
@@ -137,14 +124,14 @@ task consensus {
   input {
     File bamfile
     String samplename
-    File? reference_genome
+    File reference_genome = "gs://theiagen-public-files/terra/hivgc-files/NC_001802.1.fasta"
     Boolean? count_orphans = true
     Int? max_depth = "600000"
     Boolean? disable_baq = true
     Int? min_bq = "0"
     Int? min_qual = "20"
     Float? min_freq = "0.6"
-    Int? consensus_min_depth
+    Int? min_depth = "30"
     String? char_unknown = "N"
   }
   command <<<
@@ -154,14 +141,8 @@ task consensus {
     samtools --version | head -n1 | tee SAMTOOLS_VERSION
 
     # set reference genome
-    if [[ ! -z "~{reference_genome}" ]]; then
-      echo "User reference identified; ~{reference_genome} will be utilized for alignement"
-      ref_genome="~{reference_genome}"
-      bwa index "~{reference_genome}"
-      # move to primer_schemes dir; bwa fails if reference file not in this location
-    else
-      ref_genome="/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta"  
-    fi
+    ref_genome="~{reference_genome}"  
+    
     
     # call consensus
     samtools mpileup \
@@ -175,7 +156,7 @@ task consensus {
     -p ~{samplename}.consensus \
     -q ~{min_qual} \
     -t ~{min_freq} \
-    -m ~{consensus_min_depth} \
+    -m ~{min_depth} \
     -n ~{char_unknown}
 
     # clean up fasta header

@@ -100,3 +100,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_hivgc_ont.wdl
    testParameterFiles:
     - empty.json
+ - name: HIV_GC_Illumina_PE
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_hivgc_illumina_pe.wdl
+   testParameterFiles:
+    - empty.json
