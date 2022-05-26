@@ -1,7 +1,7 @@
 Output Name,Data Type,Description
 aligned_bai,File,Index companion file to the bam file generated during the consensus assembly process
 aligned_bam,File,Primer-trimmed BAM file; generated during conensus assembly process
-artic_docker,String,Docker image utilized for read trimming and consensus genome assembly by Artic
+artic_docker,String,Docker image utilized for read trimming and consensus genome assembly
 artic_version,String,Version of the Artic software utilized for read trimming and conesnsus genome assembly
 assembly_fasta,File,Consensus genome assembly
 assembly_length_unambiguous,Int,Number of unambiguous basecalls within the SC2 consensus assembly
