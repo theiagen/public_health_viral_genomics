@@ -12,20 +12,20 @@ kraken2_raw,cpu,Int,CPU resources allocated to the Kraken task runtime environme
 kraken2_raw,kraken2_db,String,Path to the reference genome within the staphb/kraken2:2.0.8-beta_hv Docker container,/kraken2-db
 kraken2_raw,read2,File,Optional input file for the Kraken task that is not applicable to this workflow,None
 ncbi_scrub_se,docker,String,Docker tag used for running the NCBI SRA Human-Scruber tool,gcr.io/ncbi-sys-gcr-public-research/sra-human-scrubber@sha256:b7dba71079344daea4ea3363e1a67fa54edb7ec65459d039669c68a66d38b140
-nextclade_one_sample,auspice_reference_tree_json,File,The phylogenetic reference tree which serves as a target for phylogenetic placement,null
+nextclade_one_sample,auspice_reference_tree_json,File,The phylogenetic reference tree which serves as a target for phylogenetic placement,default is inherited from nextclade dataset
 nextclade_one_sample,docker,String,Docker tag used for running NextClade,nextstrain/nextclade:1.11.0
-nextclade_one_sample,gene_annotations_json,File,A table describing the genes of the virus,null
-nextclade_one_sample,pcr_primers_csv,File,A table that describes a set of PCR primers that might be used for PCR tests of the virus,null
-nextclade_one_sample,qc_config_json,File,A set of parameters and thresholds used to configure the QC checks,null
-nextclade_one_sample,root_sequence,File,Viral nucleotide sequence which serves as a reference for alignment and the analysis,null
-nextclade_one_sample,virus_properties,File,Private mutations are split into 3 categories. This json file indicates which label to attach to mutations,null
+nextclade_one_sample,gene_annotations_json,File,A table describing the genes of the virus,default is inherited from nextclade dataset
+nextclade_one_sample,pcr_primers_csv,File,A table that describes a set of PCR primers that might be used for PCR tests of the virus,default is inherited from nextclade dataset
+nextclade_one_sample,qc_config_json,File,A set of parameters and thresholds used to configure the QC checks,default is inherited from nextclade dataset
+nextclade_one_sample,root_sequence,File,Viral nucleotide sequence which serves as a reference for alignment and the analysis,default is inherited from nextclade dataset
+nextclade_one_sample,virus_properties,File,Private mutations are split into 3 categories. This json file indicates which label to attach to mutations,default is inherited from nextclade dataset
 nextclade_output_parser_one_sample,docker,String,Docker tag used for parsing NextClade output,python:slim
 pangolin4,analysis_mode,String,pangolin inference engine for lineage designations (UShER or pangolearn),UShER
 pangolin4,docker,String,Docker tag used for running Pangolin,staphb/pangolin:4.0.6-pdata-1.8
 pangolin4,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
 pangolin4,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
 pangolin4,pangolin_arguments,String,Optional arguments for pangolin e.g. "--skip-scorpio",null
-read_filtering,cpu,Int,CPU resources allocated to the read filtering task (Artic guppypled) runtime environment ,8
+read_filtering,cpu,Int,CPU resources allocated to the read filtering task (Artic guppypled) runtime environment,8
 read_filtering,run_prefix,String,Run name,artic_ncov2019
 stats_n_coverage,s_gene_start,Int,Starting position of S gene for S gene coverage calculations pre primer trimming,21563
 stats_n_coverage,s_gene_stop,Int,Stopping position of S gene for S gene coverage calculations pre primer trimming,25384

@@ -1,10 +1,12 @@
 Output Name,Data Type,Description
 assembly_length_unambiguous,Int,Number of unambiguous basecalls within the SC2 consensus assembly
-assembly_mean_coverage,Float,Mean sequencing depth throughout the conesnsus assembly generated after performing primer trimming--calculated using the SAMtools coverage command
+assembly_method,String,Method employed to generate consensus assembly
 auspice_json,File,Auspice-compatable JSON output generated from NextClade analysis that includes the NextClade default samples for clade-typing and the single sample placed on this tree
 nextclade_aa_dels,String,Amino-acid deletions as detected by NextClade
 nextclade_aa_subs,String,Amino-acid substitutions as detected by NextClade
 nextclade_clade,String,NextClade clade designation
+nextclade_docker,String,Docker image used to run Nextclade
+nextclade_ds_tag,String,Dataset tag used to run Nextclade
 nextclade_json,File,NexClade output in JSON file format
 nextclade_tsv,File,NextClade output in TSV file format
 nextclade_version,String,Version of NextClade software used

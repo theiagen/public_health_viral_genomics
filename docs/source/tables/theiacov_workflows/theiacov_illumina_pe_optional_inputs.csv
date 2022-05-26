@@ -7,13 +7,13 @@ consensus,max_depth,Int,Maximum reads read at a position per input file for SAMt
 consensus,min_bq,Int,Minimum mapping quality for an alignment to be used for SAMtools mpileup before running iVar consensus,0
 consensus,min_freq,Float,Minimum frequency threshold(0 - 1) to call variants for iVar consensus,0.6
 consensus,min_qual,Int,Minimum quality threshold for sliding window to pass for iVar consensus,20
-nextclade_one_sample,auspice_reference_tree_json,File,The phylogenetic reference tree which serves as a target for phylogenetic placement,null
+nextclade_one_sample,auspice_reference_tree_json,File,The phylogenetic reference tree which serves as a target for phylogenetic placement,default is inherited from nextclade dataset
 nextclade_one_sample,docker,String,Docker tag used for running NextClade,nextstrain/nextclade:1.11.0
-nextclade_one_sample,gene_annotations_json,File,A table describing the genes of the virus,null
-nextclade_one_sample,pcr_primers_csv,File,A table that describes a set of PCR primers that might be used for PCR tests of the virus,null
-nextclade_one_sample,qc_config_json,File,A set of parameters and thresholds used to configure the QC checks,null
-nextclade_one_sample,root_sequence,File,Viral nucleotide sequence which serves as a reference for alignment and the analysis,null
-nextclade_one_sample,virus_properties,File,Private mutations are split into 3 categories. This json file indicates which label to attach to mutations,null
+nextclade_one_sample,gene_annotations_json,File,A table describing the genes of the virus,default is inherited from nextclade dataset
+nextclade_one_sample,pcr_primers_csv,File,A table that describes a set of PCR primers that might be used for PCR tests of the virus,default is inherited from nextclade dataset
+nextclade_one_sample,qc_config_json,File,A set of parameters and thresholds used to configure the QC checks,default is inherited from nextclade dataset
+nextclade_one_sample,root_sequence,File,Viral nucleotide sequence which serves as a reference for alignment and the analysis,default is inherited from nextclade dataset
+nextclade_one_sample,virus_properties,File,Private mutations are split into 3 categories. This json file indicates which label to attach to mutations,default is inherited from nextclade dataset
 nextclade_output_parser_one_sample,docker,String,Docker tag used for parsing NextClade output,python:slim
 pangolin4,analysis_mode,String,pangolin inference engine for lineage designations (UShER or pangolearn),UShER
 pangolin4,docker,String,Docker tag used for running Pangolin,staphb/pangolin:4.0.6-pdata-1.8
