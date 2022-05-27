@@ -1,0 +1,14 @@
+Task,Variable Name,Data Type,Description,Default
+sarscov2_nextstrain,ancestral_traits_to_infer,Array[String],"A list of metadata traits to use for ancestral node inference. Multiple traits may be specified; must correspond exactly to column headers in metadata file. Omitting these values will skip ancestral trait inference, and ancestral nodes will not have estimated values for metadata",None
+sarscov2_nextstrain,auspice_config,File,Auspice config file for customizing visualizations,Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
+sarscov2_nextstrain,builds_yaml,File,"YAML-formatted nextstrain 'build' definitions. See https://docs.nextstrain.org/en/latest/tutorials/SARS-CoV-2/steps/customizing-analysis.html#custom-subsampling-schemes for details",Nextstrain default
+sarscov2_nextstrain,clades_tsv,File,"TSV file containing clade mutation positions in four columns: [clade  gene    site    alt]",Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
+sarscov2_nextstrain,clock_rate,Float,Fixed clock rate to use for time tree calculations,0.0008
+sarscov2_nextstrain,clock_std_dev,Float,Standard deviation of the fixed clock_rate estimate,0.0004
+sarscov2_nextstrain,lat_longs_tsv,File,"Tab-delimited mapping of geographic scales (e.g., location ,division, etc.), geographic names (e.g., King County), and corresponding latitude and longitude values for the given place name",Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
+sarscov2_nextstrain,mafft_cpu,Int,CPUs allocated to multiple sequence alignment,64
+sarscov2_nextstrain,mafft_mem_size,Int,Memory allocated to multiple sequence alignment,500
+sarscov2_nextstrain,min_unambig_genome,Int,Minimum number of called bases in genome to pass prefilter,27000
+sarscov2_nextstrain,ref_fasta,File,A reference assembly (not included in assembly_fastas) to align assembly_fastas against. Typically from NCBI RefSeq or similar,Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
+sarscov2_nextstrain,tree_root_seq_id,String,,Wuhan-Hu-1/2019
+sarscov2_nextstrain,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None

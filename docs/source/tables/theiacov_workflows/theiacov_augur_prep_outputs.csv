@@ -1,0 +1,4 @@
+Output Name,Data Type,Description
+augur_metadata,File,Tsv file of the metadata provided as input to the theiacov_augur_prep workflow
+theiacov_augur_run_analysis_date,String,Date of analysis
+theiacov_augur_run_version,String,Version of theiacov_augur_prep
