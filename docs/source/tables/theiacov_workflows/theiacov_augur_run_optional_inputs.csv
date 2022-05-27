@@ -10,5 +10,5 @@ sarscov2_nextstrain,mafft_cpu,Int,CPUs allocated to multiple sequence alignment,
 sarscov2_nextstrain,mafft_mem_size,Int,Memory allocated to multiple sequence alignment,500
 sarscov2_nextstrain,min_unambig_genome,Int,Minimum number of called bases in genome to pass prefilter,27000
 sarscov2_nextstrain,ref_fasta,File,A reference assembly (not included in assembly_fastas) to align assembly_fastas against. Typically from NCBI RefSeq or similar,Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
-sarscov2_nextstrain,tree_root_seq_id,String,,Wuhan-Hu-1/2019
+sarscov2_nextstrain,tree_root_seq_id,String,Rooting mechanism or strain name(s) whose sequences should be used to root the time tree,Wuhan-Hu-1/2019
 sarscov2_nextstrain,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None
