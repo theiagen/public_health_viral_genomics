@@ -5,7 +5,7 @@ sarscov2_nextstrain,builds_yaml,File,"YAML-formatted nextstrain 'build' definiti
 sarscov2_nextstrain,clades_tsv,File,"TSV file containing clade mutation positions in four columns: [clade  gene    site    alt]",Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
 sarscov2_nextstrain,clock_rate,Float,Fixed clock rate to use for time tree calculations,0.0008
 sarscov2_nextstrain,clock_std_dev,Float,Standard deviation of the fixed clock_rate estimate,0.0004
-sarscov2_nextstrain,lat_longs_tsv,File,"Tab-delimited mapping of geographic scales (e.g., location ,division, etc.), geographic names (e.g., King County), and corresponding latitude and longitude values for the given place name",Nextstrain default see https://github.com/nextstrain/ncov/tree/master/defaults
+sarscov2_nextstrain,lat_longs_tsv,File,"Tab-delimited file of geographic location names with corresponding latitude and longitude values",Nextstrain default see https://github.com/nextstrain/ncov/blob/master/defaults/lat_longs.tsv
 sarscov2_nextstrain,mafft_cpu,Int,CPUs allocated to multiple sequence alignment,64
 sarscov2_nextstrain,mafft_mem_size,Int,Memory allocated to multiple sequence alignment,500
 sarscov2_nextstrain,min_unambig_genome,Int,Minimum number of called bases in genome to pass prefilter,27000
