@@ -9,7 +9,7 @@ TheiaCoV Workflows for Genomic Characterization
 Genomic characterization of pathogens is an increasing priority for public health laboratories globally. The workflows in the TheiaCoV Genomic Characterization Series make this easy for SARS-CoV-2 by either taking in raw next-generation sequencing (NGS) data or FASTA assembly files to characterize the virus to the most up-to-date international standards. The workflows facilitate (as required):
 
 1. **Assembly:** Mapping input read data to a reference genome, removing primer reads from that alignment, and then calling the consensus assembly based on the primer-trimmed alignment
-2. **Quality control (QC):** Producing relevant quality-control (QC) metrics for the input read data and the generated assembly
+2. **Quality control (QC):** Producing relevant quality-control (QC) metrics for the input read data and the generated assembly. These should be checked against QC guidelines for SARS-CoV-2 `(e.g. those produced by PH4GE) <https://github.com/pha4ge/pipeline-resources/blob/udubs-qc-guidance-dev/docs/qc-solutions.md#gisaid-assembly-acceptance-criteria>`_ to determine high quality data for further analysis.
 3. **Characterization:** Using Pangolin for lineage assignment, NextClade for clade assignment, and VADR for validation and annotation. 
 
 The workflow taking in assembled SARS-CoV-2 genomes produces only assembly QC metrics, Pangolin lineage and clade assignments.
