@@ -14,7 +14,7 @@ Genomic characterization of pathogens is an increasing priority for public healt
 
 The workflow taking in assembled SARS-CoV-2 genomes produces only assembly QC metrics, Pangolin lineage and clade assignments.
 
-There are five workflows in the TheiaCoV Workflow Series. They vary according to their input data types, supporting the following: 
+There are five workflows in the TheiaCoV Workflow Series. They all take in sequencing data generated using tiled PCR-amplicons designed for the SARS-CoV-2 genome. Most commonly, these are generated with the `Artic V3 protocol <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V3>`_ but reads resulting from alternative primer/PCR schemes such as the `QIAseq Primer Panel <https://www.qiagen.com/us/products/next-generation-sequencing/rna-sequencing/qiaseq-sars-cov-2-primer-panel/>`_, the `Artic V4 Amplicon Sequencing Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4>`_, the `Artic V4.1 Amplicon Sequencing Primer Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4.1>`_, and the `Midnight Amplicon Primer Set <https://www.protocols.io/view/sars-cov2-genome-sequencing-protocol-1200bp-amplic-rm7vz8q64vx1/v6>`_  can also be analysed with this workflow. The primer sequence coordinates of the PCR scheme used must be provided in `BED file format <https://en.wikipedia.org/wiki/BED_(file_format)#>`_ along with the raw paired-end Illumina read data in FASTQ format. If you are running your workflow on Terra, the bed files for these most commonly used PCR primers can be found in the Data tab, in the workspace data group. The TheiaCoV workflows vary according to their input sequencing datatypes, supporting the following: 
 
 * Previously assembled genomes in FASTA format (TheiaCoV_FASTA_ workflow)
 * Illumina paired-end data (TheiaCoV_Illumina_PE_ workflow)
@@ -24,7 +24,7 @@ There are five workflows in the TheiaCoV Workflow Series. They vary according to
 
 The input datatypes affect how the downstream assembly and QC steps have to be performed. Methological details for these steps are described for each workflow below. Ultimately, all workflows create equivalent assemblies then characterisation is undertaken in the same way in all workflows.
 
-**TheiaCoV Workflow series Characterisation step:** All workflows in this series characterize genomes using `Pangolin <https://cov-lineages.org/>`_ for lineage assignment, `NextClade <https://docs.nextstrain.org/projects/nextclade/en/stable/index.html>`_ for clade assignment, and `VADR <https://github.com/ncbi/vadr>`_ for validation and annotation. These tools and their underlying databases are updated regularly and have many versions available. The version should be selected when running the workflow. The latest versions are described `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
+**TheiaCoV Workflow series Characterization step:** All workflows in this series characterize genomes using `Pangolin <https://cov-lineages.org/>`_ for lineage assignment, `NextClade <https://docs.nextstrain.org/projects/nextclade/en/stable/index.html>`_ for clade assignment, and `VADR <https://github.com/ncbi/vadr>`_ for validation and annotation. These tools and their underlying databases are updated regularly and have many versions available, one of which should be selected when running the workflow. The latest versions are described `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
 More details on how to run these workflows through Terra are provided in the `Overview <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html#>`_ page.
 
@@ -38,10 +38,7 @@ TheiaCoV_Illumina_PE
 
    **TheiaCoV_Illumina_PE Workflow**
 
-**Input:** The TheiaCoV_Illumina_PE workflow was written to process Illumina paired-end (PE) read data for genomic characterization of SARS-CoV-2. 
-
-* Input reads should be the product of sequencing tiled PCR-amplicons designed for the SARS-CoV-2 genome. Most commonly, these are generated with the `Artic V3 protocol <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V3>`_ but reads resulting from alternative primer/PCR schemes such as the `QIAseq Primer Panel <https://www.qiagen.com/us/products/next-generation-sequencing/rna-sequencing/qiaseq-sars-cov-2-primer-panel/>`_, the `Artic V4 Amplicon Sequencing Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4>`_, the `Artic V4.1 Amplicon Sequencing Primer Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4.1>`_, and the `Midnight Amplicon Primer Set <https://www.protocols.io/view/sars-cov2-genome-sequencing-protocol-1200bp-amplic-rm7vz8q64vx1/v6>`_  can also be analysed with this workflow. 
-* The primer sequence coordinates of the PCR scheme used must be provided in `BED file format <https://en.wikipedia.org/wiki/BED_(file_format)#>`_ along with the raw paired-end Illumina read data in FASTQ format. If you are running your workflow on Terra, the bed files for these most commonly used PCR primers can be found in the Data tab, in the workspace data group. 
+**Input:** The TheiaCoV_Illumina_PE workflow was written to process Illumina paired-end (PE) read data generated by tiled PCR for genomic characterization of SARS-CoV-2. 
 
 .. note::
    By default, this workflow will assume that input reads were generated using a 300-cycle sequencing kit (i.e. 2 x 150 bp reads). Modifications to the optional parameter for trimmomatic_minlen may be required to accommodate shorter read data, such as 2 x 75bp reads generated using a 150-cycle sequencing kit.
