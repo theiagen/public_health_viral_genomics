@@ -1,6 +1,24 @@
 ==========================
 TheiaCoV Epidemiology Series
 ==========================
+TheiaCoV Workflows for Genomic Epidemiology
+----------------------------------------------
+
+Genomic Epidemiology, i.e. generating phylogenetic trees from a set of consensus assemblies (FASTA format) to track the spread and evolution of viruses on a local, national or global scale, has been an important methodological approach in the effort to mitigate disease transmission.
+
+The TheiaCoV Genomic Epidemiology Series contains two seperate WDL workflows (TheiaCoV_Augur_Prep and TheiaCoV_Augur_Run) that process a set of viral genomic assemblies to generate phylogenetic trees (JSON format) and metadata files which can be used to assign epidemiological data to each assembly for subsequent analyses.
+
+The two TheiaCoV workflows for genomic epidemiology must be run sequentially to first prepare the data for phylogenetic analysis and second to generate the phylogenetic trees. More information on the technical details of these processes and information on how to utilize and apply these workflows for public health investigations is available below.
+
+Required User Inputs
+********************
+Download CSV: :download:`TheiaCoV_Augur_Prep_required_inputs.csv <tables/theiacov_workflows/theiacov_augur_prep_required_inputs.csv>`
+
+.. csv-table::
+   :file: tables/theiacov_workflows/theiacov_augur_prep_required_inputs.csv
+   :widths: 20, 20, 20, 40
+   :header-rows: 1
+|
 
 TheiaCoV_Augur_Prep
 ================
