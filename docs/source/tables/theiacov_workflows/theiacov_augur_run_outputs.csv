@@ -1,0 +1,12 @@
+Output Name,Data Type,Description
+auspice_input_json,File,Json file for input to Auspice
+combined_assemblies,File,Combined fasta file for all samples included as input
+distance_tree,File,Distance tree in Newick (.nwk) format
+keep_list,File,List of samples included in phylogenetic tree
+MAFFT_alignment,File,Fasta file of aligned genomes (MAFFT:multiple alignment using fast Fourier transform)
+metadata_merged,File,CSV file of merged metadata from all samples included as input
+snp_matrix,File,SNP distance matrix for all samples included as input
+theiacov_augur_run_analysis_date,String,Date of analysis
+theiacov_augur_run_version,String,Version of the Public Health Viral Genomics (PHVG) repository used
+time_tree,File,Time tree in Newick (.nwk) format
+unmasked_snps,File,Vcf (variant call format) file for all samples included as input
