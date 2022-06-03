@@ -6,9 +6,6 @@
 Public Health Viral Genomics
 ==================================================
 
-Contents
---------
-
 .. toctree::
    :maxdepth: 2
 
@@ -18,4 +15,3 @@ Contents
    mercury_workflows
    about_theiagen
    license
-
