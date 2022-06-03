@@ -1,13 +1,13 @@
 Task,Input Variable,Data Type,Description,Default
-compile_biosamp_n_sra,docker_image,String,Docker image utilized for the compile_biosample_n_sra task,quay.io/theiagen/utility:1.1
-compile_biosamp_n_sra,preemptible_tries,Int,Number of preemptible tries for the compile_biosample_n_sra task,0
-genbank_compile,docker_image,String,Docker image utilized for the genbank_compile task,quay.io/theiagen/utility:1.1
-genbank_compile,preemptible_tries,Int,Number of preemptible tries for the genbank_compile task,0
-gisaid_compile,docker_image,String,Docker image utilized for the gisaid_compile task,quay.io/theiagen/utility:1.1
-gisaid_compile,preemptible_tries,Int,Number of preemptible tries for the gisaid_compile task,0
-mercury_batch,CPUs,Int,CPUs allocated for each task in the mercury_batch workflow,4
+compile_biosamp_n_sra,docker,String,Docker image utilized for the compile_biosample_n_sra task,quay.io/theiagen/utility:1.1
+compile_biosamp_n_sra,preemptible,Int,Number of preemptible tries for the compile_biosample_n_sra task,0
+genbank_compile,docker,String,Docker image utilized for the genbank_compile task,quay.io/theiagen/utility:1.1
+genbank_compile,preemptible,Int,Number of preemptible tries for the genbank_compile task,0
+gisaid_compile,docker,String,Docker image utilized for the gisaid_compile task,quay.io/theiagen/utility:1.1
+gisaid_compile,preemptible,Int,Number of preemptible tries for the gisaid_compile task,0
+mercury_batch,cpu,Int,CPUs allocated for each task in the mercury_batch workflow,4
 mercury_batch,disk_size,Int,Disk size allocated for each task in the mercury_batch workflow,100
 mercury_batch,gcp_bucket,String,GCP bucket for SRA transfer,None
-mercury_batch,mem_size_gb,Int,Memory allocated for each task in the mercury_batch workflow,8
+mercury_batch,memory,Int,Memory allocated for each task in the mercury_batch workflow,8
 mercury_batch,vadr_threshold,Int,Maximum number of VADR alerts for samples included in the batch submission files,0
 version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None
