@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Theiagen's Public Health Viral Genomics Repository!
+Public Health Viral Genomics
 ==================================================
 
 Contents
@@ -13,7 +13,9 @@ Contents
    :maxdepth: 2
 
    overview
-   theiacov_workflows
+   theiacov_characterization_workflows
+   theiacov_epidemiology_workflows
    mercury_workflows
-   terra_resources
+   about_theiagen
    license
+
