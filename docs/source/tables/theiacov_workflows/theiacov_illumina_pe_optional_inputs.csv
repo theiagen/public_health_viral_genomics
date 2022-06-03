@@ -25,10 +25,10 @@ read_QC_trim,bbduk_mem,Int,Memory allocated to the BBDuk VM,8
 read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,25
 read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
 read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
-stats_n_coverage,s_gene_start,Int,Starting position of S gene for S gene coverage calculations pre primer trimming,21563
-stats_n_coverage,s_gene_stop,Int,Stopping position of S gene for S gene coverage calculations pre primer trimming,25384
-stats_n_coverage_primtrim,s_gene_start,Int,Starting position of S gene for S gene coverage calculations post primer trimming,21563
-stats_n_coverage_primtrim,s_gene_stop,Int,Stopping position of S gene for S gene coverage calculations post primer trimming,25384
+stats_n_coverage,s_gene_start,Int,Starting position of S gene used for S gene coverage calculations pre primer trimming,21563
+stats_n_coverage,s_gene_stop,Int,Stopping position of S gene used for S gene coverage calculations pre primer trimming,25384
+stats_n_coverage_primtrim,s_gene_start,Int,Starting position of S gene used for S gene coverage calculations post primer trimming,21563
+stats_n_coverage_primtrim,s_gene_stop,Int,Stopping position of S gene used for S gene coverage calculations post primer trimming,25384
 theiacov_illumina_pe,min_depth,Int,Minimum read depth to call variants for iVar consensus and iVar variants,100
 theiacov_illumina_pe,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
 theiacov_illumina_pe,nextclade_dataset_reference,String,Nextclade reference genome,MN908947

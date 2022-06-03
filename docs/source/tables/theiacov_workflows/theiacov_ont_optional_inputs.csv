@@ -27,10 +27,10 @@ pangolin4,min_length,Int,Minimum query length allowed for pangolin to attempt as
 pangolin4,pangolin_arguments,String,Optional arguments for pangolin e.g. "--skip-scorpio",null
 read_filtering,cpu,Int,CPU resources allocated to the read filtering task (Artic guppypled) runtime environment,8
 read_filtering,run_prefix,String,Run name,artic_ncov2019
-stats_n_coverage,s_gene_start,Int,Starting position of S gene for S gene coverage calculations pre primer trimming,21563
-stats_n_coverage,s_gene_stop,Int,Stopping position of S gene for S gene coverage calculations pre primer trimming,25384
-stats_n_coverage_primtrim,s_gene_start,Int,Starting position of S gene for S gene coverage calculations post primer trimming,21563
-stats_n_coverage_primtrim,s_gene_stop,Int,Stopping position of S gene for S gene coverage calculations post primer trimming,25384
+stats_n_coverage,s_gene_start,Int,Starting position of S gene used for S gene coverage calculations pre primer trimming,21563
+stats_n_coverage,s_gene_stop,Int,Stopping position of S gene used for S gene coverage calculations pre primer trimming,25384
+stats_n_coverage_primtrim,s_gene_start,Int,Starting position of S gene used for S gene coverage calculations post primer trimming,21563
+stats_n_coverage_primtrim,s_gene_stop,Int,Stopping position of S gene used for S gene coverage calculations post primer trimming,25384
 theiacov_ont,max_length,Int,Maximum sequence length ,700
 theiacov_ont,min_length,Int,Minimum sequence length,400
 theiacov_ont,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
