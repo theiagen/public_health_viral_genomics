@@ -13,7 +13,7 @@ Contents
    :maxdepth: 2
 
    overview
-   theiacov_workflows
+   theiacov_characterization_workflows
+   theiacov_epidemiology_workflows
    mercury_workflows
-   terra_resources
    license
