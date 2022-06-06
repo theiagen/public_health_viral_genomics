@@ -49,7 +49,7 @@ pangolin_assignment_version,String,Version of the pangolin software (e.g. PANGO 
 pangolin_conflicts,String,Number of lineage conflicts as deteremed by Pangolin
 pangolin_docker,String,Docker image used to run Pangolin
 pangolin_notes,String,Lineage notes as deteremined by Pangolin
-pangolin_versions,String,All Pangolin software and database version
+pangolin_versions,String,All Pangolin software and database versions
 percent_gene_coverage,File,Percent coverage for each gene in reference genome (assumes WUHAN-1 reference genome)
 percent_reference_coverage,Float,"Percent coverage of the reference genome after performing primer trimming; calculated as assembly_length_unambiguous / length of reference genome (SC2: 29,903) x 100"
 primer_bed_name,String,Name of the primer bed files used for primer trimming

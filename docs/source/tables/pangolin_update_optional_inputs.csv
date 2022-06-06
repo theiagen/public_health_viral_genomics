@@ -1,0 +1,7 @@
+Task,Variable Name,Data Type,Description,Default
+pangolin4,analysis_mode,String,pangolin inference engine for lineage designations (UShER or pangolearn),UShER
+pangolin4,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
+pangolin4,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
+pangolin4,pangolin_arguments,String,Optional arguments for pangolin e.g. "--skip-scorpio",null
+pangolin_update,lineage_log,File,Tsv file detailing previous lineage assignments and software versions for the analyzed sample,None
+pangolin_update,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None
