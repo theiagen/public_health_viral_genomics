@@ -29,6 +29,12 @@ There are five workflows in the TheiaCoV Characterization Series. They all take 
 
 More details on how to get started with running these workflows are provided in the `Overview <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html#>`_ page.
 
+.. toggle-header::
+    :header: TheiaCoV_Illumina_PE 
+
+        Content for header
+        .. 
+
 TheiaCoV_Illumina_PE 
 ================================
 
