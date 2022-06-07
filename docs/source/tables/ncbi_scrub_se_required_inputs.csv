@@ -1,0 +1,3 @@
+Task,Input Variable ,Data Type ,Description
+dehost_se,reads,File,Single-end Illumina reads in FASTQ file format
+dehost_se,samplename,String,Name of the sample being analyzed 
