@@ -34,7 +34,7 @@ theiacov_illumina_se,min_depth,Int,Minimum read depth to call variants for iVar 
 theiacov_illumina_se,nextclade_dataset_name,String,Nextclade organism dataset,sars-cov-2
 theiacov_illumina_se,nextclade_dataset_reference,String,Nextclade reference genome,MN908947
 theiacov_illumina_se,nextclade_dataset_tag,String,Nextclade dataset tag,2022-04-28T12:00:00Z
-theiacov_illumina_se,reference_genome,String,Path to the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
+theiacov_illumina_se,reference_genome,String,Path to the reference genome within the quay.io/staphb/ivar:1.3.1-titan Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
 theiacov_illumina_se,seq_method,String,Description of the sequencing methodology used to generate the input read data,Illumina paired-end
 vadr,docker,String,Docker tag used for running VADR,quay.io/staphb/1.4.1-models-1.3-2
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000

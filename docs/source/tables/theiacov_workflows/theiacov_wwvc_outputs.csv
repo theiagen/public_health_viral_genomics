@@ -1,0 +1,19 @@
+Output Name,Data Type,Description
+addrg_bam,Array[File],Array of BAM files with read group line appended to header
+alignment_files,Array[File],Array of sorted and primer-trimmed BAM files
+allele_freq_tsv,Array[File],Array of tsv files detailing allele frequency values for detected mutations (converted from fill_NA_tsv)
+fill_NA_tsv,Array[File],Array of tsv files detailing data for mutations detected in each sample with NAs in positions of interest with missing data
+reformat_tsv_tsv,Array[File],Array of tsv files detailing allele frequency values for detected mutations (reformatted from allele_freq_tsv)
+sample_spike_tsv,Array[File],Array of tsv files detailing only data for the mutations of interest (converted from sample_spike_vcf)
+sample_spike_tsv_counts,Array[File],Array of tsv files formatted for concatenation detailing count data for detected mutations (reformatted from reformat_tsv_tsv)
+sample_spike_tsv_dash,Array[File],Array of tsv files formatted for concatenation detailing allele frequency data for detected mutations (reformatted from reformat_tsv_tsv)
+sample_spike_tsv_summary,Array[File],Array of intermediate tsv files formatted for concatenation detailing alternate alleles and their frequencies (cut from reformat_tsv_tsv)
+sample_spike_vcf,Array[File],Array of vcf files detailing only data for the mutations of interest designated in input spike_bed file
+sorted_vcf,Array[File],Array of sorted vcf files detailing variants detected by FreeBayes
+spike_counts,File,Tsv file of concatenated count data for all analyzed samples
+spike_dashboard,File,Tsv file of concatenated allele frequency data for all analyzed samples
+spike_summary,File,Tsv file of concatenated allele frequency data for all analyzed samples (transpose of spike_summary_temp file)
+spike_summary_temp,File,Intermediate tsv file of concatenated allele frequency data for all analyzed samples (transpose of spike_summary)
+theiacov_wwvc_date,String,Date of analysis
+theiacov_wwvc_version,String,Version of the Public Health Viral Genomics (PHVG) repository used
+variants,Array[File],Array of vcf files detailing variants detected by FreeBayes
