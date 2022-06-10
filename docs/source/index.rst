@@ -12,6 +12,8 @@ Public Health Viral Genomics
    overview
    theiacov_characterization_workflows
    theiacov_epidemiology_workflows
+   theiacov_additional_workflows
    mercury_workflows
+   additional_resources
    about_theiagen
    license
