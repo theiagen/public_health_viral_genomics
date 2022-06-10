@@ -55,6 +55,40 @@ TheiaCoV_Illumina_PE
 
 More information about the TheiaCoV_Illumina_PE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_outputs.csv>`_.
 
+.. toggle-header::
+    :header: **References**
+
+        When publishing work using TheiaCoV_Illumina_PE, please reference the following:
+      
+        **NCBI SRA-Human-Scrubber** Based on Katz KS, Shutov O, Lapoint R, Kimelman M, Brister JR, O’Sullivan C. STAT: a fast, scalable, MinHash-based k-mer tool to assess Sequence Read Archive next-generation sequence submissions. Genome biology. 2021 Dec;22(1):1-5.
+
+        **trimmomatic** Bolger AM, Lohse M, Usadel B. Trimmomatic: a flexible trimmer for Illumina sequence data. Bioinformatics. 2014 Aug 1;30(15):2114-20.
+
+        **BBDuk** Bushnell B. BBTools software package. URL http://sourceforge. net/projects/bbmap. 2014;578:579.
+
+        **BWA** Li H, Durbin R. Fast and accurate long-read alignment with Burrows–Wheeler transform. Bioinformatics. 2010 Mar 1;26(5):589-95.
+
+        **iVar** Grubaugh ND, Gangavarapu K, Quick J, Matteson NL, De Jesus JG, Main BJ, Tan AL, Paul LM, Brackney DE, Grewal S, Gurfield N. An amplicon-based sequencing framework for accurately measuring intrahost virus diversity using PrimalSeq and iVar. Genome biology. 2019 Dec;20(1):1-9.
+
+        **Kraken2** Wood DE, Lu J, Langmead B. Improved metagenomic analysis with Kraken 2. Genome biology. 2019 Dec;20(1):1-3.
+        
+        **fastq-scan** Petit RA, III. 2020. fastq-scan. Output FASTQ summary statistics in JSON format. https://github.com/rpetit3/fastq-scan.
+
+        **Samtools** Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools. Gigascience. 2021 Feb;10(2):giab008.
+
+        **VADR** Schäffer AA, Hatcher EL, Yankie L, Shonkwiler L, Brister JR, Karsch-Mizrachi I, Nawrocki EP. VADR: validation and annotation of virus sequence submissions to GenBank. BMC bioinformatics. 2020 Dec;21(1):1-23.
+        
+        **NextClade** Aksamentov I, Roemer C, Hodcroft EB, Neher RA. Nextclade: clade assignment, mutation calling and quality control for viral genomes. Journal of Open Source Software. 2021 Nov 30;6(67):3773.
+        
+        **Pangolin** 
+            **minimap2** Li H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics. 2018 Sep 15;34(18):3094-100.
+
+            **gofasta** Benjamin C Jackson, 2021. GoFasta. https://github.com/virus-evolution/gofasta
+
+            **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
+
+            **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
 TheiaCoV_Illumina_SE
 =======================
 
@@ -79,6 +113,38 @@ NB Sequencing reads derived from the human genome are not removed during this wo
 
 More information about the TheiaCoV_Illumina_SE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_outputs.csv>`_.
 
+.. toggle-header::
+    :header: **References**
+
+        When publishing work using TheiaCoV_Illumina_SE, please reference the following:
+
+        **trimmomatic** Bolger AM, Lohse M, Usadel B. Trimmomatic: a flexible trimmer for Illumina sequence data. Bioinformatics. 2014 Aug 1;30(15):2114-20.
+
+        **BBDuk** Bushnell B. BBTools software package. URL http://sourceforge. net/projects/bbmap. 2014;578:579.
+
+        **BWA** Li H, Durbin R. Fast and accurate long-read alignment with Burrows–Wheeler transform. Bioinformatics. 2010 Mar 1;26(5):589-95.
+
+        **iVar** Grubaugh ND, Gangavarapu K, Quick J, Matteson NL, De Jesus JG, Main BJ, Tan AL, Paul LM, Brackney DE, Grewal S, Gurfield N. An amplicon-based sequencing framework for accurately measuring intrahost virus diversity using PrimalSeq and iVar. Genome biology. 2019 Dec;20(1):1-9.
+
+        **Kraken2** Wood DE, Lu J, Langmead B. Improved metagenomic analysis with Kraken 2. Genome biology. 2019 Dec;20(1):1-3.
+        
+        **fastq-scan** Petit RA, III. 2020. fastq-scan. Output FASTQ summary statistics in JSON format. https://github.com/rpetit3/fastq-scan.
+
+        **Samtools** Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools. Gigascience. 2021 Feb;10(2):giab008.
+
+        **VADR** Schäffer AA, Hatcher EL, Yankie L, Shonkwiler L, Brister JR, Karsch-Mizrachi I, Nawrocki EP. VADR: validation and annotation of virus sequence submissions to GenBank. BMC bioinformatics. 2020 Dec;21(1):1-23.
+        
+        **NextClade** Aksamentov I, Roemer C, Hodcroft EB, Neher RA. Nextclade: clade assignment, mutation calling and quality control for viral genomes. Journal of Open Source Software. 2021 Nov 30;6(67):3773.
+        
+        **Pangolin** 
+            **minimap2** Li H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics. 2018 Sep 15;34(18):3094-100.
+
+            **gofasta** Benjamin C Jackson, 2021. GoFasta. https://github.com/virus-evolution/gofasta
+
+            **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
+            
+            **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
 TheiaCoV_ClearLabs
 ======================
 
@@ -102,6 +168,34 @@ NB Read-trimming is performed on raw read data generated on the ClearLabs instru
 
 More information about the TheiaCoV_ClearLabs workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_outputs.csv>`_.
 
+.. toggle-header::
+    :header: **References**
+
+        When publishing work using TheiaCoV_Illumina_ClearLabs, please reference the following:
+      
+        **NCBI SRA-Human-Scrubber** Based on Katz KS, Shutov O, Lapoint R, Kimelman M, Brister JR, O’Sullivan C. STAT: a fast, scalable, MinHash-based k-mer tool to assess Sequence Read Archive next-generation sequence submissions. Genome biology. 2021 Dec;22(1):1-5.
+
+        **Artic nCoV-2019 protocol** https://github.com/artic-network/artic-ncov2019
+
+        **minimap2** Li H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics. 2018 Sep 15;34(18):3094-100.
+
+        **Kraken2** Wood DE, Lu J, Langmead B. Improved metagenomic analysis with Kraken 2. Genome biology. 2019 Dec;20(1):1-3.
+        
+        **fastq-scan** Petit RA, III. 2020. fastq-scan. Output FASTQ summary statistics in JSON format. https://github.com/rpetit3/fastq-scan.
+
+        **Samtools** Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools. Gigascience. 2021 Feb;10(2):giab008.
+
+        **VADR** Schäffer AA, Hatcher EL, Yankie L, Shonkwiler L, Brister JR, Karsch-Mizrachi I, Nawrocki EP. VADR: validation and annotation of virus sequence submissions to GenBank. BMC bioinformatics. 2020 Dec;21(1):1-23.
+        
+        **NextClade** Aksamentov I, Roemer C, Hodcroft EB, Neher RA. Nextclade: clade assignment, mutation calling and quality control for viral genomes. Journal of Open Source Software. 2021 Nov 30;6(67):3773.
+        
+        **Pangolin** 
+            **gofasta** Benjamin C Jackson, 2021. GoFasta. https://github.com/virus-evolution/gofasta
+
+            **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
+            
+            **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
 TheiaCoV_ONT
 ===============
 
@@ -123,6 +217,36 @@ TheiaCoV_ONT
 
 More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_outputs.csv>`_.
 
+
+.. toggle-header::
+    :header: **References**
+
+        When publishing work using TheiaCoV_Illumina_ONT, please reference the following:
+      
+        **NCBI SRA-Human-Scrubber** Based on Katz KS, Shutov O, Lapoint R, Kimelman M, Brister JR, O’Sullivan C. STAT: a fast, scalable, MinHash-based k-mer tool to assess Sequence Read Archive next-generation sequence submissions. Genome biology. 2021 Dec;22(1):1-5.
+
+        **Artic nCoV-2019 protocol** https://github.com/artic-network/artic-ncov2019
+
+        **minimap2** Li H. Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics. 2018 Sep 15;34(18):3094-100.
+
+        **Kraken2** Wood DE, Lu J, Langmead B. Improved metagenomic analysis with Kraken 2. Genome biology. 2019 Dec;20(1):1-3.
+        
+        **fastq-scan** Petit RA, III. 2020. fastq-scan. Output FASTQ summary statistics in JSON format. https://github.com/rpetit3/fastq-scan.
+
+        **Samtools** Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools. Gigascience. 2021 Feb;10(2):giab008.
+
+        **VADR** Schäffer AA, Hatcher EL, Yankie L, Shonkwiler L, Brister JR, Karsch-Mizrachi I, Nawrocki EP. VADR: validation and annotation of virus sequence submissions to GenBank. BMC bioinformatics. 2020 Dec;21(1):1-23.
+        
+        **NextClade** Aksamentov I, Roemer C, Hodcroft EB, Neher RA. Nextclade: clade assignment, mutation calling and quality control for viral genomes. Journal of Open Source Software. 2021 Nov 30;6(67):3773.
+        
+        **Pangolin** 
+            **gofasta** Benjamin C Jackson, 2021. GoFasta. https://github.com/virus-evolution/gofasta
+
+            **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
+            
+            **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
+
 TheiaCoV_FASTA
 ================
 .. figure:: images/TheiaCoV_FASTA.png
@@ -135,3 +259,19 @@ TheiaCoV_FASTA
 **QA:** The quality of input SARS-CoV-2 genome assemblies are assessed by the TheiaCoV_FASTA workflow using a series of `bash shell scripts <https://github.com/theiagen/public_health_viral_genomics/blob/main/tasks/task_qc_utils.wdl>`_. 
 
 More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_outputs.csv>`_.
+
+.. toggle-header::
+    :header: **References**
+
+        When publishing work using TheiaCoV_FASTA, please reference the following:
+
+        **VADR** Schäffer AA, Hatcher EL, Yankie L, Shonkwiler L, Brister JR, Karsch-Mizrachi I, Nawrocki EP. VADR: validation and annotation of virus sequence submissions to GenBank. BMC bioinformatics. 2020 Dec;21(1):1-23.
+        
+        **NextClade** Aksamentov I, Roemer C, Hodcroft EB, Neher RA. Nextclade: clade assignment, mutation calling and quality control for viral genomes. Journal of Open Source Software. 2021 Nov 30;6(67):3773.
+        
+        **Pangolin** 
+            **gofasta** Benjamin C Jackson, 2021. GoFasta. https://github.com/virus-evolution/gofasta
+
+            **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
+            
+            **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
