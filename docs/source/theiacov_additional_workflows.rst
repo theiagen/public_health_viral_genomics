@@ -20,7 +20,7 @@ WasteWaterVariantCalling wf: performs variant calling and variant filtration usi
 .. toggle-header::
     :header: **References**
 
-        When publishing work using TheiaCoV_WWVC, please do reference the following:
+        When publishing work using TheiaCoV_WWVC, please reference the following:
 
         **fastq-scan** Petit RA, III. 2020. fastq-scan. Output FASTQ summary statistics in JSON format. https://github.com/rpetit3/fastq-scan.
 
