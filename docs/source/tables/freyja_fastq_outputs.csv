@@ -1,0 +1,37 @@
+Output Name,Data Type,Description
+aligned_bai,File,Index companion file to the bam file generated during the consensus assembly process
+aligned_bam,File,Primer-trimmed BAM file; generated during conensus assembly process
+alignment_method,String,BWA and iVar versions used for alignment
+bbduk_docker,String,Docker image used to run BBDuk
+bwa_version,String,Version of BWA used to align read data to the reference genome
+fastq_scan_version,String,Version of fastq_scan used for read QC analysis
+freyja_barcode_version,String,Version of freyja UShER barcode file used for demixing
+freyja_demixed,File,"Tsv file that includes the lineages present, their corresponding abundances, and summarization by constellation"
+freyja_depths,File,Tsv file detailing read depth at every position in the analyzed sample
+freyja_fastq_wf_analysis_date,String,Date of Analysis
+freyja_fastq_wf_version,String,Version of the Public Health Viral Genomics (PHVG) repository used
+freyja_metadata_version,String,Version of freyja metadata file used for demixing
+freyja_variants,File,Tsv file detailing read depth and allele frequency for variants detected in the analyzed sample 
+ivar_version_primtrim,String,Version of iVar for running the iVar trim command
+kraken_human,Float,Percent of human read data detected using the Kraken2 software
+kraken_human_dehosted,Float,Percent of human read data detected using the Kraken2 software after host removal
+kraken_report,File,Full Kraken report
+kraken_report_dehosted,File,Full Kraken report after host removal
+kraken_sc2,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software
+kraken_sc2_dehosted,Float,Percent of SARS-CoV-2 read data detected using the Kraken2 software after host removal
+kraken_version,String,Version of Kraken software used
+num_reads_clean1,Int,Number of forward reads after filtering as determined by fastq_scan
+num_reads_clean2,Int,Number of reverse reads after filtering as determined by fastq_scan
+num_reads_clean_pairs,String,Number of paired reads after filtering as determined by fastq_scan
+num_reads_raw1,Int,Number of forward reads identified in the input fastq files as determined by fastq_scan
+num_reads_raw2,Int,Number of reverse reads identified in the input fastq files as determined by fastq_scan
+num_reads_raw_pairs,String,Number of paired reads identified in the input fastq files as determined by fastq_scan
+primer_bed_name,String,Name of the primer bed files used for primer trimming
+primer_trimmed_read_percent,Float,Percent of read data with primers trimmed as determined by iVar trim
+read1_clean,File,Forward read file after quality trimming and adapter removal
+read1_dehosted,File,Dehosted forward reads; suggested read file for SRA submission
+read2_clean,File,Reverse read file after quality trimming and adapter removal
+read2_dehosted,File,Dehosted reverse reads; suggested read file for SRA submission
+samtools_version,String,Version of SAMtools used to sort and index the alignment file
+samtools_version_primtrim,String,Version of SAMtools used to create the pileup before running iVar trim
+trimmomatic_version,String,Version of Trimmomatic used

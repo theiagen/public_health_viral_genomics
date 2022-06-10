@@ -2,7 +2,7 @@ Task,Variable Name,Data Type,Description,Default
 consensus,cpu,Int,CPU resources allocated to the Artic Medaka task runtime environment,8
 consensus,docker,String,Docker tag used for running Medaka assembler,quay.io/staphb/artic-ncov2019-epi2me
 consensus,medaka_model,String,Model for consensus genome assembly via Medaka,r941_min_high_g360
-consensus,reference_genome,File,Path to the reference genome within the staphb/ivar:1.2.2_artic20200528 Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
+consensus,reference_genome,File,Path to the reference genome within the quay.io/staphb/ivar:1.3.1-titan Docker container,/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta
 fastq_scan_clean_reads,read1_name,String,Name of the sample being analyzed,Inferred from the input read file 
 fastq_scan_raw_reads,read1_name,String,Name of the sample being analyzed,Inferred from the input read file
 kraken2_dehosted,cpu,Int,CPU resources allocated to the Kraken task runtime environment for asessing dehosted read data,4

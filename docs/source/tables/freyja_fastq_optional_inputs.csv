@@ -1,0 +1,13 @@
+Task,Variable Name,Data Type,Description,Default
+bwa,cpu,Int,CPU resources allocated to the BWA task runtime environment,6
+freyja,docker,String,Docker image used for running Freyja,quay.io/staphb/freyja:1.3.4
+freyja,eps,Float,Minimum lineage abundance returned,0.0001
+freyja,freyja_lineage_metadata,File,File mapping lineage to constellation data,default from freyja docker container
+freyja,freyja_usher_barcodes,File,Csv file listing lineage-determining mutational "barcodes" derived from the UShER global phylogenetic tree used as a basis set to solve the constrained de-mixing problem,default from freyja docker container
+freyja,update_db,Boolean,Boolean indicating whether to update frejya database,false
+freyja_fastq,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,25
+primer_trim,keep_noprimer_reads,Boolean,Include reads with no primers for iVar trim,True
+read_QC_trim,bbduk_mem,Int,Memory allocated to the BBDuk,8
+read_QC_trim,trimmomatic_quality_trim_score,Int,Specifies the average quality required for Trimmomatic,30
+read_QC_trim,trimmomatic_window_size,Int,Specifies the number of bases to average across for Trimmomatic,4
+version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None

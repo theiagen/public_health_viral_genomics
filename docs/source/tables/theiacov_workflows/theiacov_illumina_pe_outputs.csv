@@ -57,7 +57,7 @@ primer_trimmed_read_percent,Float,Percent of read data with primers trimmed as d
 read1_clean,File,Forward read file after quality trimming and adapter removal
 read1_dehosted,File,Dehosted forward reads; suggested read file for SRA submission
 read2_clean,File,Reverse read file after quality trimming and adapter removal
-read2_dehosted,File,Dehosted reverse reads; suggested read file for SRA submissionsamtools_version
+read2_dehosted,File,Dehosted reverse reads; suggested read file for SRA submission
 s_gene_mean_coverage,Float,Mean read depth for S gene
 s_gene_percent_coverage,Float,Percent coverage of S gene
 samtools_version,String,Version of SAMtools used to sort and index the alignment file

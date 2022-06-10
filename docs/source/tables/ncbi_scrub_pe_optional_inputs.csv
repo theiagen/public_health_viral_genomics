@@ -1,0 +1,5 @@
+Task,Variable Name,Data Type,Description,Default
+kraken2,cpu,Int,CPU resources allocated to the Kraken2 task runtime environment,4
+kraken2,kraken2_db,String,Database used by Kraken2 for taxonomic assignment,/kraken2-db
+ncbi_scrub_pe,docker,String,Docker tag used for running ncbi_scrub_se,gcr.io/ncbi-sys-gcr-public-research/sra-human-scrubber@sha256:b7dba71079344daea4ea3363e1a67fa54edb7ec65459d039669c68a66d38b140
+version_capture,timezone,String,User time zone in valid Unix TZ string (e.g. America/New_York),None
