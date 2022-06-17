@@ -1,6 +1,6 @@
-=======================
-Mercury Workflow Series
-=======================
+==================================
+TheiaCoV Mercury Workflow Series
+==================================
 
 The Mercury workflow series was developed to allow users to efficiently and accurately prepare submission files for GISAID, SRA, and Genbank submissions as well as BioSample registration. As of today (November 11th, 2021) these workflows are specific to SARS-CoV-2 amplicon read data from clinical samples, but work is underway to allow for the submission preparation of other viral pathogens of concern. 
 
