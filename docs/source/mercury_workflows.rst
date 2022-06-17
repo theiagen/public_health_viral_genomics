@@ -2,22 +2,18 @@
 Mercury Workflow Series
 ==================================
 
-The Mercury workflow series was developed to allow users to efficiently and accurately prepare submission files for GISAID, SRA, and Genbank submissions as well as BioSample registration. As of today (November 11th, 2021) these workflows are specific to SARS-CoV-2 amplicon read data from clinical samples, but work is underway to allow for the submission preparation of other viral pathogens of concern. 
+The Mercury workflow series was developed to allow users to efficiently and accurately prepare submission files for GISAID, SRA, and Genbank submissions as well as BioSample registration. As of November 11th, 2021, these workflows are specific to SARS-CoV-2 amplicon read data from clinical samples. 
 
-These workflows were written to ingest and properly format all suggested metadata fields as per the Public Health Alliance for Genomic Epidemiology (PH4GE)'s SARS-CoV-2 Contextual Data Specifications_.
+These workflows were written to properly format all suggested metadata fields as per the Public Health Alliance for Genomic Epidemiology (PH4GE)'s SARS-CoV-2 Contextual Data Specifications_.
 
 .. _Specifications: https://github.com/pha4ge/SARS-CoV-2-Contextual-Data-Specification
-
-
-
-
 
 Mercury Workflows for Single-Sample Preparation
 -----------------------------------------------
 
-Sharing of sample read and assembly data through internationally accessible databases allows insights to be drawn about how the virus is spreading and mutating across the globe; the more freely available these data are to international researchers and public health scientists, the stronger our decision making can be.
+Sharing of sample read and assembly data through internationally accessible databases allows insights to be drawn about how the virus is spreading and mutating across the globe. This allows international researchers and public health scientists to use these data and help all of us make stronger public health decisions.
 
-The Mercury workflows for single-sample preparation is made up of two separate WDL workflows, Mercury_SE_Prep & Mercury_PE_Prep, for preparing submission files to GISAID, SRA, and GenBank for single and paired-end read data, respectively. These two workflows will process read data, assembly files, and contextual metadata to prepare submission for samples individually--while these workflows can process multiple samples in a single run, the submission files prepared are for single-sample submission; for preparation of multiple samples (i.e. batch submission), please see details for the Mercury_Batch workflow below. 
+The Mercury workflows for single-sample preparation is made up of two separate WDL workflows, Mercury_SE_Prep & Mercury_PE_Prep, which prepare submission files for GISAID, SRA, and GenBank for single and paired-end read data, respectively. These two workflows will process read data, assembly files, and contextual metadata to prepare submission for samples individually. NB while these workflows can process multiple samples in a single run, the prepared submission files are for single-sample submission. For preparation of multiple samples (i.e. batch submission), please see details for the Mercury_Batch_ workflow below. 
 
 .. figure:: images/Mercury_Prep.png
    :width: 800
@@ -38,7 +34,7 @@ A series of introductory training videos that provide conceptual overviews of me
 
 
 Mercury_PE_Prep
-===============
+=================
 The Mercury_PE_Prep workflow was written to process paired-end read data, assembly files, and contextual metadata to prepare submission for samples individually. 
 
 .. note::
