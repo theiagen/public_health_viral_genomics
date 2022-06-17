@@ -1,5 +1,5 @@
 ===================================
-Additional resources
+Rsources for SARS-CoV-2 genomics
 ===================================
 
 **Outbreak.info** "a standardized, open-source database of COVID-19 resources and epidemiology data" https://outbreak.info
