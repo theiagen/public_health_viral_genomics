@@ -129,6 +129,9 @@ task pangolin4 {
     Float max_ambig = 0.5
     String docker = "staphb/pangolin:4.0.6-pdata-1.8"
     String? analysis_mode
+    Boolean expanded_lineage=false
+    Boolean skip_scorpio=false
+    Boolean skip_designation_cache=false
     String? pangolin_arguments
   }
   command <<<
@@ -143,9 +146,13 @@ task pangolin4 {
        ~{'--analysis-mode ' + analysis_mode} \
        ~{'--min-length ' + min_length} \
        ~{'--max-ambig ' + max_ambig} \
+       ~{true='--expanded-lineage' false='' expanded_lineage} \
+       ~{true='--skip-scorpio' false='' skip_scorpio} \
+       ~{true='--skip-designation-cache' false='' skip_designation_cache} \
        --outfile "~{samplename}.pangolin_report.csv" \
        --verbose \
        ~{pangolin_arguments}
+
 
     python3 <<CODE
     import csv
@@ -163,6 +170,9 @@ task pangolin4 {
           pangolin_conflicts.write(line["conflict"])
         with open("PANGOLIN_NOTES", 'wt') as pangolin_notes:
           pangolin_notes.write(line["note"])
+        with open("EXPANDED_LINEAGE", "wt") as expanded_lineage:
+          if "expanded_lineage" in line:
+            expanded_lineage.write(line["expanded_lineage"])
     CODE
   >>>
   output {
@@ -172,6 +182,7 @@ task pangolin4 {
     String pangolin_notes = read_string("PANGOLIN_NOTES")
     String pangolin_assignment_version = read_string("PANGO_ASSIGNMENT_VERSION")
     String pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
+    String pangolin_expanded_lineage = read_string("EXPANDED_LINEAGE")
     String pangolin_docker = docker
     File pango_lineage_report = "~{samplename}.pangolin_report.csv"
   }
@@ -181,7 +192,7 @@ task pangolin4 {
     cpu: 4
     disks: "local-disk 100 SSD"
     preemptible: 0
-    maxRetries: 3
+    #maxRetries: 3
   }
 }
 
