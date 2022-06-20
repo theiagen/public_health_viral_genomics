@@ -129,7 +129,7 @@ task pangolin4 {
     Float max_ambig = 0.5
     String docker = "staphb/pangolin:4.0.6-pdata-1.8"
     String? analysis_mode
-    Boolean expanded_lineage=false
+    Boolean expanded_lineage=true
     Boolean skip_scorpio=false
     Boolean skip_designation_cache=false
     String? pangolin_arguments
@@ -173,6 +173,8 @@ task pangolin4 {
         with open("EXPANDED_LINEAGE", "wt") as expanded_lineage:
           if "expanded_lineage" in line:
             expanded_lineage.write(line["expanded_lineage"])
+          else:
+            expanded_lineage.write("NA")
     CODE
   >>>
   output {
