@@ -156,6 +156,7 @@ workflow theiacov_illumina_se {
     File pango_lineage_report = pangolin4.pango_lineage_report
     String pangolin_docker = pangolin4.pangolin_docker
     String pangolin_versions = pangolin4.pangolin_versions
+    String pangolin_expanded_lineage = pangolin4.pangolin_expanded_lineage
     # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
     File auspice_json = nextclade_one_sample.auspice_json

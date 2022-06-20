@@ -136,6 +136,7 @@ workflow theiacov_clearlabs {
     File pango_lineage_report= pangolin4.pango_lineage_report
     String pangolin_docker = pangolin4.pangolin_docker
     String pangolin_versions = pangolin4.pangolin_versions
+    String pangolin_expanded_lineage = pangolin4.pangolin_expanded_lineage
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
