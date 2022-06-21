@@ -283,14 +283,14 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
 
 Pangolin_update
 =================
-The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here<https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
+The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
 
 More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/pangolin_update_required_inputs.csv>`_, `optional user inputs <tables/pangolin_update_optional_inputs.csv>`_ and `outputs <tables/pangolin_update_outputs.csv>`_.
 |
 
 VADR_update
 =================
-The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here<https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
+The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
 More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/vadr_update_required_inputs.csv>`_, `optional user inputs <tables/vadr_update_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csv>`_.
 |
