@@ -55,7 +55,7 @@ task freyja_dashboard_task {
   collection_date_array=(~{sep=' ' collection_date})
   collection_date_array_len=$(echo "${#collection_date_array[@]}")
   viral_load_array=(~{sep=' ' viral_load})
-  viral_load_array_len=$(echo "${#viral_load[@]}")
+  viral_load_array_len=$(echo "${#viral_load_array[@]}")
 
   if [ "$samplename_array_len" -ne "$collection_date_array_len" ] ||  [ "$samplename_array_len" -ne "$viral_load_array_len" ]; then
     echo "ERROR: Missing collection date or viral load value. Samplename array (length: $samplename_array_len), collection date array (length: $collection_date_array_len), and viral load array (length: $viral_load_array_len) are of unequal length." >&2
