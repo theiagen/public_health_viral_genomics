@@ -34,7 +34,7 @@ More details on how to get started with running these workflows are provided in 
     **QA:** All data should be assessed relative to quality control guidelines for SARS-CoV-2 (e.g. `QC guidelines produced by PH4GE <https://github.com/pha4ge/pipeline-resources/blob/udubs-qc-guidance-dev/docs/qc-solutions.md#gisaid-assembly-acceptance-criteria>`_). 
 
     **Characterization:** All workflows in this series characterize genomes using `Pangolin <https://cov-lineages.org/>`_ for lineage assignment, `NextClade <https://docs.nextstrain.org/projects/nextclade/en/stable/index.html>`_ for clade assignment, and `VADR <https://github.com/ncbi/vadr>`_ for validation and annotation. These tools and their underlying databases are updated regularly and have many versions available, one of which should be selected when running the workflow. The latest versions are described `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
-
+|
 
 TheiaCoV_Illumina_PE 
 ================================
@@ -91,7 +91,8 @@ More information about the TheiaCoV_Illumina_PE workflow including inputs, outpu
 
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
---------------
+
+|
 
 TheiaCoV_Illumina_SE
 =======================
@@ -149,7 +150,7 @@ More information about the TheiaCoV_Illumina_SE workflow including inputs, outpu
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
---------------
+|
 
 TheiaCoV_ClearLabs
 ======================
@@ -252,7 +253,7 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
---------------
+|
 
 TheiaCoV_FASTA
 ================
@@ -282,3 +283,4 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+|
