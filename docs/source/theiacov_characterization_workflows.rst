@@ -2,7 +2,7 @@
 TheiaCoV Characterization Series
 ===================================
 
-The TheiaCoV Characterization Series is a collection of WDL workflows for performing genomic assembly, quality assessment and characterization of SARS-CoV-2 data to support public health decision-making. These include workflows for analysis of newly generated data and workflows to update the Pangolin and VADR outputs for previously analyzed data. Further workflows are available for subsequent genomic epidemiology of SARS-CoV-2.
+The TheiaCoV Characterization Series is a collection of WDL workflows for performing genomic assembly, quality assessment and characterization of SARS-CoV-2 data to support public health decision-making. These include workflows for first-time analysis of data and workflows to update the Pangolin and VADR outputs for previously analyzed data. Further workflows are available for subsequent genomic epidemiology of SARS-CoV-2.
 
 Overview 
 ===========
@@ -13,7 +13,7 @@ Genomic characterization of pathogens is an increasing priority for public healt
 2. **Quality assessment (QA):** Producing relevant quality-control (QA) metrics for the input read data and the generated assembly. 
 3. **Characterization:** Using Pangolin for lineage assignment, NextClade for clade assignment, and VADR for validation and annotation. 
 
-There are five workflows in the TheiaCoV Characterization Series. They vary according to their input sequencing datatypes, supporting the following: 
+There are five workflows in the TheiaCoV Characterization Series for first-time analysis of data. They vary according to their input sequencing datatypes, supporting the following: 
 
 * Illumina paired-end data (TheiaCoV_Illumina_PE_ workflow)
 * Illumina single-end data (TheiaCoV_Illumina_SE_ workflow)
@@ -21,7 +21,7 @@ There are five workflows in the TheiaCoV Characterization Series. They vary acco
 * Oxford Nanopore Technology data (TheiaCoV_ONT_ workflow)
 * Previously assembled genomes in FASTA format (TheiaCoV_FASTA_ workflow)- this produces only assembly QA metrics, Pangolin lineage and clade assignments.
 
-The input datatypes affect how the downstream assembly and QA steps have to be performed. Methological details for these steps are described for each workflow below. Ultimately, all workflows create equivalent assemblies that are then characterized in the same way. 
+The input datatypes affect how the downstream assembly and QA steps have to be performed. Methological details for these steps are described for each workflow below. Ultimately, all workflows create equivalent assemblies that are then characterized in the same way. As new SARS-CoV-2 lineages are identified, there are updates to Pangolin and VADR and our ability to characterize SARS-CoV-2. This may require reassignment of previously-analyzed SARS-CoV-2 genomes to meet the most up-to-date standards. Additonal workflows, Pangolin_update_ and VADR_update_ are available for this.
 
 More details on how to get started with running these workflows are provided in the `Overview <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html#>`_ page.
 
@@ -279,3 +279,13 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
+Pangolin_update
+=================
+
+More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/eld-docs-dev/docs/source/tables/vadr_update_outputs.csv>`_.
+
+VADR_update
+=================
+
+More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs </tables/vadr_update_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/eld-docs-dev/docs/source/tables/pangolin_update_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/eld-docs-dev/docs/source/tables/vadr_update_outputs.csv>`_.
