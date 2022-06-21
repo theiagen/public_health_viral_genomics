@@ -381,10 +381,12 @@ task freyja_one_sample {
   if ~{update_db}; then 
       freyja update 2>&1 | tee freyja_update.log
       # check log files to ensure update did not fail
-      if grep "FileNotFoundError: [Errno 2] No such file or directory" freyja_update.log
+      if grep "FileNotFoundError: *Errno 2* No such file or directory: *lineagePaths.txt*" freyja_update.log
       then 
         echo "Error in attempting to update Freyja files. Try increasing memory"
         exit 1
+      else 
+        echo "Missed grep!"
       fi
 
       # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
