@@ -293,3 +293,9 @@ VADR_update
 The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here<https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
 More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/vadr_update_required_inputs.csv>`_, `optional user inputs <tables/vadr_update_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csv>`_.
+|
+
+TheiaCoV_validate
+====================
+
+The TheiaCoV validate workflow compares the results from TheiaCoV runs that are found in two different datatables. This facilitates analyzing the same dataset (duplicated in the two distinct datatables) with two different TheiaCoV workflows or workflow versions to validate the results of the workflows. These two datatables to be compared must be in the same Terra workspace. 
