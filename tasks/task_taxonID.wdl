@@ -384,7 +384,7 @@ task freyja_one_sample {
       if grep "FileNotFoundError.*lineagePaths.*" freyja_update.log
       then 
         echo "Error in attempting to update Freyja files. Try increasing memory"
-        >&2 echo "OutofMemory"
+        >&2 echo "Killed"
         exit 1
       fi
 
