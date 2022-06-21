@@ -54,7 +54,7 @@ TheiaCoV_Illumina_PE
 * Bash CLI utilities generate quality metrics about the consensus genome assembly. 
 * NCBI’S `VADR <https://github.com/ncbi/vadr>`_ tool screens for potentially errant features in the assembly (e.g. erroneous frame-shift mutations).
 
-More information about the TheiaCoV_Illumina_PE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_outputs.csv>`_.
+More information about the TheiaCoV_Illumina_PE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/theiacov_workflows/theiacov_illumina_pe_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_outputs.csv>`_.
 
 .. toggle-header::
     :header: **References**
