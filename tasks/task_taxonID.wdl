@@ -384,6 +384,7 @@ task freyja_one_sample {
       if grep "FileNotFoundError.*lineagePaths.*" freyja_update.log
       then 
         echo "Error in attempting to update Freyja files. Try increasing memory"
+        >&2 echo "OutofMemory"
         exit 1
       fi
 
@@ -434,6 +435,7 @@ task freyja_one_sample {
     cpu: 2
     docker: "~{docker}"
     disks: "local-disk 100 HDD"
+    maxRetries: 3
   }
   output {
     File freyja_variants = "~{samplename}_freyja_variants.tsv"
