@@ -87,10 +87,9 @@ task freyja_dashboard_task {
 
   # Create intro text file
   if [[ ! -z "~{dashboard_intro_text}" ]]; then 
-    intro_text="~{dashboard_intro_text}"
+    cp "~{dashboard_intro_text}" introContent.txt
   else
-    echo "SARS-CoV-2 lineage de-convolution performed by the Freyja workflow (https://github.com/andersen-lab/Freyja)." > default_intro.txt
-    intro_text="default_intro.txt"
+    echo "SARS-CoV-2 lineage de-convolution performed by the Freyja workflow (https://github.com/andersen-lab/Freyja)." > introContent.txt
   fi
 
   # create freya plot
@@ -98,13 +97,13 @@ task freyja_dashboard_task {
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \ 
-    '${intro_text}' \
+    introContent.txt \
     --output ~{freyja_dashboard_title}.html "
   freyja dash \
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \ 
-    "${intro_text}" \
+    introContent.txt \
     --output ~{freyja_dashboard_title}.html
   >>>
   output {
