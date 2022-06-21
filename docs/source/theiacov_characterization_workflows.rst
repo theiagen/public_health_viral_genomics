@@ -25,7 +25,9 @@ The input datatypes affect how the downstream assembly and QA steps have to be p
 
 More details on how to get started with running these workflows are provided in the `Overview <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html#>`_ page.
 
-.. topic:: For all workflows:
+.. note:: 
+
+    For all workflows:
 
     **Input:** All TheiaCoV workflows take in sequencing data generated using tiled PCR-amplicons designed for the SARS-CoV-2 genome. Most commonly, these are generated with the `Artic V3 protocol <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V3>`_ but reads resulting from alternative primer/PCR schemes such as the `QIAseq Primer Panel <https://www.qiagen.com/us/products/next-generation-sequencing/rna-sequencing/qiaseq-sars-cov-2-primer-panel/>`_, the `Artic V4 Amplicon Sequencing Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4>`_, the `Artic V4.1 Amplicon Sequencing Primer Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4.1>`_, and the `Midnight Amplicon Primer Set <https://www.protocols.io/view/sars-cov2-genome-sequencing-protocol-1200bp-amplic-rm7vz8q64vx1/v6>`_ can also be analysed with this workflow. The primer sequence coordinates of the PCR scheme used must be provided in `BED file format <https://en.wikipedia.org/wiki/BED_(file_format)#>`_ along with the raw paired-end Illumina read data in FASTQ format. If you are running your workflow on Terra, the bed files for these most commonly used PCR primers can be found in the Data tab, in the workspace data group.
 
@@ -89,6 +91,7 @@ More information about the TheiaCoV_Illumina_PE workflow including inputs, outpu
 
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
+--------------
 
 TheiaCoV_Illumina_SE
 =======================
@@ -146,6 +149,7 @@ More information about the TheiaCoV_Illumina_SE workflow including inputs, outpu
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
+--------------
 
 TheiaCoV_ClearLabs
 ======================
@@ -248,7 +252,7 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
-
+--------------
 
 TheiaCoV_FASTA
 ================
