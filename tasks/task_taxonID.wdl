@@ -373,12 +373,20 @@ task freyja_one_sample {
     File? freyja_lineage_metadata
     Float? eps
     Boolean update_db = false
+    Int memory = 4
     String docker = "quay.io/staphb/freyja:1.3.4"
   }
   command <<<
   # update freyja reference files if specified
   if ~{update_db}; then 
-      freyja update
+      freyja update 2>&1 | tee freyja_update.log
+      # check log files to ensure update did not fail
+      if grep "FileNotFoundError: [Errno 2] No such file or directory" freyja_update.log
+      then 
+        echo "Error in attempting to update Freyja files. Try increasing memory"
+        exit 1
+      fi
+
       # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
@@ -422,7 +430,7 @@ task freyja_one_sample {
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
   >>>
   runtime {
-    memory: "4 GB"
+    memory: "~{memory} GB"
     cpu: 2
     docker: "~{docker}"
     disks: "local-disk 100 HDD"
