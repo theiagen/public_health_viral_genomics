@@ -1,10 +1,12 @@
 Public Health Viral Genomics: Overview
 ==================================================
 
-The `Theiagen <https://theiagen.com/>`_ Public Health Viral Genomics `repository <https://github.com/theiagen/public_health_viral_genomics>`_ hosts a collection of `WDL <https://github.com/openwdl/wdl>`_ workflows for genomic `characterization <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/theiacov_workflows.html>`_ and epidemiology of the SARS-CoV-2 virus  and preparation of resulting files for submission to public archives (`Mercury workflows <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/mercury_workflows.html>`_). While these workflows can be run at the command-line with Cromwell or miniWDL, we strongly recommend use through `Terra <https://app.terra.bio/>`_, a bioinformatics web application developed by the Broad Institute of MIT and Harvard in collaboration with Microsoft and Verily Life Sciences.
+The `Theiagen <https://theiagen.com/>`_ Public Health Viral Genomics `repository <https://github.com/theiagen/public_health_viral_genomics>`_ hosts a collection of `WDL <https://github.com/openwdl/wdl>`_ workflows for genomic `characterization <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/theiacov_workflows.html>`_ and epidemiology of the viral pathogens. Currently, this focusses on SARS-CoV-2 and contains workflows for preparation of files resulting from SARS-CoV-2 sequening for submission to public archives (`Mercury workflows <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/mercury_workflows.html>`_). 
 
 Getting Started
--------------
+-----------------
+These workflows can be run at the command-line with Cromwell or miniWDL, but we strongly recommend use through `Terra <https://app.terra.bio/>`_, a bioinformatics web application developed by the Broad Institute of MIT and Harvard in collaboration with Microsoft and Verily Life Sciences.
+
 **Running via a command-line interface**
 
 * `Install miniWDL <https://miniwdl.readthedocs.io/en/latest/getting_started.html#install-miniwdl>`_ or `Cromwell <https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/>`_

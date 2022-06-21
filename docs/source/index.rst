@@ -8,10 +8,9 @@ Public Health Viral Genomics
 
 .. toctree::
    :maxdepth: 2
+   :titlesonly:
 
-   overview
-   theiacov_characterization_workflows
-   theiacov_epidemiology_workflows
-   mercury_workflows
+   PHVG Overview <overview>
+   SARS-CoV-2
    about_theiagen
    license
