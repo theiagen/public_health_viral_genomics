@@ -92,17 +92,17 @@ task freyja_dashboard_task {
     echo "SARS-CoV-2 lineage de-convolution performed by the Freyja workflow (https://github.com/andersen-lab/Freyja)." > introContent.txt
   fi
 
-  # create freya plot
+  # create freya dashboard
   echo "Running: freyja dash \
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
-    dashboard-title.txt \ 
+    dashboard-title.txt \
     introContent.txt \
-    --output ~{freyja_dashboard_title}.html "
+    --output ~{freyja_dashboard_title}.html"
   freyja dash \
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
-    dashboard-title.txt \ 
+    dashboard-title.txt \
     introContent.txt \
     --output ~{freyja_dashboard_title}.html
   >>>
