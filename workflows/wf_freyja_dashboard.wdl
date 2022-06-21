@@ -98,13 +98,13 @@ task freyja_dashboard_task {
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \ 
-    ${intro_text} \
+    '${intro_text}' \
     --output ~{freyja_dashboard_title}.html "
   freyja dash \
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \ 
-    ${intro_text} \
+    "${intro_text}" \
     --output ~{freyja_dashboard_title}.html
   >>>
   output {
