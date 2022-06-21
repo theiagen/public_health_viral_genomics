@@ -86,7 +86,7 @@ task freyja_dashboard_task {
   echo "~{freyja_dashboard_title}" > dashboard-title.txt
 
   # Create intro text file
-  if [[ -z "~{dashboard_intro_text}" ]]; then 
+  if [[ ! -z "~{dashboard_intro_text}" ]]; then 
     intro_text="~{dashboard_intro_text}"
   else
     echo "SARS-CoV-2 lineage de-convolution performed by the Freyja workflow (https://github.com/andersen-lab/Freyja)." > default_intro.txt
