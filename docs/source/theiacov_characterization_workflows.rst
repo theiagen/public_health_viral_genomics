@@ -89,6 +89,7 @@ More information about the TheiaCoV_Illumina_PE workflow including inputs, outpu
 
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 
+
 TheiaCoV_Illumina_SE
 =======================
 
@@ -144,6 +145,7 @@ More information about the TheiaCoV_Illumina_SE workflow including inputs, outpu
             **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
 
 TheiaCoV_ClearLabs
 ======================
@@ -245,6 +247,7 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             **scorpio** Colquhoun & Jackson. 2021. Scorpioi. https://github.com/cov-lineages/scorpio
             
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
+
 
 
 TheiaCoV_FASTA
