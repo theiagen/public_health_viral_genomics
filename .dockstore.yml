@@ -100,3 +100,8 @@ workflows:
    primaryDescriptorPath: /workflows/wf_freyja_update.wdl
    testParameterFiles:
     - empty.json
+ - name: Freyja_Dashboard
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_dashboard.wdl
+   testParameterFiles:
+    - empty.json
