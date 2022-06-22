@@ -2,7 +2,7 @@
 TheiaCoV Characterization Series
 ===================================
 
-The TheiaCoV Characterization Series is a collection of WDL workflows for performing genomic assembly, quality assessment and characterization of SARS-CoV-2 data to support public health decision-making. These include workflows for first-time analysis of data and workflows to update the Pangolin and VADR outputs for previously analyzed data. Further workflows are available for subsequent genomic epidemiology of SARS-CoV-2.
+The TheiaCoV Characterization Series is a collection of WDL workflows for performing genomic assembly, quality control assessment and characterization of SARS-CoV-2 data to support public health decision-making. These include workflows for first-time analysis of data and workflows to update the Pangolin and VADR outputs for previously analyzed data. Further workflows are available for subsequent genomic epidemiology of SARS-CoV-2.
 
 Overview 
 ===========
@@ -10,7 +10,7 @@ Overview
 Genomic characterization of pathogens is an increasing priority for public health laboratories globally. The workflows in the TheiaCoV Genomic Characterization Series make this easy for SARS-CoV-2 by either taking in raw next-generation sequencing (NGS) data or FASTA assembly files to characterize the virus to the most up-to-date international standards. The workflows facilitate (as required):
 
 1. **Assembly:** Mapping input read data to a reference genome, removing primer reads from that alignment, and then calling the consensus assembly based on the primer-trimmed alignment
-2. **Quality assessment (QA):** Producing relevant quality-control (QA) metrics for the input read data and the generated assembly. 
+2. **Quality Control (QC):** Producing relevant quality-control (QC) metrics for the input read data and the generated assembly. 
 3. **Characterization:** Using Pangolin for lineage assignment, NextClade for clade assignment, and VADR for validation and annotation. 
 
 There are five workflows in the TheiaCoV Characterization Series for first-time analysis of data. They vary according to their input sequencing datatypes, supporting the following: 
@@ -19,9 +19,9 @@ There are five workflows in the TheiaCoV Characterization Series for first-time 
 * Illumina single-end data (TheiaCoV_Illumina_SE_ workflow)
 * Clear Labs data (TheiaCoV_ClearLabs_ workflow)
 * Oxford Nanopore Technology data (TheiaCoV_ONT_ workflow)
-* Previously assembled genomes in FASTA format (TheiaCoV_FASTA_ workflow)- this produces only assembly QA metrics, Pangolin lineage and clade assignments.
+* Previously assembled genomes in FASTA format (TheiaCoV_FASTA_ workflow)- this produces only assembly QC metrics, Pangolin lineage and clade assignments.
 
-The input datatypes affect how the downstream assembly and QA steps have to be performed. Methological details for these steps are described for each workflow below. Ultimately, all workflows create equivalent assemblies that are then characterized in the same way. As new SARS-CoV-2 lineages are identified, there are updates to Pangolin and VADR and our ability to characterize SARS-CoV-2. This may require reassignment of previously-analyzed SARS-CoV-2 genomes to meet the most up-to-date standards. Additonal workflows, Pangolin_update_ and VADR_update_ are available for this.
+The input datatypes affect how the downstream assembly and QC steps have to be performed. Methological details for these steps are described for each workflow below. Ultimately, all workflows create equivalent assemblies that are then characterized in the same way. As new SARS-CoV-2 lineages are identified, there are updates to Pangolin and VADR and our ability to characterize SARS-CoV-2. This may require reassignment of previously-analyzed SARS-CoV-2 genomes to meet the most up-to-date standards. Additonal workflows, Pangolin_update_ and VADR_update_ are available for this.
 
 More details on how to get started with running these workflows are provided in the `Overview <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html#>`_ page.
 
@@ -30,7 +30,7 @@ More details on how to get started with running these workflows are provided in 
 
     **Input:** All TheiaCoV workflows take in sequencing data generated using tiled PCR-amplicons designed for the SARS-CoV-2 genome. Most commonly, these are generated with the `Artic V3 protocol <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V3>`_ but reads resulting from alternative primer/PCR schemes such as the `QIAseq Primer Panel <https://www.qiagen.com/us/products/next-generation-sequencing/rna-sequencing/qiaseq-sars-cov-2-primer-panel/>`_, the `Artic V4 Amplicon Sequencing Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4>`_, the `Artic V4.1 Amplicon Sequencing Primer Panel <https://github.com/artic-network/artic-ncov2019/tree/master/primer_schemes/nCoV-2019/V4.1>`_, and the `Midnight Amplicon Primer Set <https://www.protocols.io/view/sars-cov2-genome-sequencing-protocol-1200bp-amplic-rm7vz8q64vx1/v6>`_ can also be analysed with this workflow. The primer sequence coordinates of the PCR scheme used must be provided in `BED file format <https://en.wikipedia.org/wiki/BED_(file_format)#>`_ along with the raw paired-end Illumina read data in FASTQ format. If you are running your workflow on Terra, the bed files for these most commonly used PCR primers can be found in the Data tab, in the workspace data group.
 
-    **QA:** All data should be assessed relative to quality control guidelines for SARS-CoV-2 (e.g. `QC guidelines produced by PH4GE <https://github.com/pha4ge/pipeline-resources/blob/udubs-qc-guidance-dev/docs/qc-solutions.md#gisaid-assembly-acceptance-criteria>`_). 
+    **QC:** All data should be assessed relative to quality control guidelines for SARS-CoV-2 (e.g. `QC guidelines produced by PH4GE <https://github.com/pha4ge/pipeline-resources/blob/udubs-qc-guidance-dev/docs/qc-solutions.md#gisaid-assembly-acceptance-criteria>`_). 
 
     **Characterization:** All workflows in this series characterize genomes using `Pangolin <https://cov-lineages.org/>`_ for lineage assignment, `NextClade <https://docs.nextstrain.org/projects/nextclade/en/stable/index.html>`_ for clade assignment, and `VADR <https://github.com/ncbi/vadr>`_ for validation and annotation. These tools and their underlying databases are updated regularly and have many versions available, one of which should be selected when running the workflow. The latest versions are described `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`.
 
@@ -47,7 +47,7 @@ TheiaCoV_Illumina_PE
 
 **Assembly:** As outlined in the schematic above, consensus genome assembly with the TheiaCoV_Illumina_PE workflow is performed by first removing human read data with the `NCBI SRA-Human-Scrubber <https://github.com/ncbi/sra-human-scrubber>`_ tool then trimming low-quality reads with `Trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>`_ and removing adapter sequences with `BBDuk <https://jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/bbduk-guide/>`_. These cleaned read data are then aligned to the `Wuhan-1 reference genome <https://github.com/artic-network/artic-ncov2019/blob/master/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta>`_ (unless optionally specified otherwise) with `BWA <http://bio-bwa.sourceforge.net/>`_ to generate a Binary Alignment Mapping (`BAM <https://en.wikipedia.org/wiki/Binary_Alignment_Map>`_) file. Primer sequences are next removed from the BAM file using the `iVar Trim <https://andersen-lab.github.io/ivar/html/manualpage.html>`_ sub-command. The iVar Consensus sub-command is then used to generate a consensus assembly in FASTA format.
 
-**QA:** The output files from this workflow are all subjected to quality assessment: 
+**QC:** The output files from this workflow are all subjected to quality control assessments: 
 
 * Read data is assessed with `Kraken2 <https://ccb.jhu.edu/software/kraken2/>`_ to identify the species represented by the reads and with `fastq-scan <https://github.com/rpetit3/fastq-scan>`_, before and after read cleaning, to determine read technical quality. 
 * Quality metrics about the genome alignment are generated with `Samtools <http://www.htslib.org/>`_
@@ -106,7 +106,7 @@ is performed by trimming low-quality reads with `Trimmomatic <http://www.usadell
 
 NB Sequencing reads derived from the human genome are not removed during this workflow.
 
-**QA:** The output files from this workflow are all subjected to quality assessment: 
+**QC:** The output files from this workflow are all subjected to quality control assessment: 
 
 * Read data is assessed with `Kraken2 <https://ccb.jhu.edu/software/kraken2/>`_ to identify the species represented by the reads and with `fastq-scan <https://github.com/rpetit3/fastq-scan>`_, before and after read cleaning, to determine read technical quality. 
 * Quality metrics about the raw and primer-trimmed genome alignments are generated with `Samtools <http://www.htslib.org/>`_
@@ -162,7 +162,7 @@ TheiaCoV_ClearLabs
 
 NB Read-trimming is performed on raw read data generated on the ClearLabs instrument and thus not a required step in the TheiaCoV_ClearLabs workflow
 
-**QA:** The output files from this workflow are all subjected to quality assessment: 
+**QC:** The output files from this workflow are all subjected to quality control assessment: 
 
 * Read data is assessed with `Kraken2 <https://ccb.jhu.edu/software/kraken2/>`_ to identify the species represented by the reads and with `fastq-scan <https://github.com/rpetit3/fastq-scan>`_ to determine read technical quality. 
 * Quality metrics about the raw and primer-trimmed genome alignments are generated with `Samtools <http://www.htslib.org/>`_
@@ -212,7 +212,7 @@ TheiaCoV_ONT
 
 **Assembly:** Consensus genome assembly with the TheiaCoV_ONT workflow is performed performed by first de-hosting read data with the `NCBI SRA-Human-Scrubber <https://github.com/ncbi/sra-human-scrubber>`_ tool then following the `Artic nCoV-2019 novel coronavirus bioinformatics protocol <https://artic.network/ncov-2019/ncov2019-bioinformatics-sop.html>`_. Briefly, input reads are filtered by size (min-length: 400bp; max-length: 700bp) with the `Artic guppyplex command <https://artic.readthedocs.io/en/latest/commands/#guppyplex>`_.  These size-selected read data are aligned to the `Wuhan-1 reference genome <https://github.com/artic-network/artic-ncov2019/blob/master/primer_schemes/nCoV-2019/V3/nCoV-2019.reference.fasta>`_ with `minimap2 <https://github.com/lh3/minimap2>`_ to generate a Binary Alignment Mapping (`BAM <https://en.wikipedia.org/wiki/Binary_Alignment_Map>`_) file. Primer sequences are then removed from the BAM file and a consensus assembly file is generated using the `Artic minion <https://artic.readthedocs.io/en/latest/commands/#basecaller>`_ Medaka argument.
 
-**QA:** The output files from this workflow are all subjected to quality assessment: 
+**QC:** The output files from this workflow are all subjected to quality control assessment: 
 
 * Read data is assessed with `Kraken2 <https://ccb.jhu.edu/software/kraken2/>`_ to identify the species represented by the reads and with `fastq-scan <https://github.com/rpetit3/fastq-scan>`_ to determine raw and cleaned read technical quality. 
 * Quality metrics about the raw and primer-trimmed genome alignments are generated with `Samtools <http://www.htslib.org/>`_
@@ -260,7 +260,7 @@ TheiaCoV_FASTA
 
 **Input:** The `TheiaCoV_FASTA workflow <https://github.com/theiagen/public_health_viral_genomics/blob/main/workflows/wf_theiacov_fasta.wdl>`_ was written to process SARS-CoV-2 assembly files to only infer the quality of the input assembly and assign SARS-CoV-2 lineage and clade types as outlined in the TheiaCoV_FASTA data workflow below.
 
-**QA:** The quality of input SARS-CoV-2 genome assemblies are assessed by the TheiaCoV_FASTA workflow using a series of `bash shell scripts <https://github.com/theiagen/public_health_viral_genomics/blob/main/tasks/task_qc_utils.wdl>`_. 
+**QC:** The quality of input SARS-CoV-2 genome assemblies are assessed by the TheiaCoV_FASTA workflow using a series of `bash shell scripts <https://github.com/theiagen/public_health_viral_genomics/blob/main/tasks/task_qc_utils.wdl>`_. 
 
 More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/theiacov_workflows/theiacov_fasta_required_inputs.csv>`_, `optional user inputs <tables/theiacov_workflows/theiacov_fasta_optional_inputs.csv>`_ and `outputs <tables/theiacov_workflows/theiacov_fasta_outputs.csv>`_.
 
@@ -283,14 +283,14 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
 
 Pangolin_update
 =================
-The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here<https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
+The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
 
 More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/pangolin_update_required_inputs.csv>`_, `optional user inputs <tables/pangolin_update_optional_inputs.csv>`_ and `outputs <tables/pangolin_update_outputs.csv>`_.
 |
 
 VADR_update
 =================
-The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here<https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
+The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
 More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/vadr_update_required_inputs.csv>`_, `optional user inputs <tables/vadr_update_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csv>`_.
 |
@@ -299,3 +299,5 @@ TheiaCoV_validate
 ====================
 
 The TheiaCoV validate workflow compares the results from TheiaCoV runs that are found in two different datatables. This facilitates analyzing the same dataset (duplicated in the two distinct datatables) with two different TheiaCoV workflows or workflow versions to validate the results of the workflows. These two datatables to be compared must be in the same Terra workspace. 
+
+More information about the TheiaCoV validate workflow including including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/theiacov_workflows/theiacov_validate_required_inputs.csv>`_, `optional user inputs <tables/theiacov_workflows/theiacov_validate_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csvtables/theiacov_workflows/theiacov_validate_outputs.csv>_.
