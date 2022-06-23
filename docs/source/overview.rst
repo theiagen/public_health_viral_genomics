@@ -1,7 +1,7 @@
 Public Health Viral Genomics: Overview
 ==================================================
 
-The `Theiagen <https://theiagen.com/>`_ Public Health Viral Genomics `repository <https://github.com/theiagen/public_health_viral_genomics>`_ hosts a collection of `WDL <https://github.com/openwdl/wdl>`_ workflows for genomic `characterization <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/theiacov_workflows.html>`_ and epidemiology of the viral pathogens. Currently, this focusses on SARS-CoV-2 and contains workflows for preparation of files resulting from SARS-CoV-2 sequening for submission to public archives (`Mercury workflows <https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/mercury_workflows.html>`_). 
+The `Theiagen <https://theiagen.com/>`_ Public Health Viral Genomics `repository <https://github.com/theiagen/public_health_viral_genomics>`_ hosts a collection of `WDL <https://github.com/openwdl/wdl>`_ workflows for characterization, epidemiology and sharing of the viral pathogen genomes. Currently, these focus on SARS-CoV-2, but workflows for other viral pathogens are anticipated to be available soon.
 
 Getting Started
 -----------------
