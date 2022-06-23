@@ -294,10 +294,3 @@ The VADR_update workflow updates prior VADR assessments for each sample in line 
 
 More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/vadr_update_required_inputs.csv>`_, `optional user inputs <tables/vadr_update_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csv>`_.
 |
-
-TheiaCoV_validate
-====================
-
-The TheiaCoV validate workflow compares the results from TheiaCoV runs that are found in two different datatables. This facilitates analyzing the same dataset (duplicated in the two distinct datatables) with two different TheiaCoV workflows or workflow versions to validate the results of the workflows. These two datatables to be compared must be in the same Terra workspace. 
-
-More information about the TheiaCoV validate workflow including including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <tables/theiacov_workflows/theiacov_validate_required_inputs.csv>`_, `optional user inputs <tables/theiacov_workflows/theiacov_validate_optional_inputs.csv>`_ and `outputs <tables/vadr_update_outputs.csvtables/theiacov_workflows/theiacov_validate_outputs.csv>_.

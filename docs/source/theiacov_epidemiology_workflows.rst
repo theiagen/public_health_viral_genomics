@@ -42,34 +42,3 @@ More details for using the TheiaCoV_Augur_Run workflow can be found in tables of
         
          **UShER:** Turakhia Y, Thornlow B, Hinrichs AS, De Maio N, Gozashti L, Lanfear R, Haussler D, Corbett-Detig R. Ultrafast Sample placement on Existing tRees (UShER) enables real-time phylogenetics for the SARS-CoV-2 pandemic. Nature Genetics. 2021 Jun;53(6):809-16.
 |
-TheiaCoV_Augur_Distance_Tree
-===============================
-
-The TheiaCoV Augur Distance Tree workflow is intended for SARS-CoV-2 cluster investigations. It will generate a Maximum-likelihood phylogeny using select tasks incorporated in the ThieaCoV_Augur_Run workflow. Output from the modified Broad Institue sarscov2_nextstrain workflow will also be used to infer SNP distances. The ML distance tree output can be visualized using the Auspice web application https://auspice.us/"
-
-**Input:** Set of assembled genomes to align and build trees. These must each represent a single chromosome/segment of a genome only. Fastas may be one-sequence-per-individual or a concatenated multi-fasta (unaligned) or a mixture of the two. They may be compressed (gz, bz2, zst, lz4), uncompressed, or a mixture."
-
-**Action:**
-
-**Output:**
-
-More details for using the TheiaCoV_Augur_Distance_Tree workflow can be found in tables of `required inputs <>`_, `optional inputs <>`_ and `outputs <>`_.
-
-.. toggle-header::
-    :header: **References**
-
-nextstrain_ncov_defaults
-nextstrain_deduplicate_sequences
-filter_sequences_by_length
-mafft_one_chr_chunked
-merge metadata, compute derived cols
-derived_cols
-Subsample if builds.yaml file provided
-fasta_to_ids
-snp_sites
-augur_mask_sites
-draft_augur_tree
-phylo.snp_dists
-    
-
-
