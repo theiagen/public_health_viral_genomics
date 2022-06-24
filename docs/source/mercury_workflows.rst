@@ -21,7 +21,7 @@ Mercury Workflows for Single-Sample Preparation
    :alt: Mercury_Prep 
    :figclass: align-center
 |
-The Mercury Workflows for Single-Sample Preparation process read data, assembly files, and contextual metadata to prepare submission for samples individually. There are two separate WDL workflows, Mercury_SE_Prep_ & Mercury_PE_Prep_, which prepare submission files for GISAID, SRA, and GenBank from single and paired-end read data, respectively. 
+The Mercury Workflows for Single-Sample Preparation process read data, assembly files, and contextual metadata to prepare submission for samples individually. There are two separate WDL workflows, Mercury_SE_Prep_ & Mercury_PE_Prep_, which each prepare submission files for GISAID, SRA, and GenBank from single and paired-end read data, respectively. 
 
 .. note::
  With default settings, this workflow will only prepare submission files for samples with assembly files containing less than 5,000 Ns. This quality threshold can be adjusted by modifying the number_N_threshold. 
