@@ -45,7 +45,7 @@ task freyja_dashboard_task {
     Float? thresh 
     String? headerColor
     File? dashboard_intro_text
-    String docker = "quay.io/staphb/freyja:1.3.7"
+    String docker = "quay.io/staphb/freyja:1.3.8"
   }
   command <<<
   # create bash arrays
