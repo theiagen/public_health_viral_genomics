@@ -5,8 +5,8 @@ task kraken2 {
     File read1
     File? read2
     String samplename
-    String? kraken2_db = "/kraken2-db"
-    Int? cpu = 4
+    String kraken2_db = "/kraken2-db"
+    Int cpu = 4
   }
   command <<<
     # date and version control
