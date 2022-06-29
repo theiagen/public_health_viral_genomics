@@ -262,7 +262,7 @@ task nextclade_one_sample {
       File? gene_annotations_json
       File? pcr_primers_csv
       File? virus_properties
-      String docker = "nextstrain/nextclade:1.11.0"
+      String docker = "nextstrain/nextclade:2.0.0"
       String dataset_name
       String dataset_reference
       String dataset_tag
@@ -274,18 +274,20 @@ task nextclade_one_sample {
 
         nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
         set -e
-        nextclade run --input-fasta "~{genome_fasta}" \
-            --input-dataset "nextclade_dataset_dir" \
-            --input-root-seq ~{default="nextclade_dataset_dir/reference.fasta" root_sequence} \
-            --input-tree ~{default="nextclade_dataset_dir/tree.json" auspice_reference_tree_json} \
-            --input-qc-config ~{default="nextclade_dataset_dir/qc.json" qc_config_json} \
-            --input-gene-map ~{default="nextclade_dataset_dir/genemap.gff" gene_annotations_json} \
-            --input-pcr-primers ~{default="nextclade_dataset_dir/primers.csv" pcr_primers_csv} \
-            --input-virus-properties ~{default="nextclade_dataset_dir/virus_properties.json" virus_properties} \
+        nextclade run \
+            --input-dataset=nextclade_dataset_dir/ \
+            ~{"--input-root-seq " + root_sequence} \
+            ~{"--input-tree " + auspice_reference_tree_json} \
+            ~{"--input-qc-config " + qc_config_json} \
+            ~{"--input-gene-map " + gene_annotations_json} \
+            ~{"--input-pcr-primers " + pcr_primers_csv} \
+            ~{"--input-virus-properties " + virus_properties}  \
+            --output-basename "~{basename}" \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
-            --verbose
+            --output-all=. \
+            "~{genome_fasta}"
     >>>
     runtime {
       docker: "~{docker}"
@@ -293,7 +295,7 @@ task nextclade_one_sample {
       cpu: 2
       disks: "local-disk 50 HDD"
       dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 3 
+   #   maxRetries: 3 
     }
     output {
       String nextclade_version = read_string("NEXTCLADE_VERSION")
