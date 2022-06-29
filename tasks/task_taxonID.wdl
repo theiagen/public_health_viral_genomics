@@ -282,7 +282,6 @@ task nextclade_one_sample {
             ~{"--input-gene-map " + gene_annotations_json} \
             ~{"--input-pcr-primers " + pcr_primers_csv} \
             ~{"--input-virus-properties " + virus_properties}  \
-            --output-basename "~{basename}" \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
