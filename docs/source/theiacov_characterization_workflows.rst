@@ -94,7 +94,7 @@ More information about the TheiaCoV_Illumina_PE workflow including inputs, outpu
 TheiaCoV_Illumina_SE
 =======================
 
-.. figure:: images/TheiaCoV_Illumina_SE.png
+.. figure:: https://lucid.app/publicSegments/view/53cd27e9-60e0-4845-80c0-ea356282c254/image.png
    :width: 800
    :alt: TheiaCoV_Illumina_SE workflow
    :figclass: align-center
@@ -151,7 +151,7 @@ More information about the TheiaCoV_Illumina_SE workflow including inputs, outpu
 TheiaCoV_ClearLabs
 ======================
 
-.. figure:: images/TheiaCoV_ClearLabs.png
+.. figure:: https://lucid.app/publicSegments/view/7efde81d-7bce-4364-9d99-995f3af4be5d/image.png
    :width: 800
    :alt: TheiaCoV_ClearLabs workflow
    :figclass: align-center
