@@ -38,7 +38,7 @@ More details on how to get started with running these workflows are provided in 
 TheiaCoV_Illumina_PE 
 ================================
 
-.. figure:: images/TheiaCoV_Illumina_PE.png
+.. figure:: https://lucid.app/publicSegments/view/9806c612-3a95-4cfe-8893-9cdedd55c34d/image.png
    :width: 800
    :alt: TheiaCoV_Illumina_PE workflow
    :figclass: align-center
