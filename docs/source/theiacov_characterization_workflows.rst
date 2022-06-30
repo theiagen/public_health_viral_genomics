@@ -203,7 +203,7 @@ More information about the TheiaCoV_ClearLabs workflow including inputs, outputs
 TheiaCoV_ONT
 ===============
 
-.. figure:: images/TheiaCoV_ONT.png
+.. figure:: https://lucid.app/publicSegments/view/1de34b1b-6440-402e-b996-760ab3968ce5/image.png
    :width: 800
    :alt: TheiaCoV_ONT workflow
    :figclass: align-center
@@ -253,7 +253,7 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
 
 TheiaCoV_FASTA
 ================
-.. figure:: images/TheiaCoV_FASTA.png
+.. figure:: https://lucid.app/publicSegments/view/9fd78ff4-20ab-4cce-b66a-04fa11cd5930/image.png
    :width: 800
    :alt: TheiaCoV_FASTA workflow
    :figclass: align-center
