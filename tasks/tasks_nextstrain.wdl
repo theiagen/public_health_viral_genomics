@@ -1232,6 +1232,7 @@ task draft_augur_tree {
             ~{"--vcf-reference " + vcf_reference} \
             --tree-builder-args="~{tree_builder_args}" \
             --nthreads auto
+            --override-default-args
         cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
         cat /proc/loadavg > CPU_LOAD
         { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
