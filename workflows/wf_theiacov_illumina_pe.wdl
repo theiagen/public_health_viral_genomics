@@ -24,6 +24,9 @@ workflow theiacov_illumina_pe {
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
     File? reference_genome
     Int min_depth = 100
+    Boolean skip_vadr = false
+    Boolean skip_nextclade = false
+    Boolean skip_pangolin = false
   }
   call read_qc.read_QC_trim {
     input:
@@ -74,11 +77,14 @@ workflow theiacov_illumina_pe {
       bamfile = primer_trim.trim_sorted_bam,
       min_depth = min_depth
   }
+  if (skip_pangolin == false) {
   call taxon_ID.pangolin4 {
     input:
       samplename = samplename,
       fasta = consensus.consensus_seq
   }
+  }
+  if (skip_nextclade == false) {
   call taxon_ID.nextclade_one_sample {
     input:
       genome_fasta = consensus.consensus_seq,
@@ -90,10 +96,13 @@ workflow theiacov_illumina_pe {
     input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
   }
+}
+  if (skip_vadr == false) {
   call ncbi.vadr {
     input:
       genome_fasta = consensus.consensus_seq,
       assembly_length_unambiguous = consensus_qc.number_ATCG
+  }
   }
   call versioning.version_capture{
     input:
@@ -159,26 +168,26 @@ workflow theiacov_illumina_pe {
     File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
     # Lineage Assignment
-    String pango_lineage = pangolin4.pangolin_lineage
-    String pangolin_conflicts = pangolin4.pangolin_conflicts
-    String pangolin_notes = pangolin4.pangolin_notes
-    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
-    File pango_lineage_report = pangolin4.pango_lineage_report
-    String pangolin_docker = pangolin4.pangolin_docker
-    String pangolin_versions = pangolin4.pangolin_versions
+    String? pango_lineage = pangolin4.pangolin_lineage
+    String? pangolin_conflicts = pangolin4.pangolin_conflicts
+    String? pangolin_notes = pangolin4.pangolin_notes
+    String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File? pango_lineage_report = pangolin4.pango_lineage_report
+    String? pangolin_docker = pangolin4.pangolin_docker
+    String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    File nextclade_json = nextclade_one_sample.nextclade_json
-    File auspice_json = nextclade_one_sample.auspice_json
-    File nextclade_tsv = nextclade_one_sample.nextclade_tsv
-    String nextclade_version = nextclade_one_sample.nextclade_version
-    String nextclade_docker = nextclade_one_sample.nextclade_docker
+    File? nextclade_json = nextclade_one_sample.nextclade_json
+    File? auspice_json = nextclade_one_sample.auspice_json
+    File? nextclade_tsv = nextclade_one_sample.nextclade_tsv
+    String? nextclade_version = nextclade_one_sample.nextclade_version
+    String? nextclade_docker = nextclade_one_sample.nextclade_docker
     String nextclade_ds_tag = nextclade_dataset_tag
-    String  nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
-    String  nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
-    String  nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
+    String?  nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String?  nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String?  nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
-    String vadr_num_alerts = vadr.num_alerts
-    String vadr_docker = vadr.vadr_docker
+    String? vadr_num_alerts = vadr.num_alerts
+    String? vadr_docker = vadr.vadr_docker
   }
 }
