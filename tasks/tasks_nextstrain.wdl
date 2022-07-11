@@ -1229,7 +1229,7 @@ task draft_augur_tree {
             --substitution-model ~{default="GTR" substitution_model} \
             ~{"--exclude-sites " + exclude_sites} \
             ~{"--vcf-reference " + vcf_reference} \
-            ~{true='--override-default-args' false='' bootstrap_vals} \
+            ~{true="--override-default-args" false="" bootstrap_vals} \
             --tree-builder-args="~{tree_builder_args}" \
             --nthreads auto
             
