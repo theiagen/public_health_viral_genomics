@@ -1209,6 +1209,7 @@ task draft_augur_tree {
         File?   exclude_sites
         File?   vcf_reference
         String  tree_builder_args = ""
+        Boolean bootstrap_vals = false
         Int?    cpus
         String  docker = "nextstrain/base:build-20220111T004537Z"
     }
@@ -1228,7 +1229,8 @@ task draft_augur_tree {
             --substitution-model ~{default="GTR" substitution_model} \
             ~{"--exclude-sites " + exclude_sites} \
             ~{"--vcf-reference " + vcf_reference} \
-            --override-default-args \
+            "~{override_default_args}" \
+            ~{true='--override-default-args' false='' bootstrap_vals} \
             --tree-builder-args="~{tree_builder_args}" \
             --nthreads auto
             
