@@ -1,7 +1,7 @@
 Output Name	Data Type	Description
 kraken_human_dehosted	Float	Percentage of reads assigned to ''Homo Sapiens'' in dehosted read file
 kraken_report_dehosted	String	Kraken2 report for dehosted read file
-kraken_sc2_dehosted	Float	Percentage of reads assigned to "Severe acute respiratory syndrome coronavirus 2" in dehosted read file
+kraken_sc2_dehosted	Float	Percentage of reads assigned to Severe acute respiratory syndrome coronavirus 2 in dehosted read file
 kraken_version_dehosted	String	Version of Kraken2 used for analysis
 ncbi_scrub_docker	String	Docker tag used for running ncbi_scrub
 ncbi_scrub_pe_version	String	Version of the Public Health Viral Genomics (PHVG) repository used
