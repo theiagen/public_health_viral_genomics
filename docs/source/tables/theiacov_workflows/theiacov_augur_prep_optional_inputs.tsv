@@ -1,0 +1,8 @@
+Task	Variable Name	Data Type	Description	Default
+prep_augur_metadata	CPUs	Int	CPU resources allocated to the prep_augur_metadata task runtime environment	1
+prep_augur_metadata	disk_size	Int	Disk size allocated to the prep_augur_metadata task	10
+prep_augur_metadata	docker_image	String	Docker image utilized for the prep_augur_metadata task	quay.io/theiagen/utility:1.1
+prep_augur_metadata	mem_size_gb	Int	Memory allocated to the prep_augur_metadata task	3
+prep_augur_metadata	preemptible_tries	Int	Number of preemptible tries for the prep_augur_metadata task	0
+theiacov_augur_prep	iso_county	String	County of the sample to be included in the analysis	None
+version_capture	timezone	String	User time zone in valid Unix TZ string (e.g. America/New_York)	None

@@ -1,8 +1,0 @@
-Task,Input Variable ,Data Type ,Description
-pangolin_update,assembly,File,SARS-CoV-2 assembly file in fasta format
-pangolin_update,current_lineage,String,Pango_lineage previously assigned to sample
-pangolin_update,current_pangolin_assignment_version,String,Version of the pangolin software (e.g. PANGO or PUSHER) previously used for lineage asignment
-pangolin_update,current_pangolin_docker,String,Pangolin docker image previously used for lineage assignment
-pangolin_update,current_pangolin_versions,String,All Pangolin software and database versions previously used for lineage assignment
-pangolin_update,samplename,String,Name of the sample being analyzed
-pangolin_update,updated_pangolin_docker,String,Docker image used to update pangolin lineage assignments

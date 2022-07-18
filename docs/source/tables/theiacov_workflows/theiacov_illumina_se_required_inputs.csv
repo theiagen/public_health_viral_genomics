@@ -1,4 +1,0 @@
-Task,Input Variable ,Data Type ,Description 
-theiacov_illumina_se,primer_bed ,File ,Primer sequence coordinates of the PCR scheme utilized in BED file format
-theiacov_illumina_se,read1_raw ,File ,Single-end Illumina read in FASTQ file format
-theiacov_illumina_se,samplename ,String ,Name of the sample being analyzed 

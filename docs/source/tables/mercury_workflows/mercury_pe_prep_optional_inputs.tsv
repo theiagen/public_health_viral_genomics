@@ -1,0 +1,38 @@
+Task	Input Variable	Data Type	Description	Default
+gisaid_prep_one_sample	cpu	Int	CPUs allocated to the gisaid_prep_one_sample task	None
+gisaid_prep_one_sample	disk_size	Int	Disk size allocated to the gisaid_prep_one_sample task	25
+gisaid_prep_one_sample	docker	String	Docker image utilized for the gisaid_prep_one_sample task	quay.io/theiagen/utility:1.1
+gisaid_prep_one_sample	last_vaccinated	String	Date of last vaccine recieved	None
+gisaid_prep_one_sample	memory	Int	Memory allocated to the gisaid_prep_one_sample task	1
+gisaid_prep_one_sample	outbreak	String	Outbreak associated with this submission e.g. date, place, family cluster	None
+gisaid_prep_one_sample	passage_details	String	Passage details of the sample being submitted e.g. original, vero, etc	original
+gisaid_prep_one_sample	patient_status	String	Status of the patient e.g. Hospitalized, Released, Live, Deceased, unknown"	unknown
+gisaid_prep_one_sample	preemptible	Int	Number of preemptible tries for the gisaid_prep_one_sample task	0
+gisaid_prep_one_sample	specimen_source	String	Biologial source of the specimen, e.g. sputum, Alveolar lavage fluid, Oro-pharyngeal swab, Blood, Tracheal swab, Urine, Stool, Cloakal swab, Organ, Feces, Other"	None
+gisaid_prep_one_sample	type	String	Organism typoe	betacoronovirus
+mercury_pe_prep	amplicon_primer_scheme	String	Name of the amplicon primer scheme utilized to generate the amplicons sequenced	None
+mercury_pe_prep	amplicon_size	String	Average size of the amplicons sequenced	None
+mercury_pe_prep	biosample_accession	String	BioSample accession number	None
+mercury_pe_prep	county	String	County the laboratory was collected in	None
+mercury_pe_prep	dehosting_method	String	Method utilized to dehost read data	NCBI Human Scrubber
+mercury_pe_prep	filetype	String	File type of the read data being submitted to SRA	fastq
+mercury_pe_prep	gisaid_accession	String	Accession number in GISAID	None
+mercury_pe_prep	gisaid_organism	String	Orgiansm name as per GISAID submission	hCoV-19
+mercury_pe_prep	host	String	Common name of the host organism	Human
+mercury_pe_prep	host_sci_name	String	Scientific name of the host organism	Homo sapiens
+mercury_pe_prep	library_layout	String	Layout of the sequenced library	paired
+mercury_pe_prep	number_N_threshold	Int	Maximum number of ambiguous nucleotides in a sample to prepare submission files	5000
+mercury_pe_prep	patient_age	String	Age of the patient	unknown
+mercury_pe_prep	patient_gender	String	Gender of the patient	unknown
+mercury_pe_prep	purpose_of_sampling	String	Reason that the original specimen was taken e.g. clinical diagnostics	None
+mercury_pe_prep	purpose_of_sequencing	String	Reason that this sample was sequenced; for labs that are sequencing samples as part of a federal surveillance program ''baseline surveillance'' would be the most accurate entry for this field	None
+mercury_pe_prep	submitter_email	String	Email address of the submitter	None
+mercury_pe_prep	treatment	String	"Treatment administered to the patient e.g. drug name, dosage, etc.	None
+ncbi_prep_one_sample	cpu	Int	CPUs allocated to the ncbi_prep_one_sample task	1
+ncbi_prep_one_sample	disk_size	Int	Disk size allocated the ncbi_prep_one_sample task	25
+ncbi_prep_one_sample	docker_image	String	Docker image utilized for the ncbi_prep_one_sample task	quay.io/staphb/vadr:1.3
+ncbi_prep_one_sample	maxlen	Int	VADR --maxlen input utilized when trimming terminal ambiguous ends	30000
+ncbi_prep_one_sample	memory	Int	Memory allocated to the ncbi_prep_one_sample task	1
+ncbi_prep_one_sample	minlen	Int	VADR --minen input utilized when trimming terminal ambiguous ends	50
+ncbi_prep_one_sample	preemptible_tries	Int	Number of preemptible tries for the ncbi_prep_one_sample task	0
+version_capture	timezone	String	User time zone in valid Unix TZ string (e.g. America/New_York)	None

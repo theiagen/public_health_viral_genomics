@@ -1,5 +1,0 @@
-Output Name,Data Type,Description
-theicov_validation_date,String,Date of analysis
-theiacov_validation_report_pdf,File,File in pdf format listing number of differences between the datatable1 and datatable2 for each data column
-theiacov_validation_report_xl,File,File in xlsx format detailing differences between the datatable1 and datatable2 for each data column
-theiacov_validation_version,String,Version of the Public Health Viral Genomics (PHVG) repository used

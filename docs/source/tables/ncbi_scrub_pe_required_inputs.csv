@@ -1,4 +1,0 @@
-Task,Input Variable ,Data Type ,Description
-dehost_pe,read1,File,Forward Illumina reads in FASTQ file format
-dehost_pe,read2,File,Reverse Illumina reads in FASTQ file format
-dehost_pe,samplename,String,Name of the sample being analyzed 

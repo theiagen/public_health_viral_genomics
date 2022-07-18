@@ -1,4 +1,0 @@
-Task,Input Variable ,Data Type ,Description
-vadr,assembly_length_unambiguous,Int,Number of unambiguous basecalls within the SC2 consensus assembly
-vadr_update,docker,String,Docker image used to run VADR
-vadr_update,genome_fasta,File,Consensus genome assembly
