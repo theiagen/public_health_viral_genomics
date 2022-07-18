@@ -27,7 +27,7 @@ mercury_pe_prep	patient_gender	String	Gender of the patient	unknown
 mercury_pe_prep	purpose_of_sampling	String	Reason that the original specimen was taken e.g. clinical diagnostics	None
 mercury_pe_prep	purpose_of_sequencing	String	Reason that this sample was sequenced; for labs that are sequencing samples as part of a federal surveillance program ''baseline surveillance'' would be the most accurate entry for this field	None
 mercury_pe_prep	submitter_email	String	Email address of the submitter	None
-mercury_pe_prep	treatment	String	"Treatment administered to the patient e.g. drug name, dosage, etc.	None
+mercury_pe_prep	treatment	String	Treatment administered to the patient e.g. drug name, dosage, etc.	None
 ncbi_prep_one_sample	cpu	Int	CPUs allocated to the ncbi_prep_one_sample task	1
 ncbi_prep_one_sample	disk_size	Int	Disk size allocated the ncbi_prep_one_sample task	25
 ncbi_prep_one_sample	docker_image	String	Docker image utilized for the ncbi_prep_one_sample task	quay.io/staphb/vadr:1.3
