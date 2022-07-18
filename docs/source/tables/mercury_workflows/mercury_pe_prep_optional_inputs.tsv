@@ -6,7 +6,7 @@ gisaid_prep_one_sample	last_vaccinated	String	Date of last vaccine recieved	None
 gisaid_prep_one_sample	memory	Int	Memory allocated to the gisaid_prep_one_sample task	1
 gisaid_prep_one_sample	outbreak	String	Outbreak associated with this submission e.g. date, place, family cluster	None
 gisaid_prep_one_sample	passage_details	String	Passage details of the sample being submitted e.g. original, vero, etc	original
-gisaid_prep_one_sample	patient_status	String	Status of the patient e.g. Hospitalized, Released, Live, Deceased, unknown"	unknown
+gisaid_prep_one_sample	patient_status	String	Status of the patient e.g. Hospitalized, Released, Live, Deceased, unknown	unknown
 gisaid_prep_one_sample	preemptible	Int	Number of preemptible tries for the gisaid_prep_one_sample task	0
 gisaid_prep_one_sample	specimen_source	String	Biologial source of the specimen, e.g. sputum, Alveolar lavage fluid, Oro-pharyngeal swab, Blood, Tracheal swab, Urine, Stool, Cloakal swab, Organ, Feces, Other"	None
 gisaid_prep_one_sample	type	String	Organism typoe	betacoronovirus
