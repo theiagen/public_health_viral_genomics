@@ -1211,7 +1211,7 @@ task draft_augur_tree {
         String  tree_builder_args = ""
         Boolean bootstrap_vals = false
         Int?    cpus
-        String  docker = "nextstrain/base:build-20220111T004537Z"
+        String  docker = "nextstrain/base:build-20220708T143421Z"
     }
     parameter_meta {
         msa_or_vcf: {
