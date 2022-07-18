@@ -19,7 +19,7 @@ pangolin4,analysis_mode,String,pangolin inference engine for lineage designation
 pangolin4,docker,String,Docker tag used for running Pangolin,staphb/pangolin:4.0.6-pdata-1.8
 pangolin4,min_length,Int,Minimum query length allowed for pangolin to attempt assignment,10000
 pangolin4,max_ambig,Float,Maximum proportion of Ns allowed for pangolin to attempt assignment,0.5
-pangolin4,pangolin_arguments,String,Optional arguments for pangolin e.g. "--skip-scorpio",null
+pangolin4,pangolin_arguments,String,Optional arguments for pangolin e.g. ''--skip-scorpio'',null
 primer_trim,keep_noprimer_reads,Boolean,Include reads with no primers for iVar trim,True
 read_QC_trim,bbduk_mem,Int,Memory allocated to the BBDuk VM,8
 read_QC_trim,trimmomatic_minlen,Int,Specifies the minimum length of reads to be kept for Trimmomatic,25
@@ -39,7 +39,7 @@ vadr,docker,String,Docker tag used for running VADR,quay.io/staphb/1.4.1-models-
 vadr,maxlen,Int,Maximum length for the fasta-trim-terminal-ambigs.pl VADR script,30000
 vadr,minlen,Int,Minimum length subsequence to possibly replace Ns for the fasta-trim-terminal-ambigs.pl VADR script,50
 vadr,skip_length,Int,Minimum assembly length (unambiguous) to run vadr,10000
-vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,"--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/"
+vadr,vadr_opts,String,Options for the v-annotate.pl VADR script,''--glsearch -s -r --nomisc --mkey sarscov2 --alt_fail lowscore,fstukcnf,insertnn,deletinn --mdir /opt/vadr/vadr-models/''
 variant_call,count_orphans,Boolean,Do not skip anomalous read pairs in variant calling for SAMtools mpileup before running iVar variants,TRUE
 variant_call,disable_baq,Boolean,Disable read-pair overlap detection for SAMtools mpileup before running iVar variants,TRUE
 variant_call,max_depth,Int,Maximum reads read at a position per input file for SAMtools mpileup before running iVar variants,600000
