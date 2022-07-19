@@ -441,7 +441,7 @@ task freyja_one_sample {
     File freyja_variants = "~{samplename}_freyja_variants.tsv"
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
-    File freyja_update_log = "freyja_update.log"
+    File? freyja_update_log = "freyja_update.log"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
   }
