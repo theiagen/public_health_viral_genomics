@@ -48,7 +48,7 @@ workflow theiacov_gc {
           pangolin_notes = theiacov_clearlabs.pangolin_notes,
           pangolin_assignment_version = theiacov_clearlabs.pangolin_assignment_version,
           pangolin_docker = theiacov_clearlabs.pangolin_docker,
-          pango_lineage_expanded = theiacov_clearlabs.pangolin_lineage_expanded,
+          pango_lineage_expanded = theiacov_clearlabs.pango_lineage_expanded,
           pangolin_versions = theiacov_clearlabs.pangolin_versions,
           nextclade_clade = theiacov_clearlabs.nextclade_clade,
           nextclade_aa_subs = theiacov_clearlabs.nextclade_aa_subs,
