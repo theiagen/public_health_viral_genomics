@@ -14,7 +14,7 @@ The TheiaCoV_Augur_Prep workflow was written to prepare individual sample assemb
 
 **Action:** Using BASH commands, assembly files are de-identified and their metadata are reformatted into individual augur_metadata.tsv files which are later used with the Augur software in TheiaCoV_Augur_Run_.
 
-More details for using the TheiaCoV_Augur_Prep workflow can be found in tables of `required inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_required_inputs.csv>`_, `optional inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_outputs.csv>`_.
+More details for using the TheiaCoV_Augur_Prep workflow can be found in tables of `required inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_required_inputs.tsv>`_, `optional inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_outputs.tsv>`_.
 
 TheiaCoV_Augur_Run
 ====================
@@ -29,7 +29,7 @@ The TheiaCoV_Augur_Run workflow takes a set of assembly/concensus files (FASTA f
 .. note::
    You may generate phylogenies multiple times, running the TheiaCov_Augur_Run workflow, assessing results and amending inputs to generate a final tree with suffient diversity and high-quality data of interest.
 
-More details for using the TheiaCoV_Augur_Run workflow can be found in tables of `required inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_required_inputs.csv>`_, `optional inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_run_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_run_outputs.csv>`_.
+More details for using the TheiaCoV_Augur_Run workflow can be found in tables of `required inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_prep_required_inputs.tsv>`_, `optional inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_run_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_augur_run_outputs.tsv>`_.
 
 .. toggle-header::
     :header: **References**

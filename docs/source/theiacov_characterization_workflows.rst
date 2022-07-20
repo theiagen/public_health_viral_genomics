@@ -54,7 +54,7 @@ TheiaCoV_Illumina_PE
 * Bash CLI utilities generate quality metrics about the consensus genome assembly. 
 * NCBI’S `VADR <https://github.com/ncbi/vadr>`_ tool screens for potentially errant features in the assembly (e.g. erroneous frame-shift mutations).
 
-More information about the TheiaCoV_Illumina_PE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_outputs.csv>`_.
+More information about the TheiaCoV_Illumina_PE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_pe_outputs.tsv>`_.
 
 .. toggle-header::
     :header: **References**
@@ -113,7 +113,7 @@ NB Sequencing reads derived from the human genome are not removed during this wo
 * Bash CLI utilities generate quality metrics about the consensus genome assembly. 
 * NCBI’S `VADR <https://github.com/ncbi/vadr>`_ tool screens for potentially errant features in the assembly (e.g. erroneous frame-shift mutations).
 
-More information about the TheiaCoV_Illumina_SE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_outputs.csv>`_.
+More information about the TheiaCoV_Illumina_SE workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_illumina_se_outputs.tsv>`_.
 
 .. toggle-header::
     :header: **References**
@@ -169,7 +169,7 @@ NB Read-trimming is performed on raw read data generated on the ClearLabs instru
 * Bash CLI utilities generate quality metrics about the consensus genome assembly. 
 * NCBI’S `VADR <https://github.com/ncbi/vadr>`_ tool screens for potentially errant features in the assembly (e.g. erroneous frame-shift mutations).
 
-More information about the TheiaCoV_ClearLabs workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_outputs.csv>`_.
+More information about the TheiaCoV_ClearLabs workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_clearlabs_outputs.tsv>`_.
 
 .. toggle-header::
     :header: **References**
@@ -219,7 +219,7 @@ TheiaCoV_ONT
 * Bash CLI utilities generate quality metrics about the consensus genome assembly. 
 * NCBI’S `VADR <https://github.com/ncbi/vadr>`_ tool screens for potentially errant features in the assembly (e.g. erroneous frame-shift mutations).
 
-More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_outputs.csv>`_.
+More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_ont_outputs.tsv>`_.
 
 
 .. toggle-header::
@@ -262,7 +262,7 @@ TheiaCoV_FASTA
 
 **QC:** The quality of input SARS-CoV-2 genome assemblies are assessed by the TheiaCoV_FASTA workflow using a series of `bash shell scripts <https://github.com/theiagen/public_health_viral_genomics/blob/main/tasks/task_qc_utils.wdl>`_. 
 
-More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_outputs.csv>`_.
+More information about the TheiaCoV_ONT workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/theiacov_workflows/theiacov_fasta_outputs.tsv>`_.
 
 .. toggle-header::
     :header: **References**
@@ -285,12 +285,12 @@ Pangolin_update
 =================
 The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
 
-More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_outputs.csv>`_.
+More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_outputs.tsv>`_.
 |
 
 VADR_update
 =================
 The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
-More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_required_inputs.csv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_optional_inputs.csv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_outputs.csv>`_.
+More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_outputs.tsv>`_.
 |
