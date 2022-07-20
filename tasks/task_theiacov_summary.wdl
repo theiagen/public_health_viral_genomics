@@ -18,7 +18,7 @@ task theiacov_summary {
     String pangolin_notes
     String pangolin_assignment_version
     String pangolin_docker
-    String pangolin_expanded_lineage
+    String pango_lineage_expanded
     String pangolin_versions
     String nextclade_clade
     String nextclade_aa_subs
@@ -82,7 +82,7 @@ task theiacov_summary {
           ('pangolin_conflicts', '~{pangolin_conflicts}'),
           ('pangolin_notes', '~{pangolin_notes}'),
           ('pangolin_assignment_version', '~{pangolin_assignment_version}'),
-          ('pangolin_expanded_lineage', '~{pangolin_expanded_lineage}'),
+          ('pango_lineage_expanded', '~{pango_lineage_expanded}'),
           ('pangolin_versions', '~{pangolin_versions}'),
           ('pangolin_docker', '~{pangolin_docker}'),
           ('nextclade_clade', '~{nextclade_clade}'),

@@ -180,11 +180,11 @@ task pangolin4 {
   output {
     String date = read_string("DATE")
     String pangolin_lineage = read_string("PANGOLIN_LINEAGE")
+    String pangolin_lineage_expanded = read_string("EXPANDED_LINEAGE")
     String pangolin_conflicts = read_string("PANGOLIN_CONFLICTS")
     String pangolin_notes = read_string("PANGOLIN_NOTES")
     String pangolin_assignment_version = read_string("PANGO_ASSIGNMENT_VERSION")
     String pangolin_versions = read_string("VERSION_PANGOLIN_ALL")
-    String pangolin_expanded_lineage = read_string("EXPANDED_LINEAGE")
     String pangolin_docker = docker
     File pango_lineage_report = "~{samplename}.pangolin_report.csv"
   }

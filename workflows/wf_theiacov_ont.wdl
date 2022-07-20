@@ -147,13 +147,13 @@ workflow theiacov_ont {
     String samtools_version = stats_n_coverage.samtools_version
     # Lineage Assignment
     String pango_lineage = pangolin4.pangolin_lineage
+    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String pangolin_conflicts = pangolin4.pangolin_conflicts
     String pangolin_notes = pangolin4.pangolin_notes
     String pangolin_assignment_version = pangolin4.pangolin_assignment_version
     File pango_lineage_report = pangolin4.pango_lineage_report
     String pangolin_docker = pangolin4.pangolin_docker
     String pangolin_versions = pangolin4.pangolin_versions
-    String pangolin_expanded_lineage = pangolin4.pangolin_expanded_lineage
     # Clade Assigment
     File nextclade_json = nextclade_one_sample.nextclade_json
     File auspice_json = nextclade_one_sample.auspice_json
