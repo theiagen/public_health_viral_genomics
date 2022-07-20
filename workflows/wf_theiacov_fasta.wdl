@@ -19,7 +19,7 @@ workflow theiacov_fasta {
     String input_assembly_method
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-06-14T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
   }
   call qc_utils.consensus_qc {
     input:

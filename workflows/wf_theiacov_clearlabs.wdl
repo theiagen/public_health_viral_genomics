@@ -20,7 +20,7 @@ workflow theiacov_clearlabs {
     Int? normalise = 20000
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-06-14T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
