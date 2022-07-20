@@ -294,7 +294,7 @@ task nextclade_one_sample {
       cpu: 2
       disks: "local-disk 50 HDD"
       dx_instance_type: "mem1_ssd1_v2_x2"
-   #   maxRetries: 3 
+      maxRetries: 3 
     }
     output {
       String nextclade_version = read_string("NEXTCLADE_VERSION")
