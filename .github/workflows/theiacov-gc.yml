@@ -52,12 +52,12 @@ jobs:
           name: logs-${{ matrix.wf }}
           path: |
             /home/runner/pytest_workflow_*/*/theiacov/
-            /home/runner/pytest_workflow_*/*/stdout
-            /home/runner/pytest_workflow_*/*/stderr
-            /home/runner/pytest_workflow_*/*/script
-            /home/runner/pytest_workflow_*/*/*.txt
-            /home/runner/pytest_workflow_*/*/*.log
-            /home/runner/pytest_workflow_*/*/*.out
-            /home/runner/pytest_workflow_*/*/*.err
+            /home/runner/pytest_workflow_*/**/stdout
+            /home/runner/pytest_workflow_*/**/stderr
+            /home/runner/pytest_workflow_*/**/script
+            /home/runner/pytest_workflow_*/**/*.txt
+            /home/runner/pytest_workflow_*/**/*.log
+            /home/runner/pytest_workflow_*/**/*.out
+            /home/runner/pytest_workflow_*/**/*.err
             !/home/runner/pytest_workflow_*/*/theiacov/*/alignments/*.bam*
             !/home/runner/pytest_workflow_*/*/theiacov/*/dehosted_reads/*.fastq.gz
