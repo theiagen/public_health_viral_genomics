@@ -373,6 +373,7 @@ task freyja_one_sample {
     File? freyja_lineage_metadata
     Float? eps
     Boolean update_db = false
+    Boolean confirmed_only = false
     Int memory = 4
     String docker = "quay.io/staphb/freyja:1.3.4"
   }
@@ -423,6 +424,7 @@ task freyja_one_sample {
     ~{'--eps ' + eps} \
     ~{'--meta ' + freyja_lineage_metadata} \
     ~{'--barcodes ' + freyja_usher_barcodes} \
+    ~{true='--confirmedonly' false='' confirmed_only} \
     ~{samplename}_freyja_variants.tsv \
     ~{samplename}_freyja_depths.tsv \
     --output ~{samplename}_freyja_demixed.tmp
