@@ -26,7 +26,7 @@ jobs:
 
       - name: Setup TheiaCoV CI Environment
         run: |
-          conda install -y -c conda-forge -c bioconda cromwell 'python>=3.7' pytest pytest-workflow wget
+          conda install -y -c conda-forge -c bioconda 'cromwell==81' 'python>=3.7' pytest pytest-workflow wget
           chmod 755 bin/*
           cp bin/* ${CONDA_PREFIX}/bin
           THEIACOV_GC_VERSION=$(grep "PHVG_Version=" tasks/task_versioning.wdl | sed -E 's/.*="PHVG v(.*)"/\1/')
