@@ -1,0 +1,4 @@
+Task	Variable Name	Data Type	Description	Default
+theiacov_validate	out_dir	String	The directory to output files to	''./''
+theiacov_validate	out_prefix	String	The prefix to use for output files	''comparison''
+version_capture	timezone	String	User time zone in valid Unix TZ string (e.g. America/New_York)	None

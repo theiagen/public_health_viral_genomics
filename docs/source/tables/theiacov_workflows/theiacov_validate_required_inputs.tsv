@@ -1,0 +1,5 @@
+Task	Input Variable	Data Type	Description
+theiacov_validate	datatable1	String	First datatable to compare
+theiacov_validate	datatable2	String	Second datatable to compare
+theiacov_validate	terra_project	String	Terra billing project
+theiacov_validate	terra_workspace	String	Workspace in which datatables are located

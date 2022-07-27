@@ -1,0 +1,7 @@
+Task	Input Variable 	Data Type 	Description 
+theiacov_augur_prep	assembly 	File 	Assembly/consensus file (single FASTA file per sample)
+theiacov_augur_prep	collection_date 	String 	Collection date of the sample to be included in the analysis
+theiacov_augur_prep	iso_continent 	String 	Continent of the sample to be included in the analysis
+theiacov_augur_prep	iso_country 	String 	Country of the sample to be included in the analysis
+theiacov_augur_prep	iso_state 	String 	State of the sample to be included in the analysis
+theiacov_augur_prep	pango_lineage 	String 	Pango Lineage of the sample to be included in the analysis

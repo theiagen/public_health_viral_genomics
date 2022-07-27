@@ -4,7 +4,7 @@ import "wf_read_QC_trim.wdl" as read_qc
 import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
 import "../tasks/task_versioning.wdl" as versioning
-import "../workflows/wf_WasteWaterVariantCalling_modified.wdl" as wastewater
+import "wf_WasteWaterVariantCalling_modified.wdl" as wastewater
 
 workflow theiacov_illumina_wwvc {
   meta {

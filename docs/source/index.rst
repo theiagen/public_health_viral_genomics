@@ -3,17 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Theiagen's Public Health Viral Genomics Repository
+Public Health Viral Genomics (PHVG)
 ==================================================
-
-Contents
---------
 
 .. toctree::
    :maxdepth: 2
+   :titlesonly:
 
-   overview
-   theiacov_workflows
-   mercury_workflows
-   terra_resources
+   PHVG Overview <overview>
+   SARS-CoV-2
+   about_theiagen
    license
