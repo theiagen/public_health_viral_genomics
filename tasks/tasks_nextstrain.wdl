@@ -1248,6 +1248,7 @@ task draft_augur_tree {
     }
     output {
         File   aligned_tree  = "~{out_basename}_~{method}.nwk"
+        File?   aligned_boottrees  = "~{out_basename}-delim.fasta.boottrees"
         Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
         Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
         String cpu_load      = read_string("CPU_LOAD")
