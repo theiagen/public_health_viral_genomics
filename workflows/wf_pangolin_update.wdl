@@ -51,7 +51,7 @@ workflow pangolin_update {
     String pangolin_versions = pangolin4.pangolin_versions
     File   pango_lineage_report = pangolin4.pango_lineage_report
     String pangolin_docker = pangolin4.pangolin_docker
-    String pangolin_lineage_expanded = pangolin4.pangolin_lineage_expanded
+    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     # Update Log
     String pangolin_updates = pangolin_update_log.pangolin_updates
     File pango_lineage_log = pangolin_update_log.pango_lineage_log
