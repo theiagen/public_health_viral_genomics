@@ -1,4 +1,4 @@
-Public Health Viral Genomics: Overview
+Public Health Viral Genomics (PHVG): Overview
 ==================================================
 
 The `Theiagen <https://theiagen.com/>`_ Public Health Viral Genomics `repository <https://github.com/theiagen/public_health_viral_genomics>`_ hosts a collection of `WDL <https://github.com/openwdl/wdl>`_ workflows for characterization, epidemiology and sharing of the viral pathogen genomes. Currently, these focus on SARS-CoV-2, but workflows for other viral pathogens are anticipated to be available soon.

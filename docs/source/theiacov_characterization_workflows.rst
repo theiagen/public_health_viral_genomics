@@ -281,16 +281,16 @@ More information about the TheiaCoV_ONT workflow including inputs, outputs and d
             **snakemake** Köster J, Rahmann S. Snakemake—a scalable bioinformatics workflow engine. Bioinformatics. 2012 Oct 1;28(19):2520-2.
 |
 
-Pangolin_update
+Pangolin_Update
 =================
-The Pangolin_update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
+The Pangolin_Update workflow updates prior Pangolin lineage calls for each sample to meet the lineage calls specified in a alternative docker image. The most common use case for this is updating lineage calls to be up-to-date with the latest Pangolin nomenclature, by using the latest available Pangolin docker image (found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_).
 
 More information about the Pangolin_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/pangolin_update_outputs.tsv>`_.
 |
 
-VADR_update
+VADR_Update
 =================
-The VADR_update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
+The VADR_Update workflow updates prior VADR assessments for each sample in line with the assessment criteria in a alternative docker image. This may be useful when samples have previously been subject to VADR alerts as updates to VADR assessment criteria may mean that the sample no longer raises concern about quality. The latest docker image for VADR can be found `here <https://www.notion.so/theiagen/Docker-Image-and-Reference-Materials-for-SARS-CoV-2-Genomic-Characterization-98328c61f5cb4f77975f512b55d09108>`_.
 
 More information about the VADR_update workflow including inputs, outputs and default tool parameters can be found in the tables of `required user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_required_inputs.tsv>`_, `optional user inputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_optional_inputs.tsv>`_ and `outputs <https://github.com/theiagen/public_health_viral_genomics/blob/main/docs/source/tables/vadr_update_outputs.tsv>`_.
 |

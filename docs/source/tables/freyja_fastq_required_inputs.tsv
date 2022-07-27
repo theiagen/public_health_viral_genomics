@@ -1,6 +1,6 @@
 Task	Input Variable	Data Type	Description
 freyja_fastq	primer_bed	File	Primer sequence coordinates of the PCR scheme utilized in BED file format
-freyja_fastq	read1_raw	Array[File]	Forward Illumina read in FASTQ file format
-freyja_fastq	read2_raw	Array[File]	Reverse Illumina read in FASTQ file format
+freyja_fastq	read1_raw	File	Forward Illumina read in FASTQ file format
+freyja_fastq	read2_raw	File	Reverse Illumina read in FASTQ file format
 freyja_fastq	reference_genome	File	Path to the reference genome
-freyja_fastq	samplename	Array[String]	Name of the sample being analyzed
+freyja_fastq	samplename	String	Name of the sample being analyzed

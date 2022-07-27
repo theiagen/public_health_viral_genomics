@@ -9,7 +9,7 @@ gisaid_prep_one_sample	passage_details	String	Passage details of the sample bein
 gisaid_prep_one_sample	patient_status	String	Status of the patient e.g. Hospitalized, Released, Live, Deceased, unknown	unknown
 gisaid_prep_one_sample	preemptible	Int	Number of preemptible tries for the gisaid_prep_one_sample task	0
 gisaid_prep_one_sample	specimen_source	String	Biologial source of the specimen, e.g. sputum, Alveolar lavage fluid, Oro-pharyngeal swab, Blood, Tracheal swab, Urine, Stool, Cloakal swab, Organ, Feces, Other	None
-gisaid_prep_one_sample	type	String	Organism typoe	betacoronovirus
+gisaid_prep_one_sample	type	String	Organism type	betacoronovirus
 mercury_se_prep	amplicon_primer_scheme	String	Name of the amplicon primer scheme utilized to generate the amplicons sequenced	None
 mercury_se_prep	amplicon_size	String	Average size of the amplicons sequenced	None
 mercury_se_prep	biosample_accession	String	BioSample accession number	None
