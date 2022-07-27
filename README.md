@@ -1,5 +1,5 @@
-# Public Health Viral Genomics
-Bioinformatics workflows for characterization, epidemiology and sharing of viral pathogen genomes. More information about the steps undertaken in these workflows is available via the [Public Health Viral Genomics ReadTheDocs page](https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html). Support for running these workflows can be sought by raising a [GitHub issue](https://github.com/theiagen/public_health_viral_genomics/issues/new) or by contacting Theiagen at support@theiagen.com.
+# Public Health Viral Genomics (PHVG)
+Bioinformatics workflows for characterization, epidemiology and sharing of viral pathogen genomes. More information about the steps undertaken in these workflows is available via the [PHVG ReadTheDocs page](https://public-health-viral-genomics-theiagen.readthedocs.io/en/latest/overview.html). Support for running these workflows can be sought by raising a [GitHub issue](https://github.com/theiagen/public_health_viral_genomics/issues/new) or by contacting Theiagen at support@theiagen.com.
 
 These workflows are written in [WDL](https://github.com/openwdl/wdl), a language for specifying data processing workflows with a human-readable and writeable syntax. They have been developed by [Theiagen genomics](https://theiagen.com/) to primarily run on the [Terra.bio](https://terra.bio/) platform but can be run locally or on an HPC system at the command-line with Cromwell or miniWDL. 
 
@@ -10,11 +10,10 @@ These workflows are written in [WDL](https://github.com/openwdl/wdl), a language
 * The TheiaCoV workflow for waste water variant calling (TheiaCoV_WWVC) incorporates a modified version of the [CDPHE's WasteWaterVariantCalling WDL Worfklow](https://github.com/CDPHE/WasteWaterVariantCalling).
 * The TheiaCoV workflow user community. To provide feedback, please raise a GitHub issue [GitHub issue](https://github.com/theiagen/public_health_viral_genomics/issues/new).
 
-###Contributing to the PHVG workflows
+### Contributing to the PHVG workflows
 Contributions to the workflows contained in this repository are warmly welcomed. Our style guide may be found below for convenience of formatting.
 
- 
-2-space indents (no tabs), braces on same line, single space when defining input/output variables & runtime attributes, single-line breaks between non-intended constructs, and task commands enclosed with triple braces (`<<< ... >>>`). 
+2-space indents (no tabs), no line break for openning braces, single space when defining input/output variables & runtime attributes, single-line breaks between non-intended constructs, and task commands enclosed with triple braces (`<<< ... >>>`). 
 
 <em>E.g.</em>:
 ```
