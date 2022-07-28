@@ -1232,7 +1232,7 @@ task draft_augur_tree {
             ~{true="--override-default-args" false="" override_default_args} \
             --tree-builder-args="~{tree_builder_args}" \
             --nthreads auto
-            
+
         cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
         cat /proc/loadavg > CPU_LOAD
         { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
@@ -1248,7 +1248,7 @@ task draft_augur_tree {
     }
     output {
         File   aligned_tree  = "~{out_basename}_~{method}.nwk"
-        File?   aligned_boottrees  = "~{out_basename}-delim.fasta.boottrees"
+        File?   aligned_boottrees  = "*.fasta.boottrees"
         Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
         Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
         String cpu_load      = read_string("CPU_LOAD")
