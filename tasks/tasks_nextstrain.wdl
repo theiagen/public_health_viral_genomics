@@ -1232,8 +1232,9 @@ task draft_augur_tree {
             ~{true="--override-default-args" false="" override_default_args} \
             --tree-builder-args="~{tree_builder_args}" \
             --nthreads auto
-            
-        mv *.fasta.boottrees ~{out_basename}_~{method}.fasta.boottrees
+        echo "pwd" 
+        pwd
+        ls   
         cat /proc/uptime | cut -f 1 -d ' ' > UPTIME_SEC
         cat /proc/loadavg > CPU_LOAD
         { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
