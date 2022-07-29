@@ -1237,9 +1237,7 @@ task draft_augur_tree {
         cat /proc/loadavg > CPU_LOAD
         { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
 
-        cd ..
-        find -type f -name "*.fasta.boottrees"
-        mv *.fasta.boottrees ~{out_basename}_~{method}.fasta.boottrees
+        find -name "*.fasta.boottrees" | xargs mv -t ~{out_basename}_~{method}.fasta.boottrees
 
     >>>
     runtime {
