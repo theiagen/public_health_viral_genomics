@@ -91,7 +91,7 @@ workflow theiacov_illumina_pe {
     # MPXV specific tasks
   }
   # adjust these next two so that they work for both mpxv and sc2
-  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+  if (organism == "mpxv" || organism == "sars-cov-2"){ # organism == "mpxv" || 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
