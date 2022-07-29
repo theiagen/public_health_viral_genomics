@@ -22,6 +22,7 @@ workflow theiacov_ont {
     Int? normalise = 200
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    File? reference_genome
     Int? max_length = 700
     Int? min_length = 400
     String organism = "sars-cov-2"
@@ -65,7 +66,8 @@ workflow theiacov_ont {
   }
   call qc_utils.consensus_qc {
     input:
-      assembly_fasta = consensus.consensus_seq
+      assembly_fasta = consensus.consensus_seq,
+      reference_genome = reference_genome
   }
   call assembly_metrics.stats_n_coverage {
     input:

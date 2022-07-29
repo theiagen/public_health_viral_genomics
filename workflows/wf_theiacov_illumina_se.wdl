@@ -59,7 +59,8 @@ workflow theiacov_illumina_se {
   }
   call qc_utils.consensus_qc {
     input:
-      assembly_fasta = consensus.consensus_seq
+      assembly_fasta = consensus.consensus_seq,
+      reference_genome = reference_genome
   }
   call assembly_metrics.stats_n_coverage {
     input:

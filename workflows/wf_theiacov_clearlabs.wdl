@@ -22,6 +22,7 @@ workflow theiacov_clearlabs {
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
+    File? reference_genome
     String organism = "sars-cov-2"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
@@ -62,7 +63,8 @@ workflow theiacov_clearlabs {
   }
   call qc_utils.consensus_qc {
     input:
-      assembly_fasta = consensus.consensus_seq
+      assembly_fasta = consensus.consensus_seq,
+      reference_genome = reference_genome
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
