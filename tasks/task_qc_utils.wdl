@@ -180,7 +180,8 @@ task consensus_qc {
     File? reference_genome
   }
   command <<<
-    if [ -f ~{reference_genome} ] ; then
+    if [ ~{reference_genome} ] ; then
+      # assumes closed reference
       GENOME_LEN=$(awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ~{reference_genome} | tail -n+2 | head -n1)
     else
       # set SC2 default
