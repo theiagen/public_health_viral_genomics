@@ -87,11 +87,11 @@ workflow theiacov_illumina_pe {
         min_depth = min_depth
     }
   }
-  if (organism == "mpxv") {
+  if (organism == "hMPXV") {
     # MPXV specific tasks
   }
   # adjust these next two so that they work for both mpxv and sc2
-  if (organism == "mpxv" || organism == "sars-cov-2"){ # organism == "mpxv" || 
+  if (organism == "hMPXV" || organism == "sars-cov-2"){ # organism == "mpxv" || 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
