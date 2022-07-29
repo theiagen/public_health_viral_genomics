@@ -1237,6 +1237,10 @@ task draft_augur_tree {
         cat /proc/loadavg > CPU_LOAD
         { cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes || echo 0; } > MEM_BYTES
 
+        cd ..
+        find -type f -name "*.fasta.boottrees"
+        mv *.fasta.boottrees ~{out_basename}_~{method}.fasta.boottrees
+
     >>>
     runtime {
         docker: docker
@@ -1249,7 +1253,7 @@ task draft_augur_tree {
     }
     output {
         File    aligned_tree  = "~{out_basename}_~{method}.nwk"
-        File?   fasta_boottrees = glob("*.fasta.boottrees")
+        File?   fasta_boottrees = "~{out_basename}_~{method}.fasta.boottrees"
         Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
         Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
         String cpu_load      = read_string("CPU_LOAD")
