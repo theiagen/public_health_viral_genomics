@@ -4,6 +4,7 @@ import "../tasks/task_taxonID.wdl" as taxon_id
 import "wf_read_QC_trim.wdl" as read_qc
 import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
+import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_versioning.wdl" as versioning
 
 workflow freyja_fastq {
@@ -14,6 +15,7 @@ workflow freyja_fastq {
     File reference_genome
     Int trimmomatic_minlen = 25
     String samplename
+    Int min_depth = 10
   }
   call read_qc.read_QC_trim {
     input:
@@ -34,6 +36,12 @@ workflow freyja_fastq {
       samplename = samplename,
       primer_bed = primer_bed,
       bamfile = bwa.sorted_bam
+  }
+  call assembly_metrics.stats_n_coverage {
+    input:
+      samplename = samplename,
+      bamfile = primer_trim.trim_sorted_bam,
+      min_depth = min_depth
   }
   call taxon_id.freyja_one_sample as freyja {
     input:
@@ -81,6 +89,16 @@ workflow freyja_fastq {
     String ivar_version_primtrim = primer_trim.ivar_version
     String samtools_version_primtrim = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
+    # Alignment QC
+    File alignment_stats = stats_n_coverage.stats
+    File alignment_flagstat = stats_n_coverage.flagstat
+    Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
+    Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
+    Float alignment_mean_coverage = stats_n_coverage_primtrim.depth
+    Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
+    String samtools_version_stats = stats_n_coverage.samtools_version
     # Freyja Analysis
     File freyja_variants = freyja.freyja_variants
     File freyja_depths = freyja.freyja_depths
