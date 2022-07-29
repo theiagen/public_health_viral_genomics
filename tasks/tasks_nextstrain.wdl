@@ -610,7 +610,7 @@ task nextstrain_deduplicate_sequences {
         mkdir -p "$ncov_path_prefix"
         tar -xf "~{nextstrain_ncov_repo_commit}.tar.gz" --strip-components=1 -C "$ncov_path_prefix"
 
-        sed  -i.bak -e '/>/s/\s.*$//g' "~{sequences_fasta}"
+        sed  -i -e '/>/s/\s.*$//g' "~{sequences_fasta}"
 
         python3 "$ncov_path_prefix/scripts/sanitize_sequences.py" \
         --sequences "~{sequences_fasta}" \
@@ -1249,7 +1249,7 @@ task draft_augur_tree {
     }
     output {
         File    aligned_tree  = "~{out_basename}_~{method}.nwk"
-        File?   fasta_boottrees = glob("*.fasta.boottrees")[0]
+        File?   fasta_boottrees = glob("*.fasta.boottrees")
         Int    max_ram_gb    = ceil(read_float("MEM_BYTES")/1000000000)
         Int    runtime_sec   = ceil(read_float("UPTIME_SEC"))
         String cpu_load      = read_string("CPU_LOAD")
