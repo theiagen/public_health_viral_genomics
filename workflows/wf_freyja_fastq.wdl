@@ -92,12 +92,12 @@ workflow freyja_fastq {
     # Alignment QC
     File alignment_stats = stats_n_coverage.stats
     File alignment_flagstat = stats_n_coverage.flagstat
-    Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
-    Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
-    Float alignment_mean_coverage = stats_n_coverage_primtrim.depth
-    Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
-    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
-    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
+    Float meanbaseq_trim = stats_n_coverage.meanbaseq
+    Float meanmapq_trim = stats_n_coverage.meanmapq
+    Float alignment_mean_coverage = stats_n_coverage.depth
+    Float s_gene_mean_coverage = stats_n_coverage.s_gene_depth
+    Float s_gene_percent_coverage = stats_n_coverage.s_gene_percent_coverage
+    File percent_gene_coverage = stats_n_coverage.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
     # Freyja Analysis
     File freyja_variants = freyja.freyja_variants
