@@ -177,8 +177,16 @@ task fastq_scan_se {
 task consensus_qc {
   input {
     File assembly_fasta
+    File? reference_genome
   }
   command <<<
+    if [ -f ~{reference_genome} ] ; then
+      GENOME_LEN=$(awk '/^>/ {if (seqlen){print seqlen}; print ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ~{reference_genome} | tail -n+2 | head -n1)
+    else
+      # set SC2 default
+      GENOME_LEN=29903
+    fi 
+
     # capture date and version
     date | tee DATE
 
@@ -191,7 +199,7 @@ task consensus_qc {
     echo $num_ACTG | tee NUM_ACTG
 
     # calculate percent coverage (Wu Han-1 genome length: 29903bp)
-    python3 -c "print ( round( ($num_ACTG / 29903 ) * 100, 2 ) )" | tee PERCENT_REF_COVERAGE
+    python3 -c "print ( round( ($num_ACTG / $GENOME_LEN ) * 100, 2 ) )" | tee PERCENT_REF_COVERAGE
 
     num_degenerate=$( grep -v ">" ~{assembly_fasta} | grep -o -E "B|D|E|F|H|I|J|K|L|M|O|P|Q|R|S|U|V|W|X|Y|Z" | wc -l )
     if [ -z "$num_degenerate" ] ; then num_degenerate="0" ; fi

@@ -3,11 +3,12 @@ version 1.0
 import "wf_read_QC_trim.wdl" as read_qc
 import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
-import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
+import "../tasks/quality_control/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
 
 workflow theiacov_illumina_pe {
   meta {
@@ -19,14 +20,11 @@ workflow theiacov_illumina_pe {
     File read1_raw
     File read2_raw
     File primer_bed
-    String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
     File? reference_genome
     Int min_depth = 100
-    Boolean skip_vadr = false
-    Boolean skip_nextclade = false
-    Boolean skip_pangolin = false
+    String organism = "sars-cov-2"
   }
   call read_qc.read_QC_trim {
     input:
@@ -68,41 +66,50 @@ workflow theiacov_illumina_pe {
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
-      bamfile = bwa.sorted_bam,
-      min_depth = min_depth
+      bamfile = bwa.sorted_bam
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam,
-      min_depth = min_depth
+      bamfile = primer_trim.trim_sorted_bam
   }
-  if (skip_pangolin == false) {
-  call taxon_ID.pangolin4 {
-    input:
-      samplename = samplename,
-      fasta = consensus.consensus_seq
+  if (organism == "sars-cov-2") {
+    call taxon_ID.pangolin4 {
+      input:
+        samplename = samplename,
+        fasta = consensus.consensus_seq
+    }
+    call sc2_calculation.sc2_gene_coverage {
+      input: 
+        samplename = samplename,
+        bamfile = bwa.sorted_bam,
+        min_depth = min_depth
+    }
   }
+  if (organism == "mpxv") {
+    # MPXV specific tasks
   }
-  if (skip_nextclade == false) {
-  call taxon_ID.nextclade_one_sample {
-    input:
+  # adjust these next two so that they work for both mpxv and sc2
+  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+    call taxon_ID.nextclade_one_sample {
+      input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = nextclade_dataset_name,
+      dataset_name = organism,
+      # need to pull reference name from input reference file -- maybe from the alignment task
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
-  }
-  call taxon_ID.nextclade_output_parser_one_sample {
-    input:
+    }
+    call taxon_ID.nextclade_output_parser_one_sample {
+      input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
+    }
   }
-}
-  if (skip_vadr == false) {
-  call ncbi.vadr {
-    input:
-      genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus_qc.number_ATCG
-  }
+  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+    call ncbi.vadr {
+      input:
+        genome_fasta = consensus.consensus_seq,
+        assembly_length_unambiguous = consensus_qc.number_ATCG
+    }
   }
   call versioning.version_capture{
     input:
@@ -119,8 +126,8 @@ workflow theiacov_illumina_pe {
     File read1_clean = read_QC_trim.read1_clean
     File read2_clean = read_QC_trim.read2_clean
     Int num_reads_raw1 = read_QC_trim.fastq_scan_raw1
-    Int? num_reads_raw2 = read_QC_trim.fastq_scan_raw2
-    String? num_reads_raw_pairs = read_QC_trim.fastq_scan_raw_pairs
+    Int num_reads_raw2 = read_QC_trim.fastq_scan_raw2
+    String num_reads_raw_pairs = read_QC_trim.fastq_scan_raw_pairs
     String fastq_scan_version = read_QC_trim.fastq_scan_version
     Int num_reads_clean1 = read_QC_trim.fastq_scan_clean1
     Int num_reads_clean2 = read_QC_trim.fastq_scan_clean2
@@ -163,11 +170,12 @@ workflow theiacov_illumina_pe {
     Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
-    Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
-    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
-    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
-    # Lineage Assignment
+    # SC2 specific
+    Float? sc2_s_gene_mean_coverage = sc2_gene_coverage.sc2_s_gene_depth
+    Float? sc2_s_gene_percent_coverage = sc2_gene_coverage.sc2_s_gene_percent_coverage
+    File? sc2_all_genes_percent_coverage = sc2_gene_coverage.sc2_all_genes_percent_coverage
+    # SC2 Lineage Assignment
     String? pango_lineage = pangolin4.pangolin_lineage
     String? pangolin_conflicts = pangolin4.pangolin_conflicts
     String? pangolin_notes = pangolin4.pangolin_notes

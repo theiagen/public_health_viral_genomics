@@ -3,11 +3,13 @@ version 1.0
 import "wf_read_QC_trim_se.wdl" as read_qc
 import "../tasks/task_alignment.wdl" as align
 import "../tasks/task_consensus_call.wdl" as consensus_call
-import "../tasks/task_assembly_metrics.wdl" as assembly_metrics
+import "../tasks/quality_control/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
+
 
 workflow theiacov_illumina_se {
   meta {
@@ -18,11 +20,11 @@ workflow theiacov_illumina_se {
     String seq_method = "ILLUMINA"
     File read1_raw
     File primer_bed
-    String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
     File? reference_genome
     Int min_depth = 100
+    String organism = "sars-cov-2"
   }
   call read_qc.read_QC_trim {
     input:
@@ -62,35 +64,50 @@ workflow theiacov_illumina_se {
   call assembly_metrics.stats_n_coverage {
     input:
       samplename = samplename,
-      bamfile = bwa.sorted_bam,
-      min_depth = min_depth
+      bamfile = bwa.sorted_bam
   }
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam,
-      min_depth = min_depth
+      bamfile = primer_trim.trim_sorted_bam
   }
-  call taxon_ID.pangolin4 {
-    input:
-      samplename = samplename,
-      fasta = consensus.consensus_seq
+  if (organism == "sars-cov-2") {
+    call taxon_ID.pangolin4 {
+      input:
+        samplename = samplename,
+        fasta = consensus.consensus_seq
+    }
+    call sc2_calculation.sc2_gene_coverage {
+      input: 
+        samplename = samplename,
+        bamfile = bwa.sorted_bam,
+        min_depth = min_depth
+    }
   }
-  call taxon_ID.nextclade_one_sample {
-    input:
+  if (organism == "mpxv") {
+    # MPXV specific tasks
+  }
+  # adjust these next two so that they work for both mpxv and sc2
+  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+    call taxon_ID.nextclade_one_sample {
+      input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = nextclade_dataset_name,
+      dataset_name = organism,
+      # need to pull reference name from input reference file -- maybe from the alignment task
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
-  }
-  call taxon_ID.nextclade_output_parser_one_sample {
-    input:
+    }
+    call taxon_ID.nextclade_output_parser_one_sample {
+      input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
+    }
   }
-  call ncbi.vadr {
-    input:
-      genome_fasta = consensus.consensus_seq,
-      assembly_length_unambiguous = consensus_qc.number_ATCG
+  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+    call ncbi.vadr {
+      input:
+        genome_fasta = consensus.consensus_seq,
+        assembly_length_unambiguous = consensus_qc.number_ATCG
+    }
   }
   call versioning.version_capture{
     input:
@@ -138,37 +155,38 @@ workflow theiacov_illumina_se {
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     Int consensus_n_variant_min_depth = min_depth
-    # Alignment QC
+   # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
     Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
     Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
     Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
-    Float s_gene_mean_coverage = stats_n_coverage_primtrim.s_gene_depth
-    Float s_gene_percent_coverage = stats_n_coverage_primtrim.s_gene_percent_coverage
-    File percent_gene_coverage = stats_n_coverage_primtrim.percent_gene_coverage
     String samtools_version_stats = stats_n_coverage.samtools_version
+    # SC2 specific
+    Float? sc2_s_gene_mean_coverage = sc2_gene_coverage.sc2_s_gene_depth
+    Float? sc2_s_gene_percent_coverage = sc2_gene_coverage.sc2_s_gene_percent_coverage
+    File? sc2_all_genes_percent_coverage = sc2_gene_coverage.sc2_all_genes_percent_coverage
     # Lineage Assignment
-    String pango_lineage = pangolin4.pangolin_lineage
-    String pangolin_conflicts = pangolin4.pangolin_conflicts
-    String pangolin_notes = pangolin4.pangolin_notes
-    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
-    File pango_lineage_report = pangolin4.pango_lineage_report
-    String pangolin_docker = pangolin4.pangolin_docker
-    String pangolin_versions = pangolin4.pangolin_versions
+    String? pango_lineage = pangolin4.pangolin_lineage
+    String? pangolin_conflicts = pangolin4.pangolin_conflicts
+    String? pangolin_notes = pangolin4.pangolin_notes
+    String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File? pango_lineage_report = pangolin4.pango_lineage_report
+    String? pangolin_docker = pangolin4.pangolin_docker
+    String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    File nextclade_json = nextclade_one_sample.nextclade_json
-    File auspice_json = nextclade_one_sample.auspice_json
-    File nextclade_tsv = nextclade_one_sample.nextclade_tsv
-    String nextclade_version = nextclade_one_sample.nextclade_version
-    String nextclade_docker = nextclade_one_sample.nextclade_docker
+    File? nextclade_json = nextclade_one_sample.nextclade_json
+    File? auspice_json = nextclade_one_sample.auspice_json
+    File? nextclade_tsv = nextclade_one_sample.nextclade_tsv
+    String? nextclade_version = nextclade_one_sample.nextclade_version
+    String? nextclade_docker = nextclade_one_sample.nextclade_docker
     String nextclade_ds_tag = nextclade_dataset_tag
-    String nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
-    String nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
-    String nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
+    String? nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String? nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String? nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
-    String vadr_num_alerts = vadr.num_alerts
-    String vadr_docker = vadr.vadr_docker
+    String? vadr_num_alerts = vadr.num_alerts
+    String? vadr_docker = vadr.vadr_docker
   }
 }
