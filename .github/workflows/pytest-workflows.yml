@@ -77,6 +77,7 @@ jobs:
             /home/runner/pytest_workflow_*/**/*.log
             /home/runner/pytest_workflow_*/**/*.out
             /home/runner/pytest_workflow_*/**/*.err
+            /home/runner/pytest_workflow_*/**/*.json
             /home/runner/pytest_workflow_*/**/DATE
             /home/runner/pytest_workflow_*/**/VERSION
             !/home/runner/pytest_workflow_*/**/*.bam*
