@@ -8,7 +8,7 @@ task bwa {
     File? reference_genome
     Int cpu = 6
   }
-  command <<<
+  # command <<<
     # date and version control
     date | tee DATE
     echo "BWA $(bwa 2>&1 | grep Version )" | tee BWA_VERSION
