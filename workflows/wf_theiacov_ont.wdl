@@ -10,7 +10,7 @@ import "../tasks/task_versioning.wdl" as versioning
 
 workflow theiacov_ont {
   meta {
-    description: "Reference-based consensus calling for viral amplicon ont sequencing data generated on ONT NGS platforms."
+    description: "Reference-based consensus calling for viral amplicon sequencing data generated on ONT NGS platforms."
   }
   input {
     String samplename

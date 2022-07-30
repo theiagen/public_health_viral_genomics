@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-20.04
     name: ${{ matrix.tag }} ${{ matrix.engine }}
     needs: changes
-    if: ${{ needs.changes.outputs.workflows == 'true' }}
+    if: ${{ needs.changes.outputs.workflows == '[]' && needs.changes.outputs.workflows != '' }}
     strategy:
       fail-fast: false
       matrix:
