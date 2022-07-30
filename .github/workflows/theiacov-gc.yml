@@ -1,5 +1,4 @@
 name: theiacov-gc
-on: [push, pull_request]
     
 jobs:
   theiacov-gc:
