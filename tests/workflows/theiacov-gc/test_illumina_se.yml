@@ -1,29 +1,25 @@
-- name: theiacov_illumina_se
-  command: theiacov-gc -i theiacov/illumina_se.json -o theiacov/illumina_se
+- name: theiacov_illumina_se_cromwell
+  command: cromwell run -i ./tests/inputs/wf_theiacov_illumina_se.json -m metadata.json ./workflows/wf_theiacov_illumina_se.wdl
   tags:
-    - theiacov_gc
-    - theiacov_illumina_se
+    - wf_theiacov_illumina_se
+    - wf_theiacov_illumina_se_cromwell
   files:
-    - path: theiacov/illumina_se/alignments/ERR6319327.flagstat.txt
-      md5sum: 607170bcd36b984168eea6b6a9d9cd37
-    - path: theiacov/illumina_se/alignments/ERR6319327.primertrim.sorted.bam
-    - path: theiacov/illumina_se/alignments/ERR6319327.primertrim.sorted.bam.bai
-    - path: theiacov/illumina_se/alignments/ERR6319327.stats.txt
-    - path: theiacov/illumina_se/alignments/ERR6319327.variants.vcf
-      md5sum: 9c0f25e6f486f8b8731ac87aed283d23
-    - path: theiacov/illumina_se/assemblies/ERR6319327.ivar.consensus.fasta
-      md5sum: cb2c2f900d2942b30b762bf3b7a0a17a
-    - path: theiacov/illumina_se/cromwell-stderr.txt
-    - path: theiacov/illumina_se/cromwell-stdout.txt
-    - path: theiacov/illumina_se/kraken2_reports/ERR6319327_kraken2_report.txt
-      md5sum: 7e4fc05efbbc3937b99420e6193be061
-    - path: theiacov/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.auspice.json
-    - path: theiacov/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.json
-    - path: theiacov/illumina_se/nextclade/ERR6319327.ivar.consensus.nextclade.tsv
-    - path: theiacov/illumina_se/pangolin_reports/ERR6319327.pangolin_report.csv
-    - path: theiacov/illumina_se/results/ERR6319327.results.json
-    - path: theiacov/illumina_se/theiacov-metadata.json
-    - path: theiacov/illumina_se/theiacov-results.json
-    - path: theiacov/illumina_se/theiacov-results.tsv
-    - path: theiacov/illumina_se/vadr_alerts/ERR6319327.ivar.consensus.vadr.alt.list
-      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
+    - path: log.err
+      contains: ["Successfully released change log lock", "INFO", "WORKFLOW_METADATA_SUMMARY_ENTRY", "liquibase"]
+    - path: log.out
+      contains: ["workflow finished with status 'Succeeded'", "theiacov_illumina_se", "Done"]
+    - path: metadata.json
+      contains: ["outputs", "theiacov_illumina_se", "Succeeded"]
+
+- name: theiacov_illumina_se_miniwdl
+  command: miniwdl run -i ./tests/inputs/wf_theiacov_illumina_se.json -d miniwdl_run/. --verbose --error-json ./workflows/wf_theiacov_illumina_se.wdl
+  tags:
+    - wf_theiacov_illumina_se
+    - wf_theiacov_illumina_se_miniwdl
+  files:
+    - path: miniwdl_run/inputs.json
+      contains: ["theiacov_illumina_se", "samplename", "primer_bed"]
+    - path: miniwdl_run/outputs.json
+      contains: ["theiacov_illumina_se"]
+    - path: miniwdl_run/workflow.log
+      contains: ["wdl", "theiacov_illumina_se", "NOTICE", "done"]

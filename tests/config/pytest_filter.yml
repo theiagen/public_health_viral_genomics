@@ -1,0 +1,43 @@
+wf_theiacov_clearlabs:
+  - workflows/wf_theiacov_clearlabs.wdl
+  - tasks/task_assembly_metrics.wdl
+  - tasks/task_taxonID.wdl
+  - tasks/task_ncbi.wdl
+  - tasks/task_ont_medaka.wdl
+  - tasks/task_read_clean.wdl
+  - tasks/task_qc_utils.wdl
+  - tasks/task_versioning.wdl
+
+wf_theiacov_illumina_pe:
+  - workflows/wf_theiacov_illumina_pe.wdl
+  - workflows/wf_read_QC_trim.wdl
+  - tasks/task_qc_utils.wdl
+  - tasks/task_read_clean.wdl
+  - tasks/task_taxonID.wdl
+  - tasks/task_alignment.wdl
+  - tasks/task_consensus_call.wdl
+  - tasks/task_assembly_metrics.wdl
+  - tasks/task_ncbi.wdl
+  - tasks/task_versioning.wdl
+
+wf_theiacov_illumina_se:
+  - workflows/wf_theiacov_illumina_se.wdl
+  - workflows/wf_read_QC_trim_se.wdl
+  - tasks/task_qc_utils.wdl
+  - tasks/task_read_clean.wdl
+  - tasks/task_taxonID.wdl
+  - tasks/task_alignment.wdl
+  - tasks/task_consensus_call.wdl
+  - tasks/task_assembly_metrics.wdl
+  - tasks/task_ncbi.wdl
+  - tasks/task_versioning.wdl
+
+wf_theiacov_ont:
+  - workflows/wf_theiacov_ont.wdl
+  - tasks/task_ont_medaka.wdl
+  - tasks/task_assembly_metrics.wdl
+  - tasks/task_taxonID.wdl
+  - tasks/task_ncbi.wdl
+  - tasks/task_read_clean.wdl
+  - tasks/task_qc_utils.wdl
+  - tasks/task_versioning.wdl

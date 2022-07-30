@@ -1,33 +1,25 @@
-- name: theiacov_illumina_pe
-  command: theiacov-gc -i theiacov/illumina_pe.json -o theiacov/illumina_pe
+- name: theiacov_illumina_pe_cromwell
+  command: cromwell run -i ./tests/inputs/wf_theiacov_illumina_pe.json -m metadata.json ./workflows/wf_theiacov_illumina_pe.wdl
   tags:
-    - theiacov_gc
-    - theiacov_illumina_pe
+    - wf_theiacov_illumina_pe
+    - wf_theiacov_illumina_pe_cromwell
   files:
-    - path: theiacov/illumina_pe/alignments/SRR13687078.flagstat.txt
-      md5sum: 6ee6edfa11b24818f5c16f73b1dcf211
-    - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam
-    - path: theiacov/illumina_pe/alignments/SRR13687078.primertrim.sorted.bam.bai
-    - path: theiacov/illumina_pe/alignments/SRR13687078.stats.txt
-    - path: theiacov/illumina_pe/alignments/SRR13687078.variants.vcf
-      md5sum: 285abef3eca1928504afcdaed801a7ad
-    - path: theiacov/illumina_pe/assemblies/SRR13687078.ivar.consensus.fasta
-      md5sum: 6923b89d36bc66e1cdfabfd1dedbea71
-    - path: theiacov/illumina_pe/cromwell-stderr.txt
-    - path: theiacov/illumina_pe/cromwell-stdout.txt
-    - path: theiacov/illumina_pe/dehosted_reads/SRR13687078_R1_dehosted.fastq.gz
-    - path: theiacov/illumina_pe/dehosted_reads/SRR13687078_R2_dehosted.fastq.gz
-    - path: theiacov/illumina_pe/kraken2_reports/SRR13687078_dehosted_kraken2_report.txt
-      md5sum: 3544d9ca35d45093c03cdead46677765
-    - path: theiacov/illumina_pe/kraken2_reports/SRR13687078_kraken2_report.txt
-      md5sum: 3544d9ca35d45093c03cdead46677765
-    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.auspice.json
-    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.json
-    - path: theiacov/illumina_pe/nextclade/SRR13687078.ivar.consensus.nextclade.tsv
-    - path: theiacov/illumina_pe/pangolin_reports/SRR13687078.pangolin_report.csv
-    - path: theiacov/illumina_pe/results/SRR13687078.results.json
-    - path: theiacov/illumina_pe/theiacov-metadata.json
-    - path: theiacov/illumina_pe/theiacov-results.json
-    - path: theiacov/illumina_pe/theiacov-results.tsv
-    - path: theiacov/illumina_pe/vadr_alerts/SRR13687078.ivar.consensus.vadr.alt.list
-      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
+    - path: log.err
+      contains: ["Successfully released change log lock", "INFO", "WORKFLOW_METADATA_SUMMARY_ENTRY", "liquibase"]
+    - path: log.out
+      contains: ["workflow finished with status 'Succeeded'", "theiacov_illumina_pe", "Done"]
+    - path: metadata.json
+      contains: ["outputs", "theiacov_illumina_pe", "Succeeded"]
+
+- name: theiacov_illumina_pe_miniwdl
+  command: miniwdl run -i ./tests/inputs/wf_theiacov_illumina_pe.json -d miniwdl_run/. --verbose --error-json ./workflows/wf_theiacov_illumina_pe.wdl
+  tags:
+    - wf_theiacov_illumina_pe
+    - wf_theiacov_illumina_pe_miniwdl
+  files:
+    - path: miniwdl_run/inputs.json
+      contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
+    - path: miniwdl_run/outputs.json
+      contains: ["theiacov_illumina_pe"]
+    - path: miniwdl_run/workflow.log
+      contains: ["wdl", "theiacov_illumina_pe", "NOTICE", "done"]

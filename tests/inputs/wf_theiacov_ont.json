@@ -1,0 +1,5 @@
+{
+    "samplename": "ont",
+    "demultiplexed_reads": "tests/data/fastqs/ont/ont.fastq.gz",
+    "primer_bed": "tests/data/primers/artic-v3.primers.bed"
+}

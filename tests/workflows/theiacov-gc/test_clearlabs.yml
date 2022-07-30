@@ -1,32 +1,25 @@
-- name: theiacov_clearlabs
-  command: theiacov-gc -i theiacov/clearlabs.json -o theiacov/clearlabs
+- name: theiacov_clearlabs_cromwell
+  command: cromwell run -i ./tests/inputs/wf_theiacov_clearlabs.json -m metadata.json ./workflows/wf_theiacov_clearlabs.wdl
   tags:
-    - theiacov_gc
-    - theiacov_clearlabs
+    - wf_theiacov_clearlabs
+    - wf_theiacov_clearlabs_cromwell
   files:
-    - path: theiacov/clearlabs/alignments/clearlabs.flagstat.txt
-      md5sum: e0b5f095ba646f1a697acd6d8ec5a54c
-    - path: theiacov/clearlabs/alignments/clearlabs.pass.vcf
-      contains: ["VCF", "medaka", "CHROM", "PASS"]
-    - path: theiacov/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam
-    - path: theiacov/clearlabs/alignments/clearlabs.primertrimmed.rg.sorted.bam.bai
-    - path: theiacov/clearlabs/alignments/clearlabs.stats.txt
-    - path: theiacov/clearlabs/assemblies/clearlabs.medaka.consensus.fasta
-      md5sum: ff8bf729b73fd7d34200100957b6f92d
-    - path: theiacov/clearlabs/cromwell-stderr.txt
-    - path: theiacov/clearlabs/cromwell-stdout.txt
-    - path: theiacov/clearlabs/dehosted_reads/clearlabs_R1_dehosted.fastq.gz
-    - path: theiacov/clearlabs/kraken2_reports/clearlabs_dehosted_kraken2_report.txt
-      md5sum: 35841fa2d77ec202c275b1de548b8d98
-    - path: theiacov/clearlabs/kraken2_reports/clearlabs_kraken2_report.txt
-      md5sum: 35841fa2d77ec202c275b1de548b8d98
-    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.auspice.json
-    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.json
-    - path: theiacov/clearlabs/nextclade/clearlabs.medaka.consensus.nextclade.tsv
-    - path: theiacov/clearlabs/pangolin_reports/clearlabs.pangolin_report.csv
-    - path: theiacov/clearlabs/results/clearlabs.results.json
-    - path: theiacov/clearlabs/theiacov-metadata.json
-    - path: theiacov/clearlabs/theiacov-results.json
-    - path: theiacov/clearlabs/theiacov-results.tsv
-    - path: theiacov/clearlabs/vadr_alerts/clearlabs.medaka.consensus.vadr.alt.list
-      md5sum: 3d858fa350d36dbcdfc1a52180ec9d87
+    - path: log.err
+      contains: ["Successfully released change log lock", "INFO", "WORKFLOW_METADATA_SUMMARY_ENTRY", "liquibase"]
+    - path: log.out
+      contains: ["workflow finished with status 'Succeeded'", "theiacov_clearlabs", "Done"]
+    - path: metadata.json
+      contains: ["outputs", "theiacov_clearlabs", "Succeeded"]
+
+- name: theiacov_clearlabs_miniwdl
+  command: miniwdl run -i ./tests/inputs/wf_theiacov_clearlabs.json -d miniwdl_run/. --verbose --error-json ./workflows/wf_theiacov_clearlabs.wdl
+  tags:
+    - wf_theiacov_clearlabs
+    - wf_theiacov_clearlabs_miniwdl
+  files:
+    - path: miniwdl_run/inputs.json
+      contains: ["theiacov_clearlabs", "samplename", "primer_bed"]
+    - path: miniwdl_run/outputs.json
+      contains: ["theiacov_clearlabs"]
+    - path: miniwdl_run/workflow.log
+      contains: ["wdl", "theiacov_clearlabs", "NOTICE", "done"]

@@ -1,0 +1,5 @@
+{
+    "samplename": "ERR6319327",
+    "read1_raw": "tests/data/fastqs/illumina_se/ERR6319327.fastq.gz",
+    "primer_bed": "tests/data/primers/artic-v3.primers.bed"
+}

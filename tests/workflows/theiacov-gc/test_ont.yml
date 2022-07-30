@@ -1,32 +1,25 @@
-- name: theiacov_ont
-  command: theiacov-gc -i theiacov/ont.json -o theiacov/ont
+- name: theiacov_ont_cromwell
+  command: cromwell run -i ./tests/inputs/wf_theiacov_ont.json -m metadata.json ./workflows/wf_theiacov_ont.wdl
   tags:
-    - theiacov_gc
-    - theiacov_ont
+    - wf_theiacov_ont
+    - wf_theiacov_ont_cromwell
   files:
-    - path: theiacov/ont/alignments/ont.flagstat.txt
-      md5sum: 971b1ac6888b860c629d4b727ce59e3c
-    - path: theiacov/ont/alignments/ont.pass.vcf
-      contains: ["VCF", "medaka", "CHROM", "PASS"]
-    - path: theiacov/ont/alignments/ont.primertrimmed.rg.sorted.bam
-    - path: theiacov/ont/alignments/ont.primertrimmed.rg.sorted.bam.bai
-    - path: theiacov/ont/alignments/ont.stats.txt
-    - path: theiacov/ont/assemblies/ont.medaka.consensus.fasta
-      md5sum: 02a04e9cf297acc8fc03667edab41fde
-    - path: theiacov/ont/cromwell-stderr.txt
-    - path: theiacov/ont/cromwell-stdout.txt
-    - path: theiacov/ont/dehosted_reads/ont_R1_dehosted.fastq.gz
-    - path: theiacov/ont/kraken2_reports/ont_dehosted_kraken2_report.txt
-      md5sum: 5780753ae61523a3621fbe2635b04b70
-    - path: theiacov/ont/kraken2_reports/ont_kraken2_report.txt
-      md5sum: f2c6f26b1ef2786d124eae2ab3fe80c1
-    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.auspice.json
-    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.json
-    - path: theiacov/ont/nextclade/ont.medaka.consensus.nextclade.tsv
-    - path: theiacov/ont/pangolin_reports/ont.pangolin_report.csv
-    - path: theiacov/ont/results/ont.results.json
-    - path: theiacov/ont/theiacov-metadata.json
-    - path: theiacov/ont/theiacov-results.json
-    - path: theiacov/ont/theiacov-results.tsv
-    - path: theiacov/ont/vadr_alerts/ont.medaka.consensus.vadr.alt.list
-      md5sum: fc0e4e38d8484f8547c4cf265f41f7ad
+    - path: log.err
+      contains: ["Successfully released change log lock", "INFO", "WORKFLOW_METADATA_SUMMARY_ENTRY", "liquibase"]
+    - path: log.out
+      contains: ["workflow finished with status 'Succeeded'", "theiacov_ont", "Done"]
+    - path: metadata.json
+      contains: ["outputs", "theiacov_ont", "Succeeded"]
+
+- name: theiacov_ont_miniwdl
+  command: miniwdl run -i ./tests/inputs/wf_theiacov_ont.json -d miniwdl_run/. --verbose --error-json ./workflows/wf_theiacov_ont.wdl
+  tags:
+    - wf_theiacov_ont
+    - wf_theiacov_ont_miniwdl
+  files:
+    - path: miniwdl_run/inputs.json
+      contains: ["theiacov_ont", "samplename", "primer_bed"]
+    - path: miniwdl_run/outputs.json
+      contains: ["theiacov_ont"]
+    - path: miniwdl_run/workflow.log
+      contains: ["wdl", "theiacov_ont", "NOTICE", "done"]
