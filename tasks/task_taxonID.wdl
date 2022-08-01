@@ -362,11 +362,14 @@ task nextclade_output_parser_one_sample {
             nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
         with codecs.open ("NEXTCLADE_LINEAGE", 'wt') as Nextclade_Lineage:
-          nc_lineage=tsv_dict['lineage']
-          if nc_lineage is None:
+          if tsv_dict.has_key('lineage')
+            nc_lineage=tsv_dict['lineage']
+            if nc_lineage is None:
+              nc_lineage=""
+            else:
+              nc_lineage=nc_lineage
+          else 
             nc_lineage=""
-          else:
-            nc_lineage=nc_lineage
           Nextclade_Lineage.write(nc_lineage)
       CODE
     >>>
