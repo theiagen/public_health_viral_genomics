@@ -1,0 +1,8 @@
+Task	Input Variable	Data Type	Description
+theiacov_illumina_wwvc	primer_bed	File	Primer sequence coordinates of the PCR scheme utilized in BED file format
+theiacov_illumina_wwvc	read1_raw	Array[File]	Forward Illumina read in FASTQ file format
+theiacov_illumina_wwvc	read2_raw	Array[File]	Reverse Illumina read in FASTQ file format
+theiacov_illumina_wwvc	reference_genome	File	Path to the reference genome
+theiacov_illumina_wwvc	samplename	Array[String]	Name of the sample being analyzed 
+theiacov_illumina_wwvc	spike_annotations	File	Lineage information associated with mutations of interest. Tsv format with 3 columns: AA_change   Nucl_change Lineage
+theiacov_illumina_wwvc	spike_bed	File	Nucleotide positions of mutations of interest in BED file format

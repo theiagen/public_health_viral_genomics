@@ -72,6 +72,7 @@ workflow theiacov_fasta {
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
     String? pango_lineage = pangolin4.pangolin_lineage
+    String? pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String? pangolin_conflicts = pangolin4.pangolin_conflicts
     String? pangolin_notes = pangolin4.pangolin_notes
     String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
@@ -88,6 +89,7 @@ workflow theiacov_fasta {
     String? nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
     String? nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
     String? nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File?  vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts

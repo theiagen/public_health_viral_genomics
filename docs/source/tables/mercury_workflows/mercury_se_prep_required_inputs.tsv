@@ -1,0 +1,27 @@
+Task	Input Variable	Data Type	Description
+mercury_pe_prep	assembly_fasta	File	Consensus genome assembly
+mercury_pe_prep	assembly_mean_coverage	Float	Mean sequencing depth throughout the conesnsus assembly
+mercury_pe_prep	assembly_method	String	Method employed to generate the input assembbly file 
+mercury_pe_prep	authors	String	Authors associated with this submission
+mercury_pe_prep	bioproject_accession	String	NCBI BioProject accession number
+mercury_pe_prep	collecting_lab	String	Name of the laboratory that orginial laboratory that collected the sample
+mercury_pe_prep	collecting_lab_address	String	Address of the laboratory that orginial laboratory that collected the sample
+mercury_pe_prep	collection_date	String	Date on which the sample was collected
+mercury_pe_prep	continent	String	Continent the sample was collected in
+mercury_pe_prep	country	String	Country the sample was collected in
+mercury_pe_prep	gisaid_submitter	String	GISAID username
+mercury_pe_prep	host_disease	String	Host disease; for SARS-CoV-2 sequences from human samples ''COVID-19'' would be the most accurate entry for this field
+mercury_pe_prep	instrument_model	String	Model of the sequencing instrument utilized to generate the read data
+mercury_pe_prep	isolation_source	String	Isolation source i.e. clinical animal or environmental
+mercury_pe_prep	library_id	String	Unique identifer for the sequenced library
+mercury_pe_prep	library_selection	String	Selection methodology used to designate samples as eligible for sequencing e.g. ''PCR'' for samples selected based on PCT Ct values
+mercury_pe_prep	library_source	String	Source of the genomic material used to prepare the sequencing libraries
+mercury_pe_prep	library_strategy	String	Library preparation strategy e.g. ''AMPLICON'' for data generated from tiling PCR amplicons
+mercury_pe_prep	number_N	Int	Number of fully ambiguous basecalls within the consensus assembly
+mercury_pe_prep	organism	String	Name of the organism sequenced e.g. ''SARS-CoV-2''
+mercury_pe_prep	reads_dehosted	File	Dehosted read files
+mercury_pe_prep	seq_platform	String	Description of the sequencing methodology used to generate the input read data
+mercury_pe_prep	state	String	State the sample was collected in
+mercury_pe_prep	submission_id	String	Unique identfier for the sample utilized upon submission
+mercury_pe_prep	submitting_lab	String	Name of the submitting laboratory
+mercury_pe_prep	submitting_lab_address	String	Address of the submitting laboratory

@@ -23,6 +23,7 @@ workflow theiacov_ont {
     Int? normalise = 200
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    String? nextclade_dataset_name
     File? reference_genome
     Int? max_length = 700
     Int? min_length = 400
@@ -101,7 +102,7 @@ workflow theiacov_ont {
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = organism,
+      dataset_name = select_first([nextclade_dataset_name, organism,]),
       # need to pull reference name from input reference file -- maybe from the alignment task
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
@@ -168,6 +169,7 @@ workflow theiacov_ont {
     File? sc2_all_genes_percent_coverage = sc2_gene_coverage.sc2_all_genes_percent_coverage
     # Lineage Assignment
     String? pango_lineage = pangolin4.pangolin_lineage
+    String? pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String? pangolin_conflicts = pangolin4.pangolin_conflicts
     String? pangolin_notes = pangolin4.pangolin_notes
     String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
@@ -184,6 +186,7 @@ workflow theiacov_ont {
     String? nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
     String? nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
     String? nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
+    String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts

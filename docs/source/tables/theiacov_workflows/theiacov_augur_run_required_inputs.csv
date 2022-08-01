@@ -1,4 +1,0 @@
-Task,Input Variable ,Data Type ,Description 
-sarscov2_nextstrain,assembly_fastas ,Array[File] ,An array of assembly/consensus files (FASTA)
-sarscov2_nextstrain,sample_metadata_tsvs ,Array[File] ,An array of sample metadata files (TSV)
-sarscov2_nextstrain,build_name ,String ,The name of the Augur build to be used in this analysis

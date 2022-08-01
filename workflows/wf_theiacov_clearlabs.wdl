@@ -21,7 +21,7 @@ workflow theiacov_clearlabs {
     File primer_bed
     Int? normalise = 20000
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
     File? reference_genome
     String organism = "sars-cov-2"
@@ -147,6 +147,15 @@ workflow theiacov_clearlabs {
     Int number_Degenerate = consensus_qc.number_Degenerate
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
+    # Lineage Assignment
+    String pango_lineage = pangolin4.pangolin_lineage
+    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
+    String pangolin_conflicts = pangolin4.pangolin_conflicts
+    String pangolin_notes = pangolin4.pangolin_notes
+    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File pango_lineage_report= pangolin4.pango_lineage_report
+    String pangolin_docker = pangolin4.pangolin_docker
+    String pangolin_versions = pangolin4.pangolin_versions
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
