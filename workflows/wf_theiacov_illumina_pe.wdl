@@ -48,6 +48,11 @@ workflow theiacov_illumina_pe {
         primer_bed = select_first([primer_bed]),
         bamfile = bwa.sorted_bam
     }
+    call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
+    input:
+      samplename = samplename,
+      bamfile = primer_trim.trim_sorted_bam,
+    }
   }
   call consensus_call.variant_call {
     input:
@@ -73,11 +78,6 @@ workflow theiacov_illumina_pe {
       samplename = samplename,
       bamfile = bwa.sorted_bam
   }
-  call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
-    input:
-      samplename = samplename,
-      bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
-  }
   if (organism == "sars-cov-2") {
     call taxon_ID.pangolin4 {
       input:
@@ -95,7 +95,7 @@ workflow theiacov_illumina_pe {
     # MPXV specific tasks
   }
   # adjust these next two so that they work for both mpxv and sc2
-  if (organism == "MPXV" || organism == "sars-cov-2"){ # organism == "mpxv" || 
+  if (organism == "MPXV" || organism == "sars-cov-2"){ 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
@@ -172,9 +172,9 @@ workflow theiacov_illumina_pe {
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
-    Float meanbaseq_trim = stats_n_coverage_primtrim.meanbaseq
-    Float meanmapq_trim = stats_n_coverage_primtrim.meanmapq
-    Float assembly_mean_coverage = stats_n_coverage_primtrim.depth
+    Float meanbaseq_trim = select_first([stats_n_coverage_primtrim.meanbaseq, stats_n_coverage.meanbaseq])
+    Float meanmapq_trim = select_first([stats_n_coverage_primtrim.meanmapq, stats_n_coverage.meanmapq])
+    Float assembly_mean_coverage = select_first([stats_n_coverage_primtrim.depth, stats_n_coverage.depth])
     String samtools_version_stats = stats_n_coverage.samtools_version
     # SC2 specific
     Float? sc2_s_gene_mean_coverage = sc2_gene_coverage.sc2_s_gene_depth

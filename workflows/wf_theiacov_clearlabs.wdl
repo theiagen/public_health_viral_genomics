@@ -89,7 +89,7 @@ workflow theiacov_clearlabs {
     # MPXV specific tasks
   }
   # adjust these next two so that they work for both mpxv and sc2
-  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+  if (organism == "MPXV" || organism == "sars-cov-2"){ 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
@@ -148,14 +148,14 @@ workflow theiacov_clearlabs {
     Int number_Total = consensus_qc.number_Total
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
-    String pango_lineage = pangolin4.pangolin_lineage
-    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
-    String pangolin_conflicts = pangolin4.pangolin_conflicts
-    String pangolin_notes = pangolin4.pangolin_notes
-    String pangolin_assignment_version = pangolin4.pangolin_assignment_version
-    File pango_lineage_report= pangolin4.pango_lineage_report
-    String pangolin_docker = pangolin4.pangolin_docker
-    String pangolin_versions = pangolin4.pangolin_versions
+    String? pango_lineage = pangolin4.pangolin_lineage
+    String? pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
+    String? pangolin_conflicts = pangolin4.pangolin_conflicts
+    String? pangolin_notes = pangolin4.pangolin_notes
+    String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
+    File? pango_lineage_report= pangolin4.pango_lineage_report
+    String? pangolin_docker = pangolin4.pangolin_docker
+    String? pangolin_versions = pangolin4.pangolin_versions
     # Alignment QC
     File consensus_stats = stats_n_coverage.stats
     File consensus_flagstat = stats_n_coverage.flagstat
@@ -167,14 +167,6 @@ workflow theiacov_clearlabs {
     Float? sc2_s_gene_mean_coverage = sc2_gene_coverage.sc2_s_gene_depth
     Float? sc2_s_gene_percent_coverage = sc2_gene_coverage.sc2_s_gene_percent_coverage
     File? sc2_all_genes_percent_coverage = sc2_gene_coverage.sc2_all_genes_percent_coverage
-    # Lineage Assignment
-    String? pango_lineage = pangolin4.pangolin_lineage
-    String? pangolin_conflicts = pangolin4.pangolin_conflicts
-    String? pangolin_notes = pangolin4.pangolin_notes
-    String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
-    File? pango_lineage_report= pangolin4.pango_lineage_report
-    String? pangolin_docker = pangolin4.pangolin_docker
-    String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
     File? nextclade_json = nextclade_one_sample.nextclade_json
     File? auspice_json = nextclade_one_sample.auspice_json
