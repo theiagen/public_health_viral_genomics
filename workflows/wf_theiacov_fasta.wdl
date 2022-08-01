@@ -88,6 +88,7 @@ workflow theiacov_fasta {
     String? nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
     String? nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
     String? nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File?  vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts

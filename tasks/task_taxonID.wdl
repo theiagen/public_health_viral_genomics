@@ -361,6 +361,13 @@ task nextclade_output_parser_one_sample {
           else:
             nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
+        with codecs.open ("NEXTCLADE_LINEAGE", 'wt') as Nextclade_Lineage:
+          nc_lineage=tsv_dict['lineage']
+          if nc_lineage is None:
+            nc_lineage=""
+          else:
+            nc_lineage=nc_lineage
+          Nextclade_Lineage.write(nc_lineage)
       CODE
     >>>
     runtime {
@@ -375,6 +382,7 @@ task nextclade_output_parser_one_sample {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
       String nextclade_aa_subs = read_string("NEXTCLADE_AASUBS")
       String nextclade_aa_dels = read_string("NEXTCLADE_AADELS")
+      String nextclade_lineage = read_string("NEXTCLADE_LINEAGE")
     }
 }
 

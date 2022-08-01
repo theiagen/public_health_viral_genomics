@@ -154,7 +154,7 @@ workflow theiacov_illumina_pe {
     File aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai])
     Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String? ivar_version_primtrim = primer_trim.ivar_version
-    String? samtools_version_primtrim   = primer_trim.samtools_version
+    String? samtools_version_primtrim = primer_trim.samtools_version
     String? primer_bed_name = primer_trim.primer_bed_name
     File ivar_tsv = variant_call.sample_variants_tsv
     File ivar_vcf = variant_call.sample_variants_vcf
@@ -196,9 +196,10 @@ workflow theiacov_illumina_pe {
     String? nextclade_version = nextclade_one_sample.nextclade_version
     String? nextclade_docker = nextclade_one_sample.nextclade_docker
     String nextclade_ds_tag = nextclade_dataset_tag
-    String?  nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
-    String?  nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
-    String?  nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
+    String? nextclade_aa_subs = nextclade_output_parser_one_sample.nextclade_aa_subs
+    String? nextclade_aa_dels = nextclade_output_parser_one_sample.nextclade_aa_dels
+    String? nextclade_clade = nextclade_output_parser_one_sample.nextclade_clade
+    String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
