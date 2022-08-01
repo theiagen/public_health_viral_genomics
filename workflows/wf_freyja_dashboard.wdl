@@ -18,7 +18,7 @@ workflow freyja_dashboard {
       collection_date = collection_date,
       viral_load = viral_load,
       freyja_dashboard_title = freyja_dashboard_title,
-      dashboard_intro_text = dashboard_intro_text
+      dashboard_intro_text = dashboard_intro_text,
   }
   call versioning.version_capture{
     input:
@@ -40,12 +40,14 @@ task freyja_dashboard_task {
     Array[File] freyja_demixed
     Array[String] collection_date
     Array[String] viral_load
-   
-    String freyja_dashboard_title
-    Float? thresh 
+    File? config
+    Float? thresh
+    Float? mincov
     String? headerColor
+    Boolean scale_by_viral_load = false
+    String freyja_dashboard_title
     File? dashboard_intro_text
-    String docker = "quay.io/staphb/freyja:1.3.8"
+    String docker = "quay.io/staphb/freyja:1.3.9"
   }
   command <<<
   # create bash arrays
@@ -94,17 +96,27 @@ task freyja_dashboard_task {
 
   # create freya dashboard
   echo "Running: freyja dash \
-    demixed_aggregate.tsv \
-    freyja_dash_metadata.csv \
-    dashboard-title.txt \
-    introContent.txt \
-    --output ~{freyja_dashboard_title}.html"
-  freyja dash \
-    demixed_aggregate.tsv \
-    freyja_dash_metadata.csv \
-    dashboard-title.txt \
-    introContent.txt \
+    ~{'--config ' + config} \
+    ~{'--thresh ' + thresh} \
+    ~{'--headerColor ' + headerColor} \
+    ~{'--mincov ' + mincov} \
+    ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
     --output ~{freyja_dashboard_title}.html
+    demixed_aggregate.tsv \
+    freyja_dash_metadata.csv \
+    dashboard-title.txt \
+    introContent.txt "
+  freyja dash \
+    ~{'--config ' + config} \
+    ~{'--thresh ' + thresh} \
+    ~{'--headerColor ' + headerColor} \
+    ~{'--mincov ' + mincov} \
+    ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
+    --output ~{freyja_dashboard_title}.html
+    demixed_aggregate.tsv \
+    freyja_dash_metadata.csv \
+    dashboard-title.txt \
+    introContent.txt 
   >>>
   output {
     File freyja_dasbhoard = "~{freyja_dashboard_title}.html"
