@@ -1,6 +1,6 @@
 version 1.0
 
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/quality_control/task_fastq_scan.wdl" as fastq_scan
 import "../tasks/task_read_clean.wdl" as read_clean
 import "../tasks/task_taxonID.wdl" as taxonID
 
@@ -36,11 +36,11 @@ workflow read_QC_trim {
       read1_trimmed = trimmomatic_se.read1_trimmed,
       memory = bbduk_mem
   }
-  call qc_utils.fastq_scan_se as fastq_scan_raw {
+  call fastq_scan.fastq_scan_se as fastq_scan_raw {
     input:
       read1 = read1_raw
   }
-  call qc_utils.fastq_scan_se as fastq_scan_clean {
+  call fastq_scan.fastq_scan_se as fastq_scan_clean {
     input:
       read1 = bbduk_se.read1_clean
   }
@@ -61,7 +61,7 @@ workflow read_QC_trim {
     String kraken_version = kraken2_raw.version
     Float kraken_human = kraken2_raw.percent_human
     Float kraken_sc2 = kraken2_raw.percent_sc2
-    String kraken_report = kraken2_raw.kraken_report
+    File kraken_report = kraken2_raw.kraken_report
 #    Float    kraken_human_dehosted    =    kraken2_dehosted.percent_human
 #    Float    kraken_sc2_dehosted    =    kraken2_dehosted.percent_sc2
 #    String    kraken_report_dehosted    =    kraken2_dehosted.kraken_report

@@ -2,7 +2,7 @@ version 1.0
 
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_versioning.wdl" as versioning
 
 workflow theiacov_fasta {
@@ -18,10 +18,11 @@ workflow theiacov_fasta {
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
     String organism = "sars-cov-2"
   }
-  call qc_utils.consensus_qc {
+  call consensus_qc_task.consensus_qc {
     input:
       assembly_fasta = assembly_fasta
-  }if (organism == "sars-cov-2") {
+  }
+  if (organism == "sars-cov-2") {
     call taxon_ID.pangolin4 {
       input:
         samplename = samplename,

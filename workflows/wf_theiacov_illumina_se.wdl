@@ -7,7 +7,7 @@ import "../tasks/quality_control/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
 
 
@@ -57,7 +57,7 @@ workflow theiacov_illumina_se {
       reference_genome = reference_genome,
       consensus_min_depth = min_depth
   }
-  call qc_utils.consensus_qc {
+  call consensus_qc_task.consensus_qc {
     input:
       assembly_fasta = consensus.consensus_seq,
       reference_genome = reference_genome

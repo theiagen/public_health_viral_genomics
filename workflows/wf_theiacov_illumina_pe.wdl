@@ -7,7 +7,7 @@ import "../tasks/quality_control/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_versioning.wdl" as versioning
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
 
 workflow theiacov_illumina_pe {
@@ -59,7 +59,7 @@ workflow theiacov_illumina_pe {
       reference_genome = reference_genome,
       consensus_min_depth = min_depth
   }
-  call qc_utils.consensus_qc {
+  call consensus_qc_task.consensus_qc {
     input:
       assembly_fasta = consensus.consensus_seq,
       reference_genome = reference_genome
@@ -95,7 +95,7 @@ workflow theiacov_illumina_pe {
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = organism,
+      dataset_name = organism, # not sure if this will work well???
       # need to pull reference name from input reference file -- maybe from the alignment task
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
@@ -138,10 +138,10 @@ workflow theiacov_illumina_pe {
     String kraken_version = read_QC_trim.kraken_version
     Float kraken_human = read_QC_trim.kraken_human
     Float kraken_sc2 = read_QC_trim.kraken_sc2
-    String kraken_report = read_QC_trim.kraken_report
+    File kraken_report = read_QC_trim.kraken_report
     Float kraken_human_dehosted = read_QC_trim.kraken_human_dehosted
     Float kraken_sc2_dehosted = read_QC_trim.kraken_sc2_dehosted
-    String kraken_report_dehosted = read_QC_trim.kraken_report_dehosted
+    File kraken_report_dehosted = read_QC_trim.kraken_report_dehosted
     # Read Alignment
     String bwa_version = bwa.bwa_version
     String samtools_version = bwa.sam_version

@@ -5,8 +5,9 @@ import "../tasks/quality_control/task_assembly_metrics.wdl" as assembly_metrics
 import "../tasks/task_taxonID.wdl" as taxon_ID
 import "../tasks/task_ncbi.wdl" as ncbi
 import "../tasks/task_read_clean.wdl" as read_clean
-import "../tasks/task_qc_utils.wdl" as qc_utils
+import "../tasks/quality_control/task_fastq_scan.wdl" as fastq_scan
 import "../tasks/task_versioning.wdl" as versioning
+import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
 
 
@@ -27,7 +28,7 @@ workflow theiacov_ont {
     Int? min_length = 400
     String organism = "sars-cov-2"
   }
-  call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
+  call fastq_scan.fastq_scan_se as fastq_scan_raw_reads {
     input:
       read1 = demultiplexed_reads
   }
@@ -43,7 +44,7 @@ workflow theiacov_ont {
       min_length = min_length,
       max_length = max_length
   }
-  call qc_utils.fastq_scan_se as fastq_scan_clean_reads {
+  call fastq_scan.fastq_scan_se as fastq_scan_clean_reads {
     input:
       read1 = read_filtering.filtered_reads
   }
@@ -64,7 +65,7 @@ workflow theiacov_ont {
       primer_bed = primer_bed,
       normalise = normalise
   }
-  call qc_utils.consensus_qc {
+  call consensus_qc_task.consensus_qc {
     input:
       assembly_fasta = consensus.consensus_seq,
       reference_genome = reference_genome
@@ -134,10 +135,10 @@ workflow theiacov_ont {
     String kraken_version = kraken2_raw.version
     Float kraken_human = kraken2_raw.percent_human
     Float kraken_sc2 = kraken2_raw.percent_sc2
-    String kraken_report = kraken2_raw.kraken_report
+    File kraken_report = kraken2_raw.kraken_report
     Float kraken_human_dehosted = kraken2_dehosted.percent_human
     Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
-    String kraken_report_dehosted = kraken2_dehosted.kraken_report
+    File kraken_report_dehosted = kraken2_dehosted.kraken_report
     # Read Alignment
     File aligned_bam = consensus.trim_sorted_bam
     File aligned_bai = consensus.trim_sorted_bai
