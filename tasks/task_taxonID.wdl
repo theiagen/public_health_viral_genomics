@@ -435,8 +435,7 @@ task freyja_one_sample {
     --depths ~{samplename}_freyja_depths.tsv \
     --ref ~{reference_genome}
   # Calculate Boostraps, if specified
-  if [ ~{bootstrap} -eq 1 ]
-  then
+  if ~{bootstrap}; then
     freyja boot \
     ~{"--eps " + eps} \
     ~{"--meta " + freyja_lineage_metadata} \
