@@ -473,9 +473,9 @@ task freyja_one_sample {
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
     File? freyja_update_log = "freyja_update.log"
-    File? freyja_lineage_boostraps = "~{samplename}_lineage_bostraps.csv"
-    File? freyja_lineage_boostraps_summary = "~{samplename}_lineage_bostraps_summary.csv"
-    File? freyja_lineage_boostraps_pdf = "~{samplename}_lineage_bostraps_summary.pdf"
+    File? freyja_boostraps = "~{samplename}_lineage_bostraps.csv"
+    File? freyja_boostraps_summary = "~{samplename}_lineage_bostraps_summary.csv"
+    File? freyja_boostraps_pdf = "~{samplename}_lineage_bostraps_summary.pdf"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
   }
