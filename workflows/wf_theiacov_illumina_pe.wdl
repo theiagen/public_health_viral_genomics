@@ -22,6 +22,7 @@ workflow theiacov_illumina_pe {
     File? primer_bed
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
+    String? nextclade_dataset_name
     File? reference_genome
     Int min_depth = 100
     String organism = "sars-cov-2"
@@ -98,7 +99,7 @@ workflow theiacov_illumina_pe {
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = organism,
+      dataset_name = select_first([nextclade_dataset_name, organism]),
       # need to pull reference name from input reference file -- maybe from the alignment task
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
