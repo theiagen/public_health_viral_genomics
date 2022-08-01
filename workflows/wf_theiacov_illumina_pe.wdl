@@ -19,7 +19,7 @@ workflow theiacov_illumina_pe {
     String seq_method = "ILLUMINA"
     File read1_raw
     File read2_raw
-    File primer_bed
+    File? primer_bed
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     File? reference_genome
@@ -44,7 +44,7 @@ workflow theiacov_illumina_pe {
     call consensus_call.primer_trim {
       input:
         samplename = samplename,
-        primer_bed = primer_bed,
+        primer_bed = select_first([primer_bed]),
         bamfile = bwa.sorted_bam
     }
   }

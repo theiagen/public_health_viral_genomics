@@ -19,12 +19,13 @@ workflow theiacov_illumina_se {
     String samplename
     String seq_method = "ILLUMINA"
     File read1_raw
-    File primer_bed
+    File? primer_bed
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     File? reference_genome
     Int min_depth = 100
     String organism = "sars-cov-2"
+    Boolean trim_primers = true
   }
   call read_qc.read_QC_trim {
     input:
@@ -37,11 +38,13 @@ workflow theiacov_illumina_se {
       read1 = read_QC_trim.read1_clean,
       reference_genome = reference_genome
   }
-  call consensus_call.primer_trim {
-    input:
-      samplename = samplename,
-      primer_bed = primer_bed,
-      bamfile = bwa.sorted_bam
+  if (trim_primers){
+    call consensus_call.primer_trim {
+      input:
+        samplename = samplename,
+        primer_bed = primer_bed,
+        bamfile = bwa.sorted_bam
+    }
   }
   call consensus_call.variant_call {
     input:
