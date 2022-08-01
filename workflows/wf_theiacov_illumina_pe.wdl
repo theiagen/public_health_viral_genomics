@@ -25,6 +25,7 @@ workflow theiacov_illumina_pe {
     File? reference_genome
     Int min_depth = 100
     String organism = "sars-cov-2"
+    Boolean trim_primers = true
   }
   call read_qc.read_QC_trim {
     input:
@@ -39,23 +40,25 @@ workflow theiacov_illumina_pe {
       read2 = read_QC_trim.read2_clean,
       reference_genome = reference_genome
   }
-  call consensus_call.primer_trim {
-    input:
-      samplename = samplename,
-      primer_bed = primer_bed,
-      bamfile = bwa.sorted_bam
+  if (trim_primers){
+    call consensus_call.primer_trim {
+      input:
+        samplename = samplename,
+        primer_bed = primer_bed,
+        bamfile = bwa.sorted_bam
+    }
   }
   call consensus_call.variant_call {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam,
+      bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
       reference_genome = reference_genome,
       variant_min_depth = min_depth
   }
   call consensus_call.consensus {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam,
+      bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
       reference_genome = reference_genome,
       consensus_min_depth = min_depth
   }
@@ -72,7 +75,7 @@ workflow theiacov_illumina_pe {
   call assembly_metrics.stats_n_coverage as stats_n_coverage_primtrim {
     input:
       samplename = samplename,
-      bamfile = primer_trim.trim_sorted_bam
+      bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
   }
   if (organism == "sars-cov-2") {
     call taxon_ID.pangolin4 {
@@ -146,12 +149,12 @@ workflow theiacov_illumina_pe {
     String bwa_version = bwa.bwa_version
     String samtools_version = bwa.sam_version
     String assembly_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
-    File aligned_bam = primer_trim.trim_sorted_bam
-    File aligned_bai = primer_trim.trim_sorted_bai
-    Float primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
-    String ivar_version_primtrim = primer_trim.ivar_version
-    String samtools_version_primtrim   = primer_trim.samtools_version
-    String primer_bed_name = primer_trim.primer_bed_name
+    File aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam])
+    File aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai])
+    Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
+    String? ivar_version_primtrim = primer_trim.ivar_version
+    String? samtools_version_primtrim   = primer_trim.samtools_version
+    String? primer_bed_name = primer_trim.primer_bed_name
     File ivar_tsv = variant_call.sample_variants_tsv
     File ivar_vcf = variant_call.sample_variants_vcf
     String ivar_variant_version = variant_call.ivar_version
