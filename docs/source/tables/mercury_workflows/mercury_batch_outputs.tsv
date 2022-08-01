@@ -1,0 +1,15 @@
+Output Name	Data Type	Description 
+BioSample_attributes	File	Tsv file of compiled BioSample attributes
+Genbank_assembly	File	Concatenated assembly file for batch submission to GenBank
+GenBank_batched_samples	File	File detailing all of the files batched for GenBank submission
+GenBank_excluded_samples	File	File detailing all of the files excluded from the prepared submission files for GenBank
+GenBank_modifier	File	Compiled metadata formatted for batch submissinon to GenBank
+GISAID_assembly	File	Concatenated assembly file for batch submission to GISAID
+GISAID_batched_samples	File	File detailing all of the files batched for GISAID submission
+GISAID_excluded_samples	File	File detailing all of the files excluded from the prepared submission files for GenBank
+GISAID_metadata	File	Compiled metadata formatted for batch submission to GISAID
+mercury_batch_analysis_date	String	Date of analysis
+mercury_batch_version	String	Version of the Public Health Viral Genomics (PHVG) repository used
+SRA_gcp_bucket	String	GCP bucket location for SRA read transfer
+SRA_metadata	File	Compiled metadata formatted for batch submission to SRA
+SRA_zipped_reads	File	All reads prepared for SRA submission (empty file is GCP bucket location was provided for SRA read transfer)

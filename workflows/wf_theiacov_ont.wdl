@@ -167,6 +167,7 @@ workflow theiacov_ont {
     File? sc2_all_genes_percent_coverage = sc2_gene_coverage.sc2_all_genes_percent_coverage
     # Lineage Assignment
     String? pango_lineage = pangolin4.pangolin_lineage
+    String? pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String? pangolin_conflicts = pangolin4.pangolin_conflicts
     String? pangolin_notes = pangolin4.pangolin_notes
     String? pangolin_assignment_version = pangolin4.pangolin_assignment_version

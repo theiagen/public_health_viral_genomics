@@ -26,7 +26,7 @@ jobs:
 
       - name: Setup TheiaCoV CI Environment
         run: |
-          conda install -y -c conda-forge -c bioconda cromwell 'python>=3.7' pytest pytest-workflow wget
+          conda install -y -c conda-forge -c bioconda 'cromwell==81' 'python>=3.7' pytest pytest-workflow wget
           chmod 755 bin/*
           cp bin/* ${CONDA_PREFIX}/bin
           THEIACOV_GC_VERSION=$(grep "PHVG_Version=" tasks/task_versioning.wdl | sed -E 's/.*="PHVG v(.*)"/\1/')
@@ -52,7 +52,15 @@ jobs:
           name: logs-${{ matrix.wf }}
           path: |
             /home/runner/pytest_workflow_*/*/theiacov/
-            /home/runner/pytest_workflow_*/*/log.out
-            /home/runner/pytest_workflow_*/*/log.err
+            /home/runner/pytest_workflow_*/**/stdout*
+            /home/runner/pytest_workflow_*/**/stderr*
+            /home/runner/pytest_workflow_*/**/script*
+            /home/runner/pytest_workflow_*/**/rc
+            /home/runner/pytest_workflow_*/**/*.txt
+            /home/runner/pytest_workflow_*/**/*.log
+            /home/runner/pytest_workflow_*/**/*.out
+            /home/runner/pytest_workflow_*/**/*.err
+            /home/runner/pytest_workflow_*/**/DATE
+            /home/runner/pytest_workflow_*/**/VERSION
             !/home/runner/pytest_workflow_*/*/theiacov/*/alignments/*.bam*
             !/home/runner/pytest_workflow_*/*/theiacov/*/dehosted_reads/*.fastq.gz

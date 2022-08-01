@@ -1,7 +1,0 @@
-Task,Input Variable ,Data Type ,Description 
-prep_augur_metadata,assembly ,File ,Assembly/consensus file (single FASTA file per sample)
-prep_augur_metadata,collection_date ,String ,Collection date of the sample to be included in the analysis
-prep_augur_metadata,iso_country ,String ,Country of the sample to be included in the analysis
-prep_augur_metadata,iso_state ,String ,State of the sample to be included in the analysis
-prep_augur_metadata,iso_continent ,String ,Continent of the sample to be included in the analysis
-prep_augur_metadata,pango_lineage ,String ,Pango Lineage of the sample to be included in the analysis

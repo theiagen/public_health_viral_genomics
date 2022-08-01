@@ -1,0 +1,6 @@
+Output Name	Data Type	Description
+freyja_demixed_aggregate	File	Tsv file of aggregated freyja_demixed data for all samples in sample set
+freyja_plot	File	PDF plot of variant proportions for all samples in sample set
+freyja_plot_metadata	File	Csv file detailing metadata used for plotting variant proportions over time
+freyja_plot_wf_analysis_date	String	Date of analysis
+freyja_plot_wf_version	String	Version of the Public Health Viral Genomics (PHVG) repository used

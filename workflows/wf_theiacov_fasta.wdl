@@ -71,6 +71,7 @@ workflow theiacov_fasta {
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
     String? pango_lineage = pangolin4.pangolin_lineage
+    String? pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String? pangolin_conflicts = pangolin4.pangolin_conflicts
     String? pangolin_notes = pangolin4.pangolin_notes
     String? pangolin_assignment_version = pangolin4.pangolin_assignment_version
