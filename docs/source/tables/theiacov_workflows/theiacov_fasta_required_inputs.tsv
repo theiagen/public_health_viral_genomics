@@ -1,0 +1,5 @@
+Task	Input Variable	Data Type	Description
+theiacov_fasta	assembly_fasta	File	SARS-CoV-2 assembly file in fasta format
+theiacov_fasta	input_assembly_method	String	Description of the method utilized to generate the input assembly fasta file; if unknown ''NA'' will be accepted
+theiacov_fasta	samplename	String	Name of the sample being analyzed
+theiacov_fasta	seq_method	String	Description of the sequencing method utilized to generate the raw sequencing data; if unknown ''NA'' will be accepted

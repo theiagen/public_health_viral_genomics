@@ -5,8 +5,8 @@ task kraken2 {
     File read1
     File? read2
     String samplename
-    String? kraken2_db = "/kraken2-db"
-    Int? cpu = 4
+    String kraken2_db = "/kraken2-db"
+    Int cpu = 4
   }
   command <<<
     # date and version control
@@ -127,8 +127,11 @@ task pangolin4 {
     String samplename
     Int min_length = 10000
     Float max_ambig = 0.5
-    String docker = "staphb/pangolin:4.0.6-pdata-1.8"
+    String docker = "staphb/pangolin:4.1.2-pdata-1.12"
     String? analysis_mode
+    Boolean expanded_lineage=true
+    Boolean skip_scorpio=false
+    Boolean skip_designation_cache=false
     String? pangolin_arguments
   }
   command <<<
@@ -143,9 +146,13 @@ task pangolin4 {
        ~{'--analysis-mode ' + analysis_mode} \
        ~{'--min-length ' + min_length} \
        ~{'--max-ambig ' + max_ambig} \
+       ~{true='--expanded-lineage' false='' expanded_lineage} \
+       ~{true='--skip-scorpio' false='' skip_scorpio} \
+       ~{true='--skip-designation-cache' false='' skip_designation_cache} \
        --outfile "~{samplename}.pangolin_report.csv" \
        --verbose \
        ~{pangolin_arguments}
+
 
     python3 <<CODE
     import csv
@@ -163,11 +170,17 @@ task pangolin4 {
           pangolin_conflicts.write(line["conflict"])
         with open("PANGOLIN_NOTES", 'wt') as pangolin_notes:
           pangolin_notes.write(line["note"])
+        with open("EXPANDED_LINEAGE", "wt") as expanded_lineage:
+          if "expanded_lineage" in line:
+            expanded_lineage.write(line["expanded_lineage"])
+          else:
+            expanded_lineage.write("NA")
     CODE
   >>>
   output {
     String date = read_string("DATE")
     String pangolin_lineage = read_string("PANGOLIN_LINEAGE")
+    String pangolin_lineage_expanded = read_string("EXPANDED_LINEAGE")
     String pangolin_conflicts = read_string("PANGOLIN_CONFLICTS")
     String pangolin_notes = read_string("PANGOLIN_NOTES")
     String pangolin_assignment_version = read_string("PANGO_ASSIGNMENT_VERSION")
@@ -262,7 +275,7 @@ task nextclade_one_sample {
       File? gene_annotations_json
       File? pcr_primers_csv
       File? virus_properties
-      String docker = "nextstrain/nextclade:1.11.0"
+      String docker = "nextstrain/nextclade:2.3.0"
       String dataset_name
       String dataset_reference
       String dataset_tag
@@ -274,18 +287,19 @@ task nextclade_one_sample {
 
         nextclade dataset get --name="~{dataset_name}" --reference="~{dataset_reference}" --tag="~{dataset_tag}" -o nextclade_dataset_dir --verbose
         set -e
-        nextclade run --input-fasta "~{genome_fasta}" \
-            --input-dataset "nextclade_dataset_dir" \
-            --input-root-seq ~{default="nextclade_dataset_dir/reference.fasta" root_sequence} \
-            --input-tree ~{default="nextclade_dataset_dir/tree.json" auspice_reference_tree_json} \
-            --input-qc-config ~{default="nextclade_dataset_dir/qc.json" qc_config_json} \
-            --input-gene-map ~{default="nextclade_dataset_dir/genemap.gff" gene_annotations_json} \
-            --input-pcr-primers ~{default="nextclade_dataset_dir/primers.csv" pcr_primers_csv} \
-            --input-virus-properties ~{default="nextclade_dataset_dir/virus_properties.json" virus_properties} \
+        nextclade run \
+            --input-dataset=nextclade_dataset_dir/ \
+            ~{"--input-root-seq " + root_sequence} \
+            ~{"--input-tree " + auspice_reference_tree_json} \
+            ~{"--input-qc-config " + qc_config_json} \
+            ~{"--input-gene-map " + gene_annotations_json} \
+            ~{"--input-pcr-primers " + pcr_primers_csv} \
+            ~{"--input-virus-properties " + virus_properties}  \
             --output-json "~{basename}".nextclade.json \
             --output-tsv  "~{basename}".nextclade.tsv \
             --output-tree "~{basename}".nextclade.auspice.json \
-            --verbose
+            --output-all=. \
+            "~{genome_fasta}"
     >>>
     runtime {
       docker: "~{docker}"

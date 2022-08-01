@@ -20,7 +20,7 @@ workflow theiacov_clearlabs {
     Int? normalise = 20000
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
   }
   call qc_utils.fastq_scan_se as fastq_scan_raw_reads {
@@ -130,6 +130,7 @@ workflow theiacov_clearlabs {
     Float percent_reference_coverage = consensus_qc.percent_reference_coverage
     # Lineage Assignment
     String pango_lineage = pangolin4.pangolin_lineage
+    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String pangolin_conflicts = pangolin4.pangolin_conflicts
     String pangolin_notes = pangolin4.pangolin_notes
     String pangolin_assignment_version = pangolin4.pangolin_assignment_version

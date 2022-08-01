@@ -1,0 +1,4 @@
+Task	Input Variable	Data Type	Description
+freyja_plot	freyja_demixed	Array[File]	Array of freyja_demixed.tsv files from freyja_fastq output
+freyja_plot	freyja_plot_name	String	Name of output plot
+freyja_plot	sample_name	Array[String]	Array of sample identifiers

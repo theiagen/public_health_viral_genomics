@@ -20,7 +20,7 @@ workflow theiacov_ont {
     Int? normalise = 200
     String nextclade_dataset_name = "sars-cov-2"
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     Int? max_length = 700
     Int? min_length = 400
   }
@@ -147,6 +147,7 @@ workflow theiacov_ont {
     String samtools_version = stats_n_coverage.samtools_version
     # Lineage Assignment
     String pango_lineage = pangolin4.pangolin_lineage
+    String pango_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String pangolin_conflicts = pangolin4.pangolin_conflicts
     String pangolin_notes = pangolin4.pangolin_notes
     String pangolin_assignment_version = pangolin4.pangolin_assignment_version
