@@ -15,6 +15,7 @@ workflow read_QC_trim {
     Int? trimmomatic_quality_trim_score = 30
     Int? trimmomatic_window_size = 4
     Int  bbduk_mem = 8
+    String? target_org
   }
 # Commented out as NCBI SCRUB not currently compatible with 75bp SE data used in SC2 sequencing
 #  call read_clean.ncbi_scrub_se {
@@ -47,7 +48,8 @@ workflow read_QC_trim {
   call taxonID.kraken2 as kraken2_raw {
     input:
       samplename = samplename,
-      read1 = bbduk_se.read1_clean
+      read1 = bbduk_se.read1_clean,
+      target_org = target_org
   }
 #  call taxonID.kraken2 as kraken2_dehosted {
 #    input:
@@ -63,6 +65,7 @@ workflow read_QC_trim {
     Float kraken_sc2 = kraken2_raw.percent_sc2
     Float? kraken_target_org = kraken2_raw.percent_target_org
     File kraken_report = kraken2_raw.kraken_report
+    String kraken_target_org_search = target_org
 #    Float    kraken_human_dehosted    =    kraken2_dehosted.percent_human
 #    Float    kraken_sc2_dehosted    =    kraken2_dehosted.percent_sc2
 #    String    kraken_report_dehosted    =    kraken2_dehosted.kraken_report

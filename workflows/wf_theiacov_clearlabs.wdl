@@ -128,6 +128,7 @@ workflow theiacov_clearlabs {
     Float kraken_human = kraken2_raw.percent_human
     Float kraken_sc2 = kraken2_raw.percent_sc2
     Float? kraken_target_org = kraken2_raw.percent_target_org
+    String? kakren_target_org_search = kraken2_raw.kraken_target_org
     File kraken_report = kraken2_raw.kraken_report
     Float kraken_human_dehosted = kraken2_dehosted.percent_human
     Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
