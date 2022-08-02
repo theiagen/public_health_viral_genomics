@@ -16,6 +16,7 @@ workflow read_QC_trim {
     Int? trimmomatic_quality_trim_score = 30
     Int? trimmomatic_window_size = 4
     Int bbduk_mem = 8
+    String? target_org
   }
   call read_clean.ncbi_scrub_pe {
     input:
@@ -53,13 +54,15 @@ workflow read_QC_trim {
     input:
       samplename = samplename,
       read1 = read1_raw,
-      read2 = read2_raw
+      read2 = read2_raw,
+      target_org = target_org
   }
   call taxonID.kraken2 as kraken2_dehosted {
     input:
       samplename = samplename,
       read1 = ncbi_scrub_pe.read1_dehosted,
-      read2 = ncbi_scrub_pe.read2_dehosted
+      read2 = ncbi_scrub_pe.read2_dehosted,
+      target_org = target_org
   }
   output {
     File read1_dehosted = ncbi_scrub_pe.read1_dehosted
@@ -77,9 +80,12 @@ workflow read_QC_trim {
     String kraken_version = kraken2_raw.version
     Float kraken_human = kraken2_raw.percent_human
     Float kraken_sc2 = kraken2_raw.percent_sc2
+    Float? kraken_target_org = kraken2_raw.percent_target_org
     File kraken_report = kraken2_raw.kraken_report
     Float kraken_human_dehosted = kraken2_dehosted.percent_human
     Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
+    Float? kraken_target_org_dehosted = kraken2_dehosted.percent_target_org
+    Float? kraken_target_org_search = target_org
     File kraken_report_dehosted = kraken2_dehosted.kraken_report
     String fastq_scan_version = fastq_scan_raw.version
     String bbduk_docker = bbduk.bbduk_docker
