@@ -33,8 +33,8 @@ task kraken2 {
     echo $percentage_human | tee PERCENT_HUMAN
     echo $percentage_sc2 | tee PERCENT_SC2
     # capture target org percentage 
-    if ${target_org}; then 
-      percent_target_org=$(grep "${target_org}" ~{samplename}_kraken2_report.txt | cut -f1 )
+    if ~{target_org}; then 
+      percent_target_org=$(grep "~{target_org}" ~{samplename}_kraken2_report.txt | cut -f1 | head -n1 )
       if [-z "$percent_target_org" ] ; then percent_target_org="0" ; fi
     else 
       percent_target_org=""
