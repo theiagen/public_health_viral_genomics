@@ -67,7 +67,8 @@ workflow theiacov_ont {
       samplename = samplename,
       filtered_reads = read_filtering.filtered_reads,
       primer_bed = primer_bed,
-      normalise = normalise
+      normalise = normalise,
+      reference_genome = reference_genome
   }
   call consensus_qc_task.consensus_qc {
     input:
