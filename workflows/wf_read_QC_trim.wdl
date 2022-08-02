@@ -85,7 +85,7 @@ workflow read_QC_trim {
     Float kraken_human_dehosted = kraken2_dehosted.percent_human
     Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
     String? kraken_target_org_dehosted = kraken2_dehosted.percent_target_org
-    String? kraken_target_org_search = target_org
+    String? kraken_target_org_name = target_org
     File kraken_report_dehosted = kraken2_dehosted.kraken_report
     String fastq_scan_version = fastq_scan_raw.version
     String bbduk_docker = bbduk.bbduk_docker

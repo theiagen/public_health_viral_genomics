@@ -65,7 +65,7 @@ workflow read_QC_trim {
     Float kraken_sc2 = kraken2_raw.percent_sc2
     String? kraken_target_org = kraken2_raw.percent_target_org
     File kraken_report = kraken2_raw.kraken_report
-    String? kraken_target_org_search = target_org
+    String? kraken_target_org_name = target_org
 #    Float    kraken_human_dehosted    =    kraken2_dehosted.percent_human
 #    Float    kraken_sc2_dehosted    =    kraken2_dehosted.percent_sc2
 #    String    kraken_report_dehosted    =    kraken2_dehosted.kraken_report
