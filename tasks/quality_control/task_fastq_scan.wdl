@@ -26,7 +26,7 @@ task fastq_scan {
     read2_seqs=$(cat READ2_SEQS)
 
     # capture number of read pairs
-    if [ ${read1_seqs} == $read2_seqs]; then
+    if [ ${read1_seqs} == ${read2_seqs} ]; then
       read_pairs=${read1_seqs}
     else
       read_pairs="Uneven pairs: R1=${read1_seqs}, R2=${read2_seqs}"
