@@ -33,7 +33,7 @@ task kraken2 {
     echo $percentage_human | tee PERCENT_HUMAN
     echo $percentage_sc2 | tee PERCENT_SC2
     # capture target org percentage 
-    if "~{target_org}"; then 
+    if [ ! -z "~{target_org}" ]; then 
       echo "Target org designated: ~{target_org}"
       percent_target_org=$(grep "~{target_org}" ~{samplename}_kraken2_report.txt | cut -f1 | head -n1 )
       if [-z "$percent_target_org" ] ; then percent_target_org="0" ; fi
@@ -49,7 +49,7 @@ task kraken2 {
     File kraken_report = "~{samplename}_kraken2_report.txt"
     Float percent_human = read_float("PERCENT_HUMAN")
     Float percent_sc2 = read_float("PERCENT_SC2")
-    Float? percent_target_org = read_float("PERCENT_TARGET_ORG")
+    String? percent_target_org = read_string("PERCENT_TARGET_ORG")
     String? kraken_target_org = target_org
   }
   runtime {
