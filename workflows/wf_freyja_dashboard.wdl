@@ -101,22 +101,22 @@ task freyja_dashboard_task {
     ~{'--headerColor ' + headerColor} \
     ~{'--mincov ' + mincov} \
     ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
-    --output ~{freyja_dashboard_title}.html
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \
-    introContent.txt "
+    introContent.txt \
+    --output ~{freyja_dashboard_title}.html"
   freyja dash \
     ~{'--config ' + config} \
     ~{'--thresh ' + thresh} \
     ~{'--headerColor ' + headerColor} \
     ~{'--mincov ' + mincov} \
     ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
-    --output ~{freyja_dashboard_title}.html
     demixed_aggregate.tsv \
     freyja_dash_metadata.csv \
     dashboard-title.txt \
-    introContent.txt 
+    introContent.txt \
+    --output ~{freyja_dashboard_title}.html
   >>>
   output {
     File freyja_dasbhoard = "~{freyja_dashboard_title}.html"
