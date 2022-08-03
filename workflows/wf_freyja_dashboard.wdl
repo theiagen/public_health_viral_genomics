@@ -47,7 +47,7 @@ task freyja_dashboard_task {
     Boolean scale_by_viral_load = false
     String freyja_dashboard_title
     File? dashboard_intro_text
-    String docker = "quay.io/staphb/freyja:1.3.9"
+    String docker = "quay.io/staphb/freyja:1.3.10"
   }
   command <<<
   # create bash arrays
