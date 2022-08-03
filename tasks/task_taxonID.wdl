@@ -389,7 +389,7 @@ task freyja_one_sample {
     Boolean update_db = false
     Boolean confirmed_only = false
     Boolean bootstrap = false
-    Int? number_boostraps
+    Int? number_bootstraps
     Int memory = 4
     String docker = "staphb/freyja:1.3.10"
   }
@@ -440,7 +440,7 @@ task freyja_one_sample {
     ~{"--eps " + eps} \
     ~{"--meta " + freyja_lineage_metadata} \
     ~{"--barcodes " + freyja_usher_barcodes} \
-    ~{"--nb " + number_boostraps } \
+    ~{"--nb " + number_bootstraps } \
     ~{samplename}_freyja_variants.tsv \
     ~{samplename}_freyja_depths.tsv \
     --output_base ~{samplename} \
