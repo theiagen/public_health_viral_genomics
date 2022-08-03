@@ -389,7 +389,7 @@ task freyja_one_sample {
     Boolean update_db = false
     Boolean confirmed_only = false
     Boolean bootstrap = false
-    Int? number_boostraps
+    Int? number_bootstraps
     Int memory = 4
     String docker = "quay.io/staphb/freyja:1.3.9"
   }
