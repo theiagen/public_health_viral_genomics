@@ -21,7 +21,7 @@ workflow theiacov_clearlabs {
     File primer_bed
     Int normalise = 20000
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
+    String nextclade_dataset_tag = "2022-07-26T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
     String? nextclade_dataset_name
     File? reference_genome
