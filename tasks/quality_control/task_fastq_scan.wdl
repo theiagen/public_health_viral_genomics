@@ -20,7 +20,7 @@ task fastq_scan {
     fi
 
     # capture forward read stats
-    eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json 
+    eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json
     cat ~{read1_name}_fastq-scan.json | jq .qc_stats.read_total | tee READ1_SEQS
     read1_seqs=$(cat READ1_SEQS)
     eval "${cat_reads} ~{read2}" | fastq-scan | tee ~{read2_name}_fastq-scan.json
@@ -74,7 +74,7 @@ task fastq_scan_se {
 
     # capture forward read stats
     eval "${cat_reads} ~{read1}" | fastq-scan | tee ~{read1_name}_fastq-scan.json
-    cat ~{read1_name}_fastq-scan.json | jq .qc_stats.read_total | READ1_SEQS
+    cat ~{read1_name}_fastq-scan.json | jq .qc_stats.read_total | tee READ1_SEQS
   >>>
   output {
     File fastq_scan_report = "~{read1_name}_fastq-scan.json"
