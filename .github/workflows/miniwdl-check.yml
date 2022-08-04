@@ -57,6 +57,7 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install shellcheck
           pip3 -q install miniwdl
+
       # Run MiniWDL check on each of the changed WDLs
       - name: MiniWDL Check ${{ matrix.wf }}
         run: miniwdl check ${{ matrix.wf }}
