@@ -95,3 +95,13 @@ workflows:
    primaryDescriptorPath: /workflows/wf_theiacov_augur_distance_tree.wdl
    testParameterFiles:
     - empty.json
+ - name: Freyja_Update
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_update.wdl
+   testParameterFiles:
+    - empty.json
+ - name: Freyja_Dashboard
+   subclass: WDL
+   primaryDescriptorPath: /workflows/wf_freyja_dashboard.wdl
+   testParameterFiles:
+    - empty.json

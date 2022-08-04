@@ -7,6 +7,7 @@ task kraken2 {
     String samplename
     String kraken2_db = "/kraken2-db"
     Int cpu = 4
+    String? target_org
   }
   command <<<
     # date and version control
@@ -31,13 +32,25 @@ task kraken2 {
     if [ -z "$percentage_sc2" ] ; then percentage_sc2="0" ; fi
     echo $percentage_human | tee PERCENT_HUMAN
     echo $percentage_sc2 | tee PERCENT_SC2
+    # capture target org percentage 
+    if [ ! -z "~{target_org}" ]; then 
+      echo "Target org designated: ~{target_org}"
+      percent_target_org=$(grep "~{target_org}" ~{samplename}_kraken2_report.txt | cut -f1 | head -n1 )
+      if [-z "$percent_target_org" ] ; then percent_target_org="0" ; fi
+    else 
+      percent_target_org=""
+    fi
+    echo $percent_target_org | tee PERCENT_TARGET_ORG
+
   >>>
   output {
     String date = read_string("DATE")
     String version = read_string("VERSION")
     File kraken_report = "~{samplename}_kraken2_report.txt"
-    Float percent_human = read_string("PERCENT_HUMAN")
-    Float percent_sc2 = read_string("PERCENT_SC2")
+    Float percent_human = read_float("PERCENT_HUMAN")
+    Float percent_sc2 = read_float("PERCENT_SC2")
+    String? percent_target_org = read_string("PERCENT_TARGET_ORG")
+    String? kraken_target_org = target_org
   }
   runtime {
     docker: "quay.io/staphb/kraken2:2.0.8-beta_hv"
@@ -275,7 +288,7 @@ task nextclade_one_sample {
       File? gene_annotations_json
       File? pcr_primers_csv
       File? virus_properties
-      String docker = "nextstrain/nextclade:2.3.0"
+      String docker = "nextstrain/nextclade:2.4.0"
       String dataset_name
       String dataset_reference
       String dataset_tag
@@ -361,6 +374,16 @@ task nextclade_output_parser_one_sample {
           else:
             nc_aa_dels=nc_aa_dels
           Nextclade_AA_Dels.write(nc_aa_dels)
+        with codecs.open ("NEXTCLADE_LINEAGE", 'wt') as Nextclade_Lineage:
+          if 'lineage' in tsv_dict:
+            nc_lineage=tsv_dict['lineage']
+            if nc_lineage is None:
+              nc_lineage=""
+            else:
+              nc_lineage=nc_lineage
+          else:
+            nc_lineage=""
+          Nextclade_Lineage.write(nc_lineage)
       CODE
     >>>
     runtime {
@@ -375,6 +398,7 @@ task nextclade_output_parser_one_sample {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
       String nextclade_aa_subs = read_string("NEXTCLADE_AASUBS")
       String nextclade_aa_dels = read_string("NEXTCLADE_AADELS")
+      String nextclade_lineage = read_string("NEXTCLADE_LINEAGE")
     }
 }
 
@@ -387,12 +411,25 @@ task freyja_one_sample {
     File? freyja_lineage_metadata
     Float? eps
     Boolean update_db = false
-    String docker = "quay.io/staphb/freyja:1.3.4"
+    Boolean confirmed_only = false
+    Boolean bootstrap = false
+    Int? number_bootstraps
+    Int memory = 4
+    String docker = "staphb/freyja:1.3.10"
   }
   command <<<
   # update freyja reference files if specified
   if ~{update_db}; then 
-      freyja update
+      freyja update 2>&1 | tee freyja_update.log
+      # check log files to ensure update did not fail
+      if grep "FileNotFoundError.*lineagePaths.*" freyja_update.log
+      then 
+        echo "Error in attempting to update Freyja files. Try increasing memory"
+        >&2 echo "Killed"
+        exit 1
+      fi
+
+      # can't update barcodes in freyja 1.3.2; will update known issue is closed (https://github.com/andersen-lab/Freyja/issues/33)
       freyja_usher_barcode_version="freyja update: $(date +"%Y-%m-%d")"
       freyja_metadata_version="freyja update: $(date +"%Y-%m-%d")"
   else
@@ -421,12 +458,25 @@ task freyja_one_sample {
     --variants ~{samplename}_freyja_variants.tsv \
     --depths ~{samplename}_freyja_depths.tsv \
     --ref ~{reference_genome}
+  # Calculate Boostraps, if specified
+  if ~{bootstrap}; then
+    freyja boot \
+    ~{"--eps " + eps} \
+    ~{"--meta " + freyja_lineage_metadata} \
+    ~{"--barcodes " + freyja_usher_barcodes} \
+    ~{"--nb " + number_bootstraps } \
+    ~{samplename}_freyja_variants.tsv \
+    ~{samplename}_freyja_depths.tsv \
+    --output_base ~{samplename} \
+    --boxplot pdf
+  fi
   # Demix variants 
   echo "Running: freyja demix --eps ~{eps} ${freyja_barcode} ${freyja_metadata} ~{samplename}_freyja_variants.tsv ~{samplename}_freyja_depths.tsv --output ~{samplename}_freyja_demixed.tmp"
   freyja demix \
     ~{'--eps ' + eps} \
     ~{'--meta ' + freyja_lineage_metadata} \
     ~{'--barcodes ' + freyja_usher_barcodes} \
+    ~{true='--confirmedonly' false='' confirmed_only} \
     ~{samplename}_freyja_variants.tsv \
     ~{samplename}_freyja_depths.tsv \
     --output ~{samplename}_freyja_demixed.tmp
@@ -435,15 +485,21 @@ task freyja_one_sample {
   tail -n+2 ~{samplename}_freyja_demixed.tmp >> ~{samplename}_freyja_demixed.tsv
   >>>
   runtime {
-    memory: "4 GB"
+    memory: "~{memory} GB"
     cpu: 2
     docker: "~{docker}"
     disks: "local-disk 100 HDD"
+    maxRetries: 3
   }
   output {
     File freyja_variants = "~{samplename}_freyja_variants.tsv"
     File freyja_depths = "~{samplename}_freyja_depths.tsv"
     File freyja_demixed = "~{samplename}_freyja_demixed.tsv"
+    File? freyja_update_log = "freyja_update.log"
+    File? freyja_boostrap_lineages = "~{samplename}_lineages.csv"
+    File? freyja_boostrap_lineages_pdf = "~{samplename}_lineages.pdf"
+    File? freyja_boostrap_summary = "~{samplename}_summarized.csv"
+    File? freyja_boostrap_summary_pdf = "~{samplename}_summarized.pdf"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
   }

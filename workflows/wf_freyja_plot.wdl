@@ -40,7 +40,7 @@ task freyja_plot_task {
     String plot_time_interval="MS"
     Int plot_day_window=14
     String freyja_plot_name
-    String docker = "quay.io/staphb/freyja:1.3.2"
+    String docker = "quay.io/staphb/freyja:1.3.10"
   }
   command <<<
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
