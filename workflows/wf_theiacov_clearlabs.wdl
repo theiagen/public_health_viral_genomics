@@ -26,6 +26,7 @@ workflow theiacov_clearlabs {
     String? nextclade_dataset_name
     File? reference_genome
     String organism = "sars-cov-2"
+    String? target_org
   }
   call fastq_scan.fastq_scan_se as fastq_scan_raw_reads {
     input:
@@ -43,12 +44,14 @@ workflow theiacov_clearlabs {
   call taxon_ID.kraken2 as kraken2_raw {
     input:
       samplename = samplename,
-      read1 = clear_lab_fastq
+      read1 = clear_lab_fastq,
+      target_org = target_org
   }  
   call taxon_ID.kraken2 as kraken2_dehosted {
     input:
       samplename = samplename,
-      read1 = ncbi_scrub_se.read1_dehosted
+      read1 = ncbi_scrub_se.read1_dehosted,
+      target_org = target_org
   }
   call medaka.consensus {
     input:
