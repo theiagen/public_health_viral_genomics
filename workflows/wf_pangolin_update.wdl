@@ -45,6 +45,7 @@ workflow pangolin_update {
     String pangolin_update_analysis_date = version_capture.date
     # Pangolin Assignments
     String pango_lineage = pangolin4.pangolin_lineage
+    String pangolin_lineage_expanded = pangolin4.pangolin_lineage_expanded
     String pangolin_conflicts = pangolin4.pangolin_conflicts
     String pangolin_notes = pangolin4.pangolin_notes
     String pangolin_assignment_version = pangolin4.pangolin_assignment_version
