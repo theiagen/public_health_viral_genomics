@@ -21,6 +21,9 @@ task freyja_update_refs {
   input {
     String docker = "staphb/freyja:1.3.4"
   }
+  meta {
+    volatile: true
+  }
   command <<<
   # Create updated refrence files
   mkdir freyja_update_refs 
