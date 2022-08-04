@@ -135,7 +135,7 @@ workflow theiacov_clearlabs {
     File kraken_report = kraken2_raw.kraken_report
     Float kraken_human_dehosted = kraken2_dehosted.percent_human
     Float kraken_sc2_dehosted = kraken2_dehosted.percent_sc2
-    Float? kraken_target_org_dehosted = kraken2_dehosted.percent_target_org
+    String? kraken_target_org_dehosted = kraken2_dehosted.percent_target_org
     File kraken_report_dehosted = kraken2_dehosted.kraken_report
     # Read Alignment
     File aligned_bam = consensus.trim_sorted_bam
