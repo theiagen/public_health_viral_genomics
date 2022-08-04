@@ -96,26 +96,26 @@ task freyja_dashboard_task {
 
   # create freya dashboard
   echo "Running: freyja dash \
+    demixed_aggregate.tsv \
+    freyja_dash_metadata.csv \
+    dashboard-title.txt \
+    introContent.txt \
     ~{'--config ' + config} \
     ~{'--thresh ' + thresh} \
     ~{'--headerColor ' + headerColor} \
     ~{'--mincov ' + mincov} \
     ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
-    demixed_aggregate.tsv \
-    freyja_dash_metadata.csv \
-    dashboard-title.txt \
-    introContent.txt \
     --output ~{freyja_dashboard_title}.html"
   freyja dash \
+    demixed_aggregate.tsv \
+    freyja_dash_metadata.csv \
+    dashboard-title.txt \
+    introContent.txt \
     ~{'--config ' + config} \
     ~{'--thresh ' + thresh} \
     ~{'--headerColor ' + headerColor} \
     ~{'--mincov ' + mincov} \
     ~{true='--scale_by_viral_load' false='' scale_by_viral_load} \
-    demixed_aggregate.tsv \
-    freyja_dash_metadata.csv \
-    dashboard-title.txt \
-    introContent.txt \
     --output ~{freyja_dashboard_title}.html
   >>>
   output {
