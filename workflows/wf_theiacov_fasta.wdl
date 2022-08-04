@@ -16,6 +16,7 @@ workflow theiacov_fasta {
     String input_assembly_method
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-04-28T12:00:00Z"
+    String? nextclade_dataset_name
     String organism = "sars-cov-2"
   }
   call consensus_qc_task.consensus_qc {
@@ -32,13 +33,11 @@ workflow theiacov_fasta {
   if (organism == "mpxv") {
     # MPXV specific tasks
   }
-  # adjust these next two so that they work for both mpxv and sc2
   if (organism == "MPXV" || organism == "sars-cov-2"){ 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = assembly_fasta,
-      dataset_name = organism,
-      # need to pull reference name from input reference file ??
+      dataset_name = select_first([nextclade_dataset_name, organism]),
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
     }

@@ -19,10 +19,11 @@ workflow theiacov_clearlabs {
     File clear_lab_fastq
     String seq_method = "OXFORD_NANOPORE"
     File primer_bed
-    Int? normalise = 20000
+    Int normalise = 20000
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-07-11T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
+    String? nextclade_dataset_name
     File? reference_genome
     String organism = "sars-cov-2"
   }
@@ -55,7 +56,8 @@ workflow theiacov_clearlabs {
       filtered_reads = ncbi_scrub_se.read1_dehosted,
       primer_bed = primer_bed,
       normalise = normalise,
-      docker = medaka_docker
+      docker = medaka_docker,
+      reference_genome = reference_genome
   }
   call assembly_metrics.stats_n_coverage {
     input:
@@ -88,13 +90,11 @@ workflow theiacov_clearlabs {
   if (organism == "mpxv") {
     # MPXV specific tasks
   }
-  # adjust these next two so that they work for both mpxv and sc2
   if (organism == "MPXV" || organism == "sars-cov-2"){ 
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
-      dataset_name = organism,
-      # need to pull reference name from input reference file -- maybe from the alignment task
+      dataset_name = select_first([nextclade_dataset_name, organism]),
       dataset_reference = nextclade_dataset_reference,
       dataset_tag = nextclade_dataset_tag
     }
