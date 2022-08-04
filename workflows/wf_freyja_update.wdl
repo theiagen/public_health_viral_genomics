@@ -6,7 +6,6 @@ workflow freyja_update {
   }
   call freyja_update_refs {
     input:
-      gcp_uri = gcp_uri
   }
   call transfer_files {
     input:
@@ -20,20 +19,22 @@ workflow freyja_update {
 }
 task freyja_update_refs {
   input {
-    String gcp_uri
     String docker = "staphb/freyja:1.3.4"
+  }
+  meta {
+    volatile: true
   }
   command <<<
   # Create updated refrence files
-  mkdir freyja_update_refs && cd freyja_update_refs
-  echo "PWD: $PWD"
-  freyja update --outdir $PWD
-  
-  echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > $PWD/update_log.txt
+  mkdir freyja_update_refs 
+  freyja update --outdir freyja_update_refs
+    
+  echo "Freyja reference files created using the freyja update command; Freyja Docker Image utilized: ~{docker}. More information can be found at https://github.com/andersen-lab/Freyja" > freyja_update_refs/update_log.txt
+   
   >>>
   runtime {
-    memory: "4 GB"
-    cpu: 2
+    memory: "16 GB"
+    cpu: 4
     docker: "~{docker}"
     disks: "local-disk 100 HDD"
   }
