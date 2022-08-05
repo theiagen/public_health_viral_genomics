@@ -18,7 +18,7 @@
     - wf_theiacov_illumina_se_miniwdl
   files:
     - path: miniwdl_run/call-bwa/command
-      md5sum: 1168bd516a9eb16ed268d42ba064bc61
+      md5sum: 38bdfa0eb202436d6c363666459d3a94
     - path: miniwdl_run/call-bwa/inputs.json
       contains: ["read1", "reference_genome", "ERR6319327"]
     - path: miniwdl_run/call-bwa/outputs.json
@@ -502,7 +502,7 @@
     - path: miniwdl_run/wdl/tasks/quality_control/task_fastq_scan.wdl
       md5sum: 7584c321243c18b70b7f18e91fa019df
     - path: miniwdl_run/wdl/tasks/task_alignment.wdl
-      md5sum: 28993e744b6edbe33a1ed41811e6a39a
+      md5sum: 2ceb541ddce8a12a307f80a2d2418e59
     - path: miniwdl_run/wdl/tasks/task_consensus_call.wdl
       md5sum: 9bf42b12fa4d707cce63570fd30449b7
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
@@ -512,13 +512,13 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: cc9880b0bdcebc85adb76b332300551b
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 2a1ee5070fa31eaa8e08b8892282ed00
+      md5sum: 5920b46f833c5555a3516b03af35906f
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 111f18669c9cf8b3a49eb29a33d436ae
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim_se.wdl
       md5sum: ab63cb95ae3707ce7ff10637bc0b0be6
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_se.wdl
-      md5sum: 9d76d8469796e8221b4047c8f97953f8
+      md5sum: 5bbe049a5a25c6058ae8fbf93fe2dacd
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_se", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
