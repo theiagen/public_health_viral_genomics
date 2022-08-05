@@ -65,7 +65,6 @@
     - path: miniwdl_run/call-consensus/work/ont.preconsensus.fasta.fai
       md5sum: 4ca7d9fd06b9cdf379c2cf02b9fd6d0e
     - path: miniwdl_run/call-consensus/work/ont.primers.vcf
-      md5sum: 2c578ea8e2a13cbb3ee95cfc84970f41
     - path: miniwdl_run/call-consensus/work/ont.primersitereport.txt
       md5sum: cffee67632a262eeb947cea9cee0b4c1
     - path: miniwdl_run/call-consensus/work/ont.primertrimmed.rg.sorted.bam
