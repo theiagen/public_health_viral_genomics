@@ -24,6 +24,7 @@ workflow freyja_plot {
     String freyja_plot_wf_version = version_capture.phvg_version
     String freyja_plot_wf_analysis_date = version_capture.date
     # Freyja Plot Visualization
+    String freyja_plot_version = freyja_plot_task.freyja_plot_version
     File freyja_plot = freyja_plot_task.freyja_plot
     File freyja_demixed_aggregate = freyja_plot_task.demixed_aggregate
     File? freyja_plot_metadata = freyja_plot_task.freyja_plot_metadata
@@ -43,6 +44,9 @@ task freyja_plot_task {
     String docker = "quay.io/staphb/freyja:1.3.10"
   }
   command <<<
+  # capture version
+  freyja --version | tee FREYJA_VERSION
+  
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
   samplename_array=(~{sep=' ' samplename})
   samplename_array_len=$(echo "${#samplename_array[@]}")
@@ -100,6 +104,7 @@ task freyja_plot_task {
 
   >>>
   output {
+    String freyja_plot_version = read_string("FREYJA_VERSION")
     File freyja_plot = "~{freyja_plot_name}.pdf"
     File demixed_aggregate = "demixed_aggregate.tsv"
     File? freyja_plot_metadata = "freyja_times_metadata.csv"
