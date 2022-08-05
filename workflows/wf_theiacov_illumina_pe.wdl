@@ -150,6 +150,8 @@ workflow theiacov_illumina_pe {
     # Read Alignment
     String bwa_version = bwa.bwa_version
     String samtools_version = bwa.sam_version
+    File read1_aligned = bwa.read1_aligned
+    File? read2_aligned = bwa.read2_aligned
     String assembly_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
     File aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam])
     File aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai])

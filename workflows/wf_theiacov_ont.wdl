@@ -155,6 +155,7 @@ workflow theiacov_ont {
     String primer_bed_name = consensus.primer_bed_name
     File assembly_fasta = consensus.consensus_seq
     String assembly_method = consensus.artic_pipeline_version
+    File reads_aligned = consensus.reads_aligned
     # Assembly QC
     Int number_N = consensus_qc.number_N
     Int assembly_length_unambiguous = consensus_qc.number_ATCG

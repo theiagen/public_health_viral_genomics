@@ -97,6 +97,10 @@ task consensus {
     # clean up fasta header
     echo ">~{samplename}" > ~{samplename}.medaka.consensus.fasta
     grep -v ">" ~{samplename}.consensus.fasta >> ~{samplename}.medaka.consensus.fasta
+
+    # grab reads from alignment
+    samtools fastq -F4 ~{samplename}.primertrimmed.rg.sorted.bam | gzip > ~{samplename}.fastq.gz  
+
   >>>
   output {
     File consensus_seq = "~{samplename}.medaka.consensus.fasta"
@@ -104,6 +108,7 @@ task consensus {
     File trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
     File medaka_pass_vcf = "~{samplename}.pass.vcf"
+    File reads_aligned = "~{samplename}.fastq.gz"
     String medaka_reference = read_string("REFERENCE_GENOME")
     String artic_pipeline_version = read_string("VERSION")
     String artic_pipeline_docker = docker

@@ -32,6 +32,15 @@ task bwa {
     ~{read1} ~{read2} |\
     samtools sort | samtools view -F 4 -o ~{samplename}.sorted.bam
 
+    if [[ ! -z "~{read2}" ]]; then
+      echo "processing paired reads"
+      samtools fastq -F4 -1 ~{samplename}_R1.fastq.gz -2 ~{samplename}_R2.fastq.gz ~{samplename}.sorted.bam
+    else
+      echo "processing single-end reads"
+      samtools fastq -F4 ~{samplename}.sorted.bam | gzip > ~{samplename}_R1.fastq.gz
+    fi
+
+
     # index BAMs
     samtools index ~{samplename}.sorted.bam
   >>>
@@ -40,6 +49,8 @@ task bwa {
     String sam_version = read_string("SAMTOOLS_VERSION")
     File sorted_bam = "${samplename}.sorted.bam"
     File sorted_bai = "${samplename}.sorted.bam.bai"
+    File read1_aligned = "~{samplename}_R1.fastq.gz"
+    File? read2_aligned = "~{samplename}_R2.fastq.gz"
   }
   runtime {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
@@ -47,7 +58,7 @@ task bwa {
     cpu: cpu
     disks: "local-disk 100 SSD"
     preemptible: 0
-    maxRetries: 3
+    #maxRetries: 3
   }
 }
 
