@@ -25,9 +25,10 @@ workflow freyja_dashboard {
   }
   output {
     # Version Capture
-    String freyja_plot_wf_version = version_capture.phvg_version
-    String freyja_plot_wf_analysis_date = version_capture.date
+    String freyja_dashboard_wf_version = version_capture.phvg_version
+    String freyja_dashboard_wf_analysis_date = version_capture.date
     # Freyja Dashboard Visualization
+    String freyja_dashboard_version = freyja_dashboard_task.freyja_dashboard_version
     File freyja_dasbhoard = freyja_dashboard_task.freyja_dasbhoard
     File freyja_demixed_aggregate = freyja_dashboard_task.freyja_demixed_aggregate
     File freyja_dashboard_metadata = freyja_dashboard_task.freyja_dashboard_metadata
@@ -50,6 +51,9 @@ task freyja_dashboard_task {
     String docker = "quay.io/staphb/freyja:1.3.10"
   }
   command <<<
+  # capture version
+  freyja --version | tee FREYJA_VERSION
+
   # create bash arrays
   freyja_demixed_array="~{sep=' ' freyja_demixed}"
   samplename_array=(~{sep=' ' samplename})
@@ -119,6 +123,7 @@ task freyja_dashboard_task {
     --output ~{freyja_dashboard_title}.html
   >>>
   output {
+    String freyja_dashboard_version = read_string("FREYJA_VERSION")
     File freyja_dasbhoard = "~{freyja_dashboard_title}.html"
     File freyja_demixed_aggregate = "demixed_aggregate.tsv"
     File freyja_dashboard_metadata = "freyja_dash_metadata.csv"

@@ -82,6 +82,7 @@ workflow freyja_fastq {
     String samtools_version_primtrim = primer_trim.samtools_version
     String primer_bed_name = primer_trim.primer_bed_name
     # Freyja Analysis
+    String freyja_version = freyja.freyja_version
     File freyja_variants = freyja.freyja_variants
     File freyja_depths = freyja.freyja_depths
     File freyja_demixed = freyja.freyja_demixed

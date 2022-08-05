@@ -418,6 +418,8 @@ task freyja_one_sample {
     String docker = "staphb/freyja:1.3.10"
   }
   command <<<
+  # capture version
+  freyja --version | tee FREYJA_VERSION
   # update freyja reference files if specified
   if ~{update_db}; then 
       freyja update 2>&1 | tee freyja_update.log
@@ -502,5 +504,6 @@ task freyja_one_sample {
     File? freyja_boostrap_summary_pdf = "~{samplename}_summarized.pdf"
     String freyja_barcode_version = read_string("FREYJA_BARCODES")
     String freyja_metadata_version = read_string("FREYJA_METADATA")
+    String freyja_version = read_string("FREYJA_VERSION")
   }
 }
