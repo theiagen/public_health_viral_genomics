@@ -7,7 +7,7 @@ task consensus_qc {
   }
   command <<<
     if [ ~{reference_genome} ] ; then
-      GENOME_LEN=$(grep -v ">" ~{reference_genome} | wc -c)
+      GENOME_LEN=$(grep -v ">" ~{reference_genome} | tr --delete '\n' | wc -c)
     else
       # set SC2 default
       GENOME_LEN=29903
