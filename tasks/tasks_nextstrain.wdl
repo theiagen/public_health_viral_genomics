@@ -1246,7 +1246,7 @@ task draft_augur_tree {
     >>>
     runtime {
         docker: docker
-        memory: "32 GB"
+        memory: "64 GB"
         cpu:    select_first([cpus, 64])
         disks:  "local-disk 750 LOCAL"
         dx_instance_type: "mem1_ssd1_v2_x36"
