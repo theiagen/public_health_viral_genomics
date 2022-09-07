@@ -34,7 +34,7 @@ task ncbi_prep_one_sample {
     String? amplicon_size
     String? biosample_accession = "{populate_with_bioSample_accession}"
     String? gisaid_accession
-    String? gisaid_organism="hCoV-2019"
+    String? gisaid_organism="hMpxV"
     String? patient_age
     String? patient_gender
     String? purpose_of_sampling
@@ -50,6 +50,7 @@ task ncbi_prep_one_sample {
     Int cpu = 1
     Int disk_size = 25
     Int preemptible_tries = 0
+    String lat_lon = "missing"
   }
   command <<<
     #Check date format
@@ -148,7 +149,7 @@ task ncbi_prep_one_sample_se {
     String? amplicon_size
     String? biosample_accession = "{populate_with_bioSample_accession}"
     String? gisaid_accession
-    String? gisaid_organism="hCoV-2019"
+    String? gisaid_organism="hMpxV"
     String? patient_age
     String? patient_gender
     String? purpose_of_sampling
@@ -180,9 +181,9 @@ task ncbi_prep_one_sample_se {
     gisaid_virus_name="~{gisaid_organism}/~{country}/~{submission_id}/$year"
     
     #Format BioSample Attributes
-    echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
+    echo -e "*sample_name\tsample_title\tbioproject_accession\t*organism\t*collected_by\t*collection_date\t*geo_loc_name\t*host\t*host_disease\t*isolate\t*isolation_source\t*lat_lon\tantiviral_treatment_agent\tcollection_device\tcollection_method\tdate_of_prior_antiviral_treat\tdate_of_prior_sars_cov_2_infection\tdate_of_sars_cov_2_vaccination\texposure_event\tgeo_loc_exposure\tgisaid_accession\tgisaid_virus_name\thost_age\thost_anatomical_material\thost_anatomical_part\thost_body_product\thost_disease_outcome\thost_health_state\thost_recent_travel_loc\thost_recent_travel_return_date\thost_sex\thost_specimen_voucher\thost_subject_id\tlat_lon\tpassage_method\tpassage_number\tprior_sars_cov_2_antiviral_treat\tprior_sars_cov_2_infection\tprior_sars_cov_2_vaccination\tpurpose_of_sampling\tpurpose_of_sequencing\tsars_cov_2_diag_gene_name_1\tsars_cov_2_diag_gene_name_2\tsars_cov_2_diag_pcr_ct_value_1\tsars_cov_2_diag_pcr_ct_value_2\tsequenced_by\tvaccine_received\tvirus_isolate_of_prior_infection\tdescription" > ~{submission_id}_biosample_attributes.tsv
     
-    echo -e "~{submission_id}\t\t~{bioproject_accession}\t~{organism}\t~{collecting_lab}\t~{collection_date}\t~{country}: ~{state}\t~{host_sci_name}\t~{host_disease}\t${isolate}\t~{isolation_source}\t~{treatment}\t\t\t\t\t\t\t\t~{gisaid_accession}\t${gisaid_virus_name}\t~{patient_age}\t\t\t\t\t\t\t\t~{patient_gender}\t\t\t\t\t\t\t\t\t~{purpose_of_sampling}\t~{purpose_of_sequencing}\t\t\t\t\t\t\t\t" >> ~{submission_id}_biosample_attributes.tsv
+    echo -e "~{submission_id}\t\t~{bioproject_accession}\t~{organism}\t~{collecting_lab}\t~{collection_date}\t~{country}: ~{state}\t~{host_sci_name}\t~{host_disease}\t${isolate}\t~{isolation_source}\t~{lat_lon}\t~{treatment}\t\t\t\t\t\t\t\t~{gisaid_accession}\t${gisaid_virus_name}\t~{patient_age}\t\t\t\t\t\t\t\t~{patient_gender}\t\t\t\t\t\t\t\t\t~{purpose_of_sampling}\t~{purpose_of_sequencing}\t\t\t\t\t\t\t\t" >> ~{submission_id}_biosample_attributes.tsv
     
     #Format SRA Reads & Metadata
     cp ~{reads_dehosted} ~{submission_id}_R1.fastq.gz
@@ -240,7 +241,7 @@ task gisaid_prep_one_sample {
     String country
     String gisaid_submitter
     String host
-    String organism = "hCoV-19"
+    String organism = "hMpxV"
     String seq_platform
     String state
     String submission_id
@@ -282,9 +283,8 @@ task gisaid_prep_one_sample {
     grep -v ">" ~{assembly_fasta} >> ~{submission_id}_gisaid.fasta
     
     ##GISAID tMetadata
-    echo "submitter,fn,covv_virus_name,covv_type,covv_passage,covv_collection_date,covv_location,covv_add_location,covv_host,covv_add_host_info,covv_sampling_strategy,covv_gender,covv_patient_age,covv_patient_status,covv_specimen,covv_outbreak,covv_last_vaccinated,covv_treatment,covv_seq_technology,covv_assembly_method,covv_coverage,covv_orig_lab,covv_orig_lab_addr,covv_provider_sample_id,covv_subm_lab,covv_subm_lab_addr,covv_subm_sample_id,covv_authors,covv_comment,comment_type" >  ~{submission_id}_gisaid_metadata.csv
-
-    echo "Submitter,FASTA filename,Virus name,Type,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ~{submission_id}_gisaid_metadata.csv
+    echo "submitter,fn,pox_virus_name,pox_passage,pox_collection_date,pox_location,pox_add_location,pox_host,pox_add_host_info,pox_sampling_strategy,pox_gender,pox_patient_age,pox_patient_status,pox_specimen,pox_outbreak,pox_last_vaccinated,pox_treatment,pox_seq_technology,pox_assembly_method,pox_coverage,pox_orig_lab,pox_orig_lab_addr,pox_provider_sample_id,pox_subm_lab,pox_subm_lab_addr,pox_subm_sample_id,pox_authors,pox_comment,comment_type" >  ~{submission_id}_gisaid_metadata.csv
+    echo "Submitter,FASTA filename,Virus name,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors,Comment,Comment Icon" >> ~{submission_id}_gisaid_metadata.csv
 
     echo "\"~{gisaid_submitter}\",\"~{submission_id}.gisaid.fa\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ~{submission_id}_gisaid_metadata.csv
   >>>
