@@ -205,7 +205,7 @@ workflow theiacov_illumina_pe {
     String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
-    String? vadr_num_alerts = vadr.num_alerts
+    String? vadr_num_alerts = "0"
     String? vadr_docker = vadr.vadr_docker
   }
 }
