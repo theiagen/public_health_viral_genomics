@@ -53,9 +53,9 @@ task ncbi_scrub_pe {
   }
   runtime {
       docker: "~{docker}"
-      memory: "8 GB"
+      memory: "32 GB"
       cpu: 4
-      disks: "local-disk 100 SSD"
+      disks: "local-disk 200 SSD"
       preemptible: 0
       maxRetries: 3
   }
