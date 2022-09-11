@@ -47,9 +47,9 @@ task fastq_scan {
   }
   runtime {
     docker: "quay.io/biocontainers/fastq-scan:0.4.4--h7d875b9_1"
-    memory: "2 GB"
+    memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks: "local-disk 200 SSD"
     preemptible: 0
     maxRetries: 3
   }
