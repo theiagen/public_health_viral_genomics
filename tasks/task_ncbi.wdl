@@ -6,7 +6,7 @@ task vadr {
   }
   input {
     File genome_fasta
-    String vadr_opts = "--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn"
+    String vadr_opts = "--noseqnamemax --glsearch -s -r --nomisc --mkey sarscov2 --lowsim5seq 6 --lowsim3seq 6 --alt_fail lowscore,insertnn,deletinn --out_allfasta"
     Int assembly_length_unambiguous
     Int skip_length = 10000
     String docker = "staphb/vadr:1.4.2"
@@ -36,6 +36,11 @@ task vadr {
       # package everything for output
       tar -C "~{out_base}" -czvf "~{out_base}.vadr.tar.gz" .
 
+      # package up FASTA files into zip file for output. Note: this will work whether the --out_allfasta flag is included or not (there are just more when the option is used)
+      mkdir -v vadr_fasta_files
+      cp -v ~{out_base}/*.fa vadr_fasta_files
+      zip ~{out_base}_vadr-fasta-files.zip vadr_fasta_files/*.fa 
+
       # prep alerts into a tsv file for parsing
       cat "~{out_base}/~{out_base}.vadr.alt.list" | cut -f 5 | tail -n +2 > "~{out_base}.vadr.alerts.tsv"
       cat "~{out_base}.vadr.alerts.tsv" | wc -l > NUM_ALERTS
@@ -51,6 +56,7 @@ task vadr {
     String num_alerts = read_string("NUM_ALERTS")
     File? alerts_list = "~{out_base}/~{out_base}.vadr.alt.list"
     File? outputs_tgz = "~{out_base}.vadr.tar.gz"
+    File? vadr_fastas_zip_archive = "~{out_base}_vadr-fasta-files.zip"
     String vadr_docker = docker
   }
   runtime {
