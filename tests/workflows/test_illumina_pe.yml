@@ -60,7 +60,7 @@
       md5sum: 6923b89d36bc66e1cdfabfd1dedbea71
     - path: miniwdl_run/call-consensus/work/_miniwdl_inputs/0/SRR13687078.primertrim.sorted.bam
     - path: miniwdl_run/call-consensus_qc/command
-      md5sum: e081fb53c7da2c0a92d692230c6a73aa
+      md5sum: f8324f3be110ddffe4ab83929b647b9a
     - path: miniwdl_run/call-consensus_qc/inputs.json
       contains: ["assembly_fasta", "SRR13687078"]
     - path: miniwdl_run/call-consensus_qc/outputs.json
@@ -498,7 +498,7 @@
       md5sum: 53be85d2ed9fa57ab45424fe071a6672
     - path: miniwdl_run/call-stats_n_coverage_primtrim/work/_miniwdl_inputs/0/SRR13687078.primertrim.sorted.bam
     - path: miniwdl_run/call-vadr/command
-      md5sum: d4943d5100c490fed7c22fd25d3d44ad
+      md5sum: 1fb9a4d1d7f341cce203729fc6e1f1f4
     - path: miniwdl_run/call-vadr/inputs.json
       contains: ["assembly_length_unambiguous", "genome_fasta", "SRR13687078"]
     - path: miniwdl_run/call-vadr/outputs.json
@@ -529,7 +529,7 @@
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.fail.tbl
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.filelist
-      md5sum: 9a8999e7f4f6744435e575830dbed3b7
+      md5sum: 7715c2ddbc13d7f5b4dc3e016e7771a9
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.ftr
       md5sum: c12de7e5b1f117039bbfd2000b2ce8ec
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.log
@@ -588,7 +588,7 @@
     - path: miniwdl_run/wdl/tasks/quality_control/task_assembly_metrics.wdl
       md5sum: a5bd00f53895afd62bf216b314c488eb
     - path: miniwdl_run/wdl/tasks/quality_control/task_consensus_qc.wdl
-      md5sum: b250698371ecadca92d37233723837d0
+      md5sum: 9885debe1ad812ca22094c462e229281
     - path: miniwdl_run/wdl/tasks/quality_control/task_fastq_scan.wdl
       md5sum: 7584c321243c18b70b7f18e91fa019df
     - path: miniwdl_run/wdl/tasks/task_alignment.wdl
@@ -596,7 +596,7 @@
     - path: miniwdl_run/wdl/tasks/task_consensus_call.wdl
       md5sum: 9bf42b12fa4d707cce63570fd30449b7
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
-      md5sum: e08ed21046a757fe4a3f1335a48e18d3
+      md5sum: fb25b730a30d82027c33b15a312dd634
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
       md5sum: d4b48760e66ffc28faead23aaeb54ae5
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
@@ -608,7 +608,7 @@
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 54dc94bef589bace0680e55d17cf4a9c
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
-      md5sum: 459f1769fd6d3d2453d9c48d9abb7358
+      md5sum: cb3cf43feaf19e9ebd44d128b2084712
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
