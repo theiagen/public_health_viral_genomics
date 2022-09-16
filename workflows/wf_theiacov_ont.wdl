@@ -98,8 +98,13 @@ workflow theiacov_ont {
         min_depth = 20
       }
   }
-  if (organism == "mpxv") {
+  if (organism == "MPXV") {
     # MPXV specific tasks
+    call ncbi.vadr as vadr_mpxv {
+      input:
+        genome_fasta = consensus.consensus_seq,
+        assembly_length_unambiguous = consensus_qc.number_ATCG
+    }
   }
   if (organism == "MPXV" || organism == "sars-cov-2"){ 
     call taxon_ID.nextclade_one_sample {
@@ -198,5 +203,10 @@ workflow theiacov_ont {
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
+    # VADR Annotation QC - MPXV
+    File?  vadr_alerts_list_mpxv = vadr_mpxv.alerts_list
+    String? vadr_num_alerts_mpxv = vadr_mpxv.num_alerts
+    String? vadr_docker_mpxv = vadr_mpxv.vadr_docker
+    File? vadr_fastas_zip_archive_mpxv = vadr_mpxv.vadr_fastas_zip_archive
   }
 }
