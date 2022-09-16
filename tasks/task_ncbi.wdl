@@ -12,6 +12,7 @@ task vadr {
     String docker = "staphb/vadr:1.4.2"
     Int minlen = 50
     Int maxlen = 30000
+    Int cpu = 2
   }
   String out_base = basename(genome_fasta, '.fasta')
   command <<<
@@ -27,7 +28,9 @@ task vadr {
         > "~{out_base}_trimmed.fasta"
 
       # run VADR
+      # --split and --cpu must be used in conjuction
       v-annotate.pl \
+        --split --cpu ~{cpu} \
         ~{vadr_opts} \
         "~{out_base}_trimmed.fasta" \
         "~{out_base}"
@@ -61,8 +64,8 @@ task vadr {
   }
   runtime {
     docker: "~{docker}"
-    memory: "2 GB"
-    cpu: 1
+    memory: "8 GB"
+    cpu: cpu
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
