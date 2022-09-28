@@ -35,7 +35,6 @@ task vadr {
         "~{out_base}_trimmed.fasta" \
         "~{out_base}"
 
-
       # package everything for output
       tar -C "~{out_base}" -czvf "~{out_base}.vadr.tar.gz" .
 
@@ -45,12 +44,11 @@ task vadr {
       zip ~{out_base}_vadr-fasta-files.zip vadr_fasta_files/*.fa 
 
       # prep alerts into a tsv file for parsing
-      cat "~{out_base}/~{out_base}.vadr.alt.list" | cut -f 5 | tail -n +2 > "~{out_base}.vadr.alerts.tsv"
+      cut -f 5 "~{out_base}/~{out_base}.vadr.alt.list" | tail -n +2 > "~{out_base}.vadr.alerts.tsv"
       cat "~{out_base}.vadr.alerts.tsv" | wc -l > NUM_ALERTS
 
     else
       echo "VADR skipped due to poor assembly; assembly length (unambiguous) = ~{assembly_length_unambiguous}" > NUM_ALERTS
-
     fi
 
   >>>
