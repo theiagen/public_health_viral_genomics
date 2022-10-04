@@ -166,7 +166,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/SRR13687078.ivar.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
-      md5sum: f5f693b137e848820493cbc7dc5f7106
+      md5sum: 396d029129547116c3095245e8458be4
     - path: miniwdl_run/call-pangolin4/command
       md5sum: 52ed8698070c5eb36a6a4db6dc0949f1
     - path: miniwdl_run/call-pangolin4/inputs.json
@@ -529,7 +529,7 @@
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.fail.tbl
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.filelist
-      md5sum: 7715c2ddbc13d7f5b4dc3e016e7771a9
+      md5sum: dfaf2fac89d18769586124b035da8187
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.ftr
       md5sum: c12de7e5b1f117039bbfd2000b2ce8ec
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.log
@@ -544,7 +544,7 @@
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.rpn
       md5sum: f8d96aa645223fa49444847c1076353b
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.sda
-      md5sum: 4020bac3fbfa4e5e2af442eeb7b1eea5
+      md5sum: 1dad755431c4d91ed1f0ee9c05f9e2b2
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.seqstat
       md5sum: 4729801890b43403f1c69285fbde413b
     - path: miniwdl_run/call-vadr/work/SRR13687078.ivar.consensus/SRR13687078.ivar.consensus.vadr.sgm

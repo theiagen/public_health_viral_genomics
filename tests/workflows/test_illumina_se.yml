@@ -437,7 +437,7 @@
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.fail.tbl
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.filelist
-      md5sum: 9dbf808eeeda14c35d9e827ad5bf5fc0
+      md5sum: 2d3604544e113fe3369f65ffb8a45c11
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.ftr
       md5sum: a6695b940958e76e8d3a6fa24a1e04a2
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.log
@@ -452,7 +452,7 @@
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.rpn
       md5sum: a3163ead8f3bcdd5a32cefab8e45e237
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.sda
-      md5sum: d2d090f58deb136e2d0aecfc3f771ebc
+      md5sum: 9988418cef0ad97cf52ffd6560bb28cd
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.seqstat
       md5sum: 7e5a25b718b52f87e52151437b202d27
     - path: miniwdl_run/call-vadr/work/ERR6319327.ivar.consensus/ERR6319327.ivar.consensus.vadr.sgm

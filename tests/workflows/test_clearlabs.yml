@@ -294,7 +294,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/clearlabs.medaka.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
-      md5sum: 463c3fe25759216a6ee63820e491d3f7
+      md5sum: 14862320a34113ff363c514fd72cd117
     - path: miniwdl_run/call-pangolin4/command
       md5sum: bbfdc76e5beb51d1ca777cba116d54a8
     - path: miniwdl_run/call-pangolin4/inputs.json
@@ -440,7 +440,7 @@
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.fail.tbl
       md5sum: 26200881fe2b49458c1eb4e4be549eea
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.filelist
-      md5sum: faf9ce62325894dd5415c046b2ad7e3a
+      md5sum: e927a45c88281953bcae932bbe412d72
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.ftr
       md5sum: f42dbcedf3456c0af772f9f6edabed1f
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.log
@@ -455,7 +455,7 @@
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.rpn
       md5sum: 18b0b8defd3dfe4a52fd4b4bac39fe0d
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.sda
-      md5sum: af5a6fba2ca2596b1191f8de9f45e157
+      md5sum: c6adbea5812c762cd92250a7f9b23fb4
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.seqstat
       md5sum: 00cecc7946a375d9ed10a4797a7f6230
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.sgm
