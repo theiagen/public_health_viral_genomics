@@ -85,6 +85,9 @@ task supermassive_file_wrangling {
     excluded_samples["~{table_name}_id"].to_csv("excluded_samples.tsv", sep='\t', index=False, header=False) # write the excluded names out to a file
     table.dropna(subset=required_metadata, axis=0, how='any', inplace=True) # remove all rows that are required with NaNs from table
 
+
+
+    #######Frank was here
     if ("~{organism}" == "SARS-CoV-2"):
       # remove rows that have > 0 vadr alerts
       table.drop(table.index[table["vadr_num_alerts"] > 0], inplace=True)
