@@ -90,13 +90,26 @@ task supermassive_file_wrangling {
       table.drop(table.index[table["vadr_num_alerts"] > 0], inplace=True)
     else:
       print("Organism is MPXV, no VADR filtering performed")
-    
-    
-    # extract the required metadata from the table
 
-
-
-
+    if ("~{organism}" == "SARS-CoV-2"):
+      # extract the required metadata from the table
+      biosample_required_df = table[[biosample_required]]
+      biosample_optional_df = table[[biosample_optional]]
+      sra_required_df = table[[sra_required]]
+      sra_optional_df = table[[sra_optional]]
+      genbank_required_df = table[[genbank_required]]
+      gisaid_required_df = table[[gisaid_required]]
+      gisaid_optional_df = table[[gisaid_optional]]
+      # combine required and optional dfs
+      biosample_metadata_df = pd.concat([biosample_required_df, biosample_optional_df], axis=1)
+      sra_metadata_df = pd.concat([sra_required_df, sra_optional_df], axis=1)
+      genbank_metadata_df = genbank_required_df
+      gisaid_metadata_df = pd.concat([gisaid_required_df, gisaid_optional_df], axis=1)
+      # print to tsvs
+      biosample_metadata_df.to_csv('biosample_metadata.tsv', sep="\t")
+      sra_metadata_df.to_csv('sra_metadata.tsv', sep="\t")
+      genbank_metadata_df.to_csv('genbank_metadata.tsv', sep="\t")
+      gisaid_metadata_df.to_csv('gisaid_metadata.tsv', sep="\t")
   >>>
   output {
 
