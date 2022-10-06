@@ -105,11 +105,100 @@ task supermassive_file_wrangling {
       sra_metadata_df = pd.concat([sra_required_df, sra_optional_df], axis=1)
       genbank_metadata_df = genbank_required_df
       gisaid_metadata_df = pd.concat([gisaid_required_df, gisaid_optional_df], axis=1)
+      # remove empty columns
+      biosample_metadata_df_clean = biosample_metadata_df.dropna(axis='columns', how='all')
+      sra_metadata_df_clean = sra_metadata_df.dropna(axis='columns', how='all')
+      bankit_metadata_df_clean = bankit_metadata_df.dropna(axis='columns', how='all')
+      gisaid_metadata_df_clean = gisaid_metadata_df.dropna(axis='columns', how='all')
+      # determine which columns if any were dropped
+      # biosample
+      biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
+      biosample_metadata_df_clean_col_headers = list(biosample_metadata_df_clean.columns)
+      biosample_blank_col_headers = []
+      for i in biosample_metadata_df_col_headers:
+          if element not in biosample_metadata_df_clean_col_headers:
+              biosample_blank_col_headers.append(i)
+      # sra
+      sra_metadata_df_col_headers = list(sra_metadata_df.columns)
+      sra_metadata_df_clean_col_headers = list(sra_metadata_df_clean.columns)
+      sra_blank_col_headers = []
+      for i in sra_metadata_df_col_headers:
+          if element not in sra_metadata_df_clean_col_headers:
+              sra_blank_col_headers.append(i)
+      # genbank
+      genbank_metadata_df_col_headers = list(genbank_metadata_df.columns)
+      genbank_metadata_df_clean_col_headers = list(genbank_metadata_df_clean.columns)
+      genbank_blank_col_headers = []
+      for i in genbank_metadata_df_col_headers:
+          if element not in genbank_metadata_df_clean_col_headers:
+              genbank_blank_col_headers.append(i)
+      # gisaid
+      gisaid_metadata_df_col_headers = list(gisaid_metadata_df.columns)
+      gisaid_metadata_df_clean_col_headers = list(gisaid_metadata_df_clean.columns)
+      gisaid_blank_col_headers = []
+      for i in gisaid_metadata_df_col_headers:
+          if element not in gisaid_metadata_df_clean_col_headers:
+              gisaid_blank_col_headers.append(i)
       # print to tsvs
-      biosample_metadata_df.to_csv('biosample_metadata.tsv', sep="\t")
-      sra_metadata_df.to_csv('sra_metadata.tsv', sep="\t")
-      genbank_metadata_df.to_csv('genbank_metadata.tsv', sep="\t")
-      gisaid_metadata_df.to_csv('gisaid_metadata.tsv', sep="\t")
+      biosample_metadata_df_clean.to_csv('biosample_metadata.tsv', sep="\t")
+      sra_metadata_df_clean.to_csv('sra_metadata.tsv', sep="\t")
+      genbank_metadata_df_clean.to_csv('genbank_metadata.tsv', sep="\t")
+      gisaid_metadata_df_clean.to_csv('gisaid_metadata.tsv', sep="\t")
+    elif ("~{organism}" == "MPXV"):
+       # extract the required metadata from the table
+      biosample_required_df = table[[biosample_required]]
+      biosample_optional_df = table[[biosample_optional]]
+      sra_required_df = table[[sra_required]]
+      sra_optional_df = table[[sra_optional]]
+      bankit_required_df = table[[bankit_required]]
+      bankit_optional_df = table[[bankit_optional]]
+      gisaid_required_df = table[[gisaid_required]]
+      gisaid_optional_df = table[[gisaid_optional]]
+      # combine required and optional dfs
+      biosample_metadata_df = pd.concat([biosample_required_df, biosample_optional_df], axis=1)
+      sra_metadata_df = pd.concat([sra_required_df, sra_optional_df], axis=1)
+      bankit_metadata_df = pd.concat([bankit_required_df, bankit_optional_df], axis=1)
+      gisaid_metadata_df = pd.concat([gisaid_required_df, gisaid_optional_df], axis=1)
+      # remove empty columns
+      biosample_metadata_df_clean = biosample_metadata_df.dropna(axis='columns', how='all')
+      sra_metadata_df_clean = sra_metadata_df.dropna(axis='columns', how='all')
+      bankit_metadata_df_clean = bankit_metadata_df.dropna(axis='columns', how='all')
+      gisaid_metadata_df_clean = gisaid_metadata_df.dropna(axis='columns', how='all')
+      # determine which columns if any were dropped
+      # biosample
+      biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
+      biosample_metadata_df_clean_col_headers = list(biosample_metadata_df_clean.columns)
+      biosample_blank_col_headers = []
+      for i in biosample_metadata_df_col_headers:
+          if element not in biosample_metadata_df_clean_col_headers:
+              biosample_blank_col_headers.append(i)
+      # sra
+      sra_metadata_df_col_headers = list(sra_metadata_df.columns)
+      sra_metadata_df_clean_col_headers = list(sra_metadata_df_clean.columns)
+      sra_blank_col_headers = []
+      for i in sra_metadata_df_col_headers:
+          if element not in sra_metadata_df_clean_col_headers:
+              sra_blank_col_headers.append(i)
+      # bankit
+      bankit_metadata_df_col_headers = list(bankit_metadata_df.columns)
+      bankit_metadata_df_clean_col_headers = list(bankit_metadata_df_clean.columns)
+      bankit_blank_col_headers = []
+      for i in bankit_metadata_df_col_headers:
+          if element not in bankit_metadata_df_clean_col_headers:
+              bankit_blank_col_headers.append(i)
+      # gisaid
+      gisaid_metadata_df_col_headers = list(gisaid_metadata_df.columns)
+      gisaid_metadata_df_clean_col_headers = list(gisaid_metadata_df_clean.columns)
+      gisaid_blank_col_headers = []
+      for i in gisaid_metadata_df_col_headers:
+          if element not in gisaid_metadata_df_clean_col_headers:
+              gisaid_blank_col_headers.append(i)
+      # print to tsvs
+      biosample_metadata_df_clean.to_csv('biosample_metadata.tsv', sep="\t")
+      sra_metadata_df_clean.to_csv('sra_metadata.tsv', sep="\t")
+      bankit_metadata_df_clean.to_csv('genbank_metadata.tsv', sep="\t")
+      gisaid_metadata_df_clean.to_csv('gisaid_metadata.tsv', sep="\t")
+      
   >>>
   output {
 
