@@ -88,7 +88,7 @@
     - path: miniwdl_run/call-consensus/work/primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
       md5sum: d5ad850f8c610dc45162957ab84530d6
     - path: miniwdl_run/call-consensus_qc/command
-      md5sum: 1c60393834c06e6dbf0654855e245900
+      md5sum: 8766aa99bf4cb3e4a1d7bb7a06439213
     - path: miniwdl_run/call-consensus_qc/inputs.json
       contains: ["assembly_fasta", "medaka"]
     - path: miniwdl_run/call-consensus_qc/outputs.json
@@ -407,7 +407,7 @@
     - path: miniwdl_run/call-stats_n_coverage_primtrim/work/clearlabs.stats.txt
       md5sum: 6ad40bcca227c92fdfec23fe9a03c344
     - path: miniwdl_run/call-vadr/command
-      md5sum: 348e243c63b2ed45dfc5204e2cf6ccb9
+      md5sum: bf01367b311b76c9127738edce9f0dc8
     - path: miniwdl_run/call-vadr/inputs.json
       contains: ["assembly_length_unambiguous", "genome_fasta", "fasta"]
     - path: miniwdl_run/call-vadr/outputs.json
@@ -440,7 +440,7 @@
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.fail.tbl
       md5sum: 26200881fe2b49458c1eb4e4be549eea
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.filelist
-      md5sum: c228d6d991ea1f7ac4565b719523415f
+      md5sum: faf9ce62325894dd5415c046b2ad7e3a
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.ftr
       md5sum: f42dbcedf3456c0af772f9f6edabed1f
     - path: miniwdl_run/call-vadr/work/clearlabs.medaka.consensus/clearlabs.medaka.consensus.vadr.log
@@ -474,11 +474,11 @@
     - path: miniwdl_run//wdl/tasks/quality_control/task_assembly_metrics.wdl
       md5sum: a5bd00f53895afd62bf216b314c488eb
     - path: miniwdl_run//wdl/tasks/quality_control/task_consensus_qc.wdl
-      md5sum: b250698371ecadca92d37233723837d0
+      md5sum: 9885debe1ad812ca22094c462e229281
     - path: miniwdl_run//wdl/tasks/quality_control/task_fastq_scan.wdl
       md5sum: 7584c321243c18b70b7f18e91fa019df
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
-      md5sum: e08ed21046a757fe4a3f1335a48e18d3
+      md5sum: fb25b730a30d82027c33b15a312dd634
     - path: miniwdl_run/wdl/tasks/task_ont_medaka.wdl
       md5sum: 702db7d86d5120805e4aee0067365ee6
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
@@ -490,7 +490,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 111f18669c9cf8b3a49eb29a33d436ae
     - path: miniwdl_run/wdl/workflows/wf_theiacov_clearlabs.wdl
-      md5sum: a30be76dcbb93539b34daf4a0dd6eeb3
+      md5sum: 3d4a65aa7f280908aab9674a8711ebe1
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_clearlabs", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

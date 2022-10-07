@@ -93,5 +93,6 @@ workflow theiacov_fasta {
     File?  vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
+    File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
   }
 }
