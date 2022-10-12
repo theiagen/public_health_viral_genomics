@@ -164,6 +164,7 @@ task trimmomatic {
     Int? trimmomatic_window_size=4
     Int? trimmomatic_quality_trim_score=30
     Int? threads = 4
+    String? trimmomatic_args
   }
   command <<<
     # date and version control
@@ -171,6 +172,7 @@ task trimmomatic {
     trimmomatic -version > VERSION && sed -i -e 's/^/Trimmomatic /' VERSION
 
     trimmomatic PE \
+    ~{trimmomatic_args} \
     -threads ~{threads} \
     ~{read1} ~{read2} \
     -baseout ~{samplename}.fastq.gz \
@@ -204,6 +206,7 @@ task trimmomatic_se {
     Int? trimmomatic_window_size = 4
     Int? trimmomatic_quality_trim_score = 30
     Int? threads = 4
+    String? trimmomatic_args
   }
   command <<<
     # date and version control
@@ -211,6 +214,7 @@ task trimmomatic_se {
     trimmomatic -version > VERSION && sed -i -e 's/^/Trimmomatic /' VERSION
 
     trimmomatic SE \
+    ~{trimmomatic_args} \
     -threads ~{threads} \
     ~{read1} \
     ~{samplename}_trimmed.fastq.gz \

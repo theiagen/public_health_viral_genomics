@@ -17,6 +17,7 @@ workflow read_QC_trim {
     Int? trimmomatic_window_size = 4
     Int bbduk_mem = 8
     String? target_org
+    String? trim_args
   }
   call read_clean.ncbi_scrub_pe {
     input:
@@ -31,7 +32,8 @@ workflow read_QC_trim {
       read2 = ncbi_scrub_pe.read2_dehosted,
       trimmomatic_minlen = trimmomatic_minlen,
       trimmomatic_quality_trim_score = trimmomatic_quality_trim_score,
-      trimmomatic_window_size = trimmomatic_window_size
+      trimmomatic_window_size = trimmomatic_window_size,
+      trimmomatic_args = trim_args
   }
   call read_clean.bbduk {
     input:
