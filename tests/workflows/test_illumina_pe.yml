@@ -381,7 +381,7 @@
     - path: miniwdl_run/call-read_QC_trim/call-ncbi_scrub_pe/work/r2.fastq.clean
       md5sum: d010ac91f75828dcd61bd5f297e91061
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/command
-      md5sum: af1ded95b78d58abc05b5819ea54919a
+      md5sum: 0dfaeb241ed0f54c3d5d0c4c4bea0491
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/inputs.json
       contains: ["read1", "trimmomatic_minlen", "SRR13687078"]
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/outputs.json
@@ -598,7 +598,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: fb25b730a30d82027c33b15a312dd634
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: d4b48760e66ffc28faead23aaeb54ae5
+      md5sum: 94df554c1e9cc7c06ef2f24ea0490b1e
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: cc9880b0bdcebc85adb76b332300551b
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
@@ -606,7 +606,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 111f18669c9cf8b3a49eb29a33d436ae
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
-      md5sum: 54dc94bef589bace0680e55d17cf4a9c
+      md5sum: bf541bad0a6332decc7c2044859281fe
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
       md5sum: cb3cf43feaf19e9ebd44d128b2084712
     - path: miniwdl_run/inputs.json
