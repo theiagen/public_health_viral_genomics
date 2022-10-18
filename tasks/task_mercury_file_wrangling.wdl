@@ -76,8 +76,9 @@ task supermassive_file_wrangling {
     
 
 
-    # sra metadata fields:
-    
+    # maybe move these to be specific to table? required_metadata doesn't currently exist. 
+    # maybe make a table_clean??? then do what frank did to compare columns hmmm
+    # may have to make this organism specific? Nah, I don't think we will...
 
     # remove rows with blank cells from table -- figure out how to specify which row was blank
     table.replace(r'^\s+$', np.nan, regex=True) # replace blank cells with NaNs 
@@ -86,8 +87,6 @@ task supermassive_file_wrangling {
     table.dropna(subset=required_metadata, axis=0, how='any', inplace=True) # remove all rows that are required with NaNs from table
 
 
-
-    #######Frank was here
     if ("~{organism}" == "SARS-CoV-2"):
       # remove rows that have > 0 vadr alerts
       table.drop(table.index[table["vadr_num_alerts"] > 0], inplace=True)
@@ -96,23 +95,29 @@ task supermassive_file_wrangling {
 
     if ("~{organism}" == "SARS-CoV-2"):
       # extract the required metadata from the table
-      biosample_required_df = table[[biosample_required]]
-      biosample_optional_df = table[[biosample_optional]]
-      sra_required_df = table[[sra_required]]
-      sra_optional_df = table[[sra_optional]]
-      genbank_required_df = table[[genbank_required]]
-      gisaid_required_df = table[[gisaid_required]]
-      gisaid_optional_df = table[[gisaid_optional]]
-      # combine required and optional dfs
-      biosample_metadata_df = pd.concat([biosample_required_df, biosample_optional_df], axis=1)
-      sra_metadata_df = pd.concat([sra_required_df, sra_optional_df], axis=1)
-      genbank_metadata_df = genbank_required_df
-      gisaid_metadata_df = pd.concat([gisaid_required_df, gisaid_optional_df], axis=1)
-      # remove empty columns
-      biosample_metadata_df_clean = biosample_metadata_df.dropna(axis='columns', how='all')
-      sra_metadata_df_clean = sra_metadata_df.dropna(axis='columns', how='all')
-      bankit_metadata_df_clean = bankit_metadata_df.dropna(axis='columns', how='all')
-      gisaid_metadata_df_clean = gisaid_metadata_df.dropna(axis='columns', how='all')
+
+
+      # change this so optional values are actually optional
+      biosample_metadata = table[[biosample_required]].copy()
+      for column in biosample_optional:
+        if column in table.columns:
+          biosample_metadata[column] = table[column]
+      biosample_metadata.rename(columns={"submission_id" : "sample_name"}, inplace=True)
+
+      sra_metadata = table[[sra_required]].copy()
+      for column in sra_optional:
+        if column in table.columns:
+          sra_metadata[column] = table[column]
+      sra_metadata.rename(columns={"submission_id" : "sample_name"}, inplace=True)
+
+      genbank_metadata= table[[genbank_required]].copy()
+
+      gisaid_metadata = table[[gisaid_required]].copy()
+      for column in gisaid_optional:
+        if column in table.columns:
+          gisaid_metadata[column] = table[column]
+      
+
       # determine which columns if any were dropped
         # biosample
       biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
@@ -142,66 +147,43 @@ task supermassive_file_wrangling {
       for i in gisaid_metadata_df_col_headers:
           if element not in gisaid_metadata_df_clean_col_headers:
               gisaid_blank_col_headers.append(i)
+
+
       # print metadata files to tsvs
       biosample_metadata_df_clean.to_csv('biosample_metadata.tsv', sep="\t")
       sra_metadata_df_clean.to_csv('sra_metadata.tsv', sep="\t")
       genbank_metadata_df_clean.to_csv('genbank_metadata.tsv', sep="\t")
       gisaid_metadata_df_clean.to_csv('gisaid_metadata.tsv', sep="\t")
+     
       # print blank headers list to tsvs
       biosample_blank_col_headers.to_csv('biosample_blank_col_headers.tsv', sep="\t")
       sra_blank_col_headers.to_csv('sra_blank_col_headers.tsv', sep="\t")
       genbank_blank_col_headers.to_csv('genbank_blank_col_headers.tsv', sep="\t")
       gisaid_blank_col_headers.to_csv('gisaid_blank_col_headers.tsv', sep="\t")
+    
     elif ("~{organism}" == "MPXV"):
        # extract the required metadata from the table
-      biosample_required_df = table[[biosample_required]]
-      biosample_optional_df = table[[biosample_optional]]
-      sra_required_df = table[[sra_required]]
-      sra_optional_df = table[[sra_optional]]
-      bankit_required_df = table[[bankit_required]]
-      bankit_optional_df = table[[bankit_optional]]
-      gisaid_required_df = table[[gisaid_required]]
-      gisaid_optional_df = table[[gisaid_optional]]
-      # combine required and optional dfs
-      biosample_metadata_df = pd.concat([biosample_required_df, biosample_optional_df], axis=1)
-      sra_metadata_df = pd.concat([sra_required_df, sra_optional_df], axis=1)
-      bankit_metadata_df = pd.concat([bankit_required_df, bankit_optional_df], axis=1)
-      gisaid_metadata_df = pd.concat([gisaid_required_df, gisaid_optional_df], axis=1)
-      # remove empty columns
-      biosample_metadata_df_clean = biosample_metadata_df.dropna(axis='columns', how='all')
-      sra_metadata_df_clean = sra_metadata_df.dropna(axis='columns', how='all')
-      bankit_metadata_df_clean = bankit_metadata_df.dropna(axis='columns', how='all')
-      gisaid_metadata_df_clean = gisaid_metadata_df.dropna(axis='columns', how='all')
-      # determine which columns if any were dropped
-        # biosample
-      biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
-      biosample_metadata_df_clean_col_headers = list(biosample_metadata_df_clean.columns)
-      biosample_blank_col_headers = []
-      for i in biosample_metadata_df_col_headers:
-          if element not in biosample_metadata_df_clean_col_headers:
-              biosample_blank_col_headers.append(i)
-        # sra
-      sra_metadata_df_col_headers = list(sra_metadata_df.columns)
-      sra_metadata_df_clean_col_headers = list(sra_metadata_df_clean.columns)
-      sra_blank_col_headers = []
-      for i in sra_metadata_df_col_headers:
-          if element not in sra_metadata_df_clean_col_headers:
-              sra_blank_col_headers.append(i)
-        # bankit
-      bankit_metadata_df_col_headers = list(bankit_metadata_df.columns)
-      bankit_metadata_df_clean_col_headers = list(bankit_metadata_df_clean.columns)
-      bankit_blank_col_headers = []
-      for i in bankit_metadata_df_col_headers:
-          if element not in bankit_metadata_df_clean_col_headers:
-              bankit_blank_col_headers.append(i)
-        # gisaid
-      gisaid_metadata_df_col_headers = list(gisaid_metadata_df.columns)
-      gisaid_metadata_df_clean_col_headers = list(gisaid_metadata_df_clean.columns)
-      gisaid_blank_col_headers = []
-      for i in gisaid_metadata_df_col_headers:
-          if element not in gisaid_metadata_df_clean_col_headers:
-              gisaid_blank_col_headers.append(i)
-      # print metadata filesto tsvs
+     biosample_metadata = table[[biosample_required]].copy()
+      for column in biosample_optional:
+        if column in table.columns:
+          biosample_metadata[column] = table[column]
+      biosample_metadata.rename(columns={"submission_id" : "sample_name"}, inplace=True)
+
+      sra_metadata = table[[sra_required]].copy()
+      for column in sra_optional:
+        if column in table.columns:
+          sra_metadata[column] = table[column]
+      sra_metadata.rename(columns={"submission_id" : "sample_name"}, inplace=True)
+
+      bankit_metadata = table[[bankit_required]].copy()
+      for column in bankit_optional:
+        if column in table.columns:
+          bankit_metadata[column] = table[column]
+      
+      
+      
+      
+       # print metadata filesto tsvs
       biosample_metadata_df_clean.to_csv('biosample_metadata.tsv', sep="\t")
       sra_metadata_df_clean.to_csv('sra_metadata.tsv', sep="\t")
       bankit_metadata_df_clean.to_csv('genbank_metadata.tsv', sep="\t")
