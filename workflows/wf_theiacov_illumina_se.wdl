@@ -21,7 +21,7 @@ workflow theiacov_illumina_se {
     File read1_raw
     File? primer_bed
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-07-26T12:00:00Z"
+    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
     Int min_depth = 100
@@ -77,6 +77,7 @@ workflow theiacov_illumina_se {
       bamfile = bwa.sorted_bam
   }
   if (organism == "sars-cov-2") {
+    # sars-cov-2 specific tasks
     call taxon_ID.pangolin4 {
       input:
         samplename = samplename,
@@ -89,10 +90,11 @@ workflow theiacov_illumina_se {
         min_depth = min_depth
     }
   }
-  if (organism == "mpxv") {
+  if (organism == "MPXV") {
     # MPXV specific tasks
   }
-  if (organism == "MPXV" || organism == "sars-cov-2"){ 
+  if (organism == "MPXV" || organism == "sars-cov-2"){
+    # tasks specific to either MPXV or sars-cov-2
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
@@ -104,8 +106,6 @@ workflow theiacov_illumina_se {
       input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
     }
-  }
-  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
     call ncbi.vadr {
       input:
         genome_fasta = consensus.consensus_seq,
