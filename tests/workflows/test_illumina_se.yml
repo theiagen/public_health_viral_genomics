@@ -508,7 +508,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: d4b48760e66ffc28faead23aaeb54ae5
+      md5sum: ff3ed192a05494d4c8605929515435e2
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: cc9880b0bdcebc85adb76b332300551b
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
