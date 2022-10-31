@@ -240,16 +240,32 @@ task bbduk {
     String samplename
     Int memory = 8
     String docker = "quay.io/staphb/bbtools:38.76"
+    File? adapters
+    File? phix
   }
   command <<<
     # date and version control
     date | tee DATE
 
+    # set adapter fasta
+    if [[ ! -z "~{adapters}" ]]; then
+      adapter_fasta="~{adapters}"
+    else
+      adapter_fasta="/bbmap/resources/adapters.fa" 
+    fi
+
+    # set phix fasta
+    if [[ ! -z "~{phix}" ]]; then
+      phix_fasta="~{phix}"
+    else
+      phix_fasta="/bbmap/resources/phix174_ill.ref.fa.gz"
+    fi
+
     repair.sh in1=~{read1_trimmed} in2=~{read2_trimmed} out1=~{samplename}.paired_1.fastq.gz out2=~{samplename}.paired_2.fastq.gz
 
-    bbduk.sh in1=~{samplename}.paired_1.fastq.gz in2=~{samplename}.paired_2.fastq.gz out1=~{samplename}.rmadpt_1.fastq.gz out2=~{samplename}.rmadpt_2.fastq.gz ref=/bbmap/resources/adapters.fa stats=~{samplename}.adapters.stats.txt ktrim=r k=23 mink=11 hdist=1 tpe tbo
+    bbduk.sh in1=~{samplename}.paired_1.fastq.gz in2=~{samplename}.paired_2.fastq.gz out1=~{samplename}.rmadpt_1.fastq.gz out2=~{samplename}.rmadpt_2.fastq.gz ref=${adapter_fasta} stats=~{samplename}.adapters.stats.txt ktrim=r k=23 mink=11 hdist=1 tpe tbo
 
-    bbduk.sh in1=~{samplename}.rmadpt_1.fastq.gz in2=~{samplename}.rmadpt_2.fastq.gz out1=~{samplename}_1.clean.fastq.gz out2=~{samplename}_2.clean.fastq.gz outm=~{samplename}.matched_phix.fq ref=/bbmap/resources/phix174_ill.ref.fa.gz k=31 hdist=1 stats=~{samplename}.phix.stats.txt
+    bbduk.sh in1=~{samplename}.rmadpt_1.fastq.gz in2=~{samplename}.rmadpt_2.fastq.gz out1=~{samplename}_1.clean.fastq.gz out2=~{samplename}_2.clean.fastq.gz outm=~{samplename}.matched_phix.fq ref=${phix_fasta} k=31 hdist=1 stats=~{samplename}.phix.stats.txt
   >>>
   output {
     File read1_clean = "${samplename}_1.clean.fastq.gz"
@@ -275,14 +291,30 @@ task bbduk_se {
     String samplename
     String docker = "quay.io/staphb/bbtools:38.76"
     Int memory = 8
-    }
+    File? adapters
+    File? phix
+  }
   command <<<
     # date and version control
     date | tee DATE
 
-    bbduk.sh in1=~{read1_trimmed} out1=~{samplename}.rmadpt_1.fastq.gz ref=/bbmap/resources/adapters.fa stats=~{samplename}.adapters.stats.txt ktrim=r k=23 mink=11 hdist=1 tpe tbo
+    # set adapter fasta
+    if [[ ! -z "~{adapters}" ]]; then
+      adapter_fasta="~{adapters}"
+    else
+      adapter_fasta="/bbmap/resources/adapters.fa" 
+    fi
 
-    bbduk.sh in1=~{read1_trimmed} out1=~{samplename}_1.clean.fastq.gz outm=~{samplename}.matched_phix.fq ref=/bbmap/resources/phix174_ill.ref.fa.gz k=31 hdist=1 stats=~{samplename}.phix.stats.txt
+    # set phix fasta
+    if [[ ! -z "~{phix}" ]]; then
+      phix_fasta="~{phix}"
+    else
+      phix_fasta="/bbmap/resources/phix174_ill.ref.fa.gz"
+    fi
+
+    bbduk.sh in1=~{read1_trimmed} out1=~{samplename}.rmadpt_1.fastq.gz ref=${adapter_fasta} stats=~{samplename}.adapters.stats.txt ktrim=r k=23 mink=11 hdist=1 tpe tbo
+
+    bbduk.sh in1=~{read1_trimmed} out1=~{samplename}_1.clean.fastq.gz outm=~{samplename}.matched_phix.fq ref=${phix_fasta} k=31 hdist=1 stats=~{samplename}.phix.stats.txt
   >>>
   output {
     File read1_clean = "${samplename}_1.clean.fastq.gz"
