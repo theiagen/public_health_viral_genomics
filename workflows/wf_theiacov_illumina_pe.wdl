@@ -27,12 +27,14 @@ workflow theiacov_illumina_pe {
     Int min_depth = 100
     String organism = "sars-cov-2"
     Boolean trim_primers = true
+    File? adapters
   }
   call read_qc.read_QC_trim {
     input:
       samplename = samplename,
       read1_raw = read1_raw,
-      read2_raw = read2_raw
+      read2_raw = read2_raw,
+      adapters = adapters
   }
   call align.bwa {
     input:
