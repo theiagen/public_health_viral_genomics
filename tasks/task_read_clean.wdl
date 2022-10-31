@@ -304,15 +304,19 @@ task bbduk_se {
 
     # set adapter fasta
     if [[ ! -z "~{adapters}" ]]; then
+      echo "Using user supplied FASTA file for adapters..."
       adapter_fasta="~{adapters}"
     else
+      echo "User did not supply adapters FASTA file, using default adapters.fa file..."
       adapter_fasta="/bbmap/resources/adapters.fa" 
     fi
 
     # set phix fasta
     if [[ ! -z "~{phix}" ]]; then
+      echo "Using user supplied FASTA file for phiX..."
       phix_fasta="~{phix}"
     else
+      echo "User did not supply phiX FASTA file, using default phix174_ill.ref.fa.gz file..."
       phix_fasta="/bbmap/resources/phix174_ill.ref.fa.gz"
     fi
 
