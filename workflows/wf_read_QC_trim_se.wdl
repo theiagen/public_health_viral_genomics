@@ -16,6 +16,8 @@ workflow read_QC_trim {
     Int? trimmomatic_window_size = 4
     Int  bbduk_mem = 8
     String? target_org
+    File? adapters
+    File? phix
   }
 # Commented out as NCBI SCRUB not currently compatible with 75bp SE data used in SC2 sequencing
 #  call read_clean.ncbi_scrub_se {
@@ -35,7 +37,9 @@ workflow read_QC_trim {
     input:
       samplename = samplename,
       read1_trimmed = trimmomatic_se.read1_trimmed,
-      memory = bbduk_mem
+      memory = bbduk_mem,
+      adapters = adapters,
+      phix = phix
   }
   call fastq_scan.fastq_scan_se as fastq_scan_raw {
     input:

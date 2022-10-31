@@ -27,6 +27,8 @@ workflow theiacov_illumina_se {
     Int min_depth = 100
     String organism = "sars-cov-2"
     Boolean trim_primers = true
+    File? adapters
+    File? phix
   }
   call read_qc.read_QC_trim {
     input:

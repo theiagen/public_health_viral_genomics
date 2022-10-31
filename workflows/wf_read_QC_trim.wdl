@@ -18,6 +18,7 @@ workflow read_QC_trim {
     Int bbduk_mem = 8
     String? target_org
     File? adapters
+    File? phix
   }
   call read_clean.ncbi_scrub_pe {
     input:
@@ -40,7 +41,8 @@ workflow read_QC_trim {
       read1_trimmed = trimmomatic.read1_trimmed,
       read2_trimmed = trimmomatic.read2_trimmed,
       memory = bbduk_mem,
-      adapters = adapters
+      adapters = adapters,
+      phix = phix
   }
   call fastq_scan.fastq_scan as fastq_scan_raw {
     input:
