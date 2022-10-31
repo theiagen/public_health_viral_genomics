@@ -33,7 +33,9 @@ workflow theiacov_illumina_se {
   call read_qc.read_QC_trim {
     input:
       samplename = samplename,
-      read1_raw = read1_raw
+      read1_raw = read1_raw,
+      adapters = adapters,
+      phix = phix
   }
   call align.bwa {
     input:
