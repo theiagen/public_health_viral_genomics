@@ -508,8 +508,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: 94df554c1e9cc7c06ef2f24ea0490b1e
-      md5sum: 5a85000616ce097d3b3f0c7edcb0b45f
+      md5sum: 3259b9030e2e101e88b0b28831fdbce6
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: cc9880b0bdcebc85adb76b332300551b
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
@@ -517,8 +516,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 111f18669c9cf8b3a49eb29a33d436ae
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim_se.wdl
-      md5sum: 789de9948b8f4a840fa0f51327fda6ef
-      md5sum: 2c1a585709b709156ea663e585def1f4
+      md5sum: eb4170a3da9d95720b5403dd3d5e5d87
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_se.wdl
       md5sum: 6daa338cbd4821292780d80d659b75d4
     - path: miniwdl_run/inputs.json

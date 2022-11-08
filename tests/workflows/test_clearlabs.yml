@@ -482,7 +482,7 @@
     - path: miniwdl_run/wdl/tasks/task_ont_medaka.wdl
       md5sum: 702db7d86d5120805e4aee0067365ee6
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: 5a85000616ce097d3b3f0c7edcb0b45f
+      md5sum: 3259b9030e2e101e88b0b28831fdbce6
     - path: miniwdl_run//wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: cc9880b0bdcebc85adb76b332300551b
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
