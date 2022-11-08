@@ -381,7 +381,7 @@
     - path: miniwdl_run/call-read_QC_trim/call-ncbi_scrub_pe/work/r2.fastq.clean
       md5sum: d010ac91f75828dcd61bd5f297e91061
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/command
-      md5sum: af1ded95b78d58abc05b5819ea54919a
+      md5sum: 0dfaeb241ed0f54c3d5d0c4c4bea0491
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/inputs.json
       contains: ["read1", "trimmomatic_minlen", "SRR13687078"]
     - path: miniwdl_run/call-read_QC_trim/call-trimmomatic/outputs.json
