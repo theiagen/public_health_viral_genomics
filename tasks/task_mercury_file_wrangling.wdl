@@ -8,6 +8,7 @@ task supermassive_file_wrangling {
     File? input_table
     Array[String] sample_names
     String organism = "SARS-CoV-2"
+    String output_name
 
   }
   command <<<
@@ -16,6 +17,10 @@ task supermassive_file_wrangling {
     
     # when running locally, use the input_table in place of downloading from Terra
     #cp ~{input_table} ~{table_name}-data.tsv
+
+
+      # write headers to files up here
+
 
     python3 <<CODE 
     import pandas as pd 
@@ -39,7 +44,7 @@ task supermassive_file_wrangling {
       biosample_required = ["submission_id", "bioproject_accession", "organism", "collecting_lab", "collection_date", "country", "state", "host_sci_name", "host_disease", "isolate", "isolation_source"]
       biosample_optional = ["treatment", "gisaid_accession", "gisaid_virus_name", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing"]
 
-      sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
+      sra_required = ["bioproject_accession", "submission_id", "library_ID", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
       sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
       genbank_required = ["submission_id", "country", "host_sci_name", "isolate", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession"]
@@ -50,10 +55,12 @@ task supermassive_file_wrangling {
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
 
+      required_metadata = biosample_required + sra_required + genbank_required + gisaid_required
+
     elif ("~{organism}" == "MPXV"):
       ## TO DO: need to change these to include MPXV-required fields
-      required_metadata = ["assembly_fasta", "read1_dehosted", "assembly_method", "bioproject_accession", "collecting_lab", "collection_date", "country", "design_description", "dehosting_method", "filetype", "host_disease", "host", "host_sci_name", "instrument_model", "isolation_source", "library_id", "library_layout", "library_selection", "library_source", "library_strategy", "organism", "seq_platform", "state", "submission_id"]
-      optional_metadata = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "biosample_accession", "gisaid_accession",  "gisaid_organism", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing", "submitter_email", "treatment"]
+    #  required_metadata = ["assembly_fasta", "read1_dehosted", "assembly_method", "bioproject_accession", "collecting_lab", "collection_date", "country", "design_description", "dehosting_method", "filetype", "host_disease", "host", "host_sci_name", "instrument_model", "isolation_source", "library_id", "library_layout", "library_selection", "library_source", "library_strategy", "organism", "seq_platform", "state", "submission_id"]
+    #  optional_metadata = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "biosample_accession", "gisaid_accession",  "gisaid_organism", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing", "submitter_email", "treatment"]
 
       biosample_required = ["submission_id", "organism", "collected_by", "collection_date", "geo_loc_name", "host", "host_disease", "isolation_source", "lat_lon", "isolation_type"]
       biosample_optional = ["sample_title", "bioproject_accession", "attribute_package", "strain", "isolate", "culture_collection", "genotype", "host_age", "host_description", "host_disease_outcome", "host_disease_stage", "host_health_state", "host_sex", "host_subject_id", "host_tissue_sampled", "passage_history", "pathotype", "serotype", "serovar", "specimen_voucher", "subgroup", "subtype", "description"] 
@@ -68,24 +75,103 @@ task supermassive_file_wrangling {
       gisaid_required = ["gisaid_submitter", "organism", "country", "submission_id", "year", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
-      
 
+      required_metadata = biosample_required + sra_required + bankit_requried + gisaid_required
+
+
+    
+
+# rename biosample and sra and bankit up here
+
+
+
+
+
+
+      gisaid_metadata = table[[gisaid_required]].copy()
+      for column in gisaid_optional:
+        if column in table.columns:
+          gisaid_metadata[column] = table[column]
+
+
+
+
+
+# gisaid
+
+      # manually create virus_name, location
+
+
+
+      # gisaid output file yay
+      gisaid_out = open("~{output_name}_gisaid_metadata.csv", "w")
+      gisaid_out.write("submitter,fn,pox_virus_name,pox_passage,pox_collection_date,pox_location,pox_add_location,pox_host,pox_add_host_info,pox_sampling_strategy,pox_gender,pox_patient_age,pox_patient_status,pox_specimen,pox_outbreak,pox_last_vaccinated,pox_treatment,pox_seq_technology,pox_assembly_method,pox_coverage,pox_orig_lab,pox_orig_lab_addr,pox_provider_sample_id,pox_subm_lab,pox_subm_lab_addr,pox_subm_sample_id,pox_authors")
+      gisaid_out.write("Submitter,FASTA filename,Virus name,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Depth of coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors")
+
+      # parse date for year
+
+      def year_getter(x):
+        for name, values in x.iteritems():
+          for item in values:
+            if item != [0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]:
+              return  
+              # deal with better later
+            else:
+              return item.split("-")[0]
+
+      gisaid_metadata["year"] = df.apply(year_getter(gisaid_metadata["collection_date"]))
+      gisaid_metadata["gisaid_virus_name"] = (gisaid_metadata["organism"] + "/" + gisaid_metadata["country"] + "/" + gisaid_metadata["submission_id"] + "/" + gisaid_metadata["year"])
+      gisaid_metadata["location"] = (gisaid_metadata["continent"] + " / " + gisaid_metadata["country"] + " / " + gisaid_metadata["state"]) 
+      gisaid_metadata.drop(["continent", "country", "state"], axis=1)
+      if gisaid_metadata["county"]:
+        gisaid_metadata["location"] = (gisaid_metadata["location"] + " / " + gisaid_optional["county"])
+        gisaid_metadata.drop(["county"], axis=1)
+
+
+
+
+      for name, values in gisaid_metadata["gisaid_submitter", "gisaid_virus_name", "passage_details", "collection_date", "location", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+
+
+
+    # iterate through the table, write out to the csv with open(filename, "a")
+
+          
+
+
+
+## not python code
+
+
+      gisaid_virus_name = gisaid_required["organism"] + gisaid_required["country"] + gisaid_required["submission_id"] 
+
+      echo "submitter,fn,pox_virus_name,pox_passage,pox_collection_date,pox_location,pox_add_location,pox_host,pox_add_host_info,pox_sampling_strategy,pox_gender,pox_patient_age,pox_patient_status,pox_specimen,pox_outbreak,pox_last_vaccinated,pox_treatment,pox_seq_technology,pox_assembly_method,pox_coverage,pox_orig_lab,pox_orig_lab_addr,pox_provider_sample_id,pox_subm_lab,pox_subm_lab_addr,pox_subm_sample_id,pox_authors" > ~{output_name}_gisaid_metadata.csv
+      echo "Submitter,FASTA filename,Virus name,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Depth of coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors" >  ~{output_name}_gisaid_metadata.csv
+
+
+
+
+
+
+
+      
+      required_metadata = biosample_required + sra_required + bankit_required + gisaid_required
 
     else:
       raise Exception('Only "SARS-CoV-2" and "MPXV" are supported as acceptable input for the \'organism\' variable at this time. You entered "~{organism}".')
     
 
-
-    # maybe move these to be specific to table? required_metadata doesn't currently exist. 
-    # maybe make a table_clean??? then do what frank did to compare columns hmmm
-    # may have to make this organism specific? Nah, I don't think we will...
-
     # remove rows with blank cells from table -- figure out how to specify which row was blank
     table.replace(r'^\s+$', np.nan, regex=True) # replace blank cells with NaNs 
     excluded_samples = table[table[required_metadata].isna().any(axis=1)] # write out all rows that are required with NaNs to a new table
-    excluded_samples["~{table_name}_id"].to_csv("excluded_samples.tsv", sep='\t', index=False, header=False) # write the excluded names out to a file
     table.dropna(subset=required_metadata, axis=0, how='any', inplace=True) # remove all rows that are required with NaNs from table
 
+    # for row in excluded_samples, compare column names to required_metadata
+    # append missing column names to list
+    # print sample_name and then list of missing column names
+   
+    # excluded_samples["~{table_name}_id"].to_csv("excluded_samples.tsv", sep='\t', index=False, header=False) # write the excluded names out to a file
+   
 
     if ("~{organism}" == "SARS-CoV-2"):
       # remove rows that have > 0 vadr alerts
@@ -96,8 +182,6 @@ task supermassive_file_wrangling {
     if ("~{organism}" == "SARS-CoV-2"):
       # extract the required metadata from the table
 
-
-      # change this so optional values are actually optional
       biosample_metadata = table[[biosample_required]].copy()
       for column in biosample_optional:
         if column in table.columns:
@@ -118,35 +202,39 @@ task supermassive_file_wrangling {
           gisaid_metadata[column] = table[column]
       
 
-      # determine which columns if any were dropped
-        # biosample
-      biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
-      biosample_metadata_df_clean_col_headers = list(biosample_metadata_df_clean.columns)
-      biosample_blank_col_headers = []
-      for i in biosample_metadata_df_col_headers:
-          if element not in biosample_metadata_df_clean_col_headers:
-              biosample_blank_col_headers.append(i)
-        # sra
-      sra_metadata_df_col_headers = list(sra_metadata_df.columns)
-      sra_metadata_df_clean_col_headers = list(sra_metadata_df_clean.columns)
-      sra_blank_col_headers = []
-      for i in sra_metadata_df_col_headers:
-          if element not in sra_metadata_df_clean_col_headers:
-              sra_blank_col_headers.append(i)
-        # genbank
-      genbank_metadata_df_col_headers = list(genbank_metadata_df.columns)
-      genbank_metadata_df_clean_col_headers = list(genbank_metadata_df_clean.columns)
-      genbank_blank_col_headers = []
-      for i in genbank_metadata_df_col_headers:
-          if element not in genbank_metadata_df_clean_col_headers:
-              genbank_blank_col_headers.append(i)
-        # gisaid
-      gisaid_metadata_df_col_headers = list(gisaid_metadata_df.columns)
-      gisaid_metadata_df_clean_col_headers = list(gisaid_metadata_df_clean.columns)
-      gisaid_blank_col_headers = []
-      for i in gisaid_metadata_df_col_headers:
-          if element not in gisaid_metadata_df_clean_col_headers:
-              gisaid_blank_col_headers.append(i)
+
+
+      # # determine which columns if any were dropped
+      #   # biosample
+      # biosample_metadata_df_col_headers = list(biosample_metadata_df.columns)
+      # biosample_metadata_df_clean_col_headers = list(biosample_metadata_df_clean.columns)
+      # biosample_blank_col_headers = []
+      # for i in biosample_metadata_df_col_headers:
+      #     if element not in biosample_metadata_df_clean_col_headers:
+      #         biosample_blank_col_headers.append(i)
+      #   # sra
+      # sra_metadata_df_col_headers = list(sra_metadata_df.columns)
+      # sra_metadata_df_clean_col_headers = list(sra_metadata_df_clean.columns)
+      # sra_blank_col_headers = []
+      # for i in sra_metadata_df_col_headers:
+      #     if element not in sra_metadata_df_clean_col_headers:
+      #         sra_blank_col_headers.append(i)
+      #   # genbank
+      # genbank_metadata_df_col_headers = list(genbank_metadata_df.columns)
+      # genbank_metadata_df_clean_col_headers = list(genbank_metadata_df_clean.columns)
+      # genbank_blank_col_headers = []
+      # for i in genbank_metadata_df_col_headers:
+      #     if element not in genbank_metadata_df_clean_col_headers:
+      #         genbank_blank_col_headers.append(i)
+      #   # gisaid
+      # gisaid_metadata_df_col_headers = list(gisaid_metadata_df.columns)
+      # gisaid_metadata_df_clean_col_headers = list(gisaid_metadata_df_clean.columns)
+      # gisaid_blank_col_headers = []
+      # for i in gisaid_metadata_df_col_headers:
+      #     if element not in gisaid_metadata_df_clean_col_headers:
+      #         gisaid_blank_col_headers.append(i)
+
+
 
 
       # print metadata files to tsvs
