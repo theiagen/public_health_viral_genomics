@@ -7,6 +7,7 @@ task sc2_gene_coverage {
     Int s_gene_start = 21563
     Int s_gene_stop = 25384
     Int min_depth
+    Int disk_size = 100
   }
   command <<<
     samtools index ~{bamfile}
@@ -69,7 +70,8 @@ task sc2_gene_coverage {
     docker: "quay.io/staphb/samtools:1.15"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

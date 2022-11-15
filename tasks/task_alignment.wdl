@@ -7,6 +7,7 @@ task bwa {
     String samplename
     File? reference_genome
     Int cpu = 6
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -56,7 +57,8 @@ task bwa {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     #maxRetries: 3
   }
@@ -66,6 +68,7 @@ task mafft {
   input {
     Array[File] genomes
     Int cpu = 16
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -85,7 +88,8 @@ task mafft {
     docker: "quay.io/staphb/mafft:7.450"
     memory: "32 GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

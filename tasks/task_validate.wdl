@@ -6,6 +6,7 @@ task export_two_tsvs {
     String terra_workspace
     String datatable1
     String datatable2
+    Int disk_size = 10
   }
   command <<<
     python3 /scripts/export_large_tsv/export_large_tsv.py --project ~{terra_project} --workspace ~{terra_workspace} --entity_type ~{datatable1} --tsv_filename ~{datatable1}
@@ -16,7 +17,8 @@ task export_two_tsvs {
     docker: "broadinstitute/terra-tools:tqdm"
     memory: "1 GB"
     cpu: 1
-    disks: "local-disk 10 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -40,7 +42,8 @@ task compare_two_tsvs {
     docker: "quay.io/theiagen/utility:1.2"
     memory: "4 GB"
     cpu: 2
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
