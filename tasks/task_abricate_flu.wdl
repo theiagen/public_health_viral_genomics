@@ -4,7 +4,7 @@ task abricate_flu {
   input {
     File assembly
     String samplename
-    String database
+    String database="insaflu"
     # Parameters 
     # --minid Minimum DNA %identity [80]
     # --mincov Minimum DNA %coverage [80]
@@ -27,8 +27,9 @@ task abricate_flu {
       ~{assembly} > ~{samplename}_abricate_hits.tsv
     # capturing flu type (A or B) and subtype (e.g. H1 and N1)
     grep "M1" ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }' > FLU_TYPE
-    grep "HA" ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }' >  FLU_SUBTYPE
-    echo -n "$(grep 'NA' ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }')" >>  FLU_SUBTYPE
+    HA_hit=$(grep "HA" ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }')
+    NA_hit=$(grep 'NA' ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }')
+    echo "${HA_hit}${NA_hit}" >  FLU_SUBTYPE
   >>>
   output {
       String abricate_flu_type = read_string("FLU_TYPE")
