@@ -207,8 +207,8 @@ workflow theiacov_illumina_pe {
     File? read1_aligned = bwa.read1_aligned
     File? read2_aligned = bwa.read2_aligned
     String? assembly_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
-    File aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam,""])
-    File aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai,""])
+    String aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam,""])
+    String aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai,""])
     Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String? ivar_version_primtrim = primer_trim.ivar_version
     String? samtools_version_primtrim = primer_trim.samtools_version
@@ -267,7 +267,7 @@ workflow theiacov_illumina_pe {
     String? irma_version = irma.irma_version
     String? abricate_flu_type = abricate_flu.abricate_flu_type
     String? abricate_flu_subtype =  abricate_flu.abricate_flu_subtype
-    File? abricate_flu_results = abricate_flu.abricate_flu_results
+    String? abricate_flu_results = abricate_flu.abricate_flu_results
     String? abricate_flu_database =  abricate_flu.abricate_flu_database
     String? abricate_flu_version = abricate_flu.abricate_flu_version
   }
