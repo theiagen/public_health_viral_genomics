@@ -81,6 +81,12 @@ workflow theiacov_illumina_pe {
         reference_genome = reference_genome,
         consensus_min_depth = min_depth
     }
+    call consensus_qc_task.consensus_qc as consensus_qc {
+        input:
+          assembly_fasta =  consensus.consensus_seq,
+          reference_genome = reference_genome,
+          genome_length = genome_length
+      }
     call assembly_metrics.stats_n_coverage {
       input:
         samplename = samplename,
@@ -153,14 +159,15 @@ workflow theiacov_illumina_pe {
         input:
         nextclade_tsv = nextclade_one_sample_flu.nextclade_tsv
       }
+      call consensus_qc_task.consensus_qc as consensus_qc_flu {
+        input:
+          assembly_fasta =  irma.irma_assembly_fasta,
+          reference_genome = reference_genome,
+          genome_length = genome_length
+      }
     }
   }
-  call consensus_qc_task.consensus_qc {
-    input:
-      assembly_fasta =  select_first([consensus.consensus_seq,irma.irma_assembly_fasta]),
-      reference_genome = reference_genome,
-      genome_length = genome_length
-  }
+
   call versioning.version_capture{
     input:
   }
@@ -213,11 +220,11 @@ workflow theiacov_illumina_pe {
     File assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
-    Int number_N = consensus_qc.number_N
-    Int assembly_length_unambiguous = consensus_qc.number_ATCG
-    Int number_Degenerate = consensus_qc.number_Degenerate
-    Int number_Total = consensus_qc.number_Total
-    Float percent_reference_coverage = consensus_qc.percent_reference_coverage
+    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N])
+    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG])
+    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate])
+    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total])
+    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage])
     Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File? consensus_stats = stats_n_coverage.stats
