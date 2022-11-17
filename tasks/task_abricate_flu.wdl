@@ -4,16 +4,13 @@ task abricate_flu {
   input {
     File assembly
     String samplename
-    String database="insaflu"
-    String nextclade_flu_h1n1_tag="2022-06-08T12:00:00Z"
-    String nextclade_flu_h3n2_tag="2022-06-08T12:00:00Z"
-    String nextclade_flu_vic_tag="2022-06-08T12:00:00Z"
-    String nextclade_flu_yam_tag="2022-07-27T12:00:00Z"
-    # Parameters 
-    # --minid Minimum DNA %identity [80]
-    # --mincov Minimum DNA %coverage [80]
-    Int? minid
-    Int? mincov
+    String database = "insaflu"
+    String nextclade_flu_h1n1_tag
+    String nextclade_flu_h3n2_tag
+    String nextclade_flu_vic_tag
+    String nextclade_flu_yam_tag
+    Int minid = 70
+    Int mincov =60
     Int cpu = 2
     Int memory = 4
     String docker = "staphb/abricate:1.0.1-insaflu-220727"
