@@ -247,15 +247,15 @@ workflow theiacov_illumina_pe {
     String? pangolin_docker = pangolin4.pangolin_docker
     String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    File nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json,""])
-    File auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json,""])
-    File nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv,""])
-    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version,""])
-    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker,""])
+    File nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json])
+    File auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json])
+    File nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv])
+    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version])
+    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker])
     String nextclade_ds_tag = select_first([nextclade_dataset_tag, abricate_flu.nextstrain_ds_tag])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs,""])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels,""])
-    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample.nextclade_clade,""])
+    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs])
+    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels])
+    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade])
     String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
