@@ -45,6 +45,7 @@ task irma {
   >>>
   output {
     File irma_consensus = "~{samplename}.irma.consensus.fasta"
+    File seg4_ha_assembly = "~{samplename}/amended_consensus/~{samplename}_4.fa"
     String irma_version = read_string("VERSION")
     String irma_pipeline_date = read_string("DATE")
   }
