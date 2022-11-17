@@ -29,9 +29,15 @@ task irma {
     # format reads from sra
     if ~{from_sra} ; then
       echo "SRA reads will be formatted to meet IRMA input requirements"
+      # set cat command based on compression
+      if [[ "~{read1}" == *".gz" ]] ; then
+        cat_reads="zcat"
+      else
+        cat_reads="cat"
+      fi
       sra_id=$(echo "~{read_basename}" | awk -F "_" '{ print $1 }')
-      zcat ~{read1} | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 1:1" : $0}' | gzip -c > "${sra_id}-irmafix_R1.fastq.gz"
-      zcat ~{read2} | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 2:2" : $0}' | gzip -c > "${sra_id}-irmafix_R2.fastq.gz"
+      eval "${cat_reads} ~{read1}" | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 1:1" : $0}' | gzip -c > "${sra_id}-irmafix_R1.fastq.gz"
+      eval "${cat_reads} ~{read2}" | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 2:2" : $0}' | gzip -c > "${sra_id}-irmafix_R2.fastq.gz"
       #modify read variables
       read1="${sra_id}-irmafix_R1.fastq.gz"
       read2="${sra_id}-irmafix_R2.fastq.gz"  
