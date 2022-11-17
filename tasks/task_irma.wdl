@@ -9,7 +9,7 @@ task irma {
     String irma_module = "FLU-utr"
     Boolean from_sra = false
     String read_basename = basename(read1)
-    String docker = "quay.io/biocontainers/irma:1.0.2--pl5321hdfd78af_2"
+    String docker = "quay.io/staphb/irma:1.0.3"
 	Int memory = 8
 	Int cpu = 4
   }
