@@ -128,6 +128,7 @@ workflow theiacov_illumina_pe {
           assembly_length_unambiguous = consensus_qc.number_ATCG
       }
     }
+    String assembly_method_nonflu = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
   }
   if (organism == "flu"){
     # flu-specific tasks
@@ -206,7 +207,7 @@ workflow theiacov_illumina_pe {
     String? samtools_version = bwa.sam_version
     File? read1_aligned = bwa.read1_aligned
     File? read2_aligned = bwa.read2_aligned
-    String? assembly_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
+    String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): " + select_first([assembly_method_nonflu,irma.irma_version])
     String aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam,""])
     String aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai,""])
     Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent

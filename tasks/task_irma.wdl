@@ -19,7 +19,7 @@ task irma {
     read1=~{read1}
     read2=~{read2}
     # capture irma vesion
-    IRMA | head -n1 | awk -F' ' '{ print $5 }' | tee VERSION
+    IRMA | head -n1 | awk -F' ' '{ print "IRMA " $5 }' | tee VERSION
     # set config if needed
     if ~{keep_ref_deletions}; then 
       touch irma_config.sh
