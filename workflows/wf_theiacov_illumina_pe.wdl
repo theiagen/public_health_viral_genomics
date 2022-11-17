@@ -151,9 +151,9 @@ workflow theiacov_illumina_pe {
       call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
         input:
           genome_fasta = irma.seg4_ha_assembly,
-          dataset_name = select_first([abricate_flu.nextstrain_name, organism]),
-          dataset_reference = select_first([abricate_flu.nextstrain_ref, nextclade_dataset_reference]),
-          dataset_tag = select_first([abricate_flu.nextstrain_ds_tag, nextclade_dataset_tag])
+          dataset_name = abricate_flu.nextstrain_name,
+          dataset_reference = abricate_flu.nextstrain_ref,
+          dataset_tag = abricate_flu.nextstrain_ds_tag
       }
       call taxon_ID.nextclade_output_parser_one_sample as  nextclade_output_parser_one_sample_flu {
         input:
@@ -252,7 +252,7 @@ workflow theiacov_illumina_pe {
     File nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv])
     String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version])
     String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker])
-    String nextclade_ds_tag = select_first([nextclade_dataset_tag, abricate_flu.nextstrain_ds_tag])
+    String nextclade_ds_tag = select_first([abricate_flu.nextstrain_ds_tag, nextclade_dataset_tag])
     String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs])
     String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels])
     String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade])
