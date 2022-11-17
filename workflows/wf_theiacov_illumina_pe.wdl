@@ -263,11 +263,10 @@ workflow theiacov_illumina_pe {
     String? vadr_docker = vadr.vadr_docker
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
     # Flu Outputs
-    File? irma_assembly_fasta = irma.irma_assembly_fasta
     String? irma_version = irma.irma_version
     String? abricate_flu_type = abricate_flu.abricate_flu_type
     String? abricate_flu_subtype =  abricate_flu.abricate_flu_subtype
-    String? abricate_flu_results = abricate_flu.abricate_flu_results
+    File? abricate_flu_results = abricate_flu.abricate_flu_results
     String? abricate_flu_database =  abricate_flu.abricate_flu_database
     String? abricate_flu_version = abricate_flu.abricate_flu_version
   }
