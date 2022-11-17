@@ -68,7 +68,7 @@ task abricate_flu {
       Boolean run_nextstrain = read_boolean("RUN_NEXTSTRAIN")
       String nextstrain_ref = read_string("NEXTSTRAIN_REF")
       String nextstrain_name = read_string("NEXTSTRAIN_NAME")
-      String nextstrain_tag = read_string("NEXTSTRAIN_DS_TAG")
+      String nextstrain_ds_tag = read_string("NEXTSTRAIN_DS_TAG")
 
   }
   runtime {
