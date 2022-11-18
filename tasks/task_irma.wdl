@@ -7,7 +7,6 @@ task irma {
     String samplename
     Boolean keep_ref_deletions = true
     String irma_module = "FLU"
-    Boolean from_sra = false
     String read_basename = basename(read1)
     String docker = "quay.io/staphb/irma:1.0.3"
 	Int memory = 8
@@ -18,6 +17,12 @@ task irma {
     #capture reads as bash variables
     read1=~{read1}
     read2=~{read2}
+    # set cat command based on compression
+    if [[ "~{read1}" == *".gz" ]] ; then
+      cat_reads="zcat"
+    else
+      cat_reads="cat"
+    fi
     # capture irma vesion
     IRMA | head -n1 | awk -F' ' '{ print "IRMA " $5 }' | tee VERSION
     # set config if needed
@@ -26,23 +31,21 @@ task irma {
       echo 'DEL_TYPE="NNN"' >> irma_config.sh
       echo 'ALIGN_PROG="BLAT"' >> irma_config.sh
     fi
-    # format reads from sra
-    if ~{from_sra} ; then
-      echo "SRA reads will be formatted to meet IRMA input requirements"
-      # set cat command based on compression
-      if [[ "~{read1}" == *".gz" ]] ; then
-        cat_reads="zcat"
-      else
-        cat_reads="cat"
-      fi
+    # format reads, if needed
+    read_header=$(${cat_reads} ~{read1} | head -n1)
+    if ! [[ "${read_header}" =~ @(.+?)[_[:space:]][123]:.+ ]]; then
+      echo "Read headers may lead to IRMA failure; reformatting to meet IRMA input requirements"
       sra_id=$(echo "~{read_basename}" | awk -F "_" '{ print $1 }')
       eval "${cat_reads} ~{read1}" | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 1:1" : $0}' | gzip -c > "${sra_id}-irmafix_R1.fastq.gz"
       eval "${cat_reads} ~{read2}" | awk '{print (NR%4 == 1) ? "@'${sra_id}'-" ++i " 2:2" : $0}' | gzip -c > "${sra_id}-irmafix_R2.fastq.gz"
       #modify read variables
       read1="${sra_id}-irmafix_R1.fastq.gz"
-      read2="${sra_id}-irmafix_R2.fastq.gz"  
+      read2="${sra_id}-irmafix_R2.fastq.gz"
+    else
+      echo "Read headers match IRMA formatting requirements"
     fi
     # run IRMA 
+    exit
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
     # cat consensus assemblies
     cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta

@@ -35,7 +35,6 @@ workflow theiacov_illumina_pe {
     String nextclade_flu_h3n2_tag = "2022-06-08T12:00:00Z"
     String nextclade_flu_vic_tag = "2022-06-08T12:00:00Z"
     String nextclade_flu_yam_tag = "2022-07-27T12:00:00Z"
-    Boolean from_sra = false
     Int? genome_length
   }
   call read_qc.read_QC_trim {
@@ -137,7 +136,6 @@ workflow theiacov_illumina_pe {
         read1 = read_QC_trim.read1_clean,
         read2 = read_QC_trim.read2_clean,
         samplename = samplename,
-        from_sra = from_sra
     }
     call abricate_flu.abricate_flu {
       input:
