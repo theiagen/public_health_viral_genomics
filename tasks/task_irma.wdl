@@ -6,7 +6,7 @@ task irma {
     File read2
     String samplename
     Boolean keep_ref_deletions = true
-    String irma_module = "FLU-utr"
+    String irma_module = "FLU"
     Boolean from_sra = false
     String read_basename = basename(read1)
     String docker = "quay.io/staphb/irma:1.0.3"
@@ -45,13 +45,20 @@ task irma {
     # run IRMA 
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
     # cat consensus assemblies
-    if [ -d "~{samplename}/amended_consensus/" ]; then
-      cat ~{samplename}/amended_consensus/*.fa > ~{samplename}.irma.consensus.fasta
-    fi
+    cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
+    # rename IRMA outputs
+    for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
+      new_name=$(basename "${irma_out}" | awk -F "_" '{print "'~{samplename}_'"$2'})
+      mv "${irma_out}" "${new_name}"
+    done
+    
   >>>
   output {
     File irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
-    File seg4_ha_assembly = "~{samplename}/amended_consensus/~{samplename}_4.fa"
+    File seg4_ha_assembly = "~{samplename}_HA.fasta"
+    Array[File] irma_assemblies = glob("~{samplename}*.fasta")
+    Array[File] irma_vcfs = glob("~{samplename}*.vcf")
+    Array[File] irma_bams = glob("~{samplename}*.bam")
     String irma_version = read_string("VERSION")
     String irma_pipeline_date = read_string("DATE")
   }
