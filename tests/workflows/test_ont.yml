@@ -498,7 +498,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 111f18669c9cf8b3a49eb29a33d436ae
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
-      md5sum: 4904a2e5b0e179f2f82e989033dcd08e
+      md5sum: d19f035e33da9f0d1a5116a8730bc455
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_ont", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
