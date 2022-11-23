@@ -6,6 +6,7 @@ task ncbi_scrub_pe {
     File read2
     String samplename
     String docker = "gcr.io/ncbi-sys-gcr-public-research/sra-human-scrubber@sha256:b7dba71079344daea4ea3363e1a67fa54edb7ec65459d039669c68a66d38b140"
+    Int disk_size = 100
   }
   String r1_filename = basename(read1)
   String r2_filename = basename(read2)
@@ -55,7 +56,8 @@ task ncbi_scrub_pe {
       docker: "~{docker}"
       memory: "8 GB"
       cpu: 4
-      disks: "local-disk 100 SSD"
+      disks:  "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB" # TES
       preemptible: 0
       maxRetries: 3
   }
@@ -66,6 +68,7 @@ task ncbi_scrub_se {
     File read1
     String samplename
     String docker = "gcr.io/ncbi-sys-gcr-public-research/sra-human-scrubber@sha256:b7dba71079344daea4ea3363e1a67fa54edb7ec65459d039669c68a66d38b140"
+    Int disk_size = 100
   }
   String r1_filename = basename(read1)
   command <<<
@@ -96,7 +99,8 @@ task ncbi_scrub_se {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -114,6 +118,7 @@ task seqyclean {
     Boolean? seqyclean_dup = false
     Boolean? seqyclean_no_adapter_trim = false
     Int? cpu = 16
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -148,7 +153,8 @@ task seqyclean {
       docker: "quay.io/staphb/seqyclean:1.10.09"
       memory: "8 GB"
       cpu: 2
-      disks: "local-disk 100 SSD"
+      disks:  "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB" # TES
       preemptible: 0
       maxRetries: 3
   }
@@ -165,6 +171,7 @@ task trimmomatic {
     Int? trimmomatic_quality_trim_score=30
     Int? threads = 4
     String? trimmomatic_args
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -191,7 +198,8 @@ task trimmomatic {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -207,6 +215,7 @@ task trimmomatic_se {
     Int? trimmomatic_quality_trim_score = 30
     Int? threads = 4
     String? trimmomatic_args
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -231,7 +240,8 @@ task trimmomatic_se {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -249,6 +259,7 @@ task fastp {
     # adapter trimming and quality filtering are enabled by default, the flags below disable these functions to match trimmomatic
     String? fastp_args = "--disable_adapter_trimming --disable_quality_filtering --disable_trim_poly_g --dont_eval_duplication"
     Int? threads = 4
+    Int disk_size = 100
   }
   command <<<
     # date 
@@ -274,7 +285,8 @@ task fastp {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -291,6 +303,7 @@ task fastp_se {
     Int? threads = 4
     # adapter trimming and quality filtering are enabled by default, the flags below disable these functions
     String? fastp_params = "--disable_adapter_trimming --disable_quality_filtering"
+    Int disk_size = 100
   }
   command <<<
     # date 
@@ -315,7 +328,8 @@ task fastp_se {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -328,6 +342,7 @@ task bbduk {
     String samplename
     Int memory = 8
     String docker = "quay.io/staphb/bbtools:38.76"
+    Int disk_size = 100
     File? adapters
     File? phix
   }
@@ -371,7 +386,8 @@ task bbduk {
     docker: "~{docker}"
     memory: "~{memory} GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -383,6 +399,7 @@ task bbduk_se {
     String samplename
     String docker = "quay.io/staphb/bbtools:38.76"
     Int memory = 8
+    Int disk_size = 100
     File? adapters
     File? phix
   }
@@ -423,7 +440,8 @@ task bbduk_se {
     docker: "~{docker}"
     memory: "~{memory} GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

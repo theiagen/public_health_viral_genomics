@@ -6,6 +6,8 @@ task demultiplexing {
     String? run_prefix = "artic_ncov2019"
     Int? normalise = 200
     Int? cpu = 8
+    Int disk_size = 100
+    
   }
   command <<<
     guppy_barcoder -t \~cpu --require_barcodes_both_ends -i . -s . --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg  barcode_arrs_nb96.cfg" -q 0 -r
@@ -18,7 +20,8 @@ task demultiplexing {
     docker: "genomicpariscentre/guppy"
     memory: "16 GB"
     cpu: 8
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -32,6 +35,7 @@ task read_filtering {
     Int? min_length = 400
     Int? max_length = 700
     Int? cpu = 8
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -48,7 +52,8 @@ task read_filtering {
     docker: "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
     memory: "16 GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -62,6 +67,7 @@ task consensus {
     File? reference_genome
     Int? normalise = 20000
     Int? cpu = 8
+    Int disk_size = 100
     String medaka_model = "r941_min_high_g360"
     String docker = "quay.io/staphb/artic-ncov2019-epi2me"
   }
@@ -118,7 +124,8 @@ task consensus {
     docker: "~{docker}"
     memory: "16 GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

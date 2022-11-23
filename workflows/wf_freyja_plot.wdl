@@ -42,6 +42,7 @@ task freyja_plot_task {
     Int plot_day_window=14
     String freyja_plot_name
     String docker = "quay.io/staphb/freyja:1.3.10"
+    Int disk_size = 100
   }
   command <<<
   # capture version
@@ -113,6 +114,7 @@ task freyja_plot_task {
     memory: "4 GB"
     cpu: 2
     docker: "~{docker}"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }

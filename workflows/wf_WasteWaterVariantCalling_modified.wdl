@@ -99,6 +99,7 @@ task add_RG {
   input {
     String sample_id
     File bam
+    Int disk_size = 100
   }
   command <<<
                       
@@ -112,7 +113,8 @@ task add_RG {
     docker: "quay.io/staphb/samtools:1.10"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -121,6 +123,7 @@ task variant_calling {
     String sample_id
     File bam
     File ref
+    Int disk_size = 200
   }
   command <<<
       
@@ -134,7 +137,8 @@ task variant_calling {
     docker: "wgspipeline/freebayes:v0.0.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 200 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -142,6 +146,7 @@ task sort_vcf {
   input {
     String sample_id
     File vcf
+    Int disk_size = 100
   }
   command <<<
       
@@ -159,7 +164,8 @@ task sort_vcf {
     docker: "quay.io/biocontainers/bcftools:1.10.2--hd2cd319_0"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -168,6 +174,7 @@ task sample_spike {
     File vcf
     File bed
     String sample_id
+    Int disk_size = 100
   }
   command <<<
       
@@ -183,7 +190,8 @@ task sample_spike {
     docker: "quay.io/biocontainers/bcftools:1.10.2--hd2cd319_0"
     memory: "16 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -192,6 +200,7 @@ task vcf2tsv {
     File vcf
     File bed
     String sample_id
+    Int disk_size = 100
   }
   command <<<
   
@@ -209,7 +218,8 @@ task vcf2tsv {
     docker: "quay.io/biocontainers/bcftools:1.10.2--hd2cd319_0"
     memory: "16 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -218,6 +228,7 @@ task fill_NA {
     File tsv
     String sample_id
     File spike_bed
+    Int disk_size = 200
   }
   command <<<    
       
@@ -238,7 +249,8 @@ task fill_NA {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 200 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -246,6 +258,7 @@ task allele_freq {
   input {
     File tsv
     String sample_id
+    Int disk_size = 200
   }
   command <<<    
       
@@ -263,7 +276,8 @@ task allele_freq {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 200 HDD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -271,6 +285,7 @@ task reformat_tsv {
   input {
     File tsv
     String sample_id
+    Int disk_size = 200
   }
   command <<<    
 
@@ -297,7 +312,8 @@ task reformat_tsv {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 200 HDD"
+   disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -306,6 +322,7 @@ task summary_prep {
     File tsv
     String sample_id
     File spike_annotations
+    Int disk_size = 200
   }
   command <<<    
       
@@ -334,7 +351,8 @@ task summary_prep {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "32 GB"
     cpu: 8
-    disks: "local-disk 200 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }
 task dashboard_tsv {
@@ -343,6 +361,7 @@ task dashboard_tsv {
     Array[File] tsv_dash
     Array[File] tsv_counts
     File spike_annotations
+    Int disk_size = 200
   }
   command <<<
       
@@ -368,13 +387,15 @@ task dashboard_tsv {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "16 GB"
     cpu: 4
-    disks: "local-disk 200 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
 
 task summary_tsv {
   input {
     File tsv
+    Int disk_size = 200
   }
   command <<<
       
@@ -389,6 +410,7 @@ task summary_tsv {
     docker: "rapatsky/debian"
     memory: "16 GB"
     cpu: 4
-    disks: "local-disk 200 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
   }
 }
