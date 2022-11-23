@@ -1,13 +1,13 @@
 version 1.0
 
-task sm_metadata_wrangling {
+task sm_metadata_wrangling { # the sm stands for supermassive
   input {
     String table_name
     String workspace_name
     String project_name
     File? input_table
     Array[String] sample_names
-    String organism = "SARS-CoV-2"
+    String organism = "sars-cov-2"
     String output_name
     Int vadr_alert_limit = 0 # only for SC2
 
@@ -48,7 +48,7 @@ task sm_metadata_wrangling {
 
       return table, excluded_samples
 
-    # read export table into pandas
+    # read exported Terra table into pandas
     tablename = ~{table_name}-data.tsv 
     table = pd.read_csv(tablename, delimiter='\t', header=0)
 
@@ -57,7 +57,7 @@ task sm_metadata_wrangling {
 
     # set required and optional metadata fields based on the organism type
     ## work out what to do with the optional biosample_accession and gisaid_organism variable as those currently have default values.
-    if ("~{organism}" == "SARS-CoV-2"):
+    if ("~{organism}" == "sars-cov-2"):
       # perform vadr alert check
       table.drop(table.index[table["vadr_num_alerts"] > ~{vadr_alert_limit}], inplace=True)
 
@@ -74,9 +74,8 @@ task sm_metadata_wrangling {
 
       # TYPE IS BETACORONAVIRUS
       # ORGANISM = hCoV-19  
-      gisaid_required = ["gisaid_submitter", "organism", "country", "submission_id", "year", "type", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "organism", "submission_id", "type", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
-
 
       required_metadata = biosample_required + sra_required + genbank_required + gisaid_required
 
@@ -95,11 +94,11 @@ task sm_metadata_wrangling {
       sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
       sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-      # ADD BIOPROJECT_ACCESSION TO FASTA HEADER
+      # ADD BIOPROJECT_ACCESSION TO FASTA HEADER (?)
       bankit_required = ["submission_id", "isolate", "collection_date", "country", "host"]
       bankit_optional = ["isolation_source", "passage_details"]
 
-      gisaid_required = ["gisaid_submitter", "organism", "country", "submission_id", "year", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "organism", "submission_id", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       # remove all rows with NAs in required columns and capture which rows and columns have those NAs
@@ -113,7 +112,7 @@ task sm_metadata_wrangling {
           biosample_metadata[column] = table[column]
         else:
           biosample_metadata[column] = ""
-      biosample_metadata.rename(columns={"submission_id" : "sample_name", "" : ""}, inplace=True)
+      biosample_metadata.rename(columns={"submission_id" : "sample_name"}, inplace=True)
 
       sra_metadata = table[[sra_required]].copy()
       for column in sra_optional:
@@ -138,29 +137,31 @@ task sm_metadata_wrangling {
         else:
           gisaid_metadata[column] = "" 
 
-
-
-      # now have full table with all possible columns
-      # then we can rename any old header
-      # using fancy dictionary
-
-
-      # create gisaid-specific variables
+      # create gisaid-specific variables; drop variables that are not included in gisaid metadata
       gisaid_metadata["year"] = df.apply(year_getter(gisaid_metadata["collection_date"]))
       gisaid_metadata["pox_virus_name"] = (gisaid_metadata["organism"] + "/" + gisaid_metadata["country"] + "/" + gisaid_metadata["submission_id"] + "/" + gisaid_metadata["year"])
       gisaid_metadata["pox_location"] = (gisaid_metadata["continent"] + " / " + gisaid_metadata["country"] + " / " + gisaid_metadata["state"]) 
-      gisaid_metadata.drop("year", "continent", "country", "state"], axis=1)
+      gisaid_metadata.drop("organism", "submission_id", "year", "continent", "country", "state"], axis=1)
       if gisaid_metadata["county"]:
         gisaid_metadata["pox_location"] = (gisaid_metadata["pox_location"] + " / " + gisaid_optional["county"])
         gisaid_metadata.drop(["county"], axis=1)
 
+      # rename assembly files
+
+      # make dictionary for renaming headers
+      gisaid_rename_headers = {"submitter": "gisaid_submitter", "pox_passage" :"passage_details", "pox_collection_date" : "collection_date", "pox_seq_technology" : "seq_platform", "host" : "pox_host", "pox_assembly_method" : "assembly_method", "pox_coverage" : "assembly_mean_coverage", "pox_orig_lab" : "collecting_lab", "pox_orig_lab_addr" : "collecting_lab_address", "pos_subm_lab" : "submitting_lab", "pox_subm_lab_addr" : "submitting_lab_address", "pox_authors" : "authors", "pox_sampling_strategy" : "purpose_of_sequencing", "pox_gender" : "patient_gender", "pox_patient_age" : "patient_age", "pox_patient_status" : "patient_status", "pox_specimen_source" : "specimen_source", "pox_outbreak" : "outbreak", "pox_last_vaccinated" : "last_vaccinated", "pox_treatment" : "treatment"}
+      
+      # rename columns
+      gisaid_metadata.rename(columns=gisaid_rename_headers, inplace=True)
+
       # gisaid output file 
       gisaid_out = open("~{output_name}_gisaid_metadata.csv", "w")
-      gisaid_out.write("submitter,fn,pox_virus_name,pox_passage,pox_collection_date,pox_location,pox_add_location,pox_host,pox_add_host_info,pox_sampling_strategy,pox_gender,pox_patient_age,pox_patient_status,pox_specimen,pox_outbreak,pox_last_vaccinated,pox_treatment,pox_seq_technology,pox_assembly_method,pox_coverage,pox_orig_lab,pox_orig_lab_addr,pox_provider_sample_id,pox_subm_lab,pox_subm_lab_addr,pox_subm_sample_id,pox_authors")
-      gisaid_out.write("Submitter,FASTA filename,Virus name,Passage details/history,Collection date,Location,Additional location information,Host,Additional host information,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Depth of coverage,Originating lab,Address,Sample ID given by the sample provider,Submitting lab,Address,Sample ID given by the submitting laboratory,Authors")
-      # how to ensure each column gets written in the correct order??
+      gisaid_out.write("submitter,fn,pox_virus_name,pox_passage,pox_collection_date,pox_location,pox_host,pox_sampling_strategy,pox_gender,pox_patient_age,pox_patient_status,pox_specimen,pox_outbreak,pox_last_vaccinated,pox_treatment,pox_seq_technology,pox_assembly_method,pox_coverage,pox_orig_lab,pox_orig_lab_addr,pox_subm_lab,pox_subm_lab_addr,pox_authors")
+      gisaid_out.write("Submitter,FASTA filename,Virus name,Passage details/history,Collection date,Location,Host,Sampling Strategy,Gender,Patient age,Patient status,Specimen source,Outbreak,Last vaccinated,Treatment,Sequencing technology,Assembly method,Depth of coverage,Originating lab,Address,Submitting lab,Address,Authors")
+      # how to ensure each column gets written in the correct order?? -- this doesn't matter
 
-      
+
+
 
 
 
@@ -170,17 +171,11 @@ task sm_metadata_wrangling {
       sra_metadata_df_clean.to_csv('sra_metadata.tsv', sep="\t")
       bankit_metadata_df_clean.to_csv('genbank_metadata.tsv', sep="\t")
       gisaid_metadata_df_clean.to_csv('gisaid_metadata.tsv', sep="\t")
-      # print blank headers list to tsvs
-      biosample_blank_col_headers.to_csv('biosample_blank_col_headers.tsv', sep="\t")
-      sra_blank_col_headers.to_csv('sra_blank_col_headers.tsv', sep="\t")
-      bankit_blank_col_headers.to_csv('bankit_blank_col_headers.tsv', sep="\t")
-      gisaid_blank_col_headers.to_csv('gisaid_blank_col_headers.tsv', sep="\t")
-
 
     else:
       raise Exception('Only "SARS-CoV-2" and "MPXV" are supported as acceptable input for the \'organism\' variable at this time. You entered "~{organism}".')
   
-      >> # END PYTHON CODE
+    CODE
 
   >>>
   output {

@@ -7,7 +7,7 @@ workflow mercury_prep_n_batch {
   input {
 
   }
-  call submission.supermassive_file_wrangling {
+  call submission.sm_metadata_wrangling {
 
 
   }
