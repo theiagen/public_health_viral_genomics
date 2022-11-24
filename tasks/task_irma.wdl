@@ -45,7 +45,7 @@ task irma {
       echo "Read headers match IRMA formatting requirements"
     fi
     # run IRMA 
-    exit
+    
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
     # cat consensus assemblies
     cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
