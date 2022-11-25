@@ -45,10 +45,15 @@ task irma {
       echo "Read headers match IRMA formatting requirements"
     fi
     # run IRMA 
-    
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
-    # cat consensus assemblies
-    cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
+    # capture IRMA type
+    if compgen -G "~{samplename}/*fasta"; then
+      echo "Type_""$(basename "$(find ~{samplename}/*.fasta | head -n1 | cut -d_ -f1)")" > IRMA_TYPE
+      # cat consensus assemblies
+      cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
+    else
+      echo "No flu type predicted by IRMA" >> IRMA_TYPE
+    fi
     # rename IRMA outputs
     for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
       new_name="~{samplename}_"$(basename "${irma_out}" | cut -d "_" -f2- )
@@ -72,13 +77,14 @@ task irma {
     if ! [ -z "${subtype}" ]; then 
       echo "${subtype}" > IRMA_SUBTYPE
     else
-      echo "No subtype predicted by IRMA" >> IRMA_SUBTYPE
+      echo "No subtype predicted by IRMA" > IRMA_SUBTYPE
     fi
   >>>
   output {
     File irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
     File? seg4_ha_assembly = "~{samplename}_HA.fasta"
     Boolean ha_seg_exists = read_boolean("HA_SEG_EXISTS")
+    String irma_type = read_string("IRMA_TYPE")
     String irma_subtype = read_string("IRMA_SUBTYPE")
     Array[File] irma_assemblies = glob("~{samplename}*.fasta")
     Array[File] irma_vcfs = glob("~{samplename}*.vcf")

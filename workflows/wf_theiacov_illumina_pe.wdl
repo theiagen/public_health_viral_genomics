@@ -146,6 +146,12 @@ workflow theiacov_illumina_pe {
         nextclade_flu_vic_tag = nextclade_flu_vic_tag,
         nextclade_flu_yam_tag = nextclade_flu_yam_tag,
     }
+   call consensus_qc_task.consensus_qc as consensus_qc_flu {
+     input:
+     assembly_fasta =  irma.irma_assembly_fasta,
+     reference_genome = reference_genome,
+     genome_length = genome_length
+    }
     if (abricate_flu.run_nextclade && irma.ha_seg_exists) {
       call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
         input:
@@ -157,12 +163,6 @@ workflow theiacov_illumina_pe {
       call taxon_ID.nextclade_output_parser_one_sample as  nextclade_output_parser_one_sample_flu {
         input:
         nextclade_tsv = nextclade_one_sample_flu.nextclade_tsv
-      }
-      call consensus_qc_task.consensus_qc as consensus_qc_flu {
-        input:
-          assembly_fasta =  irma.irma_assembly_fasta,
-          reference_genome = reference_genome,
-          genome_length = genome_length
       }
     }
   }
@@ -246,15 +246,15 @@ workflow theiacov_illumina_pe {
     String? pangolin_docker = pangolin4.pangolin_docker
     String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    File nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json])
-    File auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json])
-    File nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv])
-    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version])
-    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker])
-    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels])
-    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade])
+    String nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json,""])
+    String auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json,""])
+    String nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv,""])
+    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version, ""])
+    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker, ""])
+    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag, ""])
+    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs, ""])
+    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels, ""])
+    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade, ""])
     String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
@@ -263,6 +263,7 @@ workflow theiacov_illumina_pe {
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
     # Flu Outputs
     String? irma_version = irma.irma_version
+    String? irma_type = irma.irma_type
     String? irma_subtype = irma.irma_subtype
     String? abricate_flu_type = abricate_flu.abricate_flu_type
     String? abricate_flu_subtype =  abricate_flu.abricate_flu_subtype
