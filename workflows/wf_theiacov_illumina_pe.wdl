@@ -146,10 +146,10 @@ workflow theiacov_illumina_pe {
         nextclade_flu_vic_tag = nextclade_flu_vic_tag,
         nextclade_flu_yam_tag = nextclade_flu_yam_tag,
     }
-    if (abricate_flu.run_nextclade) {
+    if (abricate_flu.run_nextclade && irma.ha_seg_exists) {
       call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
         input:
-          genome_fasta = irma.seg4_ha_assembly,
+          genome_fasta = select_first([irma.seg4_ha_assembly]),
           dataset_name = abricate_flu.nextclade_name,
           dataset_reference = abricate_flu.nextclade_ref,
           dataset_tag = abricate_flu.nextclade_ds_tag
@@ -263,6 +263,7 @@ workflow theiacov_illumina_pe {
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
     # Flu Outputs
     String? irma_version = irma.irma_version
+    String? irma_subtype = irma.irma_subtype
     String? abricate_flu_type = abricate_flu.abricate_flu_type
     String? abricate_flu_subtype =  abricate_flu.abricate_flu_subtype
     File? abricate_flu_results = abricate_flu.abricate_flu_results

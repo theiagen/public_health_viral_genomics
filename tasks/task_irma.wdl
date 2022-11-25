@@ -51,14 +51,35 @@ task irma {
     cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
     # rename IRMA outputs
     for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
-      new_name=$(basename "${irma_out}" | awk -F "_" '{print "'~{samplename}_'"$2'})
+      new_name="~{samplename}_"$(basename "${irma_out}" | cut -d "_" -f2- )
+      echo "New name: ${new_name}; irma_out: ${irma_out}"
       mv "${irma_out}" "${new_name}"
     done
-    
+    # capture type A subtype
+    if compgen -G "~{samplename}_HA*.fasta"; then
+      echo "true" > HA_SEG_EXISTS
+      if [[ "$(ls ~{samplename}_HA*.fasta)" == *"HA_H"* ]]; then 
+       subtype="$(basename ~{samplename}_HA*.fasta | awk -F _ '{print $3}' | cut -d. -f1)"
+      fi
+      # format HA segment to target output name
+      mv "~{samplename}"_HA*.fasta "~{samplename}"_HA.fasta
+    else
+      echo "false" > HA_SEG_EXISTS
+    fi
+    if compgen -G "~{samplename}_NA*.fasta" || [[ "$(ls ~{samplename}_NA*.fasta)" == *"NA_H"* ]]; then
+       subtype+="$(basename ~{samplename}_NA*.fasta | awk -F _ '{print $3}' | cut -d. -f1)"
+    fi
+    if ! [ -z "${subtype}" ]; then 
+      echo "${subtype}" > IRMA_SUBTYPE
+    else
+      echo "No subtype predicted by IRMA" >> IRMA_SUBTYPE
+    fi
   >>>
   output {
     File irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
-    File seg4_ha_assembly = "~{samplename}_HA.fasta"
+    File? seg4_ha_assembly = "~{samplename}_HA.fasta"
+    Boolean ha_seg_exists = read_boolean("HA_SEG_EXISTS")
+    String irma_subtype = read_string("IRMA_SUBTYPE")
     Array[File] irma_assemblies = glob("~{samplename}*.fasta")
     Array[File] irma_vcfs = glob("~{samplename}*.vcf")
     Array[File] irma_bams = glob("~{samplename}*.bam")
