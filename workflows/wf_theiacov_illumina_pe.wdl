@@ -218,7 +218,7 @@ workflow theiacov_illumina_pe {
     File? ivar_vcf = variant_call.sample_variants_vcf
     String? ivar_variant_version = variant_call.ivar_version
     # Assembly QC
-    String assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta,])
+    String assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta,""])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
     Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N,0])
