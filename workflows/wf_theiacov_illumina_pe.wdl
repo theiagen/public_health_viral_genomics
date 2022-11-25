@@ -218,14 +218,14 @@ workflow theiacov_illumina_pe {
     File? ivar_vcf = variant_call.sample_variants_vcf
     String? ivar_variant_version = variant_call.ivar_version
     # Assembly QC
-    File assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta])
+    String assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta,])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
-    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N, 0])
-    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG, 0])
-    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate, 0])
-    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total, 0])
-    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage, 0.0])
+    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N,0])
+    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG,0])
+    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate,0])
+    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total,0])
+    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage,0.0])
     Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File? consensus_stats = stats_n_coverage.stats
@@ -251,12 +251,12 @@ workflow theiacov_illumina_pe {
     String nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json,""])
     String auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json,""])
     String nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv,""])
-    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version, ""])
-    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker, ""])
-    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag, ""])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs, ""])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels, ""])
-    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade, ""])
+    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version,""])
+    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker,""])
+    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag,""])
+    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs,""])
+    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels,""])
+    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade,""])
     String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
