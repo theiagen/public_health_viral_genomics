@@ -53,7 +53,7 @@ task irma {
       # cat consensus assemblies
       cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
     else
-      echo "No flu type predicted by IRMA due to poor assembly" >> IRMA_TYPE
+      echo "No IRMA assembly generated for flu type prediction" >> IRMA_TYPE
       echo "false" > IRMA_ASSEMBLY_EXISTS
     fi
     # rename IRMA outputs
