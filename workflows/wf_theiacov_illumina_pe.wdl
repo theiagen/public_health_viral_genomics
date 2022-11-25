@@ -137,32 +137,34 @@ workflow theiacov_illumina_pe {
         read2 = read_QC_trim.read2_clean,
         samplename = samplename,
     }
-    call abricate_flu.abricate_flu {
-      input:
-        assembly = irma.irma_assembly_fasta,
-        samplename = samplename,
-        nextclade_flu_h1n1_tag = nextclade_flu_h1n1_tag,
-        nextclade_flu_h3n2_tag = nextclade_flu_h3n2_tag,
-        nextclade_flu_vic_tag = nextclade_flu_vic_tag,
-        nextclade_flu_yam_tag = nextclade_flu_yam_tag,
-    }
-   call consensus_qc_task.consensus_qc as consensus_qc_flu {
-     input:
-     assembly_fasta =  irma.irma_assembly_fasta,
-     reference_genome = reference_genome,
-     genome_length = genome_length
-    }
-    if (abricate_flu.run_nextclade && irma.ha_seg_exists) {
-      call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
+    if (irma.irma_assembly_exists) {
+      call abricate_flu.abricate_flu {
         input:
-          genome_fasta = select_first([irma.seg4_ha_assembly]),
-          dataset_name = abricate_flu.nextclade_name,
-          dataset_reference = abricate_flu.nextclade_ref,
-          dataset_tag = abricate_flu.nextclade_ds_tag
+          assembly = select_first([irma.irma_assembly_fasta]),
+          samplename = samplename,
+          nextclade_flu_h1n1_tag = nextclade_flu_h1n1_tag,
+          nextclade_flu_h3n2_tag = nextclade_flu_h3n2_tag,
+          nextclade_flu_vic_tag = nextclade_flu_vic_tag,
+          nextclade_flu_yam_tag = nextclade_flu_yam_tag,
       }
-      call taxon_ID.nextclade_output_parser_one_sample as  nextclade_output_parser_one_sample_flu {
-        input:
-        nextclade_tsv = nextclade_one_sample_flu.nextclade_tsv
+      call consensus_qc_task.consensus_qc as consensus_qc_flu {
+       input:
+       assembly_fasta =  select_first([irma.irma_assembly_fasta]),
+       reference_genome = reference_genome,
+       genome_length = genome_length
+      }
+      if (abricate_flu.run_nextclade && irma.ha_seg_exists) {
+        call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
+          input:
+            genome_fasta = select_first([irma.seg4_ha_assembly]),
+            dataset_name = abricate_flu.nextclade_name,
+            dataset_reference = abricate_flu.nextclade_ref,
+            dataset_tag = abricate_flu.nextclade_ds_tag
+        }
+        call taxon_ID.nextclade_output_parser_one_sample as  nextclade_output_parser_one_sample_flu {
+          input:
+          nextclade_tsv = nextclade_one_sample_flu.nextclade_tsv
+        }
       }
     }
   }
@@ -219,11 +221,11 @@ workflow theiacov_illumina_pe {
     File assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
-    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N])
-    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG])
-    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate])
-    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total])
-    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage])
+    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N, 0])
+    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG, 0])
+    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate, 0])
+    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total, 0])
+    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage, 0.0])
     Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File? consensus_stats = stats_n_coverage.stats

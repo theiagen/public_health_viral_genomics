@@ -49,10 +49,12 @@ task irma {
     # capture IRMA type
     if compgen -G "~{samplename}/*fasta"; then
       echo "Type_""$(basename "$(find ~{samplename}/*.fasta | head -n1 | cut -d_ -f1)")" > IRMA_TYPE
+      echo "true" > IRMA_ASSEMBLY_EXISTS
       # cat consensus assemblies
       cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
     else
-      echo "No flu type predicted by IRMA" >> IRMA_TYPE
+      echo "No flu type predicted by IRMA due to poor assembly" >> IRMA_TYPE
+      echo "false" > IRMA_ASSEMBLY_EXISTS
     fi
     # rename IRMA outputs
     for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
@@ -81,7 +83,8 @@ task irma {
     fi
   >>>
   output {
-    File irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
+    Boolean irma_assembly_exists = read_boolean("IRMA_ASSEMBLY_EXISTS")
+    File? irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
     File? seg4_ha_assembly = "~{samplename}_HA.fasta"
     Boolean ha_seg_exists = read_boolean("HA_SEG_EXISTS")
     String irma_type = read_string("IRMA_TYPE")
