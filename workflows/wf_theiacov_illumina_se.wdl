@@ -97,6 +97,9 @@ workflow theiacov_illumina_se {
   if (organism == "MPXV") {
     # MPXV specific tasks
   }
+  if (organism == "WNV") {
+    # WNV specific tasks (none yet, just adding as placeholder for future)
+  }
   if (organism == "MPXV" || organism == "sars-cov-2"){
     # tasks specific to either MPXV or sars-cov-2
     call taxon_ID.nextclade_one_sample {
@@ -110,6 +113,9 @@ workflow theiacov_illumina_se {
       input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
     }
+  }
+  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+    # tasks specific to MPXV, sars-cov-2, and WNV
     call ncbi.vadr {
       input:
         genome_fasta = consensus.consensus_seq,
