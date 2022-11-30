@@ -34,6 +34,7 @@ task compare_two_tsvs {
     File datatable2_tsv
     String? out_dir
     String? out_prefix
+    Int disk_size = 10
   }
   command <<<
     compare-data-tables.py ~{datatable1_tsv} ~{datatable2_tsv} --outdir ~{out_dir} --prefix ~{out_prefix}
