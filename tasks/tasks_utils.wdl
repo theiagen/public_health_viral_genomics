@@ -8,6 +8,7 @@ task concatenate {
         Array[File] infiles
         String      output_name
         Int         cpus = 4
+        Int disk_size = 375
     }
     command {
         cat ~{sep=" " infiles} > "~{output_name}"
@@ -16,7 +17,8 @@ task concatenate {
         docker: "ubuntu"
         memory: "1 GB"
         cpu:    cpus
-        disks: "local-disk 375 LOCAL"
+        disks:  "local-disk " + disk_size + " LOCAL"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
@@ -32,6 +34,7 @@ task zcat {
         Array[File] infiles
         String      output_name
         Int         cpus = 4
+        Int disk_size = 375
     }
     command <<<
         python3 <<CODE
@@ -124,7 +127,8 @@ task zcat {
         docker: "quay.io/broadinstitute/viral-core:2.1.33"
         memory: "1 GB"
         cpu:    cpus
-        disks: "local-disk 375 LOCAL"
+        disks:  "local-disk " + disk_size + " LOCAL"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
@@ -141,6 +145,7 @@ task fasta_to_ids {
     }
     input {
         File sequences_fasta
+        Int disk_size = 375
     }
     String basename = basename(sequences_fasta, ".fasta")
     command {
@@ -150,7 +155,8 @@ task fasta_to_ids {
         docker: "ubuntu"
         memory: "1 GB"
         cpu:    1
-        disks: "local-disk 375 LOCAL"
+        disks:  "local-disk " + disk_size + " LOCAL"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
@@ -161,6 +167,7 @@ task fasta_to_ids {
 task md5sum {
   input {
     File in_file
+    Int disk_size = 100
   }
   command {
     md5sum ~{in_file} | cut -f 1 -d ' ' | tee MD5
@@ -172,7 +179,8 @@ task md5sum {
     docker: "ubuntu"
     memory: "1 GB"
     cpu: 1
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd2_v2_x2"
   }
 }
@@ -183,6 +191,7 @@ task fetch_row_from_tsv {
     String        idx_col
     String        idx_val
     Array[String] set_default_keys = []
+    Int disk_size = 50
   }
   command <<<
     python3 << CODE
@@ -208,7 +217,8 @@ task fetch_row_from_tsv {
     docker: "python:slim"
     memory: "1 GB"
     cpu: 1
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -220,6 +230,7 @@ task fetch_col_from_tsv {
     Boolean       drop_empty = true
     Boolean       drop_header = true
     String        out_name = "~{basename(basename(tsv, '.txt'), '.tsv')}-~{col}.txt"
+    Int disk_size = 50
   }
   command <<<
     python3 << CODE
@@ -245,7 +256,8 @@ task fetch_col_from_tsv {
     docker: "python:slim"
     memory: "1 GB"
     cpu: 1
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -261,6 +273,7 @@ task tsv_join {
     String         out_basename = "merged"
     String         out_suffix = ".txt"
     Int            machine_mem_gb = 7
+    Int disk_size = 100
   }
 
   command <<<
@@ -365,7 +378,8 @@ task tsv_join {
     memory: "~{machine_mem_gb} GB"
     cpu: 2
     docker: "quay.io/broadinstitute/viral-core:2.1.33"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 2
   }
@@ -375,6 +389,7 @@ task tsv_to_csv {
   input {
     File   tsv
     String out_basename = basename(basename(tsv, '.tsv'), '.txt')
+    Int disk_size = 50
   }
 
   command <<<
@@ -398,7 +413,8 @@ task tsv_to_csv {
     memory: "2 GB"
     cpu: 1
     docker: "python:slim"
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -413,6 +429,7 @@ task tsv_drop_cols {
         Array[String] drop_cols
         String        out_filename = basename(in_tsv, '.tsv') + ".drop.tsv"
         String        docker = "quay.io/broadinstitute/py3-bio:0.1.2"
+        Int disk_size = 50
     }
     command <<<
         set -e
@@ -430,7 +447,8 @@ task tsv_drop_cols {
         docker: docker
         memory: "2 GB"
         cpu:    1
-        disks: "local-disk 50 HDD"
+        disks:  "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {
@@ -444,6 +462,7 @@ task tsv_stack {
     Array[File]+ input_tsvs
     String       out_basename
     String       docker = "quay.io/broadinstitute/viral-core:2.1.33"
+    Int disk_size = 50
   }
 
   command {
@@ -461,7 +480,8 @@ task tsv_stack {
     memory: "1 GB"
     cpu: 1
     docker: "${docker}"
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -469,6 +489,7 @@ task tsv_stack {
 task make_empty_file {
   input {
     String out_filename
+    Int disk_size = 10
   }
   command {
     touch "~{out_filename}"
@@ -480,7 +501,8 @@ task make_empty_file {
     memory: "1 GB"
     cpu: 1
     docker: "ubuntu"
-    disks: "local-disk 10 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -489,6 +511,7 @@ task rename_file {
   input {
     File   infile
     String out_filename
+    Int disk_size = 100
   }
   command {
     ln -s "~{infile}" "~{out_filename}"
@@ -500,7 +523,8 @@ task rename_file {
     memory: "1 GB"
     cpu: 1
     docker: "ubuntu"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -508,6 +532,7 @@ task rename_file {
 task today {
   input {
     String? timezone
+    Int disk_size = 10
   }
   meta {
     volatile: true
@@ -523,7 +548,8 @@ task today {
     memory: "1 GB"
     cpu: 1
     docker: "quay.io/broadinstitute/viral-baseimage:0.1.20"
-    disks: "local-disk 10 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
   }
 }
@@ -534,6 +560,7 @@ task s3_copy {
     String      s3_uri_prefix
     File        aws_credentials
     String?     nop_block # optional ignored input just to allow blocking
+    Int disk_size = 1000
   }
   meta {
     description: "aws s3 cp"
@@ -556,7 +583,8 @@ task s3_copy {
     docker: "quay.io/broadinstitute/viral-baseimage:0.1.20"
     memory: "2 GB"
     cpu: 2
-    disks: "local-disk 1000 HDD"
+        disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }
 
@@ -569,6 +597,7 @@ task filter_sequences_by_length {
         Int    min_non_N = 1
 
         String docker = "quay.io/broadinstitute/viral-core:2.1.33"
+        Int disk_size = 300
     }
     parameter_meta {
         sequences_fasta: {
@@ -608,7 +637,8 @@ task filter_sequences_by_length {
         docker: docker
         memory: "1 GB"
         cpu :   1
-        disks:  "local-disk 300 HDD"
+        disks:  "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
     }
     output {

@@ -8,6 +8,7 @@ task kraken2 {
     String kraken2_db = "/kraken2-db"
     Int cpu = 4
     String? target_org
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -56,7 +57,8 @@ task kraken2 {
     docker: "quay.io/staphb/kraken2:2.0.8-beta_hv"
     memory: "8 GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -70,6 +72,7 @@ task pangolin3 {
     Float max_ambig = 0.5
     String docker = "quay.io/staphb/pangolin:3.1.20-pangolearn-2022-02-02"
     String inference_engine = "usher"
+    Int disk_size = 100
   }
   command <<<
     set -e
@@ -128,7 +131,8 @@ task pangolin3 {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -146,6 +150,7 @@ task pangolin4 {
     Boolean skip_scorpio=false
     Boolean skip_designation_cache=false
     String? pangolin_arguments
+    Int disk_size = 100
   }
   command <<<
     set -e
@@ -205,7 +210,8 @@ task pangolin4 {
     docker: "~{docker}"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -224,6 +230,7 @@ task pangolin_update_log {
     String updated_pangolin_versions
     String? timezone
     File? lineage_log
+    Int disk_size = 100
   }
   command <<<
     # set timezone for date outputs
@@ -270,7 +277,8 @@ task pangolin_update_log {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -292,6 +300,7 @@ task nextclade_one_sample {
       String dataset_name
       String dataset_reference
       String dataset_tag
+      Int disk_size = 50
     }
     String basename = basename(genome_fasta, ".fasta")
     command <<<
@@ -318,7 +327,8 @@ task nextclade_one_sample {
       docker: "~{docker}"
       memory: "4 GB"
       cpu: 2
-      disks: "local-disk 50 HDD"
+      disks:  "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB" # TES
       dx_instance_type: "mem1_ssd1_v2_x2"
       maxRetries: 3 
     }
@@ -338,6 +348,7 @@ task nextclade_output_parser_one_sample {
     input {
       File nextclade_tsv
       String docker = "python:slim"
+      Int disk_size = 50
     }
     command <<<
       # Set WDL input variable to input.tsv file
@@ -390,7 +401,8 @@ task nextclade_output_parser_one_sample {
       docker: "~{docker}"
       memory: "4 GB"
       cpu: 2
-      disks: "local-disk 50 HDD"
+      disks:  "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB" # TES
       dx_instance_type: "mem1_ssd1_v2_x2"
       maxRetries: 3
     }
@@ -416,6 +428,7 @@ task freyja_one_sample {
     Int? number_bootstraps
     Int memory = 4
     String docker = "staphb/freyja:1.3.10"
+    Int disk_size = 100
   }
   command <<<
   # capture version
@@ -490,7 +503,8 @@ task freyja_one_sample {
     memory: "~{memory} GB"
     cpu: 2
     docker: "~{docker}"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     maxRetries: 3
   }
   output {

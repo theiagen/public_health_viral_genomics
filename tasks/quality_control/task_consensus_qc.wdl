@@ -4,6 +4,7 @@ task consensus_qc {
   input {
     File assembly_fasta
     File? reference_genome
+    Int disk_size = 100
   }
   command <<<
     if [ ~{reference_genome} ] ; then
@@ -46,7 +47,8 @@ task consensus_qc {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "2 GB"
     cpu: 1
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
   }
 }

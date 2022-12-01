@@ -6,6 +6,7 @@ task primer_trim {
     String samplename
     File primer_bed
     Boolean? keep_noprimer_reads = true
+    Int disk_size = 100
   }
   String primer_name = basename(primer_bed)
   command <<<
@@ -47,7 +48,8 @@ task primer_trim {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory:"8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -66,6 +68,7 @@ task variant_call {
     Int? min_qual = "20"
     Float? min_freq = "0.6"
     Int? variant_min_depth 
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -127,7 +130,8 @@ task variant_call {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -146,6 +150,7 @@ task consensus {
     Float? min_freq = "0.6"
     Int? consensus_min_depth
     String? char_unknown = "N"
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -192,7 +197,8 @@ task consensus {
     docker: "quay.io/staphb/ivar:1.3.1-titan"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

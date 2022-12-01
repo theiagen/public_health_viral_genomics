@@ -7,6 +7,7 @@ task fastqc {
     String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
     String read2_name = basename(basename(basename(read2, ".gz"), ".fastq"), ".fq")
     Int? cpu = 2
+    Int disk_size = 100
   }
   command <<<
     # capture date and version
@@ -43,7 +44,8 @@ task fastqc {
     docker: "quay.io/staphb/fastqc:0.11.9"
     memory: "4 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -54,6 +56,7 @@ task fastqc_se {
     File read1
     String read1_name = basename(basename(basename(read1, ".gz"), ".fastq"), ".fq")
     Int? cpu = 2
+    Int disk_size = 100
   }
   command <<<
     # capture date and version
@@ -79,7 +82,8 @@ task fastqc_se {
     docker: "quay.io/staphb/fastqc:0.11.8"
     memory: "4 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

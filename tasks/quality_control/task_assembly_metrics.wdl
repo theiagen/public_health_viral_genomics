@@ -4,6 +4,7 @@ task stats_n_coverage {
   input {
     File bamfile
     String samplename
+    Int disk_size = 100
   }
   command <<<
     date | tee DATE
@@ -46,7 +47,8 @@ task stats_n_coverage {
     docker: "quay.io/staphb/samtools:1.15"
     memory: "8 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
