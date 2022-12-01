@@ -105,16 +105,6 @@ workflow theiacov_illumina_pe {
           min_depth = min_depth
       }
     }
-  }
-  if (organism == "MPXV" || organism == "sars-cov-2"){ 
-    # tasks specific to either MPXV or sars-cov-2
-    call taxon_ID.nextclade_one_sample {
-
-    
-    
-    if (organism == "MPXV") {
-      # MPXV specific tasks
-    }
     if (organism == "MPXV" || organism == "sars-cov-2"){ 
       # tasks specific to either MPXV or sars-cov-2
       call taxon_ID.nextclade_one_sample {
@@ -128,16 +118,15 @@ workflow theiacov_illumina_pe {
         input:
         nextclade_tsv = nextclade_one_sample.nextclade_tsv
       }
-      call 
-  }
-  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
-    # tasks specific to MPXV, sars-cov-2, and WNV
-    call ncbi.vadr {
-        input:
-          genome_fasta = consensus.consensus_seq,
-          assembly_length_unambiguous = consensus_qc.number_ATCG
-      }
     }
+    if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+      # tasks specific to MPXV, sars-cov-2, and WNV
+      call ncbi.vadr {
+          input:
+            genome_fasta = consensus.consensus_seq,
+            assembly_length_unambiguous = consensus_qc.number_ATCG
+        }
+      }
     String assembly_method_nonflu = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
   }
   if (organism == "flu"){
