@@ -60,7 +60,7 @@
       md5sum: 6923b89d36bc66e1cdfabfd1dedbea71
     - path: miniwdl_run/call-consensus/work/_miniwdl_inputs/0/SRR13687078.primertrim.sorted.bam
     - path: miniwdl_run/call-consensus_qc/command
-      md5sum: d5fc998f43a377440b0faf8d0f4ba7cd
+      md5sum: 41458058f774aab9504521b00d0b395b
     - path: miniwdl_run/call-consensus_qc/inputs.json
       contains: ["assembly_fasta", "SRR13687078"]
     - path: miniwdl_run/call-consensus_qc/outputs.json
@@ -588,7 +588,7 @@
     - path: miniwdl_run/wdl/tasks/quality_control/task_assembly_metrics.wdl
       md5sum: 40d8cc7efcb3bbc8e436d6051fb8bff5
     - path: miniwdl_run/wdl/tasks/quality_control/task_consensus_qc.wdl
-      md5sum: 94b0ef78cc59aa0ee98a8b16a3a3e281
+      md5sum: e76ad2bc6cb54317009119a0dc5b6892
     - path: miniwdl_run/wdl/tasks/quality_control/task_fastq_scan.wdl
       md5sum: ad792cf13cedc177a386965af6f45704
     - path: miniwdl_run/wdl/tasks/task_alignment.wdl
@@ -604,11 +604,11 @@
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
       md5sum: b027e1671929931f9c2ab4ba38696139
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: e794ae48800b45c9c180a1887348ad58
+      md5sum: 98490bb3a766c04c40bcbb04f1467e60
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 9769f7ff548537ed7d36c5d0df445416
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
-      md5sum: 649ddd2b110c6c3ae0a12d429f6f3306
+      md5sum: 4050906f979532ce7aa08ef6440f8e4d
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

@@ -83,7 +83,7 @@
     - path: miniwdl_run/call-consensus/work/primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
       md5sum: d5ad850f8c610dc45162957ab84530d6
     - path: miniwdl_run/call-consensus_qc/command
-      md5sum: c9792c9c9b26a0f62822d43f7555a587
+      md5sum: 7f3cdc3b91f707c2b43e6d81d6e6cf36
     - path: miniwdl_run/call-consensus_qc/inputs.json
       contains: ["assembly_fasta", "medaka"]
     - path: miniwdl_run/call-consensus_qc/outputs.json
@@ -482,7 +482,7 @@
     - path: miniwdl_run/wdl/tasks/quality_control/task_assembly_metrics.wdl
       md5sum: 40d8cc7efcb3bbc8e436d6051fb8bff5
     - path: miniwdl_run/wdl/tasks/quality_control/task_consensus_qc.wdl
-      md5sum: 94b0ef78cc59aa0ee98a8b16a3a3e281
+      md5sum: e76ad2bc6cb54317009119a0dc5b6892
     - path: miniwdl_run/wdl/tasks/quality_control/task_fastq_scan.wdl
       md5sum: ad792cf13cedc177a386965af6f45704
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
@@ -496,7 +496,7 @@
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
       md5sum: b027e1671929931f9c2ab4ba38696139
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: e794ae48800b45c9c180a1887348ad58
+      md5sum: 98490bb3a766c04c40bcbb04f1467e60
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
       md5sum: d19f035e33da9f0d1a5116a8730bc455
     - path: miniwdl_run/inputs.json
