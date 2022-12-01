@@ -73,7 +73,7 @@ task irma {
     else
       echo "false" > HA_SEG_EXISTS
     fi
-    if compgen -G "~{samplename}_NA*.fasta" || [[ "$(ls ~{samplename}_NA*.fasta)" == *"NA_H"* ]]; then
+    if compgen -G "~{samplename}_NA*.fasta" && [[ "$(ls ~{samplename}_NA*.fasta)" == *"NA_N"* ]]; then
        subtype+="$(basename ~{samplename}_NA*.fasta | awk -F _ '{print $3}' | cut -d. -f1)"
     fi
     if ! [ -z "${subtype}" ]; then 
