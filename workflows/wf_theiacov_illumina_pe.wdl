@@ -137,7 +137,7 @@ workflow theiacov_illumina_pe {
         read2 = read_QC_trim.read2_clean,
         samplename = samplename,
     }
-    if (irma.irma_assembly_exists) {
+    if (defined(irma.irma_assemblies)) {
       call abricate_flu.abricate_flu {
         input:
           assembly = select_first([irma.irma_assembly_fasta]),
@@ -153,7 +153,7 @@ workflow theiacov_illumina_pe {
        reference_genome = reference_genome,
        genome_length = genome_length
       }
-      if (abricate_flu.run_nextclade && irma.ha_seg_exists) {
+      if (abricate_flu.run_nextclade && defined(irma.seg4_ha_assembly)) {
         call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
           input:
             genome_fasta = select_first([irma.seg4_ha_assembly]),

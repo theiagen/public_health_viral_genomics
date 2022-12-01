@@ -48,13 +48,11 @@ task irma {
     IRMA "~{irma_module}" "${read1}" "${read2}" ~{samplename}
     # capture IRMA type
     if compgen -G "~{samplename}/*fasta"; then
-      echo "Type_""$(basename "$(find ~{samplename}/*.fasta | head -n1 | cut -d_ -f1)")" > IRMA_TYPE
-      echo "true" > IRMA_ASSEMBLY_EXISTS
+      echo "Type_"$(basename "$(echo "$(find ~{samplename}/*.fasta | head -n1)")" | cut -d_ -f1) > IRMA_TYPE
       # cat consensus assemblies
       cat ~{samplename}/*.fasta > ~{samplename}.irma.consensus.fasta
     else
       echo "No IRMA assembly generated for flu type prediction" >> IRMA_TYPE
-      echo "false" > IRMA_ASSEMBLY_EXISTS
     fi
     # rename IRMA outputs
     for irma_out in ~{samplename}/*{.vcf,.fasta,.bam}; do
@@ -64,14 +62,11 @@ task irma {
     done
     # capture type A subtype
     if compgen -G "~{samplename}_HA*.fasta"; then
-      echo "true" > HA_SEG_EXISTS
       if [[ "$(ls ~{samplename}_HA*.fasta)" == *"HA_H"* ]]; then 
-       subtype="$(basename ~{samplename}_HA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)"
+        subtype="$(basename ~{samplename}_HA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)"
       fi
       # format HA segment to target output name
       mv "~{samplename}"_HA*.fasta "~{samplename}"_HA.fasta
-    else
-      echo "false" > HA_SEG_EXISTS
     fi
     if compgen -G "~{samplename}_NA*.fasta" && [[ "$(ls ~{samplename}_NA*.fasta)" == *"NA_N"* ]]; then
        subtype+="$(basename ~{samplename}_NA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)"
@@ -83,10 +78,8 @@ task irma {
     fi
   >>>
   output {
-    Boolean irma_assembly_exists = read_boolean("IRMA_ASSEMBLY_EXISTS")
     File? irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
     File? seg4_ha_assembly = "~{samplename}_HA.fasta"
-    Boolean ha_seg_exists = read_boolean("HA_SEG_EXISTS")
     String irma_type = read_string("IRMA_TYPE")
     String irma_subtype = read_string("IRMA_SUBTYPE")
     Array[File] irma_assemblies = glob("~{samplename}*.fasta")
