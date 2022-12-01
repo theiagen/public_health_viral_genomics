@@ -49,6 +49,7 @@ task freyja_dashboard_task {
     String freyja_dashboard_title
     File? dashboard_intro_text
     String docker = "quay.io/staphb/freyja:1.3.10"
+    Int disk_size = 100
   }
   command <<<
   # capture version
@@ -132,6 +133,7 @@ task freyja_dashboard_task {
     memory: "4 GB"
     cpu: 2
     docker: "~{docker}"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
 }

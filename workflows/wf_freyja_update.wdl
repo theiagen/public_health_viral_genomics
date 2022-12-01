@@ -20,6 +20,7 @@ workflow freyja_update {
 task freyja_update_refs {
   input {
     String docker = "staphb/freyja:1.3.4"
+    Int disk_size = 100
   }
   meta {
     volatile: true
@@ -36,7 +37,8 @@ task freyja_update_refs {
     memory: "16 GB"
     cpu: 4
     docker: "~{docker}"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
   output {
     File updated_barcodes = "freyja_update_refs/usher_barcodes.csv"
@@ -50,6 +52,7 @@ task transfer_files {
     File updated_barcodes
     File updated_lineages
     File update_log
+    Int disk_size = 100
   }
   command <<<
   # transfer_files to specified gcp_uri
@@ -62,7 +65,8 @@ task transfer_files {
     memory: "4 GB"
     cpu: 2
     docker: "theiagen/utility:1.1"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
   }
   output {    
   }
