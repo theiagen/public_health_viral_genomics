@@ -105,6 +105,13 @@ workflow theiacov_illumina_pe {
           min_depth = min_depth
       }
     }
+  }
+  if (organism == "MPXV" || organism == "sars-cov-2"){ 
+    # tasks specific to either MPXV or sars-cov-2
+    call taxon_ID.nextclade_one_sample {
+
+    
+    
     if (organism == "MPXV") {
       # MPXV specific tasks
     }
@@ -112,16 +119,20 @@ workflow theiacov_illumina_pe {
       # tasks specific to either MPXV or sars-cov-2
       call taxon_ID.nextclade_one_sample {
         input:
-        genome_fasta = consensus.consensus_seq,
-        dataset_name = select_first([nextclade_dataset_name, organism]),
-        dataset_reference = nextclade_dataset_reference,
-        dataset_tag = nextclade_dataset_tag
+          genome_fasta = consensus.consensus_seq,
+          dataset_name = select_first([nextclade_dataset_name, organism]),
+          dataset_reference = nextclade_dataset_reference,
+          dataset_tag = nextclade_dataset_tag
       }
       call taxon_ID.nextclade_output_parser_one_sample {
         input:
         nextclade_tsv = nextclade_one_sample.nextclade_tsv
       }
-      call ncbi.vadr {
+      call 
+  }
+  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+    # tasks specific to MPXV, sars-cov-2, and WNV
+    call ncbi.vadr {
         input:
           genome_fasta = consensus.consensus_seq,
           assembly_length_unambiguous = consensus_qc.number_ATCG
