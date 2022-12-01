@@ -66,7 +66,7 @@ task irma {
     if compgen -G "~{samplename}_HA*.fasta"; then
       echo "true" > HA_SEG_EXISTS
       if [[ "$(ls ~{samplename}_HA*.fasta)" == *"HA_H"* ]]; then 
-       subtype="$(basename ~{samplename}_HA*.fasta | awk -F _ '{print $3}' | cut -d. -f1)"
+       subtype="$(basename ~{samplename}_HA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)"
       fi
       # format HA segment to target output name
       mv "~{samplename}"_HA*.fasta "~{samplename}"_HA.fasta
