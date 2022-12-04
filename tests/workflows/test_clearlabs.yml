@@ -490,7 +490,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 98490bb3a766c04c40bcbb04f1467e60
     - path: miniwdl_run/wdl/workflows/wf_theiacov_clearlabs.wdl
-      md5sum: 050db2d2188d3bcbc202beb88364246a
+      md5sum: ae66d33bc40103adcd22b5c8fe145b39
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_clearlabs", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
