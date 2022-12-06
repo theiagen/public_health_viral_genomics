@@ -604,7 +604,7 @@
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
       md5sum: b027e1671929931f9c2ab4ba38696139
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: 98490bb3a766c04c40bcbb04f1467e60
+      md5sum: d55d15a9f120059591c23274be99a956
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 9769f7ff548537ed7d36c5d0df445416
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
