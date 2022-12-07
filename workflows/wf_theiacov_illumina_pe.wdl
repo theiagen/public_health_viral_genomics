@@ -208,7 +208,7 @@ workflow theiacov_illumina_pe {
     File? read1_aligned = bwa.read1_aligned
     File? read2_aligned = bwa.read2_aligned
     String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): " + select_first([assembly_method_nonflu,irma.irma_version])
-    String aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam,""])
+    String aligned_bam =  select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam,""]) # set default values for select_first() to avoid workflow failures
     String aligned_bai = select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai,""])
     Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
     String? ivar_version_primtrim = primer_trim.ivar_version
