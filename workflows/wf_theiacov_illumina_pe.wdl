@@ -80,12 +80,6 @@ workflow theiacov_illumina_pe {
         reference_genome = reference_genome,
         consensus_min_depth = min_depth
     }
-    call consensus_qc_task.consensus_qc as consensus_qc {
-        input:
-          assembly_fasta =  consensus.consensus_seq,
-          reference_genome = reference_genome,
-          genome_length = genome_length
-      }
     call assembly_metrics.stats_n_coverage {
       input:
         samplename = samplename,
@@ -103,20 +97,6 @@ workflow theiacov_illumina_pe {
           samplename = samplename,
           bamfile = bwa.sorted_bam,
           min_depth = min_depth
-      }
-    }
-    if (organism == "MPXV" || organism == "sars-cov-2"){ 
-      # tasks specific to either MPXV or sars-cov-2
-      call taxon_ID.nextclade_one_sample {
-        input:
-          genome_fasta = consensus.consensus_seq,
-          dataset_name = select_first([nextclade_dataset_name, organism]),
-          dataset_reference = nextclade_dataset_reference,
-          dataset_tag = nextclade_dataset_tag
-      }
-      call taxon_ID.nextclade_output_parser_one_sample {
-        input:
-        nextclade_tsv = nextclade_one_sample.nextclade_tsv
       }
     }
     if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
@@ -147,28 +127,30 @@ workflow theiacov_illumina_pe {
           nextclade_flu_vic_tag = nextclade_flu_vic_tag,
           nextclade_flu_yam_tag = nextclade_flu_yam_tag,
       }
-      call consensus_qc_task.consensus_qc as consensus_qc_flu {
-       input:
-       assembly_fasta =  select_first([irma.irma_assembly_fasta]),
-       reference_genome = reference_genome,
-       genome_length = genome_length
-      }
-      if (abricate_flu.run_nextclade && defined(irma.seg4_ha_assembly)) {
-        call taxon_ID.nextclade_one_sample as nextclade_one_sample_flu {
-          input:
-            genome_fasta = select_first([irma.seg4_ha_assembly]),
-            dataset_name = abricate_flu.nextclade_name,
-            dataset_reference = abricate_flu.nextclade_ref,
-            dataset_tag = abricate_flu.nextclade_ds_tag
-        }
-        call taxon_ID.nextclade_output_parser_one_sample as  nextclade_output_parser_one_sample_flu {
-          input:
-          nextclade_tsv = nextclade_one_sample_flu.nextclade_tsv
-        }
-      }
     }
   }
-
+  call consensus_qc_task.consensus_qc as consensus_qc {
+    input:
+      assembly_fasta =  select_first([consensus.consensus_seq,irma.irma_assembly_fasta]),
+      reference_genome = reference_genome,
+      genome_length = genome_length
+  }
+  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "flu"){ 
+    if (select_first([abricate_flu.run_nextclade, true])) {
+    }
+      # tasks specific to either MPXV, sars-cov-2, or flu
+      call taxon_ID.nextclade_one_sample {
+        input:
+          genome_fasta = select_first([consensus.consensus_seq, irma.seg4_ha_assembly]),
+          dataset_name = select_first([abricate_flu.nextclade_name, organism, nextclade_dataset_name]),
+          dataset_reference = select_first([abricate_flu.nextclade_ref, nextclade_dataset_reference]),
+          dataset_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag])
+      }
+      call taxon_ID.nextclade_output_parser_one_sample {
+        input:
+        nextclade_tsv = nextclade_one_sample.nextclade_tsv
+      }
+    }
   call versioning.version_capture{
     input:
   }
@@ -221,11 +203,11 @@ workflow theiacov_illumina_pe {
     String assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta,""])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
-    Int number_N = select_first([consensus_qc.number_N,consensus_qc_flu.number_N,0])
-    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc_flu.number_ATCG,0])
-    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc_flu.number_Degenerate,0])
-    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc_flu.number_Total,0])
-    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc_flu.percent_reference_coverage,0.0])
+    Int number_N = select_first([consensus_qc.number_N,consensus_qc.number_N])
+    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc.number_ATCG])
+    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc.number_Degenerate])
+    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc.number_Total])
+    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc.percent_reference_coverage])
     Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File? consensus_stats = stats_n_coverage.stats
@@ -248,15 +230,15 @@ workflow theiacov_illumina_pe {
     String? pangolin_docker = pangolin4.pangolin_docker
     String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    String nextclade_json = select_first([nextclade_one_sample.nextclade_json, nextclade_one_sample_flu.nextclade_json,""])
-    String auspice_json = select_first([ nextclade_one_sample.auspice_json, nextclade_one_sample_flu.auspice_json,""])
-    String nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv, nextclade_one_sample_flu.nextclade_tsv,""])
-    String nextclade_version = select_first([nextclade_one_sample.nextclade_version, nextclade_one_sample_flu.nextclade_version,""])
-    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker, nextclade_one_sample_flu.nextclade_docker,""])
+    String nextclade_json = select_first([nextclade_one_sample.nextclade_json,""])
+    String auspice_json = select_first([ nextclade_one_sample.auspice_json,""])
+    String nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv,""])
+    String nextclade_version = select_first([nextclade_one_sample.nextclade_version,""])
+    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker,""])
     String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag,""])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs, nextclade_output_parser_one_sample_flu.nextclade_aa_subs,""])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels, nextclade_output_parser_one_sample_flu.nextclade_aa_dels,""])
-    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade, nextclade_output_parser_one_sample_flu.nextclade_clade,""])
+    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs,""])
+    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels,""])
+    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade,""])
     String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
