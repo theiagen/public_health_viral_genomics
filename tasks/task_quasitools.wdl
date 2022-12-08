@@ -14,7 +14,7 @@ task quasitools_ont {
     quasitools --version > QUASITOOLS_VERSION && sed -i -e 's/^/quasitools /' QUASITOOLS_VERSION
     # Run hydra
     set -e
-    quasitools hydra -mf 0.05 -sc 7 -lc 50 -vq 7 -md 10 -ma 1 -me "~{read1}" -o "~{samplename}"
+    quasitools hydra -mf 0.05 -rt 0.05 -sc 7 -lc 50 -vq 7 -md 10 -ma 1 -me "~{read1}" -o "~{samplename}"
   }
   runtime {
     docker: "~{docker}"
@@ -38,7 +38,7 @@ task quasitools_illumina_pe {
   input {
     File read1
     File read2
-    File mutation_db =  "gs://theiagen-public-files/terra/hivgc-files/mutation_db.tsv"
+    File mutation_db = "gs://theiagen-public-files/terra/hivgc-files/mutation_db.tsv"
     String samplename
     String docker = "quay.io/biocontainers/quasitools:0.7.0--pyh864c0ab_1"
   }
