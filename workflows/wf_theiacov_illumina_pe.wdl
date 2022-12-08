@@ -45,6 +45,7 @@ workflow theiacov_illumina_pe {
       adapters = adapters,
       phix = phix
   }
+  # assembly via bwa and ivar for non-flu data
   if (organism != "flu"){
     call align.bwa {
       input:
@@ -85,30 +86,9 @@ workflow theiacov_illumina_pe {
         samplename = samplename,
         bamfile = bwa.sorted_bam
     }
-    if (organism == "sars-cov-2") {
-      # sars-cov-2 specific tasks
-      call taxon_ID.pangolin4 {
-        input:
-          samplename = samplename,
-          fasta = consensus.consensus_seq
-      }
-      call sc2_calculation.sc2_gene_coverage {
-        input: 
-          samplename = samplename,
-          bamfile = bwa.sorted_bam,
-          min_depth = min_depth
-      }
-    }
-    if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
-      # tasks specific to MPXV, sars-cov-2, and WNV
-      call ncbi.vadr {
-          input:
-            genome_fasta = consensus.consensus_seq,
-            assembly_length_unambiguous = consensus_qc.number_ATCG
-        }
-      }
     String assembly_method_nonflu = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
   }
+  # assembly via irma for flu organisms
   if (organism == "flu"){
     # flu-specific tasks
     call irma.irma {
@@ -129,12 +109,13 @@ workflow theiacov_illumina_pe {
       }
     }
   }
-  call consensus_qc_task.consensus_qc as consensus_qc {
+  call consensus_qc_task.consensus_qc {
     input:
       assembly_fasta =  select_first([consensus.consensus_seq,irma.irma_assembly_fasta]),
       reference_genome = reference_genome,
       genome_length = genome_length
   }
+  # run organism-specific typing
   if (organism == "MPXV" || organism == "sars-cov-2" || organism == "flu"){ 
     if (select_first([abricate_flu.run_nextclade, true])) {
     }
@@ -151,6 +132,28 @@ workflow theiacov_illumina_pe {
         nextclade_tsv = nextclade_one_sample.nextclade_tsv
       }
     }
+    if (organism == "sars-cov-2") {
+      # sars-cov-2 specific tasks
+      call taxon_ID.pangolin4 {
+        input:
+          samplename = samplename,
+          fasta = select_first([consensus.consensus_seq])
+    }
+      call sc2_calculation.sc2_gene_coverage {
+        input: 
+          samplename = samplename,
+          bamfile = select_first([bwa.sorted_bam]),
+          min_depth = min_depth
+      }
+    }
+    if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+      # tasks specific to MPXV, sars-cov-2, and WNV
+      call ncbi.vadr {
+          input:
+            genome_fasta = select_first([consensus.consensus_seq]),
+            assembly_length_unambiguous = consensus_qc.number_ATCG
+        }
+      }
   call versioning.version_capture{
     input:
   }
