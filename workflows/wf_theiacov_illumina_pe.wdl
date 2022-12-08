@@ -11,6 +11,7 @@ import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
 import "../tasks/task_irma.wdl" as irma
 import "../tasks/task_abricate_flu.wdl" as abricate_flu
+import "../tasks/task_quasitools.wdl" as quasitools
 
 workflow theiacov_illumina_pe {
   meta {
@@ -73,6 +74,7 @@ workflow theiacov_illumina_pe {
         bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
         reference_genome = reference_genome,
         variant_min_depth = min_depth
+        # Ref GFF
     }
     call consensus_call.consensus {
       input:
@@ -150,6 +152,14 @@ workflow theiacov_illumina_pe {
       input:
         genome_fasta = select_first([consensus.consensus_seq]),
         assembly_length_unambiguous = consensus_qc.number_ATCG
+    }
+  }
+  if (organism == "HIV") {
+    call quasitools.quasitools_illumina_pe {
+      input:
+        read1 = read_QC_trim.read1_clean,
+        read2 = read_QC_trim.read2_clean,
+        samplename = samplename
     }
   }
   call versioning.version_capture{
@@ -255,5 +265,12 @@ workflow theiacov_illumina_pe {
     File? abricate_flu_results = abricate_flu.abricate_flu_results
     String? abricate_flu_database =  abricate_flu.abricate_flu_database
     String? abricate_flu_version = abricate_flu.abricate_flu_version
+    # HIV Outputs
+    String? quasitools_version = quasitools_illumina_pe.quasitools_version
+    String? quasitools_date = quasitools_illumina_pe.quasitools_date
+    File? quasitools_coverage_file = quasitools_illumina_pe.coverage_file
+    File? quasitools_dr_report = quasitools_illumina_pe.dr_report
+    File? quasitools_hydra_vcf = quasitools_illumina_pe.hydra_vcf
+    File? quasitools_mutations_report = quasitools_illumina_pe.mutations_report
   }
 }
