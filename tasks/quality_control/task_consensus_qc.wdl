@@ -4,11 +4,14 @@ task consensus_qc {
   input {
     File assembly_fasta
     File? reference_genome
+    Int? genome_length
     Int disk_size = 100
   }
   command <<<
     if [ ~{reference_genome} ] ; then
       GENOME_LEN=$(grep -v ">" ~{reference_genome} | tr --delete '\n' | wc -c)
+    elif [ ~{genome_length} ] ; then
+      GENOME_LEN=~{genome_length}
     else
       # set SC2 default
       GENOME_LEN=29903
