@@ -121,7 +121,7 @@ workflow theiacov_illumina_pe {
     call taxon_ID.nextclade_one_sample {
       input:
         genome_fasta = select_first([consensus.consensus_seq, irma.seg4_ha_assembly]),
-        dataset_name = select_first([abricate_flu.nextclade_name, organism, nextclade_dataset_name]),
+        dataset_name = select_first([abricate_flu.nextclade_name, nextclade_dataset_name, organism]),
         dataset_reference = select_first([abricate_flu.nextclade_ref, nextclade_dataset_reference]),
         dataset_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag])
     }
