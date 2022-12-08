@@ -26,6 +26,7 @@ workflow theiacov_illumina_pe {
     String nextclade_dataset_reference = "MN908947"
     String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
     String? nextclade_dataset_name
+    File? reference_gff
     File? reference_genome
     Int min_depth = 100
     String organism = "sars-cov-2"
@@ -72,9 +73,9 @@ workflow theiacov_illumina_pe {
       input:
         samplename = samplename,
         bamfile = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam]),
+        reference_gff = reference_gff,
         reference_genome = reference_genome,
         variant_min_depth = min_depth
-        # Ref GFF
     }
     call consensus_call.consensus {
       input:
