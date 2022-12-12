@@ -108,8 +108,9 @@ task ncbi_prep_one_sample {
   runtime {
     docker: "~{docker_image}"
     memory: "~{memory} GB"
-    cpu: cpu
+    cpu: cpu    
     disks: "local-disk ~{disk_size} SSD"
+    disk: disk_size + " GB" # TES
     preemptible: preemptible_tries
     maxRetries: 3
   }
@@ -220,6 +221,7 @@ task ncbi_prep_one_sample_se {
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk ~{disk_size} SSD"
+    disk: disk_size + " GB" # TES
     preemptible: preemptible_tries
     maxRetries: 3
   }
@@ -297,6 +299,7 @@ task gisaid_prep_one_sample {
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk ~{disk_size} SSD"
+    disk: disk_size + " GB" # TES
     preemptible: preemptible
     maxRetries:   3
   }
@@ -411,6 +414,7 @@ task compile_assembly_n_meta {
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk ~{disk_size} SSD"
+    disk: disk_size + " GB" # TES
     preemptible: preemptible
     maxRetries: 3
   }
@@ -486,6 +490,7 @@ input {
     memory: "~{memory} GB"
     cpu: cpu
     disks: "local-disk ~{disk_size} SSD"
+    disk: disk_size + " GB" # TES
     preemptible: preemptible
     maxRetries: 3
   }

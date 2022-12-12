@@ -4,6 +4,7 @@ task snp_dists {
   input {
     File alignment
     String cluster_name
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -21,7 +22,8 @@ task snp_dists {
     docker: "quay.io/staphb/snp-dists:0.6.2"
     memory: "2 GB"
     cpu: 2
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }
@@ -33,6 +35,7 @@ task iqtree {
     String cluster_name
     String? iqtree_model = "GTR+G4"
     String? iqtree_bootstraps = 1000
+    Int disk_size = 100
   }
   command <<<
     # date and version control
@@ -56,7 +59,8 @@ task iqtree {
     docker: "quay.io/staphb/iqtree:1.6.7"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
     maxRetries: 3
   }

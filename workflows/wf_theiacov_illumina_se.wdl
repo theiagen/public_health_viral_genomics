@@ -21,17 +21,21 @@ workflow theiacov_illumina_se {
     File read1_raw
     File? primer_bed
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-07-26T12:00:00Z"
+    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
     Int min_depth = 100
     String organism = "sars-cov-2"
     Boolean trim_primers = true
+    File? adapters
+    File? phix
   }
   call read_qc.read_QC_trim {
     input:
       samplename = samplename,
-      read1_raw = read1_raw
+      read1_raw = read1_raw,
+      adapters = adapters,
+      phix = phix
   }
   call align.bwa {
     input:
@@ -77,6 +81,7 @@ workflow theiacov_illumina_se {
       bamfile = bwa.sorted_bam
   }
   if (organism == "sars-cov-2") {
+    # sars-cov-2 specific tasks
     call taxon_ID.pangolin4 {
       input:
         samplename = samplename,
@@ -89,10 +94,14 @@ workflow theiacov_illumina_se {
         min_depth = min_depth
     }
   }
-  if (organism == "mpxv") {
+  if (organism == "MPXV") {
     # MPXV specific tasks
   }
-  if (organism == "MPXV" || organism == "sars-cov-2"){ 
+  if (organism == "WNV") {
+    # WNV specific tasks (none yet, just adding as placeholder for future)
+  }
+  if (organism == "MPXV" || organism == "sars-cov-2"){
+    # tasks specific to either MPXV or sars-cov-2
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
@@ -105,7 +114,8 @@ workflow theiacov_illumina_se {
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
     }
   }
-  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+    # tasks specific to MPXV, sars-cov-2, and WNV
     call ncbi.vadr {
       input:
         genome_fasta = consensus.consensus_seq,
@@ -141,7 +151,7 @@ workflow theiacov_illumina_se {
     String bwa_version = bwa.bwa_version
     String samtools_version = bwa.sam_version
     File read1_aligned = bwa.read1_aligned
-    String assembly_method = "~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
+    String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): ~{bwa.bwa_version}; ~{primer_trim.ivar_version}"
     File aligned_bam = select_first([primer_trim.trim_sorted_bam,bwa.sorted_bam])
     File aligned_bai =select_first([primer_trim.trim_sorted_bai,bwa.sorted_bai])
     Float? primer_trimmed_read_percent = primer_trim.primer_trimmed_read_percent
@@ -196,5 +206,6 @@ workflow theiacov_illumina_se {
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
+    File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
   }
 }
