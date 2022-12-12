@@ -4,10 +4,14 @@ task consensus_qc {
   input {
     File assembly_fasta
     File? reference_genome
+    Int? genome_length
+    Int disk_size = 100
   }
   command <<<
     if [ ~{reference_genome} ] ; then
       GENOME_LEN=$(grep -v ">" ~{reference_genome} | tr --delete '\n' | wc -c)
+    elif [ ~{genome_length} ] ; then
+      GENOME_LEN=~{genome_length}
     else
       # set SC2 default
       GENOME_LEN=29903
@@ -46,7 +50,8 @@ task consensus_qc {
     docker: "quay.io/theiagen/utility:1.1"
     memory: "2 GB"
     cpu: 1
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB" # TES
     preemptible: 0
   }
 }

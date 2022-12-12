@@ -130,6 +130,7 @@ task annotate_vcf_snpeff {
     String         docker="quay.io/broadinstitute/viral-phylo:2.1.19.1"
 
     String         output_basename = basename(basename(in_vcf, ".gz"), ".vcf")
+    Int disk_size = 375
   }
 
   parameter_meta {
@@ -204,7 +205,8 @@ task annotate_vcf_snpeff {
   runtime {
     docker: docker
     memory: select_first([machine_mem_gb, 4]) + " GB"
-    disks:  "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x4"
     maxRetries: 3
   }

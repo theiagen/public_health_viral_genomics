@@ -11,6 +11,7 @@ task plot_coverage {
     String?  binning_summary_statistic="max" # max or min
 
     String   docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 375
   }
 
   command {
@@ -73,7 +74,8 @@ task plot_coverage {
     docker: "${docker}"
     memory: "7 GB"
     cpu: 2
-    disks: "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x4"
     preemptible: 1
     maxRetries: 3
@@ -87,6 +89,7 @@ task coverage_report {
     String       out_report_name="coverage_report.txt"
 
     String       docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 375
   }
 
   command {
@@ -106,7 +109,8 @@ task coverage_report {
     docker: "${docker}"
     memory: "2 GB"
     cpu: 2
-    disks: "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd2_v2_x4"
     maxRetries: 3
   }
@@ -120,6 +124,7 @@ task assembly_bases {
     input {
       File     fasta
       String   docker="ubuntu"
+      Int disk_size = 50
     }
 
     command {
@@ -137,7 +142,8 @@ task assembly_bases {
         docker: "${docker}"
         memory: "1 GB"
         cpu: 1
-        disks: "local-disk 50 HDD"
+        disks:  "local-disk " + disk_size + " HDD"
+        disk: disk_size + " GB" # TES
         dx_instance_type: "mem1_ssd1_v2_x2"
         maxRetries: 3
     }
@@ -148,6 +154,7 @@ task fastqc {
     File     reads_bam
 
     String   docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 375
   }
 
   String   reads_basename=basename(reads_bam, ".bam")
@@ -168,7 +175,8 @@ task fastqc {
     memory: "2 GB"
     cpu: 1
     docker: "${docker}"
-    disks: "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -182,6 +190,7 @@ task align_and_count {
 
     Int?    machine_mem_gb
     String  docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 375
   }
 
   String  reads_basename=basename(reads_bam, ".bam")
@@ -215,7 +224,8 @@ task align_and_count {
     memory: select_first([machine_mem_gb, 15]) + " GB"
     cpu: 4
     docker: "${docker}"
-    disks: "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x4"
     maxRetries: 3
   }
@@ -226,6 +236,7 @@ task align_and_count_summary {
     Array[File]+  counts_txt
     String        output_prefix="count_summary"
     String        docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 50
   }
 
   command {
@@ -244,7 +255,8 @@ task align_and_count_summary {
     memory: "3 GB"
     cpu: 2
     docker: "${docker}"
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -258,6 +270,7 @@ task aggregate_metagenomics_reports {
     Int          aggregate_top_N_hits                     = 5
 
     String       docker="quay.io/broadinstitute/viral-classify:2.1.16.0"
+    Int disk_size = 50
   }
 
   parameter_meta {
@@ -291,7 +304,8 @@ task aggregate_metagenomics_reports {
     docker: "${docker}"
     memory: "3 GB"
     cpu: 1
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd2_v2_x2"
     preemptible: 0
     maxRetries: 3
@@ -329,6 +343,7 @@ task MultiQC {
     String?         config_yaml
 
     String          docker = "quay.io/biocontainers/multiqc:1.8--py_2"
+    Int disk_size = 375
   }
 
   parameter_meta {
@@ -389,7 +404,8 @@ task MultiQC {
     memory: "3 GB"
     cpu: 2
     docker: "${docker}"
-    disks: "local-disk 375 LOCAL"
+    disks:  "local-disk " + disk_size + " LOCAL"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -403,6 +419,7 @@ task tsv_join {
     Array[File]+   input_tsvs
     String         id_col
     String         out_basename = "merged"
+    Int disk_size = 100
   }
   command <<<
     python3<<CODE
@@ -454,7 +471,8 @@ task tsv_join {
     memory: "7 GB"
     cpu: 1
     docker: "python:slim"
-    disks: "local-disk 100 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -465,6 +483,7 @@ task tsv_stack {
     Array[File]+   input_tsvs
     String         out_basename
     String         docker="quay.io/broadinstitute/viral-core:2.1.19"
+    Int disk_size = 50
   }
   command <<<
     csvstack -t --filenames \
@@ -479,7 +498,8 @@ task tsv_stack {
     memory: "1 GB"
     cpu: 1
     docker: "${docker}"
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     maxRetries: 3
   }
@@ -492,6 +512,7 @@ task compare_two_genomes {
     String        out_basename
 
     String        docker="quay.io/broadinstitute/viral-assemble:2.1.16.1"
+    Int disk_size = 50
   }
   command <<<
     set -ex -o pipefail
@@ -512,7 +533,8 @@ task compare_two_genomes {
     memory: "3 GB"
     cpu: 2
     docker: "${docker}"
-    disks: "local-disk 50 HDD"
+    disks:  "local-disk " + disk_size + " HDD"
+    disk: disk_size + " GB" # TES
     dx_instance_type: "mem1_ssd1_v2_x2"
     preemptible: 1
     maxRetries: 3

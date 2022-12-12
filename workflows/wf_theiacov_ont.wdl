@@ -22,11 +22,11 @@ workflow theiacov_ont {
     File demultiplexed_reads
     Int normalise = 200
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-07-26T12:00:00Z"
+    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
-    Int? max_length = 700
-    Int? min_length = 400
+    Int max_length = 700
+    Int min_length = 400
     String organism = "sars-cov-2"
     String? target_org
   }
@@ -86,6 +86,7 @@ workflow theiacov_ont {
       bamfile = consensus.trim_sorted_bam
   }
   if (organism == "sars-cov-2") {
+    # sars-cov-2 specific tasks
     call taxon_ID.pangolin4 {
       input:
         samplename = samplename,
@@ -98,10 +99,14 @@ workflow theiacov_ont {
         min_depth = 20
       }
   }
-  if (organism == "mpxv") {
+  if (organism == "MPXV") {
     # MPXV specific tasks
   }
+  if (organism == "WNV") {
+    # WNV specific tasks (none yet, just adding as placeholder for future)
+  }
   if (organism == "MPXV" || organism == "sars-cov-2"){ 
+    # tasks specific to either MPXV or sars-cov-2
     call taxon_ID.nextclade_one_sample {
       input:
       genome_fasta = consensus.consensus_seq,
@@ -113,8 +118,9 @@ workflow theiacov_ont {
       input:
       nextclade_tsv = nextclade_one_sample.nextclade_tsv
     }
-  }
-  if (organism == "sars-cov-2"){ # organism == "mpxv" || 
+   }
+  if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
+    # tasks specific to MPXV, sars-cov-2, and WNV
     call ncbi.vadr {
       input:
         genome_fasta = consensus.consensus_seq,
@@ -154,7 +160,7 @@ workflow theiacov_ont {
     String medaka_reference = consensus.medaka_reference
     String primer_bed_name = consensus.primer_bed_name
     File assembly_fasta = consensus.consensus_seq
-    String assembly_method = consensus.artic_pipeline_version
+    String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): ~{consensus.artic_pipeline_version}"
     File reads_aligned = consensus.reads_aligned
     # Assembly QC
     Int number_N = consensus_qc.number_N
@@ -197,5 +203,6 @@ workflow theiacov_ont {
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
+    File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
   }
 }
