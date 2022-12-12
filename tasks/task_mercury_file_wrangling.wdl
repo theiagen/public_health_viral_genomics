@@ -11,7 +11,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     String output_name
     String gcp_bucket_uri
     Int vadr_alert_limit = 0 # only for SC2
-
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -144,7 +143,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # since gisaid virus name includes '/', use '|' in sed command instead
       genbank_metadata["rename_fasta_header"] = "sed -i '1s|.*|>" + genbank_metadata["Sequence_ID"] + "|' " + genbank_metadata["fn"]
       genbank_metadata.to_csv("genbank-fasta-manipulation.sh", header=False, index=False, columns = ["rename_fasta_header"])
-      genbank_metadata.drop("rename_fasta_header")
+      genbank_metadata.drop("rename_fasta_header", "fn")
 
       genbank_metadata.to_csv("~{output_name}_genbank_metadata.tsv", sep='\t', index=False)
 
@@ -203,8 +202,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
       # ADD BIOPROJECT_ACCESSION TO FASTA HEADER (?)
-      bankit_required = ["submission_id", "isolate", "collection_date", "country", "host"]
-      bankit_optional = ["isolation_source", "passage_details"]
+      bankit_required = ["submission_id", "isolate", "collection_date", "country", "host", "assembly_fasta"]
+      bankit_optional = ["isolation_source", "bioproject_accession"]
 
       gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "passage_details", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
@@ -264,6 +263,22 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         else:
           bankit_metadata[column] = ""
       
+      bankit_metadata.rename({"submission_id" : "Sequence_ID", "isolate" : "Isolate", "collection_date" : "Collection_date", "country" : "Country", "host" : "Host", "isolation_source" : "Isolation_source"}, inplace=True)
+      
+      bankit_metadata["cp"] = "gsutil cp"
+      bankit_metadata["fn"] = bankit_metadata["Sequence_ID"] + "_bankit.fasta"
+      bankit_metadata.to_csv("bankit-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"])
+      bankit_metadata.drop(["cp", "assembly_fasta"], axis=1)
+
+      # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>covv_virus_name)
+      # since gisaid virus name includes '/', use '|' in sed command instead
+      bankit_metadata["rename_fasta_header"] = "sed -i '1s|.*|>" + bankit_metadata["Sequence_ID"] + "|' " + bankit_metadata["fn"]
+      bankit_metadata.to_csv("bankit-fasta-manipulation.sh", header=False, index=False, columns = ["rename_fasta_header"])
+      bankit_metadata.drop("rename_fasta_header", "fn")
+
+      bankit_metadata.to_csv("~{output_name}.src", sep='\t', index=False)
+
+
       # GISAID
       print("DEBUG: creating gisaid metadata file...")
       gisaid_metadata = table[[gisaid_required]].copy() 
@@ -329,7 +344,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     fi
 
     if [[ ~{organism} == "MPXV" ]] ; then
-      echo "do bankit stuff here"
+      bash bankit-file-transfer.sh
+      bash bankit-fasta-manipulation.sh
+      cat *_bankit.fasta > ~{output_name}.fsa
     fi
 
     # transfer sra files to gcp bucket
@@ -345,6 +362,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     File sra_metadata = "~{output_name}_sra_metadata.tsv"
     File? genbank_metadata = "~{output_name}_genbank_metadata.tsv"
     File? genbank_untrimmed_fasta = "~{output_name}_genbank_untrimmed.fasta"
+    File? bankit_metadata = "~{output_name}.src"
+    File? bankit_fasta = "~{output_name}.fsa"
     File gisaid_metadata = "~{output_name}_gisaid_metadata.csv"
     File gisaid_fasta = "~{output_name}_gisaid.fasta"
   }
@@ -383,4 +402,27 @@ task trim_genbank_fastas {
     preemptible: 0
     maxRetries: 3
   }
+}
+
+
+## REQUIRES LOTS OF TESTING
+task table2asn {
+  input {
+    File authors_sbt # have users provide the .sbt file for MPXV submission-- it can be created here: https://submit.ncbi.nlm.nih.gov/genbank/template/submission/
+    File bankit_fasta
+    File bankit_metadata
+    String output_name
+  }
+  command <<<
+    # locate table2asn in docker we'll make tomorrow
+    table2asn -t ~{authors_sbt} \
+      -j ~{bankit_metadata} \
+      -a a ~{bankit_fasta} \
+      -o ~{output_name}
+
+  >>>
+  output {
+    File sqn_file = ""
+  }
+
 }
