@@ -190,8 +190,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       ###### THIS DOES NOT INCLUDE THE SECONDARY HEADER LINE
       gisaid_metadata.to_csv("~{output_name}_gisaid_metadata.csv", sep=',', index=False)
 
-    elif ("~{organism}" == "MPXV"):
-      print("Organism is MPXV, no VADR filtering performed")
+    elif ("~{organism}" == "mpox"):
+      print("Organism is mpox, no VADR filtering performed")
       table["gisaid_organism"] = "mpx/A"
       table["gisaid_virus_name"] = (table["organism"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
 
@@ -343,7 +343,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       cat *_genbank_untrimmed.fasta > ~{output_name}_genbank_untrimmed.fasta
     fi
 
-    if [[ ~{organism} == "MPXV" ]] ; then
+    if [[ ~{organism} == "mpox" ]] ; then
       bash bankit-file-transfer.sh
       bash bankit-fasta-manipulation.sh
       cat *_bankit.fasta > ~{output_name}.fsa
