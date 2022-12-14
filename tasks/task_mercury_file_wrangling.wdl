@@ -176,7 +176,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # write out the command to rename the assembly files to a file for bash to move about
       gisaid_metadata["cp"] = "gsutil cp"
       gisaid_metadata.to_csv("gisaid-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
-      gisaid_metadata.drop("cp", axis=1, inplace=True)
+      gisaid_metadata.drop(["cp", "assembly_fasta"], axis=1, inplace=True)
 
       # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>covv_virus_name)
       # since gisaid virus name includes '/', use '|' in sed command instead
@@ -416,14 +416,19 @@ task table2asn {
     echo "~{bankit_fasta} file needs to be localized for the program to access"
 
     # rename authors_sbt to contain output_name
-    mv ~{authors_sbt} ~{output_name}.sbt
+    # had issues with device busy
+    ln -s ~{authors_sbt} ~{output_name}.sbt
+    ln -s ~{bankit_fasta} ~{output_name}.fsa
+    ln -s ~{bankit_metadata} ~{output_name}.src
 
     # convert the data into a sqn file so it can be emailed to NCBI
     table2asn -t ~{output_name}.sbt \
-      -src-file ~{bankit_metadata} \
+      -src-file ~{output_name}.src \
       -indir . \
       -a s # inputting a set of fasta data
 
+    ls 
+    
   >>>
   output {
     File sqn_file = "~{output_name}.sqn"
