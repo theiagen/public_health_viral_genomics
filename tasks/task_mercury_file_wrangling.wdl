@@ -204,9 +204,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       sra_required = ["bioproject_accession", "submission_id", "library_ID", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
       sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-      # ADD BIOPROJECT_ACCESSION TO FASTA HEADER (?)
+      # cannot add bioproject_accession
       bankit_required = ["submission_id", "isolate", "collection_date", "country", "host", "assembly_fasta"]
-      bankit_optional = ["isolation_source", "bioproject_accession"]
+      bankit_optional = ["isolation_source"]
 
       gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
@@ -438,5 +438,6 @@ task table2asn {
     disks: "local-disk 25 SSD"
     preemptible: 0
     maxRetries: 3
+    continueOnReturnCode: [0, 2]
   }
 }
