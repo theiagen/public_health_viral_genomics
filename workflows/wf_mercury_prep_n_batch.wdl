@@ -1,6 +1,7 @@
 version 1.0
 
 import "../tasks/task_mercury_file_wrangling.wdl" as submission
+import "../tasks/task_versioning.wdl" as versioning
 
 
 workflow mercury_prep_n_batch {
@@ -44,6 +45,8 @@ workflow mercury_prep_n_batch {
         output_name = output_name
     }
   }
+  call versioning.version_capture {
+  }
   output {
     File excluded_samples = sm_metadata_wrangling.excluded_samples
     File biosample_metadata = sm_metadata_wrangling.biosample_metadata
@@ -53,5 +56,7 @@ workflow mercury_prep_n_batch {
     File? bankit_sqn_to_email = table2asn.sqn_file
     File gisaid_metadata = sm_metadata_wrangling.gisaid_metadata
     File gisaid_fasta = sm_metadata_wrangling.gisaid_fasta
+    String mercury_prep_n_batch_analysis_date = version_capture.date
+    String phvg_version = version_capture.phvg_version
   }
 }
