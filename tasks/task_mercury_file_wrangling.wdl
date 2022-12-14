@@ -405,7 +405,7 @@ task trim_genbank_fastas {
 }
 
 
-## REQUIRES LOTS OF TESTING
+## I think this works, but honestly not sure.
 task table2asn {
   input {
     File authors_sbt # have users provide the .sbt file for MPXV submission-- it can be created here: https://submit.ncbi.nlm.nih.gov/genbank/template/submission/
@@ -414,15 +414,28 @@ task table2asn {
     String output_name
   }
   command <<<
-    # locate table2asn in docker we'll make tomorrow
-    table2asn -t ~{authors_sbt} \
-      -j ~{bankit_metadata} \
-      -a a ~{bankit_fasta} \
-      -o ~{output_name}
+    # using this echo statement so the fasta file doesn't have a wiggly line
+    echo "~{bankit_fasta} file needs to be localized for the program to access"
+
+    # rename authors_sbt to contain output_name
+    mv ~{authors_sbt} ~{output_name}.sbt
+
+    # convert the data into a sqn file so it can be emailed to NCBI
+    table2asn -t ~{output_name}.sbt \
+      -src-file ~{bankit_metadata} \
+      -indir . \
+      -a s # inputting a set of fasta data
 
   >>>
   output {
-    File sqn_file = ""
+    File sqn_file = "~{output_name}.sqn"
   }
-
+  runtime {
+    docker: "staphb/ncbi-table2asn:1.26.678"
+    memory: "1 GB"
+    cpu: 1
+    disks: "local-disk 25 SSD"
+    preemptible: 0
+    maxRetries: 3
+  }
 }
