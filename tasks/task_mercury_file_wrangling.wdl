@@ -348,7 +348,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     fi
 
     # transfer sra files to gcp bucket
-    #bash sra-file-transfer.sh    
+    bash sra-file-transfer.sh    
 
     unset CLOUDSDK_PYTHON   # reset env var
 
