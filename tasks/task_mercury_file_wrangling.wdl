@@ -415,8 +415,8 @@ task table2asn {
     # using this echo statement so the fasta file doesn't have a wiggly line
     echo "~{bankit_fasta} file needs to be localized for the program to access"
 
-    # rename authors_sbt to contain output_name
-    # had issues with device busy
+    # rename authors_sbt to contain output_name so table2asn can find it
+    # had issues with device busy, making softlinks for all
     ln -s ~{authors_sbt} ~{output_name}.sbt
     ln -s ~{bankit_fasta} ~{output_name}.fsa
     ln -s ~{bankit_metadata} ~{output_name}.src
