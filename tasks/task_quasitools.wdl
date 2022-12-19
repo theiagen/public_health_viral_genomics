@@ -14,7 +14,7 @@ task quasitools_ont {
     quasitools --version > QUASITOOLS_VERSION && sed -i -e 's/^/quasitools /' QUASITOOLS_VERSION
     # Run hydra
     set -e
-    quasitools hydra -mf 0.05 -rt 0.05 -sc 7 -lc 50 -vq 7 -md 10 -ma 1 -me "~{read1}" -o "~{samplename}"
+    quasitools hydra -mf 0.05 -rt 5 -sc 7 -lc 50 -vq 7 -md 10 -ma 1 -me "~{read1}" -o "~{samplename}"
   }
   runtime {
     docker: "~{docker}"
