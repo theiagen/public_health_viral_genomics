@@ -56,7 +56,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     tablename = "~{table_name}-data.tsv" 
     table = pd.read_csv(tablename, delimiter='\t', header=0)
 
-    # potentially set all column headers to lowercase 
+    # set all column headers to lowercase 
     table.columns = table.columns.str.lower()
 
     # extract the samples for upload from the entire table
@@ -72,14 +72,17 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     table["isolate"] = (table["organism"] + "/" + table["host"] + "/" + table["submission_id"] + "/" + table["year"])
     table["biosample_accession"] = "{populate_with_BioSample_accession}"
 
+
+
     # set required and optional metadata fields based on the organism type
     if ("~{organism}" == "sars-cov-2"):
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
-      table.drop(table.index[table["vadr_num_alerts"].str.contains("VADR skipped due to poor assembly")], inplace=True)
-      table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
-      table.drop(table.index[table["number_n"].astype(int) < ~{number_N_threshold}], inplace=True)
-    
+      # this part doesn't work unless this is present
+     # table.drop(table.index[table["vadr_num_alerts"].str.contains("VADR skipped due to poor assembly")], inplace=True)
+      #table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
+      #table.drop(table.index[table["number_n"].astype(int) < ~{number_N_threshold}], inplace=True)
+
       # future: write out the rows that were dropped
       # future: maybe min allele frequency cutoff
 
@@ -182,13 +185,13 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata["county"] = gisaid_metadata["county"].fillna("")
       gisaid_metadata["covv_location"] = gisaid_metadata.apply(lambda x: x["covv_location"] + " / " + x["county"] if len(x["county"]) > 0 else x["covv_location"], axis=1)
 
+
       #  = (gisaid_metadata["covv_location"] + " / " + gisaid_optional["county"])
       gisaid_metadata.drop("county", axis=1, inplace=True)
       gisaid_metadata["covv_type"] = "betacoronavirus"
       gisaid_metadata["covv_passage"] = "Original"
 
       # make new column for filename
-
       gisaid_metadata["fn"] = gisaid_metadata["submission_id"] + "_gisaid.fasta"
       gisaid_metadata.drop("submission_id", axis=1, inplace=True)
 
@@ -205,7 +208,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # make dictionary for renaming headers
       # format: {original : new} or {metadata_formatter : gisaid_format}
-      gisaid_rename_headers = {"gisaid_virus_name" : "covv_virus_name", "additional_host_information" : "covv_add_host_info", "gisaid_submitter" : "submitter", "collection_date" : "covv_collection_date", "seq_platform" : "covv_seq_technology", "host" : "covv_host", "assembly_method" : "covv_assembly_method", "assembly_mean_coverage" : "covv_coverage", "collecting_lab" : "covv_orig_lab", "collecting_lab_address" : "covv_orig_lab_addr", "submitting_lab" : "pos_subm_lab", "submitting_lab_address" : "covv_subm_lab_addr", "authors" : "covv_authors", "purpose_of_sequencing" : "covv_sampling_strategy", "patient_gender" : "covv_gender", "patient_age" : "covv_patient_age", "patient_status" : "covv_patient_status", "specimen_source" : "covv_specimen", "outbreak" : "covv_outbreak", "last_vaccinated" : "covv_last_vaccinated", "treatment" : "covv_treatment"}
+      gisaid_rename_headers = {"gisaid_virus_name" : "covv_virus_name", "additional_host_information" : "covv_add_host_info", "gisaid_submitter" : "submitter", "collection_date" : "covv_collection_date", "seq_platform" : "covv_seq_technology", "host" : "covv_host", "assembly_method" : "covv_assembly_method", "assembly_mean_coverage" : "covv_coverage", "collecting_lab" : "covv_orig_lab", "collecting_lab_address" : "covv_orig_lab_addr", "submitting_lab" : "covv_subm_lab", "submitting_lab_address" : "covv_subm_lab_addr", "authors" : "covv_authors", "purpose_of_sequencing" : "covv_sampling_strategy", "patient_gender" : "covv_gender", "patient_age" : "covv_patient_age", "patient_status" : "covv_patient_status", "specimen_source" : "covv_specimen", "outbreak" : "covv_outbreak", "last_vaccinated" : "covv_last_vaccinated", "treatment" : "covv_treatment"}
       
       # rename columns
       gisaid_metadata.rename(columns=gisaid_rename_headers, inplace=True)
