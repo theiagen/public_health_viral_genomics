@@ -12,6 +12,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     String gcp_bucket_uri
     Int vadr_alert_limit = 0 # only for SC2
     Int number_N_threshold = 5000 # only for SC2
+    # future: Boolean skip_county
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -69,7 +70,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
       table.drop(table.index[table["vadr_num_alerts"] > ~{vadr_alert_limit}], inplace=True)
-      table.drop(table.index[table["number_N"] < ~{number_N_threshold}], inplace=True)
+      table.drop(table.index[table["number_N"] > ~{number_N_threshold}], inplace=True)
+      # future: write out the rows that were dropped
+      # future: maybe min allele frequency cutoff
 
       # set default values
       table["gisaid_organism"] = "hCoV-19"
@@ -84,6 +87,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       genbank_required = ["submission_id", "country", "host_sci_name", "isolate", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "assembly_fasta"]
 
+      # optional ignore county information if statement
       gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["additional_host_information", "county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
@@ -165,6 +169,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata.drop(["continent", "country", "state"], axis=1, inplace=True)
 
       # add county to covv_location if county is present
+      # if don't want county if statement, skip these lines
       gisaid_metadata["county"] = gisaid_metadata["county"].fillna("")
       gisaid_metadata["covv_location"] = gisaid_metadata.apply(lambda x: x["covv_location"] + " / " + x["county"] if len(x["county"]) > 0 else x["covv_location"], axis=1)
 
