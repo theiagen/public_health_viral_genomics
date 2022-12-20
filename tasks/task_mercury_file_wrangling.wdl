@@ -74,7 +74,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     if ("~{organism}" == "sars-cov-2"):
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
-      table.drop(table.index[table["vadr_num_alerts"] > ~{vadr_alert_limit}], inplace=True)
+      table.drop(table.index[int(table["vadr_num_alerts"]) > ~{vadr_alert_limit}], inplace=True)
       table.drop(table.index[int(table["number_N"]) > ~{number_N_threshold}], inplace=True)
       # future: write out the rows that were dropped
       # future: maybe min allele frequency cutoff
