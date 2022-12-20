@@ -16,10 +16,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
   }
   command <<<
     # when running on terra, comment out all input_table mentions
-    python3 /scripts/export_large_tsv/export_large_tsv.py --project "~{project_name}" --workspace "~{workspace_name}" --entity_type ~{table_name} --tsv_filename ~{table_name}-data.tsv
+    #python3 /scripts/export_large_tsv/export_large_tsv.py --project "~{project_name}" --workspace "~{workspace_name}" --entity_type ~{table_name} --tsv_filename ~{table_name}-data.tsv
     
     # when running locally, use the input_table in place of downloading from Terra
-    #cp ~{input_table} ~{table_name}-data.tsv
+    cp ~{input_table} ~{table_name}-data.tsv
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
@@ -74,8 +74,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     if ("~{organism}" == "sars-cov-2"):
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
-      table.drop(table.index[int(table["vadr_num_alerts"]) > ~{vadr_alert_limit}], inplace=True)
-      table.drop(table.index[int(table["number_N"]) > ~{number_N_threshold}], inplace=True)
+      table.drop(table.index[table["vadr_num_alerts"].str.contains("VADR skipped due to poor assembly")], inplace=True)
+      table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
+      print(table)
+      print("before Number_N")
+      
+      #table.drop(table.index[table["number_N"].astype(int) < ~{number_N_threshold}], inplace=True)
       # future: write out the rows that were dropped
       # future: maybe min allele frequency cutoff
 
