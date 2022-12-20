@@ -65,7 +65,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     table["host"] = "Human"
     table["host_sci_name"] = "Homo sapiens"
     table["filetype"] = "fastq"
-    table["design_description"] = "Genomic sequencing of " + table["organism"]
+    table["design_description"] = "Whole genome sequencing of " + table["organism"]
 
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
@@ -131,7 +131,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         else: # add the column
           sra_metadata[column] = ""
       sra_metadata.rename(columns={"submission_id" : "sample_name", "library_id" : "library_ID", "seq_platform" : "platform", "amplicon_primer_scheme" : "amplicon_PCR_primer_scheme", "assembly_method" : "raw_sequence_data_processing_method", "submitter_email" : "sequence_submitter_contact_email"}, inplace=True)
-      sra_metadata["biosample_accession"] = "{populate with BioSample accession}"
       sra_metadata["title"] = "Genomic sequencing of " + sra_metadata["organism"] + ": " + sra_metadata["isolation_source"]
       sra_metadata.drop(["organism", "isolation_source"], axis=1, inplace=True)
 
@@ -189,7 +188,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       #  = (gisaid_metadata["covv_location"] + " / " + gisaid_optional["county"])
       gisaid_metadata.drop("county", axis=1, inplace=True)
       gisaid_metadata["covv_type"] = "betacoronavirus"
-      gisaid_metadata["covv_passage"] = "Original"
+      gisaid_metadata["covv_passage"] = "original"
 
       # make new column for filename
       gisaid_metadata["fn"] = gisaid_metadata["submission_id"] + "_gisaid.fasta"
@@ -334,7 +333,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata.to_csv("gisaid-fasta-manipulation.sh", header=False, index=False, columns = ["rename_fasta_header"])
       gisaid_metadata.drop("rename_fasta_header", axis=1, inplace=True)
       
-      gisaid_metadata["pox_passage"] = "Original"
+      gisaid_metadata["pox_passage"] = "original"
       # make dictionary for renaming headers
       # format: {original : new} or {metadata_formatter : gisaid_format}
       gisaid_rename_headers = {"gisaid_virus_name" : "pox_virus_name", "gisaid_submitter" : "submitter", "passage_details" : "pox_passage", "collection_date" : "pox_collection_date", "seq_platform" : "pox_seq_technology", "host" : "pox_host", "assembly_method" : "pox_assembly_method", "assembly_mean_coverage" : "pox_coverage", "collecting_lab" : "pox_orig_lab", "collecting_lab_address" : "pox_orig_lab_addr", "submitting_lab" : "pos_subm_lab", "submitting_lab_address" : "pox_subm_lab_addr", "authors" : "pox_authors", "purpose_of_sequencing" : "pox_sampling_strategy", "patient_gender" : "pox_gender", "patient_age" : "pox_patient_age", "patient_status" : "pox_patient_status", "specimen_source" : "pox_specimen_source", "outbreak" : "pox_outbreak", "last_vaccinated" : "pox_last_vaccinated", "treatment" : "pox_treatment"}
