@@ -11,6 +11,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     String output_name
     String gcp_bucket_uri
     Int vadr_alert_limit = 0 # only for SC2
+    Int number_N_threshold = 5000 # only for SC2
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -68,6 +69,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
       table.drop(table.index[table["vadr_num_alerts"] > ~{vadr_alert_limit}], inplace=True)
+      table.drop(table.index[table["number_N"] < ~{number_N_threshold}], inplace=True)
 
       # set default values
       table["gisaid_organism"] = "hCoV-19"
