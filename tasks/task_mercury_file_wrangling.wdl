@@ -76,10 +76,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # perform vadr alert check
       table.drop(table.index[table["vadr_num_alerts"].str.contains("VADR skipped due to poor assembly")], inplace=True)
       table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
-      print(table)
-      print("before Number_N")
-      
-      #table.drop(table.index[table["number_N"].astype(int) < ~{number_N_threshold}], inplace=True)
+      table.drop(table.index[table["number_n"].astype(int) < ~{number_N_threshold}], inplace=True)
+    
       # future: write out the rows that were dropped
       # future: maybe min allele frequency cutoff
 
