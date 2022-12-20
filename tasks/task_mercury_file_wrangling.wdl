@@ -23,6 +23,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
+    # add boolean variable to only submit to GISAID if possible
+
     python3 <<CODE 
     import pandas as pd 
     import numpy as np 
@@ -118,7 +120,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
           sra_metadata[column] = table[column]
         else: # add the column
           sra_metadata[column] = ""
-      sra_metadata.rename(columns={"submission_id" : "sample_name", "library_id" : "library_ID" "seq_platform" : "platform", "amplicon_primer_scheme" : "amplicon_PCR_primer_scheme", "assembly_method" : "raw_sequence_data_processing_method", "submitter_email" : "sequence_submitter_contact_email"}, inplace=True)
+      sra_metadata.rename(columns={"submission_id" : "sample_name", "library_id" : "library_ID", "seq_platform" : "platform", "amplicon_primer_scheme" : "amplicon_PCR_primer_scheme", "assembly_method" : "raw_sequence_data_processing_method", "submitter_email" : "sequence_submitter_contact_email"}, inplace=True)
       sra_metadata["biosample_accession"] = "{populate with BioSample accession}"
       sra_metadata["title"] = "Genomic sequencing of " + sra_metadata["organism"] + ": " + sra_metadata["isolation_source"]
       sra_metadata.drop(["organism", "isolation_source"], axis=1, inplace=True)
@@ -359,6 +361,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # transfer sra files to gcp bucket
     bash sra-file-transfer.sh    
+    # parse any outputs from that for failure messages and fail??
 
     unset CLOUDSDK_PYTHON   # reset env var
 
