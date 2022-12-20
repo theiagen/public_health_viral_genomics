@@ -64,6 +64,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     table["host"] = "Human"
     table["host_sci_name"] = "Homo sapiens"
+    table["filetype"] = "fastq"
+    table["design_description"] = "Genomic sequencing of " + table["organism"]
 
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
