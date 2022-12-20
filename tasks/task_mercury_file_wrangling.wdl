@@ -69,7 +69,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
-    table["isolate"] = (table["organism"] + "/" + table["host"] + "/" + table["submission_id"] + "/" + table["year"])
+    table["isolate"] = (table["organism"] + "/" + table["host"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
     table["biosample_accession"] = "{populate_with_BioSample_accession}"
 
 
