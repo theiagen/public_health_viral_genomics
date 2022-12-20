@@ -62,6 +62,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     # extract the samples for upload from the entire table
     table = table[table["~{table_name}_id"].isin("~{sep='*' sample_names}".split("*"))]
 
+    table["host"] = "Human"
+    table["host_sci_name"] = "Homo sapiens"
+
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
     table["isolate"] = (table["organism"] + "/" + table["host"] + "/" + table["submission_id"] + "/" + table["year"])
