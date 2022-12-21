@@ -16,6 +16,7 @@ workflow mercury_prep_n_batch {
     Int vadr_alert_limit = 0 # only for SC2
     File? authors_sbt # only for mpox
     Boolean skip_county = false
+    Boolean skip_ncbi = false
   }
   call submission.sm_metadata_wrangling {
     input:
@@ -28,7 +29,8 @@ workflow mercury_prep_n_batch {
       gcp_bucket_uri = gcp_bucket_uri,
       input_table = input_table,
       vadr_alert_limit = vadr_alert_limit,
-      skip_county = skip_county
+      skip_county = skip_county,
+      skip_ncbi = skip_ncbi
   }
   if (organism == "sars-cov-2") {
     call submission.trim_genbank_fastas {
