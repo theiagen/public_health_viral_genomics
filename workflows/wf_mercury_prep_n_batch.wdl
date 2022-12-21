@@ -52,8 +52,8 @@ workflow mercury_prep_n_batch {
   }
   output {
     File excluded_samples = sm_metadata_wrangling.excluded_samples
-    File biosample_metadata = sm_metadata_wrangling.biosample_metadata
-    File sra_metadata = sm_metadata_wrangling.sra_metadata
+    File? biosample_metadata = sm_metadata_wrangling.biosample_metadata
+    File? sra_metadata = sm_metadata_wrangling.sra_metadata
     File? genbank_metadata = sm_metadata_wrangling.genbank_metadata
     File? genbank_fasta = trim_genbank_fastas.genbank_fasta
     File? bankit_sqn_to_email = table2asn.sqn_file
