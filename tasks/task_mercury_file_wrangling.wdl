@@ -12,7 +12,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     String gcp_bucket_uri
     Int vadr_alert_limit = 0 # only for SC2
     Int number_N_threshold = 5000 # only for SC2
-    # future: Boolean skip_county
+    Boolean skip_county
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -20,6 +20,13 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     
     # when running locally, use the input_table in place of downloading from Terra
     #cp ~{input_table} ~{table_name}-data.tsv
+
+    # transform boolean skip_county into string for python comparison
+    if ~{skip_county}; then
+      export skip_county="true"
+    else 
+      export skip_county="false"
+    fi
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
@@ -72,16 +79,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     table["isolate"] = (table["organism"] + "/" + table["host"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
     table["biosample_accession"] = "{populate_with_BioSample_accession}"
 
-
-
     # set required and optional metadata fields based on the organism type
     if ("~{organism}" == "sars-cov-2"):
       print("Organism is SARS-CoV-2; performing VADR check")
       # perform vadr alert check
       # this part doesn't work unless this is present
-     # table.drop(table.index[table["vadr_num_alerts"].str.contains("VADR skipped due to poor assembly")], inplace=True)
-      #table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
-      #table.drop(table.index[table["number_n"].astype(int) < ~{number_N_threshold}], inplace=True)
+      table.drop(table.index[table["vadr_num_alerts"].astype(str).str.contains("VADR skipped due to poor assembly")], inplace=True)
+      table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
+      table.drop(table.index[table["number_n"].astype(int) > ~{number_N_threshold}], inplace=True)
 
       # future: write out the rows that were dropped
       # future: maybe min allele frequency cutoff
@@ -181,14 +186,27 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # add county to covv_location if county is present
       # if don't want county if statement, skip these lines
-      gisaid_metadata["county"] = gisaid_metadata["county"].fillna("")
-      gisaid_metadata["covv_location"] = gisaid_metadata.apply(lambda x: x["covv_location"] + " / " + x["county"] if len(x["county"]) > 0 else x["covv_location"], axis=1)
+      if (os.environ["skip_county"] == "false"):
+        gisaid_metadata["county"] = gisaid_metadata["county"].fillna("")
+        gisaid_metadata["covv_location"] = gisaid_metadata.apply(lambda x: x["covv_location"] + " / " + x["county"] if len(x["county"]) > 0 else x["covv_location"], axis=1)
+      else:
+        print("DEBUG: county was not added to GISAID location per user request")
 
-
-      #  = (gisaid_metadata["covv_location"] + " / " + gisaid_optional["county"])
       gisaid_metadata.drop("county", axis=1, inplace=True)
+
+
       gisaid_metadata["covv_type"] = "betacoronavirus"
       gisaid_metadata["covv_passage"] = "original"
+
+      # add empty columns that GISAID wants
+      gisaid_metadata["covv_subm_sample_id"] = ""
+      gisaid_metadata["covv_provider_sample_id"] = ""
+      
+      # replace any empty/NA values for age and gender with "unknown"
+      gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].replace(r'^\s*$', "unknown", regex=True)
+      gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].fillna("unknown")
+      gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].replace(r'^\s*$', "unknown", regex=True)
+      gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].fillna("unknown")
 
       # make new column for filename
       gisaid_metadata["fn"] = gisaid_metadata["submission_id"] + "_gisaid.fasta"
