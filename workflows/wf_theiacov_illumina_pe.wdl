@@ -13,6 +13,7 @@ import "../tasks/task_irma.wdl" as irma
 import "../tasks/task_abricate_flu.wdl" as abricate_flu
 import "../tasks/task_quasitools.wdl" as quasitools
 
+
 workflow theiacov_illumina_pe {
   meta {
     description: "Reference-based consensus calling for viral amplicon sequencing data"

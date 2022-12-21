@@ -170,6 +170,7 @@ workflow theiacov_ont {
     String primer_bed_name = consensus.primer_bed_name
     File assembly_fasta = consensus.consensus_seq
     String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): ~{consensus.artic_pipeline_version}"
+
     File? reads_aligned = consensus.reads_aligned
     File? trim_fastq = consensus.trim_fastq
     # Assembly QC
