@@ -38,8 +38,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
-    # add boolean variable to only submit to GISAID if possible
-
     python3 <<CODE 
     import pandas as pd 
     import numpy as np 
@@ -91,12 +89,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     else:
       print("DEBUG: skipping creation of several NCBI-specific variables")
 
-   
+
     # set required and optional metadata fields based on the organism type
     if ("~{organism}" == "sars-cov-2"):
       print("Organism is SARS-CoV-2; performing VADR check")
-      # perform vadr alert check
-      # this part doesn't work unless this is present
+
+      # perform vadr_num_alerts and number_n checks
       table.drop(table.index[table["vadr_num_alerts"].astype(str).str.contains("VADR skipped due to poor assembly")], inplace=True)
       table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
       table.drop(table.index[table["number_n"].astype(int) > ~{number_N_threshold}], inplace=True)
@@ -225,6 +223,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata["covv_provider_sample_id"] = ""
       
       # replace any empty/NA values for age and gender with "unknown"
+      # regex expression '^\s*$' searches for blank strings
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].fillna("unknown")
       gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].replace(r'^\s*$', "unknown", regex=True)
@@ -259,7 +258,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       table["gisaid_organism"] = "mpx/A"
       table["gisaid_virus_name"] = (table["organism"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
 
-
+      # set required and optional variables
       if (os.environ["skip_ncbi"] == "false"):
         biosample_required = ["submission_id", "organism", "collecting_lab", "collection_date",  "country", "state", "host_sci_name", "host_disease", "isolation_source", "lat_lon", "bioproject_accession", "isolation_type"]
         biosample_optional = ["sample_title", "strain", "isolate", "culture_collection", "genotype", "patient_age", "host_description", "host_disease_outcome", "host_disease_stage", "host_health_state", "patient_gender", "host_subject_id", "host_tissue_sampled", "passage_history", "pathotype", "serotype", "serovar", "specimen_voucher", "subgroup", "subtype", "description"] 
@@ -267,7 +266,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
         sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-        # cannot add bioproject_accession
         bankit_required = ["submission_id", "isolate", "collection_date", "country", "host", "assembly_fasta"]
         bankit_optional = ["isolation_source"]
       else: # skip_ncbi is true
@@ -392,13 +390,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       
       gisaid_metadata["pox_passage"] = "original"
       
-      
       # replace any empty/NA values for age and gender with "unknown"
+      # regex expression '^\s*$' searches for blank strings
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].fillna("unknown")
       gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].fillna("unknown")
-
 
       # make dictionary for renaming headers
       # format: {original : new} or {metadata_formatter : gisaid_format}
@@ -414,20 +411,20 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     CODE
 
     echo "DEBUG: performing file transfers and manipulations"
+
     # this version of gsutil only works on python2.7
     export CLOUDSDK_PYTHON=python2.7
 
-    # transfer gisaid files, alter header lines, then concatenate all gisaid fasta files
     if ~{skip_ncbi}; then
       echo "Skipping NCBI file manipulations..."
     else
-      if [[ ~{organism} == "sars-cov-2" ]]; then
+      if [[ ~{organism} == "sars-cov-2" ]]; then # transfer genbank files
         bash genbank-file-transfer.sh
         bash genbank-fasta-manipulation.sh
         cat *_genbank_untrimmed.fasta > ~{output_name}_genbank_untrimmed.fasta
       fi
 
-      if [[ ~{organism} == "mpox" ]] ; then
+      if [[ ~{organism} == "mpox" ]] ; then # transfer bankit files
         bash bankit-file-transfer.sh
         bash bankit-fasta-manipulation.sh
         cat *_bankit.fasta > ~{output_name}.fsa
@@ -435,16 +432,15 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # transfer sra files to gcp bucket
       bash sra-file-transfer.sh    
-      # parse any outputs from that for failure messages and fail??
+      # future: if failure in sra transfer, display error message
     fi
-    
+
+    # transfer gisaid files, alter header lines, then concatenate all gisaid fasta files
     bash gisaid-file-transfer.sh
     bash gisaid-fasta-manipulation.sh
     cat *_gisaid.fasta > ~{output_name}_gisaid.fasta
 
-
     unset CLOUDSDK_PYTHON   # reset env var
-
 
   >>>
   output {
