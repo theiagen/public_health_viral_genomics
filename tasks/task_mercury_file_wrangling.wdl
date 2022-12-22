@@ -221,13 +221,18 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # add empty columns that GISAID wants
       gisaid_metadata["covv_subm_sample_id"] = ""
       gisaid_metadata["covv_provider_sample_id"] = ""
-      
+      gisaid_metadata["covv_add_location"] = ""
+
       # replace any empty/NA values for age and gender with "unknown"
       # regex expression '^\s*$' searches for blank strings
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].fillna("unknown")
       gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_gender"] = gisaid_metadata["patient_gender"].fillna("unknown")
+      gisaid_metadata["patient_status"] = gisaid_metadata["patient_status"].replace(r'^\s*$', "unknown", regex=True)
+      gisaid_metadata["patient_status"] = gisaid_metadata["patient_status"].fillna("unknown")
+
+
 
       # make new column for filename
       gisaid_metadata["fn"] = gisaid_metadata["submission_id"] + "_gisaid.fasta"
