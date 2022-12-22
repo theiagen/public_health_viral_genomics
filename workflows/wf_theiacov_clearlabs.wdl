@@ -60,7 +60,8 @@ workflow theiacov_clearlabs {
       primer_bed = primer_bed,
       normalise = normalise,
       docker = medaka_docker,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      organism = organism
   }
   call assembly_metrics.stats_n_coverage {
     input:
