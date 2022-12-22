@@ -223,7 +223,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata["covv_provider_sample_id"] = ""
       gisaid_metadata["covv_add_location"] = ""
 
-      # replace any empty/NA values for age and gender with "unknown"
+      # replace any empty/NA values for age, status, and gender with "unknown"
       # regex expression '^\s*$' searches for blank strings
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_age"] = gisaid_metadata["patient_age"].fillna("unknown")
