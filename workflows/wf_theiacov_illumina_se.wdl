@@ -160,6 +160,7 @@ workflow theiacov_illumina_se {
     String? primer_bed_name = primer_trim.primer_bed_name
     File ivar_tsv = variant_call.sample_variants_tsv
     File ivar_vcf = variant_call.sample_variants_vcf
+    String? ivar_variant_proportion_intermediate = variant_call.variant_proportion_intermediate
     String ivar_variant_version = variant_call.ivar_version
     # Assembly QC
     File assembly_fasta = consensus.consensus_seq
