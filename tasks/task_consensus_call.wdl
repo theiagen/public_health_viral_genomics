@@ -117,9 +117,26 @@ task variant_call {
     variants_num=$(grep "TRUE" ~{samplename}.variants.tsv | wc -l)
     if [ -z "$variants_num" ] ; then variants_num="0" ; fi
     echo $variants_num | tee VARIANT_NUM
+
+    # # calculate proportion of variants with allele frequencies between 0.6 and 0.9
+    # filter variants that pass fisher's exact test
+    grep "TRUE" ~{samplename}.variants.tsv > passed_variants.tsv
+
+    # find number of variants at intermediate frequencies 
+    awk -F "\t" '{ if(($11 >= 0.6) && ($11 <= 0.9)) {print }}' passed_variants.tsv > intermediate_variants.tsv
+    intermediates_num=$(cat intermediate_variants.tsv | wc -l)
+
+    # if number of total variants is not zero, divide number of intermediate variants by total number of variants
+    if [[ "$variants_num" -eq "0" ]]; then
+      echo "Not computed: no variants detected" > PROPORTION_INTERMEDIATE
+    else
+      echo $intermediates_num $variants_num | awk '{ print $1/$2 }' > PROPORTION_INTERMEDIATE
+    fi
+
   >>>
   output {
     Int variant_num = read_string("VARIANT_NUM")
+    String  variant_proportion_intermediate = read_string("PROPORTION_INTERMEDIATE")
     File sample_variants_tsv = "~{samplename}.variants.tsv"
     File sample_variants_vcf = "~{samplename}.variants.vcf"
     String ivar_version = read_string("IVAR_VERSION")
