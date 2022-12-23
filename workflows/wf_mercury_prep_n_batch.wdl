@@ -32,14 +32,14 @@ workflow mercury_prep_n_batch {
       skip_county = skip_county,
       skip_ncbi = skip_ncbi
   }
-  if (organism == "sars-cov-2") {
+  if (organism == "sars-cov-2" && skip_ncbi == false) {
     call submission.trim_genbank_fastas {
       input:
         genbank_untrimmed_fasta = select_first([sm_metadata_wrangling.genbank_untrimmed_fasta]),
         output_name = output_name
     }
   }
-  if (organism == "mpox") {
+  if (organism == "mpox" && skip_ncbi == false) {
     call submission.table2asn {
       input:
         authors_sbt = select_first([authors_sbt]),
