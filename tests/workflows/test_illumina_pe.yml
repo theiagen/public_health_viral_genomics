@@ -608,7 +608,7 @@
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 9769f7ff548537ed7d36c5d0df445416
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
-      md5sum: 9bac41f257ffbe70f8d451905af3f1c0
+      md5sum: e1291b68fff8310b4b85ee6c7d6fd462
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

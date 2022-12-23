@@ -18,7 +18,7 @@
     - wf_theiacov_ont_miniwdl
   files:
     - path: miniwdl_run/call-consensus/command
-      md5sum: e51023ce426e20288130eee1ed8590ab
+      md5sum: c9dce943055504bddf59facb7099a54c
     - path: miniwdl_run/call-consensus/inputs.json
       contains: ["filtered_reads", "samplename", "fastq"]
     - path: miniwdl_run/call-consensus/outputs.json
@@ -488,7 +488,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_ont_medaka.wdl
-      md5sum: 4b71518503ca891459c82819fdd7da5d
+      md5sum: 9683dd0601393ad8d91fe3a27c311fd0
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
       md5sum: 557832879a573e1493d12947df99d5db
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
@@ -498,7 +498,7 @@
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: d55d15a9f120059591c23274be99a956
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
-      md5sum: 88f8902a9d2671c4b571c030adfba692
+      md5sum: b543819a4cdef1cc9eb1b6baa192629c
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_ont", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

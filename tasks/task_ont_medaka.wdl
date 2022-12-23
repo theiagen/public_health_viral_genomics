@@ -62,6 +62,7 @@ task read_filtering {
 task consensus {
   input {
     String samplename
+    String? organism
     File filtered_reads
     File primer_bed
     File? reference_genome
@@ -73,31 +74,54 @@ task consensus {
   }
   String primer_name = basename(primer_bed)
   command <<<
-    # setup custom primer scheme (/V is required by Artic)
-    mkdir -p ./primer-schemes/SARS-CoV-2/Vuser
+    # HIV
+    if [[ ~{organism} == "HIV" ]]; then
+      # setup custom primer scheme (/V is required by Artic)
+      mkdir -p ./primer-schemes/HIV/Vuser
 
-    ## set reference genome
-    if [[ ! -z "~{reference_genome}" ]]; then
+      ## set reference genome
       ref_genome="~{reference_genome}"
-    else
-       # use reference file in docker--different paths depending on image specified 
-       if [[ -d "/fieldbioinformatics" ]]; then
-         ref_genome=$(find /fieldbioinformatics/*/primer*schemes/nCoV-2019/V3/ -name "nCoV-2019.reference.fasta")
-       else
-         ref_genome=$(find /wf-artic*/data/primer_schemes/SARS-CoV-2/V4/ -name "SARS-CoV-2.reference.fasta")
-       fi
-       echo "No user-defined reference genome; setting reference to ${ref_genome}"
-    fi
-    head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
-    cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
 
-    ## set primers
-    cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+      head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
+      cp "${ref_genome}" ./primer-schemes/HIV/Vuser/HIV.reference.fasta
+
+      ## set primers
+      #cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+      #p_bed="~{primer_bed}"
+      cp "~{primer_bed}" ./primer-schemes/HIV/Vuser/HIV.scheme.bed
+      scheme_name="HIV/Vuser"
+    # Add other viruses here
+    # Default is SARS-CoV-2
+    else
+      # setup custom primer scheme (/V is required by Artic)
+      mkdir -p ./primer-schemes/SARS-CoV-2/Vuser
+
+      ## set reference genome
+      if [[ ! -z "~{reference_genome}" ]]; then
+        ref_genome="~{reference_genome}"
+      else
+        # use reference file in docker--different paths depending on image specified 
+        if [[ -d "/fieldbioinformatics" ]]; then
+          ref_genome=$(find /fieldbioinformatics/*/primer*schemes/nCoV-2019/V3/ -name "nCoV-2019.reference.fasta")
+        else
+          ref_genome=$(find /wf-artic*/data/primer_schemes/SARS-CoV-2/V4/ -name "SARS-CoV-2.reference.fasta")
+        fi
+        echo "No user-defined reference genome; setting reference to ${ref_genome}"
+      fi
+      head -n1 "${ref_genome}" | sed 's/>//' | tee REFERENCE_GENOME
+      cp "${ref_genome}" ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.reference.fasta
+
+      ## set primers
+      cp ~{primer_bed} ./primer-schemes/SARS-CoV-2/Vuser/SARS-CoV-2.scheme.bed
+      scheme_name="SARS-CoV-2/Vuser"
+    fi
+
+
 
     # version control
     echo "Medaka via $(artic -v)" | tee VERSION
     echo "~{primer_name}" | tee PRIMER_NAME
-    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} SARS-CoV-2/Vuser ~{samplename}
+    artic minion --medaka --medaka-model ~{medaka_model} --normalise ~{normalise} --threads ~{cpu} --scheme-directory ./primer-schemes --read-file ~{filtered_reads} ${scheme_name} ~{samplename}
     gunzip -f ~{samplename}.pass.vcf.gz
 
     # clean up fasta header
@@ -114,11 +138,12 @@ task consensus {
     File trim_sorted_bam = "~{samplename}.primertrimmed.rg.sorted.bam"
     File trim_sorted_bai = "~{samplename}.primertrimmed.rg.sorted.bam.bai"
     File medaka_pass_vcf = "~{samplename}.pass.vcf"
-    File reads_aligned = "~{samplename}.fastq.gz"
+    File? reads_aligned = "~{samplename}.fastq.gz"
     String medaka_reference = read_string("REFERENCE_GENOME")
     String artic_pipeline_version = read_string("VERSION")
     String artic_pipeline_docker = docker
     String primer_bed_name = read_string("PRIMER_NAME")
+    File? trim_fastq = "~{samplename}.primertrimmed.rg.fastq"
   }
   runtime {
     docker: "~{docker}"
