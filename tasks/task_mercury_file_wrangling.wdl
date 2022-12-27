@@ -59,7 +59,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     def remove_nas(table, required_metadata):
       table.replace(r'^\s+$', np.nan, regex=True) # replace blank cells with NaNs 
       excluded_samples = table[table[required_metadata].isna().any(axis=1)] # write out all rows that are required with NaNs to a new table
-      excluded_samples.set_index("~{table_name}_id", inplace=True) # convert the sample names to the index so we can determine what samples are missing what
+      excluded_samples.set_index("~{table_name}_id".lower(), inplace=True) # convert the sample names to the index so we can determine what samples are missing what
       excluded_samples = excluded_samples[excluded_samples.columns.intersection(required_metadata)] # remove all optional rows so only required rows are shown
       excluded_samples = excluded_samples.loc[:, excluded_samples.isna().any()] # remove all NON-NA columns so only columns with NAs remain; Shelly is a wizard and I love her 
       table.dropna(subset=required_metadata, axis=0, how='any', inplace=True) # remove all rows that are required with NaNs from table
@@ -69,11 +69,11 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     tablename = "~{table_name}-data.tsv" 
     table = pd.read_csv(tablename, delimiter='\t', header=0)
 
-    # set all column headers to lowercase 
-    table.columns = table.columns.str.lower()
-
     # extract the samples for upload from the entire table
     table = table[table["~{table_name}_id"].isin("~{sep='*' sample_names}".split("*"))]
+
+    # set all column headers to lowercase 
+    table.columns = table.columns.str.lower()
 
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
