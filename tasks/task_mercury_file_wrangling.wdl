@@ -69,11 +69,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     tablename = "~{table_name}-data.tsv" 
     table = pd.read_csv(tablename, delimiter='\t', header=0)
 
-    print("here")
-    print(table)
     # extract the samples for upload from the entire table
     table = table[table["~{table_name}_id"].isin("~{sep='*' sample_names}".split("*"))]
-    print("there")
+
     # set all column headers to lowercase 
     table.columns = table.columns.str.lower()
 
