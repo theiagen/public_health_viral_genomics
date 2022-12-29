@@ -225,7 +225,7 @@
     - path: miniwdl_run/call-primer_trim/work/_miniwdl_inputs/0/artic-v3.primers.bed
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-read_QC_trim/call-bbduk_se/command
-      md5sum: d1bb5a2a59fe2e671e9fcb1944fce7af
+      md5sum: c0ea149681653ed6fcf15262e99fbeec
     - path: miniwdl_run/call-read_QC_trim/call-bbduk_se/inputs.json
       contains: ["memory", "read1_trimmed", "ERR6319327"]
     - path: miniwdl_run/call-read_QC_trim/call-bbduk_se/outputs.json
@@ -508,7 +508,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: 557832879a573e1493d12947df99d5db
+      md5sum: 82081b9f98af840a387e335e3dc6f5ee
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl

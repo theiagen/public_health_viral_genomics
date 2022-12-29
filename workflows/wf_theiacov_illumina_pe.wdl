@@ -216,11 +216,11 @@ workflow theiacov_illumina_pe {
     String assembly_fasta = select_first([consensus.consensus_seq,irma.irma_assembly_fasta,""])
     String? ivar_version_consensus = consensus.ivar_version
     String? samtools_version_consensus = consensus.samtools_version
-    Int number_N = select_first([consensus_qc.number_N,consensus_qc.number_N])
-    Int assembly_length_unambiguous =  select_first([consensus_qc.number_ATCG,consensus_qc.number_ATCG])
-    Int number_Degenerate =  select_first([consensus_qc.number_Degenerate,consensus_qc.number_Degenerate])
-    Int number_Total =  select_first([consensus_qc.number_Total,consensus_qc.number_Total])
-    Float percent_reference_coverage =  select_first([consensus_qc.percent_reference_coverage,consensus_qc.percent_reference_coverage])
+    Int number_N = consensus_qc.number_N
+    Int assembly_length_unambiguous = consensus_qc.number_ATCG
+    Int number_Degenerate =  consensus_qc.number_Degenerate
+    Int number_Total = consensus_qc.number_Total
+    Float percent_reference_coverage =  consensus_qc.percent_reference_coverage
     Int consensus_n_variant_min_depth = min_depth
     # Alignment QC
     File? consensus_stats = stats_n_coverage.stats
