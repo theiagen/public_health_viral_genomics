@@ -14,6 +14,7 @@ task abricate_flu {
     Int cpu = 2
     Int memory = 4
     String docker = "staphb/abricate:1.0.1-insaflu-220727"
+    Int disk_size = 100
   }
   command <<<
     date | tee DATE    
@@ -71,7 +72,8 @@ task abricate_flu {
       docker: "~{docker}"
       memory: "~{memory} GB"
       cpu: cpu
-      disks: "local-disk 100 SSD"
+      disks:  "local-disk " + disk_size + " SSD"
+      disk: disk_size + " GB"
       preemptible:  0
   }
 }

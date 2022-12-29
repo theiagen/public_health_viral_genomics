@@ -14,6 +14,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Int number_N_threshold = 5000 # only for SC2
     Boolean skip_county
     Boolean skip_ncbi
+    Int disk_size = 100
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -463,7 +464,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     docker: "broadinstitute/terra-tools:tqdm"
     memory: "8 GB"
     cpu: 4
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
   }
 }
@@ -474,6 +476,7 @@ task trim_genbank_fastas {
     String output_name
     Int minlen = 50
     Int maxlen = 30000
+    Int disk_size = 100
   }
   command <<<
     # remove terminal ambiguous nucleotides
@@ -490,7 +493,8 @@ task trim_genbank_fastas {
     docker: "quay.io/staphb/vadr:1.3"
     memory: "1 GB"
     cpu: 1    
-    disks: "local-disk 25 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
   }
@@ -504,6 +508,7 @@ task table2asn {
     File bankit_fasta
     File bankit_metadata
     String output_name
+    Int disk_size = 100
   }
   command <<<
     # using this echo statement so the fasta file doesn't have a wiggly line
@@ -529,7 +534,8 @@ task table2asn {
     docker: "staphb/ncbi-table2asn:1.26.678"
     memory: "1 GB"
     cpu: 1
-    disks: "local-disk 25 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
     preemptible: 0
     maxRetries: 3
     continueOnReturnCode: [0, 2]

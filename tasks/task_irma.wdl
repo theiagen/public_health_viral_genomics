@@ -9,8 +9,9 @@ task irma {
     String irma_module = "FLU"
     String read_basename = basename(read1)
     String docker = "quay.io/staphb/irma:1.0.3"
-	Int memory = 8
-	Int cpu = 4
+    Int memory = 8
+    Int cpu = 4
+    Int disk_size = 100
   }
   command <<<
     date | tee DATE
@@ -92,7 +93,9 @@ task irma {
     docker: "~{docker}"
     memory: "~{memory} GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
+    maxRetries: 3
     preemptible:  0
   }
 }
