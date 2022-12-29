@@ -225,7 +225,7 @@
     - path: miniwdl_run/call-primer_trim/work/_miniwdl_inputs/0/artic-v3.primers.bed
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-read_QC_trim/call-bbduk/command
-      md5sum: fc8fca468562a8ac9a708c17084dc914
+      md5sum: 35bf0212e172f068646ff9474bfbfbdc
     - path: miniwdl_run/call-read_QC_trim/call-bbduk/inputs.json
       contains: ["memory", "read1_trimmed", "SRR13687078"]
     - path: miniwdl_run/call-read_QC_trim/call-bbduk/outputs.json
@@ -598,7 +598,7 @@
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
-      md5sum: 557832879a573e1493d12947df99d5db
+      md5sum: 03bc121a71bbb93f0da0503aee681b2a
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
@@ -608,7 +608,7 @@
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 9769f7ff548537ed7d36c5d0df445416
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
-      md5sum: e1291b68fff8310b4b85ee6c7d6fd462
+      md5sum: 9efc4b697aa5b57d80146a8c45eba447
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
