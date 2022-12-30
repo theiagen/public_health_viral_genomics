@@ -98,7 +98,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       quality_exclusion = pd.DataFrame()
       for index, row in table.iterrows():
-        if ("VADR skipped due to poor assembly") in row["vadr_num_alerts"]:
+        if ("VADR skipped due to poor assembly") in str(row["vadr_num_alerts"]):
           notification = "VADR skipped due to poor assembly"
           quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
         elif int(row["vadr_num_alerts"]) > ~{vadr_alert_limit}:
@@ -441,7 +441,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     CODE
 
     echo "DEBUG: performing file transfers and manipulations"
-
+     
     # this version of gsutil only works on python2.7
     export CLOUDSDK_PYTHON=python2.7
 
