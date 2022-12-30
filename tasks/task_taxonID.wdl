@@ -144,7 +144,7 @@ task pangolin4 {
     String samplename
     Int min_length = 10000
     Float max_ambig = 0.5
-    String docker = "staphb/pangolin:4.1.2-pdata-1.12"
+    String docker = "staphb/pangolin:4.1.3-pdata-1.17"
     String? analysis_mode
     Boolean expanded_lineage=true
     Boolean skip_scorpio=false

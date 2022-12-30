@@ -21,7 +21,7 @@ workflow theiacov_illumina_se {
     File read1_raw
     File? primer_bed
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
+    String nextclade_dataset_tag = "2022-12-14T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
     Int min_depth = 100

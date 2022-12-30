@@ -23,7 +23,7 @@ workflow theiacov_ont {
     File demultiplexed_reads
     Int normalise = 200
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
+    String nextclade_dataset_tag = "2022-12-14T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
     Int max_length = 700
