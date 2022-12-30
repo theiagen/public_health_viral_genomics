@@ -18,10 +18,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
   }
   command <<<
     # when running on terra, comment out all input_table mentions
-    python3 /scripts/export_large_tsv/export_large_tsv.py --project "~{project_name}" --workspace "~{workspace_name}" --entity_type ~{table_name} --tsv_filename ~{table_name}-data.tsv
+    #python3 /scripts/export_large_tsv/export_large_tsv.py --project "~{project_name}" --workspace "~{workspace_name}" --entity_type ~{table_name} --tsv_filename ~{table_name}-data.tsv
     
     # when running locally, use the input_table in place of downloading from Terra
-    #cp ~{input_table} ~{table_name}-data.tsv
+    cp ~{input_table} ~{table_name}-data.tsv
 
     # transform boolean skip_county into string for python comparison
     if ~{skip_county}; then
@@ -61,9 +61,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       table.replace(r'^\s+$', np.nan, regex=True) # replace blank cells with NaNs 
       excluded_samples = table[table[required_metadata].isna().any(axis=1)] # write out all rows that are required with NaNs to a new table
       excluded_samples.set_index("~{table_name}_id".lower(), inplace=True) # convert the sample names to the index so we can determine what samples are missing what
-      excluded_samples = excluded_samples[excluded_samples.columns.intersection(required_metadata)] # remove all optional rows so only required rows are shown
+      excluded_samples = excluded_samples[excluded_samples.columns.intersection(required_metadata)] # remove all optional columns so only required columns are shown
       excluded_samples = excluded_samples.loc[:, excluded_samples.isna().any()] # remove all NON-NA columns so only columns with NAs remain; Shelly is a wizard and I love her 
       table.dropna(subset=required_metadata, axis=0, how='any', inplace=True) # remove all rows that are required with NaNs from table
+
       return table, excluded_samples
 
     # read exported Terra table into pandas
@@ -93,15 +94,27 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # set required and optional metadata fields based on the organism type
     if ("~{organism}" == "sars-cov-2"):
-      print("Organism is SARS-CoV-2; performing VADR check")
+      print("Organism is SARS-CoV-2; performing VADR and Number_N check")
 
-      # perform vadr_num_alerts and number_n checks
+      quality_exclusion = pd.DataFrame()
+      for index, row in table.iterrows():
+        if ("VADR skipped due to poor assembly") in row["vadr_num_alerts"]:
+          notification = "VADR skipped due to poor assembly"
+          quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
+        elif int(row["vadr_num_alerts"]) > ~{vadr_alert_limit}:
+          notification = "VADR number alerts too high: " + str(row["vadr_num_alerts"]) + " greater than limit of " + str(~{vadr_alert_limit})
+          quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
+        elif int(row["number_n"]) > ~{number_N_threshold}:
+          notification="Number of Ns was too high: " + str(row["number_n"]) + " greater than limit of " + str(~{number_N_threshold})
+          quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
+
+      with open("~{output_name}_excluded_samples.tsv", "w") as exclusions:
+        exclusions.write("Samples excluded for quality thresholds:\n")
+      quality_exclusion.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t', index=False)
+       
       table.drop(table.index[table["vadr_num_alerts"].astype(str).str.contains("VADR skipped due to poor assembly")], inplace=True)
       table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
       table.drop(table.index[table["number_n"].astype(int) > ~{number_N_threshold}], inplace=True)
-
-      # future: write out the rows that were dropped
-      # future: maybe min allele frequency cutoff
 
       # set default values
       table["gisaid_organism"] = "hCoV-19"
@@ -109,13 +122,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # set required and optional metadata fields
       if (os.environ["skip_ncbi"] == "false"):
-        biosample_required = ["submission_id", "bioproject_accession", "organism", "collecting_lab", "collection_date", "country", "state", "host_sci_name", "host_disease", "isolate", "isolation_source"]
-        biosample_optional = ["treatment", "gisaid_accession", "gisaid_virus_name", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing"]
+        biosample_required = ["submission_id", "bioproject_accession", "organism", "collecting_lab", "collection_date", "country", "state", "host_sci_name", "host_disease", "isolation_source"]
+        biosample_optional = ["isolate", "treatment", "gisaid_accession", "gisaid_virus_name", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing"]
   
-        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
-        sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
+        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "filetype", "read1_dehosted"]
+        sra_optional = ["design_description", "read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-        genbank_required = ["submission_id", "country", "host_sci_name", "isolate", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "assembly_fasta"]
+        genbank_required = ["submission_id", "country", "host_sci_name", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "assembly_fasta"]
+        genbank_optional = ["isolate"]
       else: # if skip_ncbi is true
         biosample_required = []
         biosample_optional = []
@@ -123,12 +137,15 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_optional = []
         genbank_required = []
       
-      gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
-      gisaid_optional = ["additional_host_information", "county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
+      gisaid_required = ["gisaid_submitter", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_optional = ["gisaid_virus_name", "additional_host_information", "county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       required_metadata = biosample_required + sra_required + genbank_required + gisaid_required
+     
       table, excluded_samples = remove_nas(table, required_metadata)
-      excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", sep='\t')
+      with open("~{output_name}_excluded_samples.tsv", "a") as exclusions:
+        exclusions.write("\nSamples excluded for missing required metadata (will have empty values in indicated columns):\n")
+      excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t')
 
       # SC2 BIOSAMPLE
       if (os.environ["skip_ncbi"] == "false"):
@@ -174,6 +191,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         # GENBANK
         print("DEBUG: creating genbank metadata table...")
         genbank_metadata = table[genbank_required].copy()
+        for column in genbank_optional:
+          if column in table.columns:
+            genbank_metadata[column] = table[column]
+          else: # add the column
+            genbank_metadata[column] = ""
+
         genbank_metadata.rename(columns={"submission_id" : "Sequence_ID", "host_sci_name" : "host", "collection_date" : "collection-date", "isolation_source" : "isolation-source", "biosample_accession" : "BioSample", "bioproject_accession" : "BioProject"}, inplace=True)
 
         # prep for file manipulation and manuevering 
@@ -233,8 +256,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       gisaid_metadata["patient_status"] = gisaid_metadata["patient_status"].replace(r'^\s*$', "unknown", regex=True)
       gisaid_metadata["patient_status"] = gisaid_metadata["patient_status"].fillna("unknown")
 
-
-
       # make new column for filename
       gisaid_metadata["fn"] = gisaid_metadata["submission_id"] + "_gisaid.fasta"
       gisaid_metadata.drop("submission_id", axis=1, inplace=True)
@@ -272,8 +293,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
         sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-        bankit_required = ["submission_id", "isolate", "collection_date", "country", "host", "assembly_fasta"]
-        bankit_optional = ["isolation_source"]
+        bankit_required = ["submission_id", "collection_date", "country", "host", "assembly_fasta"]
+        bankit_optional = ["isolate", "isolation_source"]
       else: # skip_ncbi is true
         biosample_required = []
         biosample_optional = []
@@ -289,7 +310,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # remove all rows with NAs in required columns and capture which rows and columns have those NAs
       required_metadata = biosample_required + sra_required + bankit_required + gisaid_required
       table, excluded_samples = remove_nas(table, required_metadata)
-      excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", sep='\t', index=False)
+      
+      with open("~{output_name}_excluded_samples.tsv", "a") as exclusions:
+        exclusions.write("\nSamples excluded for missing required metadata (will have empty values in indicated columns):\n")
+      excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t')
      
       if (os.environ["skip_ncbi"] == "false"):
         # BIOSAMPLE
