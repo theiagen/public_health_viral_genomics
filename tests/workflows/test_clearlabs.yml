@@ -212,7 +212,7 @@
     - path: miniwdl_run/call-ncbi_scrub_se/work/r1.fastq.clean
       md5sum: 033e7bdb8c34ed0df11bf9f604addb54
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: 0efc55d76a6c1ad4017d18c6149c6eab
+      md5sum: 9c7cb5f727c215afd966b5a680b3d201
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "dataset_tag", "genome_fasta"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -229,11 +229,11 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/clearlabs.medaka.consensus.nextclade.auspice.json
     - path: miniwdl_run/call-nextclade_one_sample/work/clearlabs.medaka.consensus.nextclade.json
     - path: miniwdl_run/call-nextclade_one_sample/work/clearlabs.medaka.consensus.nextclade.tsv
-      md5sum: 14862320a34113ff363c514fd72cd117
+      md5sum: b1c583d5e2902d442501a8b9d1853508
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.aligned.fasta
       md5sum: 0961549fb82f231ca3d27b07d68dc18c
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.csv
-      md5sum: 28413fd8f7810df99f0bbfdbbcf70061
+      md5sum: 6fdc3589a1e9a110286cbd9f4a781213
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.errors.csv
       md5sum: be674cbaf42271c6555b69e1d069447b
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.insertions.csv
@@ -246,7 +246,7 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/reference.fasta
       md5sum: c7ce05f28e4ec0322c96f24e064ef55c
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/sequences.fasta
-      md5sum: 63d9c2592b5e3adb466e2f57f1efb7d2
+      md5sum: 154d65f2491793dbb5e74b14a55309b4
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/tag.json
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/tree.json
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/virus_properties.json
@@ -294,7 +294,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/clearlabs.medaka.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
-      md5sum: 14862320a34113ff363c514fd72cd117
+      md5sum: b1c583d5e2902d442501a8b9d1853508
     - path: miniwdl_run/call-pangolin4/command
       md5sum: 6dde0f23a53493f2a5c04cbd99313e46
     - path: miniwdl_run/call-pangolin4/inputs.json
@@ -314,15 +314,15 @@
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_LINEAGE
       md5sum: 717da6cd0df2d2f1d00461f3498aaca9
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_NOTES
-      md5sum: 90d3fe0732810e69b2e7a8aa42772bfa
+      md5sum: 0d654329677a43e9626ea3921b924662
     - path: miniwdl_run/call-pangolin4/work/PANGO_ASSIGNMENT_VERSION
-      md5sum: c3e2bf00d4a82d39cc9137f5c2a6764b
+      md5sum: 4e434d75ffecbd1669b89698d0f74d9e
     - path: miniwdl_run/call-pangolin4/work/VERSION_PANGOLIN_ALL
-      md5sum: 197cb8ecf4898fbd589243cf65100cc1
+      md5sum: 610311d600672ebc0fb9c138cab9945a
     - path: miniwdl_run/call-pangolin4/work/_miniwdl_inputs/0/clearlabs.medaka.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-pangolin4/work/clearlabs.pangolin_report.csv
-      md5sum: 1ee67e087079b551da5d02345bbf5ad0
+      md5sum: 8f98ee098c10003b1a04cb13493aec78
     - path: miniwdl_run/call-sc2_gene_coverage/command
       md5sum: 7090d929e3e59de1b4799d44824bf1d3
     - path: miniwdl_run/call-sc2_gene_coverage/inputs.json
@@ -486,11 +486,11 @@
     - path: miniwdl_run//wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: b027e1671929931f9c2ab4ba38696139
+      md5sum: ac535cb1d1a51a5ca578cb26714a49a7
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: d55d15a9f120059591c23274be99a956
+      md5sum: 27d436979d253be67940a84696c5b77b
     - path: miniwdl_run/wdl/workflows/wf_theiacov_clearlabs.wdl
-      md5sum: 437b7b62e64dcb8cbf86cf3da147b4d0
+      md5sum: 46804457134e58b17493b1b408219e25
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_clearlabs", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
