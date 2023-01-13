@@ -15,6 +15,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Boolean skip_county
     Boolean skip_ncbi
     Int disk_size = 100
+    String read1_column_name = "read1_dehosted"
+    String read2_column_name = "read2_dehosted"
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -125,8 +127,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         biosample_required = ["submission_id", "bioproject_accession", "organism", "collecting_lab", "collection_date", "country", "state", "host_sci_name", "host_disease", "isolation_source"]
         biosample_optional = ["isolate", "treatment", "gisaid_accession", "gisaid_virus_name", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing"]
   
-        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "filetype", "read1_dehosted"]
-        sra_optional = ["design_description", "read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
+        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "filetype", "~{read1_column_name}"]
+        sra_optional = ["design_description", "~{read2_column_name}", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
         genbank_required = ["submission_id", "country", "host_sci_name", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "assembly_fasta"]
         genbank_optional = ["isolate"]
@@ -177,14 +179,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
         # prettify the filenames and rename them to be sra compatible; write out copy commands to a file to rename and move later
         sra_metadata["filename"] = sra_metadata["sample_name"] + "_R1.fastq.gz"
-        sra_metadata["copy_command_r1"] = "gsutil -m cp " + sra_metadata["read1_dehosted"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename"]
+        sra_metadata["copy_command_r1"] = "gsutil -m cp " + sra_metadata["~{read1_column_name}"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename"]
         sra_metadata["copy_command_r1"].to_csv("sra-file-transfer.sh", index=False, header=False)
-        sra_metadata.drop(["copy_command_r1", "read1_dehosted"], axis=1, inplace=True)
-        if "read2_dehosted" in table.columns: # enable optional single end submission
+        sra_metadata.drop(["copy_command_r1", "~{read1_column_name}"], axis=1, inplace=True)
+        if "~{read2_column_name}" in table.columns: # enable optional single end submission
           sra_metadata["filename2"] = sra_metadata["sample_name"] + "_R2.fastq.gz"
-          sra_metadata["copy_command_r2"] = "gsutil -m cp " + sra_metadata["read2_dehosted"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename2"]
+          sra_metadata["copy_command_r2"] = "gsutil -m cp " + sra_metadata["~{read2_column_name}"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename2"]
           sra_metadata["copy_command_r2"].to_csv("sra-file-transfer.sh", mode='a', index=False, header=False)
-          sra_metadata.drop(["copy_command_r2", "read2_dehosted"], axis=1, inplace=True)
+          sra_metadata.drop(["copy_command_r2", "~{read2_column_name}"], axis=1, inplace=True)
 
         sra_metadata.to_csv("~{output_name}_sra_metadata.tsv", sep='\t', index=False)
 
@@ -290,8 +292,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         biosample_required = ["submission_id", "organism", "collecting_lab", "collection_date",  "country", "state", "host_sci_name", "host_disease", "isolation_source", "lat_lon", "bioproject_accession", "isolation_type"]
         biosample_optional = ["sample_title", "strain", "isolate", "culture_collection", "genotype", "patient_age", "host_description", "host_disease_outcome", "host_disease_stage", "host_health_state", "patient_gender", "host_subject_id", "host_tissue_sampled", "passage_history", "pathotype", "serotype", "serovar", "specimen_voucher", "subgroup", "subtype", "description"] 
 
-        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "read1_dehosted"]
-        sra_optional = ["read2_dehosted", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
+        sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "~{read1_column_name}"]
+        sra_optional = ["~{read2_column_name}", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
         bankit_required = ["submission_id", "collection_date", "country", "host", "assembly_fasta"]
         bankit_optional = ["isolate", "isolation_source"]
@@ -345,14 +347,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         
         # prettify the filenames and rename them to be sra compatible
         sra_metadata["filename"] = sra_metadata["sample_name"] + "_R1.fastq.gz"
-        sra_metadata["copy_command_r1"] = "gsutil -m cp " + sra_metadata["read1_dehosted"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename"]
+        sra_metadata["copy_command_r1"] = "gsutil -m cp " + sra_metadata["~{read1_column_name}"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename"]
         sra_metadata["copy_command_r1"].to_csv("sra-file-transfer.sh", index=False, header=False)
-        sra_metadata.drop(["copy_command_r1", "read1_dehosted"], axis=1, inplace=True)
-        if "read2_dehosted" in table.columns: # enable optional single end submission
+        sra_metadata.drop(["copy_command_r1", "~{read1_column_name}"], axis=1, inplace=True)
+        if "~{read2_column_name}" in table.columns: # enable optional single end submission
           sra_metadata["filename2"] = sra_metadata["sample_name"] + "_R2.fastq.gz"
-          sra_metadata["copy_command_r2"] = "gsutil -m cp " + sra_metadata["read2_dehosted"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename2"]
+          sra_metadata["copy_command_r2"] = "gsutil -m cp " + sra_metadata["~{read2_column_name}"] + " " + "~{gcp_bucket_uri}" + "/" + sra_metadata["filename2"]
           sra_metadata["copy_command_r2"].to_csv("sra-file-transfer.sh", mode='a', index=False, header=False)
-          sra_metadata.drop(["copy_command_r2", "read2_dehosted"], axis=1, inplace=True)
+          sra_metadata.drop(["copy_command_r2", "~{read2_column_name}"], axis=1, inplace=True)
 
         sra_metadata.to_csv("~{output_name}_sra_metadata.tsv", sep='\t', index=False)
 
