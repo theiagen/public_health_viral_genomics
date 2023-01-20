@@ -17,6 +17,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Int disk_size = 100
     String read1_column_name = "read1_dehosted"
     String read2_column_name = "read2_dehosted"
+    String assembly_fasta_column_name = "assembly_fasta"
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -71,7 +72,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # read exported Terra table into pandas
     tablename = "~{table_name}-data.tsv" 
-    table = pd.read_csv(tablename, delimiter='\t', header=0)
+    table = pd.read_csv(tablename, delimiter='\t', header=0, dtype={"~{table_name}_id": 'str'}) # ensure sample_id is always a string
 
     # extract the samples for upload from the entire table
     table = table[table["~{table_name}_id"].isin("~{sep='*' sample_names}".split("*"))]
@@ -130,7 +131,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "filetype", "~{read1_column_name}"]
         sra_optional = ["design_description", "~{read2_column_name}", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-        genbank_required = ["submission_id", "country", "host_sci_name", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "assembly_fasta"]
+        genbank_required = ["submission_id", "country", "host_sci_name", "collection_date", "isolation_source", "biosample_accession", "bioproject_accession", "~{assembly_fasta_column_name}"]
         genbank_optional = ["isolate"]
       else: # if skip_ncbi is true
         biosample_required = []
@@ -139,7 +140,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_optional = []
         genbank_required = []
       
-      gisaid_required = ["gisaid_submitter", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["gisaid_virus_name", "additional_host_information", "county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       required_metadata = biosample_required + sra_required + genbank_required + gisaid_required
@@ -204,8 +205,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         # prep for file manipulation and manuevering 
         genbank_metadata["cp"] = "gsutil cp"
         genbank_metadata["fn"] = genbank_metadata["Sequence_ID"] + "_genbank_untrimmed.fasta"
-        genbank_metadata.to_csv("genbank-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
-        genbank_metadata.drop(["cp", "assembly_fasta"], axis=1, inplace=True)
+        genbank_metadata.to_csv("genbank-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "~{assembly_fasta_column_name}", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
+        genbank_metadata.drop(["cp", "~{assembly_fasta_column_name}"], axis=1, inplace=True)
 
         # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>covv_virus_name)
         # since gisaid virus name includes '/', use '|' in sed command instead
@@ -264,8 +265,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # write out the command to rename the assembly files to a file for bash to move about
       gisaid_metadata["cp"] = "gsutil cp"
-      gisaid_metadata.to_csv("gisaid-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
-      gisaid_metadata.drop(["cp", "assembly_fasta"], axis=1, inplace=True)
+      gisaid_metadata.to_csv("gisaid-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "~{assembly_fasta_column_name}", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
+      gisaid_metadata.drop(["cp", "~{assembly_fasta_column_name}"], axis=1, inplace=True)
 
       # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>covv_virus_name)
       # since gisaid virus name includes '/', use '|' in sed command instead
@@ -295,7 +296,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "design_description", "filetype", "~{read1_column_name}"]
         sra_optional = ["~{read2_column_name}", "amplicon_primer_scheme", "amplicon_size", "assembly_method", "dehosting_method", "submitter_email"]
 
-        bankit_required = ["submission_id", "collection_date", "country", "host", "assembly_fasta"]
+        bankit_required = ["submission_id", "collection_date", "country", "host", "~{assembly_fasta_column_name}"]
         bankit_optional = ["isolate", "isolation_source"]
       else: # skip_ncbi is true
         biosample_required = []
@@ -305,7 +306,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         bankit_required = []
         bankit_optional = []
 
-      gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "assembly_fasta", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       print("DEBUG: removing rows with NAs in required columns...")
@@ -370,8 +371,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
         bankit_metadata["cp"] = "gsutil cp"
         bankit_metadata["fn"] = bankit_metadata["Sequence_ID"] + "_bankit.fasta"
-        bankit_metadata.to_csv("bankit-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
-        bankit_metadata.drop(["cp", "assembly_fasta"], axis=1, inplace=True)
+        bankit_metadata.to_csv("bankit-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "~{assembly_fasta_column_name}", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
+        bankit_metadata.drop(["cp", "~{assembly_fasta_column_name}"], axis=1, inplace=True)
 
         # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>covv_virus_name)
         # since gisaid virus name includes '/', use '|' in sed command instead
@@ -411,8 +412,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # write out the command to rename the assembly files to a file for bash to move about
       gisaid_metadata["cp"] = "gsutil cp"
-      gisaid_metadata.to_csv("gisaid-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "assembly_fasta", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
-      gisaid_metadata.drop(["cp", "assembly_fasta"], axis=1, inplace=True)
+      gisaid_metadata.to_csv("gisaid-file-transfer.sh", sep=' ', header=False, index=False, columns = ["cp", "~{assembly_fasta_column_name}", "fn"], quoting=csv.QUOTE_NONE, escapechar=" ")
+      gisaid_metadata.drop(["cp", "~{assembly_fasta_column_name}"], axis=1, inplace=True)
 
       # replace the first line of every fasta file (>Sample_ID) with the gisaid virus name instead (>pox_virus_name)
       # since gisaid virus name includes '/', use '|' in sed command instead
