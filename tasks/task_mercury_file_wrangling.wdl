@@ -492,8 +492,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     File? genbank_untrimmed_fasta = "~{output_name}_genbank_untrimmed.fasta"
     File? bankit_metadata = "~{output_name}.src"
     File? bankit_fasta = "~{output_name}.fsa"
-    File? gisaid_metadata = "~{output_name}_gisaid_metadata.csv"
-    File? gisaid_fasta = "~{output_name}_gisaid.fasta"
+    File gisaid_metadata = "~{output_name}_gisaid_metadata.csv"
+    File gisaid_fasta = "~{output_name}_gisaid.fasta"
   }
   runtime {
     docker: "broadinstitute/terra-tools:tqdm"
