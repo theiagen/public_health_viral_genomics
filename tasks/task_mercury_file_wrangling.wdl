@@ -18,6 +18,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     String read1_column_name = "read1_dehosted"
     String read2_column_name = "read2_dehosted"
     String assembly_fasta_column_name = "assembly_fasta"
+    String assembly_mean_coverage_column_name = "assembly_mean_coverage"
   }
   command <<<
     # when running on terra, comment out all input_table mentions
@@ -73,7 +74,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     # read exported Terra table into pandas
     tablename = "~{table_name}-data.tsv" 
     table = pd.read_csv(tablename, delimiter='\t', header=0, dtype={"~{table_name}_id": 'str'}) # ensure sample_id is always a string
-
     # extract the samples for upload from the entire table
     table = table[table["~{table_name}_id"].isin("~{sep='*' sample_names}".split("*"))]
 
@@ -110,11 +110,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         elif int(row["number_n"]) > ~{number_N_threshold}:
           notification="Number of Ns was too high: " + str(row["number_n"]) + " greater than limit of " + str(~{number_N_threshold})
           quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
-
+      
       with open("~{output_name}_excluded_samples.tsv", "w") as exclusions:
         exclusions.write("Samples excluded for quality thresholds:\n")
       quality_exclusion.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t', index=False)
        
+
       table.drop(table.index[table["vadr_num_alerts"].astype(str).str.contains("VADR skipped due to poor assembly")], inplace=True)
       table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
       table.drop(table.index[table["number_n"].astype(int) > ~{number_N_threshold}], inplace=True)
@@ -140,15 +141,19 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         sra_optional = []
         genbank_required = []
       
-      gisaid_required = ["gisaid_submitter", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "~{assembly_mean_coverage_column_name}", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["gisaid_virus_name", "additional_host_information", "county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       required_metadata = biosample_required + sra_required + genbank_required + gisaid_required
-     
+
       table, excluded_samples = remove_nas(table, required_metadata)
       with open("~{output_name}_excluded_samples.tsv", "a") as exclusions:
         exclusions.write("\nSamples excluded for missing required metadata (will have empty values in indicated columns):\n")
       excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t')
+
+      # test if table is size 0 do not continue
+      if table.empty:
+        sys.exit("DEBUG: all samples were removed due to either missing variables or failing to meet quality thresholds. Please investigate the excluded_samples.tsv file for more information.")
 
       # SC2 BIOSAMPLE
       if (os.environ["skip_ncbi"] == "false"):
@@ -233,6 +238,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # add county to covv_location if county is present
       # if don't want county if statement, skip these lines
+ 
       if (os.environ["skip_county"] == "false"):
         gisaid_metadata["county"] = gisaid_metadata["county"].fillna("")
         gisaid_metadata["covv_location"] = gisaid_metadata.apply(lambda x: x["covv_location"] + " / " + x["county"] if len(x["county"]) > 0 else x["covv_location"], axis=1)
@@ -240,7 +246,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         print("DEBUG: county was not added to GISAID location per user request")
 
       gisaid_metadata.drop("county", axis=1, inplace=True)
-
 
       gisaid_metadata["covv_type"] = "betacoronavirus"
       gisaid_metadata["covv_passage"] = "original"
@@ -276,13 +281,13 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # make dictionary for renaming headers
       # format: {original : new} or {metadata_formatter : gisaid_format}
-      gisaid_rename_headers = {"gisaid_virus_name" : "covv_virus_name", "additional_host_information" : "covv_add_host_info", "gisaid_submitter" : "submitter", "collection_date" : "covv_collection_date", "seq_platform" : "covv_seq_technology", "host" : "covv_host", "assembly_method" : "covv_assembly_method", "assembly_mean_coverage" : "covv_coverage", "collecting_lab" : "covv_orig_lab", "collecting_lab_address" : "covv_orig_lab_addr", "submitting_lab" : "covv_subm_lab", "submitting_lab_address" : "covv_subm_lab_addr", "authors" : "covv_authors", "purpose_of_sequencing" : "covv_sampling_strategy", "patient_gender" : "covv_gender", "patient_age" : "covv_patient_age", "patient_status" : "covv_patient_status", "specimen_source" : "covv_specimen", "outbreak" : "covv_outbreak", "last_vaccinated" : "covv_last_vaccinated", "treatment" : "covv_treatment"}
+      gisaid_rename_headers = {"gisaid_virus_name" : "covv_virus_name", "additional_host_information" : "covv_add_host_info", "gisaid_submitter" : "submitter", "collection_date" : "covv_collection_date", "seq_platform" : "covv_seq_technology", "host" : "covv_host", "assembly_method" : "covv_assembly_method", "~{assembly_mean_coverage_column_name}" : "covv_coverage", "collecting_lab" : "covv_orig_lab", "collecting_lab_address" : "covv_orig_lab_addr", "submitting_lab" : "covv_subm_lab", "submitting_lab_address" : "covv_subm_lab_addr", "authors" : "covv_authors", "purpose_of_sequencing" : "covv_sampling_strategy", "patient_gender" : "covv_gender", "patient_age" : "covv_patient_age", "patient_status" : "covv_patient_status", "specimen_source" : "covv_specimen", "outbreak" : "covv_outbreak", "last_vaccinated" : "covv_last_vaccinated", "treatment" : "covv_treatment"}
       
       # rename columns
       gisaid_metadata.rename(columns=gisaid_rename_headers, inplace=True)
 
       gisaid_metadata.to_csv("~{output_name}_gisaid_metadata.csv", sep=',', index=False)
-
+      
     elif ("~{organism}" == "mpox"):
       print("Organism is mpox, no VADR filtering performed")
       table["gisaid_organism"] = "mpx/A"
@@ -306,7 +311,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         bankit_required = []
         bankit_optional = []
 
-      gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "assembly_mean_coverage", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
+      gisaid_required = ["gisaid_submitter", "gisaid_virus_name", "submission_id", "collection_date", "continent", "country", "state", "host", "seq_platform", "~{assembly_fasta_column_name}", "assembly_method", "~{assembly_mean_coverage_column_name}", "collecting_lab", "collecting_lab_address", "submitting_lab", "submitting_lab_address", "authors"]
       gisaid_optional = ["county", "purpose_of_sequencing", "patient_gender", "patient_age", "patient_status", "specimen_source", "outbreak", "last_vaccinated", "treatment"]
 
       print("DEBUG: removing rows with NAs in required columns...")
@@ -318,6 +323,9 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         exclusions.write("\nSamples excluded for missing required metadata (will have empty values in indicated columns):\n")
       excluded_samples.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t')
      
+      if table.empty:
+        sys.exit("DEBUG: all samples were removed due to either missing variables or failing to meet quality thresholds. Please investigate the excluded_samples.tsv file for more information.")
+
       if (os.environ["skip_ncbi"] == "false"):
         # BIOSAMPLE
         print("DEBUG: creating biosample metadata table...")
@@ -432,14 +440,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # make dictionary for renaming headers
       # format: {original : new} or {metadata_formatter : gisaid_format}
-      gisaid_rename_headers = {"gisaid_virus_name" : "pox_virus_name", "gisaid_submitter" : "submitter", "passage_details" : "pox_passage", "collection_date" : "pox_collection_date", "seq_platform" : "pox_seq_technology", "host" : "pox_host", "assembly_method" : "pox_assembly_method", "assembly_mean_coverage" : "pox_coverage", "collecting_lab" : "pox_orig_lab", "collecting_lab_address" : "pox_orig_lab_addr", "submitting_lab" : "pos_subm_lab", "submitting_lab_address" : "pox_subm_lab_addr", "authors" : "pox_authors", "purpose_of_sequencing" : "pox_sampling_strategy", "patient_gender" : "pox_gender", "patient_age" : "pox_patient_age", "patient_status" : "pox_patient_status", "specimen_source" : "pox_specimen_source", "outbreak" : "pox_outbreak", "last_vaccinated" : "pox_last_vaccinated", "treatment" : "pox_treatment"}
+      gisaid_rename_headers = {"gisaid_virus_name" : "pox_virus_name", "gisaid_submitter" : "submitter", "passage_details" : "pox_passage", "collection_date" : "pox_collection_date", "seq_platform" : "pox_seq_technology", "host" : "pox_host", "assembly_method" : "pox_assembly_method", "~{assembly_mean_coverage_column_name}" : "pox_coverage", "collecting_lab" : "pox_orig_lab", "collecting_lab_address" : "pox_orig_lab_addr", "submitting_lab" : "pos_subm_lab", "submitting_lab_address" : "pox_subm_lab_addr", "authors" : "pox_authors", "purpose_of_sequencing" : "pox_sampling_strategy", "patient_gender" : "pox_gender", "patient_age" : "pox_patient_age", "patient_status" : "pox_patient_status", "specimen_source" : "pox_specimen_source", "outbreak" : "pox_outbreak", "last_vaccinated" : "pox_last_vaccinated", "treatment" : "pox_treatment"}
       
       # rename columns
       gisaid_metadata.rename(columns=gisaid_rename_headers, inplace=True)
 
       gisaid_metadata.to_csv("~{output_name}_gisaid_metadata.csv", sep=',', index=False)      
     else:
-      raise Exception('Only "SARS-CoV-2" and "MPXV" are supported as acceptable input for the \'organism\' variable at this time. You entered "~{organism}".')
+      raise Exception('Only "sars-cov-2" and "mpox" are supported as acceptable input for the \'organism\' variable at this time. You entered "~{organism}".')
   
     CODE
 
@@ -484,8 +492,8 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     File? genbank_untrimmed_fasta = "~{output_name}_genbank_untrimmed.fasta"
     File? bankit_metadata = "~{output_name}.src"
     File? bankit_fasta = "~{output_name}.fsa"
-    File gisaid_metadata = "~{output_name}_gisaid_metadata.csv"
-    File gisaid_fasta = "~{output_name}_gisaid.fasta"
+    File? gisaid_metadata = "~{output_name}_gisaid_metadata.csv"
+    File? gisaid_fasta = "~{output_name}_gisaid.fasta"
   }
   runtime {
     docker: "broadinstitute/terra-tools:tqdm"
