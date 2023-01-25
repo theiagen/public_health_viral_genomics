@@ -15,6 +15,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Boolean skip_county
     Boolean skip_ncbi
     Boolean using_clearlabs_data = false
+    Boolean using_reads_dehosted = false
     Int disk_size = 100
   }
   command <<<
@@ -44,6 +45,14 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     else 
       export using_clearlabs_data="false"
     fi
+
+    # transform boolean using_clearlabs_data into string for python comparison
+    if ~{using_reads_dehosted}; then
+      export using_reads_dehosted="true"
+    else 
+      export using_reads_dehosted="false"
+    fi
+
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
@@ -75,16 +84,22 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       return table, excluded_samples
 
-
+    # set the data file names
     read1_column_name = "read1_dehosted"
     read2_column_name = "read2_dehosted"
     assembly_fasta_column_name = "assembly_fasta"
     assembly_mean_coverage_column_name = "assembly_mean_coverage"
 
+    # if want to upload clearlabs-generated data and metrics:
     if (os.environ["using_clearlabs_data"] == "true"):
-      read1_column_name = "reads_dehosted"
+      read1_column_name = "clearlabs_fastq_gz"
       assembly_fasta_column_name = "clearlabs_fasta"
       assembly_mean_coverage_column_name = "clearlabs_assembly_coverage"
+
+    # if want to upload reads_dehosted instead:
+    if (os.environ["using_reads_dehosted"] == "true"):
+      read1_column_name = "reads_dehosted"
+
 
     # read exported Terra table into pandas
     tablename = "~{table_name}-data.tsv" 
