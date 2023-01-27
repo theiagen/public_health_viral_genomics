@@ -104,7 +104,7 @@ task reorder_matrix {
 
 task visualize_matrix {
   input {
-    File snp_matrix
+    File matrix
     String cluster_name
     Int disk_size = 100
   }
