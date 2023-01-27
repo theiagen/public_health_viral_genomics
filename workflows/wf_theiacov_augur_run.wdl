@@ -36,6 +36,12 @@ workflow theiacov_augur_run {
       cluster_name = build_name,
       alignment = sarscov2_nextstrain.mafft_alignment
   }
+  call phylo.reorder_matrix{
+    input:
+      cluster_name = build_name,
+      matrix = snp_dists.snp_matrix,
+      tree = sarscov2_nextstrain.ml_tree
+  }
   call versioning.version_capture{
     input:
   }
@@ -53,6 +59,8 @@ workflow theiacov_augur_run {
     File time_tree = sarscov2_nextstrain.time_tree
     File auspice_input_json = sarscov2_nextstrain.auspice_input_json
     # SNP Matrix
-    File snp_matrix = snp_dists.snp_matrix
+    File ordered_snp_matrix = reorder_matrix.ordered_matrix
+    File ordered_midpoint_matrix = reorder_matrix.ordered_midpoint_matrix
+    File midpoint_rooted_tree = reorder_matrix.midpoint_rooted_tree
   }
 }
