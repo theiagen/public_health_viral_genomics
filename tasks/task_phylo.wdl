@@ -116,7 +116,7 @@ task visualize_matrix {
     import pandas as pd
 
     # read in matrix into pandas data frame
-    snps = pd.read_csv("~{snp_matrix}", header=0, index_col=0)
+    snps = pd.read_csv("~{matrix}", header=0, index_col=0)
 
     np_snps = snps.to_numpy()
 
