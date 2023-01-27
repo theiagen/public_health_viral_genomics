@@ -18,6 +18,7 @@ workflow theiacov_distance_tree {
     File? builds_yaml
     File? ref_fasta
     Int min_unambig_genome = 27000
+    Boolean visualize_snp_matrix = false
   }
   parameter_meta {
     assembly_fastas: {
@@ -110,6 +111,19 @@ workflow theiacov_distance_tree {
       cluster_name = build_name,
       alignment = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
   }
+  call phylo.reorder_matrix {
+    input:
+      cluster_name = build_name,
+      matrix = snp_dists.snp_matrix,
+      tree = draft_augur_tree.aligned_tree
+  }
+  if (visualize_snp_matrix) {
+    call phylo.visualize_matrix {
+      input:
+        cluster_name = build_name,
+        matrix = reorder_matrix.ordered_matrix
+    }
+  }
   call versioning.version_capture{
     input:
   }
@@ -127,6 +141,10 @@ workflow theiacov_distance_tree {
     File mafft_alignment = select_first([subsample.subsampled_msa, mafft.aligned_sequences])
     File distance_tree = draft_augur_tree.aligned_tree
     # SNP Matrix
-    File snp_matrix = snp_dists.snp_matrix
+    File ordered_snp_matrix = reorder_matrix.ordered_matrix
+    File ordered_midpoint_matrix = reorder_matrix.ordered_midpoint_matrix
+    File midpoint_rooted_tree = reorder_matrix.midpoint_rooted_tree
+    # Visualized SNP Matrix
+    File? snp_matrix_plot = visualize_matrix.snp_matrix_plot
   }
 }

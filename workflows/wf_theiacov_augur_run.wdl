@@ -14,6 +14,7 @@ workflow theiacov_augur_run {
     Array[File]+ assembly_fastas
     Array[File]+ sample_metadata_tsvs
     String build_name
+    Boolean visualize_snp_matrix = false
   }
   parameter_meta {
     assembly_fastas: {
@@ -36,11 +37,18 @@ workflow theiacov_augur_run {
       cluster_name = build_name,
       alignment = sarscov2_nextstrain.mafft_alignment
   }
-  call phylo.reorder_matrix{
+  call phylo.reorder_matrix {
     input:
       cluster_name = build_name,
       matrix = snp_dists.snp_matrix,
       tree = sarscov2_nextstrain.ml_tree
+  }
+  if (visualize_snp_matrix) {
+    call phylo.visualize_matrix {
+      input:
+        cluster_name = build_name,
+        matrix = reorder_matrix.ordered_matrix
+    }
   }
   call versioning.version_capture{
     input:
@@ -62,5 +70,7 @@ workflow theiacov_augur_run {
     File ordered_snp_matrix = reorder_matrix.ordered_matrix
     File ordered_midpoint_matrix = reorder_matrix.ordered_midpoint_matrix
     File midpoint_rooted_tree = reorder_matrix.midpoint_rooted_tree
+    # Visualized SNP Matrix
+    File? snp_matrix_plot = visualize_matrix.snp_matrix_plot
   }
 }

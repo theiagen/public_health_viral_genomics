@@ -104,11 +104,61 @@ task reorder_matrix {
 
 task visualize_matrix {
   input {
-    
+    File snp_matrix
+    String cluster_name
+    Int disk_size = 100
   }
+  command <<<
+    python3 <<CODE
 
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+
+    # read in matrix into pandas data frame
+    snps = pd.read_csv("~{snp_matrix}", header=0, index_col=0)
+
+    np_snps = snps.to_numpy()
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(np_snps)
+
+    # remove the ':c1' string from column labels
+    snps.columns = [s.replace(':c1', '') for s in snps.columns]
+
+    # Show all ticks and label them with the respective list entries
+    ax.set_xticks(np.arange(len(snps.columns)), labels=snps.columns)
+    ax.set_yticks(np.arange(len(snps.index)), labels=snps.index)
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+      rotation_mode="anchor")
+
+    # Loop over data dimensions and create text annotations.
+    for i in range(len(snps.columns)):
+      for j in range(len(snps.index)):
+          text = ax.text(j, i, np_snps[i, j],
+            ha="center", va="center", color="w")
+
+    ax.set_title("~{cluster_name} SNP Matrix")
+    fig.tight_layout()
+    plt.savefig("~{cluster_name}_matrix.png")
+
+    CODE
+  >>>
+  output{
+    File snp_matrix_plot = "~{cluster_name}_matrix.png"
+  }
+  runtime {
+    docker: "staphb/freyja:1.3.9" 
+    memory: "2 GB"
+    cpu: 2
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
+   # maxRetries: 3
+    preemptible: 0
+  }
 }
-
 
 task iqtree {
   input {
