@@ -131,12 +131,11 @@ task visualize_matrix {
     ax.set_xticks(np.arange(len(snps.columns)), labels=snps.columns)
     ax.set_yticks(np.arange(len(snps.index)), labels=snps.index)
 
-    # create an Axes on the right side of ax. The width of cax will be 5%
-    # of ax and the padding between cax and ax will be fixed at 0.05 inch.
-    # sage notes: if cax is 5% of ax with many samples, it looks way too wide.
-    # I'm setting this to 0.1 for now but we may want to change this later
+    # create an Axes on the right side of ax. padding between cax and ax will be fixed at 0.05 inch.
+    # dynamically adjust cax
+    size = len(snps.columns)*0.005
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size=0.1, pad=0.05)
+    cax = divider.append_axes("right", size=size, pad=0.05)
 
     # draw colorbar
     plt.colorbar(im, cax=cax)
