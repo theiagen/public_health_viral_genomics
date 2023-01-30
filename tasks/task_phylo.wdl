@@ -130,7 +130,17 @@ task visualize_matrix {
     ax.set_xticks(np.arange(len(snps.columns)), labels=snps.columns)
     ax.set_yticks(np.arange(len(snps.index)), labels=snps.index)
 
-    # Rotate the tick labels and set their alignment.
+    # create an Axes on the right side of ax. The width of cax will be 5%
+    # of ax and the padding between cax and ax will be fixed at 0.05 inch.
+    # sage notes: if cax is 5% of ax with many samples, it looks way too wide.
+    # I'm setting this to 0.1 for now but we may want to change this later
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size=0.1, pad=0.05)
+
+    # draw colorbar
+    plt.colorbar(im, cax=cax)
+
+    # Rotate the x-axis tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
       rotation_mode="anchor")
 
@@ -141,6 +151,9 @@ task visualize_matrix {
             ha="center", va="center", color="w")
 
     ax.set_title("~{cluster_name} SNP Matrix")
+    # dynamically scale image size to number of samples
+    fig.set_size_inches(len(snps.columns)/2,len(snps.index)/2) 
+    # ensure all tick labels fit in chart area
     fig.tight_layout()
     plt.savefig("~{cluster_name}_matrix.png")
 
