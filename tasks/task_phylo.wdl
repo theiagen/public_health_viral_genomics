@@ -112,6 +112,7 @@ task visualize_matrix {
     python3 <<CODE
 
     import matplotlib.pyplot as plt
+    from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
     import numpy as np
     import pandas as pd
 
