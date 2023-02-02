@@ -296,7 +296,7 @@ task nextclade_one_sample {
       File? gene_annotations_json
       File? pcr_primers_csv
       File? virus_properties
-      String docker = "nextstrain/nextclade:2.6.0"
+      String docker = "nextstrain/nextclade:2.11.0"
       String dataset_name
       String dataset_reference
       String dataset_tag
@@ -365,7 +365,7 @@ task nextclade_output_parser_one_sample {
           tsv_data.append(['NA']*len(tsv_data[0]))
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
         with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
-          nc_clade=tsv_dict['clade']
+          nc_clade=tsv_dict['clade_legacy']
           if nc_clade=='':
             nc_clade='NA'
           else:
