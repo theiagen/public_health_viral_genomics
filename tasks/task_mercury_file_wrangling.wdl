@@ -16,6 +16,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Boolean skip_ncbi
     Boolean using_clearlabs_data = false
     Boolean using_reads_dehosted = false
+    Boolean usa_territory = false
     Int disk_size = 100
   }
   command <<<
@@ -53,6 +54,12 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       export using_reads_dehosted="false"
     fi
 
+    # transform boolean usa_territory into string for python comparison
+    if ~{usa_territory}; then
+      export usa_territory="true"
+    else 
+      export usa_territory="false"
+    fi
 
     echo "DEBUG: Now entering Python block to perform parsing of metadata"
 
@@ -157,6 +164,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       # set required and optional metadata fields
       if (os.environ["skip_ncbi"] == "false"):
         biosample_required = ["submission_id", "bioproject_accession", "organism", "collecting_lab", "collection_date", "country", "state", "host_sci_name", "host_disease", "isolation_source"]
+
         biosample_optional = ["isolate", "treatment", "gisaid_accession", "gisaid_virus_name", "patient_age", "patient_gender", "purpose_of_sampling", "purpose_of_sequencing"]
   
         sra_required = ["bioproject_accession", "submission_id", "library_id", "organism", "isolation_source", "library_strategy", "library_source", "library_selection", "library_layout", "seq_platform", "instrument_model", "filetype", read1_column_name]
@@ -197,6 +205,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         
         biosample_metadata["geo_loc_name"] = biosample_metadata["country"] + ": " + biosample_metadata["state"]
         biosample_metadata.drop(["country", "state"], axis=1, inplace=True)
+
         biosample_metadata.rename(columns={"submission_id" : "sample_name", "host_sci_name" : "host", "treatment" : "antiviral_treatment_agent", "patient_gender" : "host_sex", "patient_age" : "host_age", "collecting_lab" : "collected_by"}, inplace=True)
 
         biosample_metadata.to_csv("~{output_name}_biosample_metadata.tsv", sep='\t', index=False)
@@ -263,7 +272,11 @@ task sm_metadata_wrangling { # the sm stands for supermassive
           gisaid_metadata[column] = "" 
 
       # create gisaid-specific variables; drop variables that are not included in gisaid metadata
-      gisaid_metadata["covv_location"] = (gisaid_metadata["continent"] + " / " + gisaid_metadata["country"] + " / " + gisaid_metadata["state"]) 
+      if (os.environ["usa_territory"] == "false"):
+        gisaid_metadata["covv_location"] = (gisaid_metadata["continent"] + " / " + gisaid_metadata["country"] + " / " + gisaid_metadata["state"]) 
+      else: # if a usa territory
+        gisaid_metadata["covv_location"] = (gisaid_metadata["continent"] + " / " + gisaid_metadata["state"]) 
+        
       gisaid_metadata.drop(["continent", "country", "state"], axis=1, inplace=True)
 
       # add county to covv_location if county is present
