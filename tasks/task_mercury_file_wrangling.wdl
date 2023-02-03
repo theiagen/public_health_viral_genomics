@@ -159,7 +159,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       # set default values
       table["gisaid_organism"] = "hCoV-19"
-      table["gisaid_virus_name"] = (table["gisaid_organism"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
+      if (os.environ["usa_territory"] == "false"):
+        table["gisaid_virus_name"] = (table["gisaid_organism"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
+      else: # if usa territory, use "state" (e.g., Puerto Rico) instead of country (USA)
+        table["gisaid_virus_name"] = (table["gisaid_organism"] + "/" + table["state"] + "/" + table["submission_id"] + "/" + table["year"])
 
       # set required and optional metadata fields
       if (os.environ["skip_ncbi"] == "false"):
