@@ -16,7 +16,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     Boolean skip_ncbi
     Boolean using_clearlabs_data = false
     Boolean using_reads_dehosted = false
-    Boolean usa_territory = false
+    Boolean usa_territory = false # only for SC2; uses territory name (in state column) for country in GISAID submissions 
     Int disk_size = 100
   }
   command <<<
