@@ -118,7 +118,8 @@ workflow theiacov_ont {
     }
     call taxon_ID.nextclade_output_parser_one_sample {
       input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv,
+      organism = organism
     }
    }
   if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
