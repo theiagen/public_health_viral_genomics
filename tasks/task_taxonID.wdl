@@ -359,7 +359,6 @@ task nextclade_output_parser_one_sample {
       python3 <<CODE
       import csv
       import codecs
-      import os
       with codecs.open("./input.tsv",'r') as tsv_file:
         tsv_reader=csv.reader(tsv_file, delimiter="\t")
         tsv_data=list(tsv_reader)
