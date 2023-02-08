@@ -349,14 +349,25 @@ task nextclade_output_parser_one_sample {
       File nextclade_tsv
       String docker = "python:slim"
       Int disk_size = 50
+      String? organism
     }
     command <<<
       # Set WDL input variable to input.tsv file
       cat "~{nextclade_tsv}" > input.tsv
+
+      # if organism is set to "sars-cov-2" set new boolean variable to be used for changing parsing behavior
+      # when set to true, parse 'clade_legacy' nextclade col instead of 'clade'
+      if [[ "~{organism}" == "sars-cov-2" ]]; then
+        export org_is_sarscov2=true
+      else
+        export org_is_sarscov2=false
+      fi 
+
       # Parse outputs using python3
       python3 <<CODE
       import csv
       import codecs
+      import os
       with codecs.open("./input.tsv",'r') as tsv_file:
         tsv_reader=csv.reader(tsv_file, delimiter="\t")
         tsv_data=list(tsv_reader)
@@ -364,13 +375,23 @@ task nextclade_output_parser_one_sample {
         if len(tsv_data)==1:
           tsv_data.append(['NA']*len(tsv_data[0]))
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
-        with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
-          nc_clade=tsv_dict['clade_legacy']
-          if nc_clade=='':
-            nc_clade='NA'
-          else:
-            nc_clade=nc_clade
-          Nextclade_Clade.write(nc_clade)
+        # parse 'clade_legacy' column if sars-cov-2, if false then parse 'clade' column
+        if (os.environ["org_is_sarscov2"] == "true"):
+          with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
+            nc_clade=tsv_dict['clade_legacy']
+            if nc_clade=='':
+              nc_clade='NA'
+            else:
+              nc_clade=nc_clade
+            Nextclade_Clade.write(nc_clade)
+        else:
+          with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
+            nc_clade=tsv_dict['clade']
+            if nc_clade=='':
+              nc_clade='NA'
+            else:
+              nc_clade=nc_clade
+            Nextclade_Clade.write(nc_clade)
         with codecs.open ("NEXTCLADE_AASUBS", 'wt') as Nextclade_AA_Subs:
           nc_aa_subs=tsv_dict['aaSubstitutions']
           if nc_aa_subs=='':
