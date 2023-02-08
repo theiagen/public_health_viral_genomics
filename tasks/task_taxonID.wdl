@@ -355,14 +355,6 @@ task nextclade_output_parser_one_sample {
       # Set WDL input variable to input.tsv file
       cat "~{nextclade_tsv}" > input.tsv
 
-      # if organism is set to "sars-cov-2" set new boolean variable to be used for changing parsing behavior
-      # when set to true, parse 'clade_legacy' nextclade col instead of 'clade'
-      if [[ "~{organism}" == "sars-cov-2" ]]; then
-        export org_is_sarscov2=true
-      else
-        export org_is_sarscov2=false
-      fi 
-
       # Parse outputs using python3
       python3 <<CODE
       import csv
@@ -376,7 +368,7 @@ task nextclade_output_parser_one_sample {
           tsv_data.append(['NA']*len(tsv_data[0]))
         tsv_dict=dict(zip(tsv_data[0], tsv_data[1]))
         # parse 'clade_legacy' column if sars-cov-2, if false then parse 'clade' column
-        if (os.environ["org_is_sarscov2"] == "true"):
+        if ("~{organism}" == "sars-cov-2"):
           with codecs.open ("NEXTCLADE_CLADE", 'wt') as Nextclade_Clade:
             nc_clade=tsv_dict['clade_legacy']
             if nc_clade=='':
