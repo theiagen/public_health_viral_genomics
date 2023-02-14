@@ -106,7 +106,8 @@ workflow theiacov_clearlabs {
     }
     call taxon_ID.nextclade_output_parser_one_sample {
       input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv,
+      organism = organism
     }
     call ncbi.vadr {
       input:
