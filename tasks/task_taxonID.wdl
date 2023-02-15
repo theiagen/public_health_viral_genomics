@@ -360,6 +360,7 @@ task nextclade_output_parser_one_sample {
       import csv
       import codecs
 
+      # list of aa substitutions linked with tamiflu resistance - hardcoded for now...
       tamiflu_aa_subs = ["NA:V95A","NA:I97V","NA:E99A","NA:H101L","NA:G108E",
       "NA:Q116L","NA:V116A","NA:E119D","NA:E119G","NA:E119I","NA:E119V","NA:R136K",
       "NA:T146K","NA:T146P","NA:D151E","NA:N169S","NA:D179N","NA:D197N","NA:D198E",
@@ -369,6 +370,8 @@ task nextclade_output_parser_one_sample {
       "NA:S334N","NA:R371K","NA:D432G","NA:H439P","NA:H439R"]
 
       def intersection(lst1, lst2):
+        # returns intersection between nextclade identified aa substitutions and
+        # tamiflu associated aa substitutions
         return list(set(lst1) & set(lst2))
 
       with codecs.open("./input.tsv",'r') as tsv_file:
@@ -401,6 +404,7 @@ task nextclade_output_parser_one_sample {
             nc_aa_subs='NA'
           else:
             nc_aa_subs=nc_aa_subs
+            # if organism is flu, return list of aa subs associated with tamiflu resistance
             if ("~{organism}" == "flu"):
               tamiflu_subs = intersection(tamiflu_aa_subs,nc_aa_subs.split(','))
               with codecs.open ("TAMIFLU_AASUBS", 'wt') as Tamiflu_AA_Subs:
