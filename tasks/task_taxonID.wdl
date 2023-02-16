@@ -438,7 +438,7 @@ task nextclade_output_parser_one_sample {
       disks:  "local-disk " + disk_size + " SSD"
       disk: disk_size + " GB" # TES
       dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 1
+      maxRetries: 3
     }
     output {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
