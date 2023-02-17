@@ -141,7 +141,7 @@ workflow theiacov_illumina_pe {
       organism = organism
     }
   }
-    if (organism == "flu" && select_first([abricate_flu.run_nextclade]) && select_first([abricate_flu.abricate_flu_subtype]) != "yamagata" ) { 
+    if (organism == "flu" && select_first([abricate_flu.run_nextclade]) ) { 
     # tasks specific to flu NA - run nextclade a second time
     call taxon_ID.nextclade_one_sample as nextclade_one_sample_run2{
       input:

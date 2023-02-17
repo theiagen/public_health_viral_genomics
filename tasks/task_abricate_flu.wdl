@@ -63,6 +63,10 @@ task abricate_flu {
       echo "flu_yam_ha" > NEXTCLADE_NAME_HA
       echo "JN993010" > NEXTCLADE_REF_HA
       echo "~{nextclade_flu_yam_tag}" > NEXTCLADE_DS_TAG_HA 
+      # this makes no biological sense, but avoids errors with nextclade
+      echo "flu_vic_na" > NEXTCLADE_NAME_NA
+      echo "CY073894" > NEXTCLADE_REF_NA
+      echo "~{nextclade_flu_vic_na_tag}" > NEXTCLADE_DS_TAG_NA
     else 
       run_nextclade=false 
     fi

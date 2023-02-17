@@ -442,9 +442,9 @@ task nextclade_output_parser_one_sample {
       memory: "4 GB"
       cpu: 2
       disks:  "local-disk " + disk_size + " SSD"
-      disk: disk_size + " GB" # TES
+      disk: disk_size + " GB"
       dx_instance_type: "mem1_ssd1_v2_x2"
-      maxRetries: 1
+      maxRetries: 3
     }
     output {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
