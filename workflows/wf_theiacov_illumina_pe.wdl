@@ -156,6 +156,10 @@ workflow theiacov_illumina_pe {
       organism = organism,
       NA = true
     }
+    # concatenate tag, aa subs and aa dels for HA and NA segments
+    String ha_na_nextclade_ds_tag= "~{abricate_flu.nextclade_ds_tag_ha + ',' + abricate_flu.nextclade_ds_tag_na}"
+    String ha_na_nextclade_aa_subs= "~{nextclade_output_parser_one_sample_run1.nextclade_aa_subs + ',' + nextclade_output_parser_one_sample_run2.nextclade_aa_subs}"
+    String ha_na_nextclade_aa_dels= "~{nextclade_output_parser_one_sample_run1.nextclade_aa_dels + ',' + nextclade_output_parser_one_sample_run2.nextclade_aa_dels}"
   }
   if (organism == "sars-cov-2") {
     # sars-cov-2 specific tasks
@@ -271,16 +275,13 @@ workflow theiacov_illumina_pe {
     String nextclade_tsv = select_first([nextclade_one_sample_run1.nextclade_tsv,""])
     String nextclade_version = select_first([nextclade_one_sample_run1.nextclade_version,""])
     String nextclade_docker = select_first([nextclade_one_sample_run1.nextclade_docker,""])
-    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag_ha, nextclade_dataset_tag,""])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample_run1.nextclade_aa_subs,""])
-    String? nextclade_tamiflu_aa_subs = select_first([nextclade_output_parser_one_sample_run1.nextclade_tamiflu_aa_subs,""])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample_run1.nextclade_aa_dels,""])
+    String nextclade_ds_tag = select_first([ha_na_nextclade_ds_tag, abricate_flu.nextclade_ds_tag_ha, nextclade_dataset_tag,""])
+    String nextclade_aa_subs = select_first([ha_na_nextclade_aa_subs,nextclade_output_parser_one_sample_run1.nextclade_aa_subs,""])
+    String nextclade_aa_dels = select_first([ha_na_nextclade_aa_dels,nextclade_output_parser_one_sample_run1.nextclade_aa_dels,""])
     String nextclade_clade = select_first([nextclade_output_parser_one_sample_run1.nextclade_clade,""])
     String? nextclade_lineage = nextclade_output_parser_one_sample_run1.nextclade_lineage
     # NA specific columns - tamiflu mutation
-    String? tamiflu_resistance_aa_subs = nextclade_output_parser_one_sample_run2.nextclade_tamiflu_aa_subs
-    String nextclade_na_aa_subs = select_first([nextclade_output_parser_one_sample_run2.nextclade_aa_subs,""])
-    String nextclade_na_aa_dels = select_first([nextclade_output_parser_one_sample_run2.nextclade_aa_dels,""])
+    String? nextclade_tamiflu_resistance_aa_subs = nextclade_output_parser_one_sample_run2.nextclade_tamiflu_aa_subs
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
