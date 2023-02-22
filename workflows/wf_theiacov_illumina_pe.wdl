@@ -277,8 +277,10 @@ workflow theiacov_illumina_pe {
     String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample_run1.nextclade_aa_dels,""])
     String nextclade_clade = select_first([nextclade_output_parser_one_sample_run1.nextclade_clade,""])
     String? nextclade_lineage = nextclade_output_parser_one_sample_run1.nextclade_lineage
-    # NA specific column - tamiflu mutation
+    # NA specific columns - tamiflu mutation
     String? tamiflu_resistance_aa_subs = nextclade_output_parser_one_sample_run2.nextclade_tamiflu_aa_subs
+    String nextclade_na_aa_subs = select_first([nextclade_output_parser_one_sample_run2.nextclade_aa_subs,""])
+    String nextclade_na_aa_dels = select_first([nextclade_output_parser_one_sample_run2.nextclade_aa_dels,""])
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
