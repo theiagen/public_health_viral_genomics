@@ -350,15 +350,38 @@ task nextclade_output_parser_one_sample {
       String docker = "python:slim"
       Int disk_size = 50
       String? organism
+      Boolean? NA
+      String tamiflu_aa_substitutions = "NA:H275Y,NA:R292K"
     }
     command <<<
       # Set WDL input variable to input.tsv file
       cat "~{nextclade_tsv}" > input.tsv
+      touch TAMIFLU_AASUBS
 
       # Parse outputs using python3
       python3 <<CODE
       import csv
       import codecs
+
+      # list of aa substitutions linked with tamiflu resistance - with the possibility to
+      # extend the list with other provived aa substitutions in the format "NA:V95A,NA:I97V"
+      tamiflu_aa_subs = ["NA:V95A","NA:I97V","NA:E99A","NA:H101L","NA:G108E",
+      "NA:Q116L","NA:V116A","NA:E119D","NA:E119G","NA:E119I","NA:E119V","NA:R136K",
+      "NA:T146K","NA:T146P","NA:D151E","NA:N169S","NA:D179N","NA:D197N","NA:D198E",
+      "NA:D198G","NA:D198N","NA:A200T","NA:I203M","NA:I203R","NA:I203V","NA:I221T",
+      "NA:I222R","NA:I222V","NA:I223R","NA:I223V","NA:S227N","NA:S247N","NA:H255Y",
+      "NA:E258Q","NA:H274N","NA:H274Y","NA:H275Y","NA:N275S","NA:H277Y","NA:R292K",
+      "NA:N294S","NA:S334N","NA:R371K","NA:D432G","NA:H439P","NA:H439R"]
+      
+      tamiflu_aa_subs = tamiflu_aa_subs + "~{tamiflu_aa_substitutions}".split(',')
+
+      print(tamiflu_aa_subs)
+
+      def intersection(lst1, lst2):
+        # returns intersection between nextclade identified aa substitutions and
+        # tamiflu associated aa substitutions
+        return list(set(lst1) & set(lst2))
+
       with codecs.open("./input.tsv",'r') as tsv_file:
         tsv_reader=csv.reader(tsv_file, delimiter="\t")
         tsv_data=list(tsv_reader)
@@ -389,6 +412,11 @@ task nextclade_output_parser_one_sample {
             nc_aa_subs='NA'
           else:
             nc_aa_subs=nc_aa_subs
+            # if organism is flu, return list of aa subs associated with tamiflu resistance
+            if ("~{organism}" == "flu" and "~{NA}" == "true"):
+              tamiflu_subs = intersection(tamiflu_aa_subs,nc_aa_subs.split(','))
+              with codecs.open ("TAMIFLU_AASUBS", 'wt') as Tamiflu_AA_Subs:
+                Tamiflu_AA_Subs.write(",".join(tamiflu_subs))
           Nextclade_AA_Subs.write(nc_aa_subs)
         with codecs.open ("NEXTCLADE_AADELS", 'wt') as Nextclade_AA_Dels:
           nc_aa_dels=tsv_dict['aaDeletions']
@@ -414,13 +442,14 @@ task nextclade_output_parser_one_sample {
       memory: "4 GB"
       cpu: 2
       disks:  "local-disk " + disk_size + " SSD"
-      disk: disk_size + " GB" # TES
+      disk: disk_size + " GB"
       dx_instance_type: "mem1_ssd1_v2_x2"
       maxRetries: 3
     }
     output {
       String nextclade_clade = read_string("NEXTCLADE_CLADE")
       String nextclade_aa_subs = read_string("NEXTCLADE_AASUBS")
+      String nextclade_tamiflu_aa_subs = read_string("TAMIFLU_AASUBS")
       String nextclade_aa_dels = read_string("NEXTCLADE_AADELS")
       String nextclade_lineage = read_string("NEXTCLADE_LINEAGE")
     }

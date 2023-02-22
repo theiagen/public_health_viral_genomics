@@ -34,9 +34,12 @@ workflow theiacov_illumina_pe {
     Boolean trim_primers = true
     File? adapters
     File? phix
-    String nextclade_flu_h1n1_tag = "2022-06-08T12:00:00Z"
-    String nextclade_flu_h3n2_tag = "2022-06-08T12:00:00Z"
-    String nextclade_flu_vic_tag = "2022-06-08T12:00:00Z"
+    String nextclade_flu_h1n1_ha_tag = "2023-01-27T12:00:00Z"
+    String nextclade_flu_h1n1_na_tag = "2023-01-27T12:00:00Z"
+    String nextclade_flu_h3n2_ha_tag = "2023-02-01T12:00:00Z"
+    String nextclade_flu_h3n2_na_tag = "2023-01-27T12:00:00Z"
+    String nextclade_flu_vic_ha_tag = "2023-02-01T12:00:00Z"
+    String nextclade_flu_vic_na_tag = "2023-01-27T12:00:00Z"
     String nextclade_flu_yam_tag = "2022-07-27T12:00:00Z"
     Int? genome_length
   }
@@ -106,10 +109,13 @@ workflow theiacov_illumina_pe {
         input:
           assembly = select_first([irma.irma_assembly_fasta]),
           samplename = samplename,
-          nextclade_flu_h1n1_tag = nextclade_flu_h1n1_tag,
-          nextclade_flu_h3n2_tag = nextclade_flu_h3n2_tag,
-          nextclade_flu_vic_tag = nextclade_flu_vic_tag,
-          nextclade_flu_yam_tag = nextclade_flu_yam_tag,
+          nextclade_flu_h1n1_ha_tag = nextclade_flu_h1n1_ha_tag,
+          nextclade_flu_h1n1_na_tag = nextclade_flu_h1n1_na_tag,
+          nextclade_flu_h3n2_ha_tag = nextclade_flu_h3n2_ha_tag,
+          nextclade_flu_h3n2_na_tag = nextclade_flu_h3n2_na_tag,
+          nextclade_flu_vic_ha_tag = nextclade_flu_vic_ha_tag,
+          nextclade_flu_vic_na_tag = nextclade_flu_vic_na_tag,
+          nextclade_flu_yam_tag = nextclade_flu_yam_tag
       }
     }
   }
@@ -122,18 +128,38 @@ workflow theiacov_illumina_pe {
   # run organism-specific typing
   if (organism == "MPXV" || organism == "sars-cov-2" || organism == "flu" && select_first([abricate_flu.run_nextclade]) ) { 
     # tasks specific to either MPXV, sars-cov-2, or flu
-    call taxon_ID.nextclade_one_sample {
+    call taxon_ID.nextclade_one_sample as nextclade_one_sample_run1 {
       input:
-        genome_fasta = select_first([consensus.consensus_seq, irma.seg4_ha_assembly]),
-        dataset_name = select_first([abricate_flu.nextclade_name, nextclade_dataset_name, organism]),
-        dataset_reference = select_first([abricate_flu.nextclade_ref, nextclade_dataset_reference]),
-        dataset_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag])
+        genome_fasta = select_first([consensus.consensus_seq, irma.seg_ha_assembly]),
+        dataset_name = select_first([abricate_flu.nextclade_name_ha, nextclade_dataset_name, organism]),
+        dataset_reference = select_first([abricate_flu.nextclade_ref_ha, nextclade_dataset_reference]),
+        dataset_tag = select_first([abricate_flu.nextclade_ds_tag_ha, nextclade_dataset_tag])
     }
-    call taxon_ID.nextclade_output_parser_one_sample {
+    call taxon_ID.nextclade_output_parser_one_sample as nextclade_output_parser_one_sample_run1 {
       input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv,
+      nextclade_tsv = nextclade_one_sample_run1.nextclade_tsv,
       organism = organism
     }
+  }
+    if (organism == "flu" &&  select_first([abricate_flu.run_nextclade]) && defined(irma.seg_na_assembly)) { 
+    # tasks specific to flu NA - run nextclade a second time
+    call taxon_ID.nextclade_one_sample as nextclade_one_sample_run2{
+      input:
+        genome_fasta = select_first([irma.seg_na_assembly]),
+        dataset_name = select_first([abricate_flu.nextclade_name_na, nextclade_dataset_name, organism]),
+        dataset_reference = select_first([abricate_flu.nextclade_ref_na, nextclade_dataset_reference]),
+        dataset_tag = select_first([abricate_flu.nextclade_ds_tag_na, nextclade_dataset_tag])
+    }
+    call taxon_ID.nextclade_output_parser_one_sample as nextclade_output_parser_one_sample_run2 {
+      input:
+      nextclade_tsv = nextclade_one_sample_run2.nextclade_tsv,
+      organism = organism,
+      NA = true
+    }
+    # concatenate tag, aa subs and aa dels for HA and NA segments
+    String ha_na_nextclade_ds_tag= "~{abricate_flu.nextclade_ds_tag_ha + ',' + abricate_flu.nextclade_ds_tag_na}"
+    String ha_na_nextclade_aa_subs= "~{nextclade_output_parser_one_sample_run1.nextclade_aa_subs + ',' + nextclade_output_parser_one_sample_run2.nextclade_aa_subs}"
+    String ha_na_nextclade_aa_dels= "~{nextclade_output_parser_one_sample_run1.nextclade_aa_dels + ',' + nextclade_output_parser_one_sample_run2.nextclade_aa_dels}"
   }
   if (organism == "sars-cov-2") {
     # sars-cov-2 specific tasks
@@ -244,16 +270,18 @@ workflow theiacov_illumina_pe {
     String? pangolin_docker = pangolin4.pangolin_docker
     String? pangolin_versions = pangolin4.pangolin_versions
     # Clade Assigment
-    String nextclade_json = select_first([nextclade_one_sample.nextclade_json,""])
-    String auspice_json = select_first([ nextclade_one_sample.auspice_json,""])
-    String nextclade_tsv = select_first([nextclade_one_sample.nextclade_tsv,""])
-    String nextclade_version = select_first([nextclade_one_sample.nextclade_version,""])
-    String nextclade_docker = select_first([nextclade_one_sample.nextclade_docker,""])
-    String nextclade_ds_tag = select_first([abricate_flu.nextclade_ds_tag, nextclade_dataset_tag,""])
-    String nextclade_aa_subs = select_first([nextclade_output_parser_one_sample.nextclade_aa_subs,""])
-    String nextclade_aa_dels = select_first([nextclade_output_parser_one_sample.nextclade_aa_dels,""])
-    String nextclade_clade = select_first([nextclade_output_parser_one_sample.nextclade_clade,""])
-    String? nextclade_lineage = nextclade_output_parser_one_sample.nextclade_lineage
+    String nextclade_json = select_first([nextclade_one_sample_run1.nextclade_json,""])
+    String auspice_json = select_first([ nextclade_one_sample_run1.auspice_json,""])
+    String nextclade_tsv = select_first([nextclade_one_sample_run1.nextclade_tsv,""])
+    String nextclade_version = select_first([nextclade_one_sample_run1.nextclade_version,""])
+    String nextclade_docker = select_first([nextclade_one_sample_run1.nextclade_docker,""])
+    String nextclade_ds_tag = select_first([ha_na_nextclade_ds_tag, abricate_flu.nextclade_ds_tag_ha, nextclade_dataset_tag,""])
+    String nextclade_aa_subs = select_first([ha_na_nextclade_aa_subs,nextclade_output_parser_one_sample_run1.nextclade_aa_subs,""])
+    String nextclade_aa_dels = select_first([ha_na_nextclade_aa_dels,nextclade_output_parser_one_sample_run1.nextclade_aa_dels,""])
+    String nextclade_clade = select_first([nextclade_output_parser_one_sample_run1.nextclade_clade,""])
+    String? nextclade_lineage = nextclade_output_parser_one_sample_run1.nextclade_lineage
+    # NA specific columns - tamiflu mutation
+    String? nextclade_tamiflu_resistance_aa_subs = nextclade_output_parser_one_sample_run2.nextclade_tamiflu_aa_subs
     # VADR Annotation QC
     File? vadr_alerts_list = vadr.alerts_list
     String? vadr_num_alerts = vadr.num_alerts
