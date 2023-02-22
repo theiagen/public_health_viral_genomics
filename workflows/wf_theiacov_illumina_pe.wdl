@@ -141,7 +141,7 @@ workflow theiacov_illumina_pe {
       organism = organism
     }
   }
-    if (organism == "flu" &&  defined(irma.seg_na_assembly)) { 
+    if (organism == "flu" &&  select_first([abricate_flu.run_nextclade]) && defined(irma.seg_na_assembly)) { 
     # tasks specific to flu NA - run nextclade a second time
     call taxon_ID.nextclade_one_sample as nextclade_one_sample_run2{
       input:
