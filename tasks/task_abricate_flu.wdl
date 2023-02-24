@@ -27,10 +27,11 @@ task abricate_flu {
       --threads ~{cpu} \
       --nopath \
       ~{assembly} > ~{samplename}_abricate_hits.tsv
-    # capturing flu type (A or B) and subtype (e.g. H1 and N1)
-    grep "M1" ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }' > FLU_TYPE
-    HA_hit=$(grep "_HA" ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }')
-    NA_hit=$(grep '_NA' ~{samplename}_abricate_hits.tsv | awk -F '\t' '{ print $15 }')
+    # capturing flu type (A or B based on M1 hit) and subtype (e.g. H1 and N1 based on HA/NA hits)
+    ## awk for gene column ($6) to grab subtype ($15)
+    awk -F '\t' '{if ($6=="M1") print $15}' > FLU_TYPE
+    HA_hit=$(awk -F '\t' '{if ($6=="HA") print $15 }')
+    NA_hit=$(awk -F '\t' '{if ($6=="NA") print $15 }')
     flu_subtype="${HA_hit}${NA_hit}" && echo "$flu_subtype" >  FLU_SUBTYPE
     # set nextclade variables based on subptype
     run_nextclade=true
