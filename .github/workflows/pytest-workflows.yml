@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Free up Disk Space
-         run: bash ${GITHUB_WORKSPACE}/.github/helpers/free-disk-space.sh
+        run: bash ${GITHUB_WORKSPACE}/.github/helpers/free-disk-space.sh
 
       # Setup Miniconda3
       - name: Setup miniconda
