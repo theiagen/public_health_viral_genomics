@@ -192,3 +192,4 @@ workflow theiacov_clearlabs {
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
   }
 }
+
