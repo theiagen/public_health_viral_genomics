@@ -43,12 +43,22 @@ jobs:
         # Play nicely with miniconda
         shell: bash -l {0}
     steps:
+      - name: check space before
+        run: df -h
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@v6
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+
+      - name: check space after
+        run: df -h
+
       # Checkout the repo
       - name: Checkout theiagen/public_health_viral_genomics
         uses: actions/checkout@v3
-
-      - name: Free up Disk Space
-        run: bash ${GITHUB_WORKSPACE}/.github/helpers/free-disk-space.sh
 
       # Setup Miniconda3
       - name: Setup miniconda
