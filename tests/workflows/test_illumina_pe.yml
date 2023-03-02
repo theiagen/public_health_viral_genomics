@@ -146,26 +146,26 @@
       md5sum: 3e3ae30830ce8e81fb4b5c7a62771035
     - path: miniwdl_run/call-nextclade_one_sample_run1/work/nextclade_gene_S.translation.fasta
       md5sum: f3739de12ef17d5d5f8ff0e0a7ea84cc
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/command
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/command
       md5sum: 48c6b2132069ef5604ceb05c1b9440cf
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/inputs.json
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/inputs.json
       contains: ["nextclade_tsv", "SRR13687078"]
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/outputs.json
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/outputs.json
       contains: ["nextclade_output_parser_one_sample", "nextclade_aa_subs", "nextclade_clade"]
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/stderr.txt
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/stderr.txt.offset
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/stdout.txt
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/task.log
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/stderr.txt
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/stderr.txt.offset
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/stdout.txt
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/task.log
       contains: ["wdl", "theiacov_illumina_pe", "nextclade", "done"]
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/NEXTCLADE_AADELS
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/work/NEXTCLADE_AADELS
       md5sum: d4cd0dabcf4caa22ad92fab40844c786
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/NEXTCLADE_AASUBS
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/work/NEXTCLADE_AASUBS
       md5sum: e0fd3ba93086384abc1e942639c8b332
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/NEXTCLADE_CLADE
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/work/NEXTCLADE_CLADE
       md5sum: 72e2f0c6d08108b42520cc6adffa86ae
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/SRR13687078.ivar.consensus.nextclade.tsv
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/work/_miniwdl_inputs/0/SRR13687078.ivar.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
-    - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
+    - path: miniwdl_run/call-nextclade_output_parser_one_sample_run1/work/input.tsv
       md5sum: 3b7bea85bf79f45e9319251540a7bab7
     - path: miniwdl_run/call-pangolin4/command
       md5sum: a175cc8e19c30ab61c88d24fe694919b
