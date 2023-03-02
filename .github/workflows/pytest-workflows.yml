@@ -54,7 +54,7 @@ jobs:
           activate-environment: actions
           auto-activate-base: false
 
-      # Depends and env info (mostly for debug)
+      # Install dependencies; clean up conda garbage; and print env info (mostly for debug)
       - name: Install Dependencies
         run: |
           conda install -y -c conda-forge -c bioconda cromwell miniwdl 'python>=3.7' pytest pytest-workflow
