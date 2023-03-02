@@ -55,11 +55,14 @@ jobs:
           auto-activate-base: false
 
       # Install dependencies; clean up conda garbage; and print env info (mostly for debug)
+      # rm -rf commands as recommended here: https://github.com/actions/runner-images/issues/2840#issuecomment-1284059930
       - name: Install Dependencies
         run: |
           conda install -y -c conda-forge -c bioconda cromwell miniwdl 'python>=3.7' pytest pytest-workflow
           conda clean -a -y
           uname -a && env
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
       - name: Test ${{ matrix.tag }}
         run: TMPDIR=~ pytest --tag ${{ matrix.tag }}_${{ matrix.engine }} --symlink --kwdof --color=yes --git-aware
 
