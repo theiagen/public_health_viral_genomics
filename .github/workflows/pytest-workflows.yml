@@ -58,6 +58,7 @@ jobs:
       - name: Install Dependencies
         run: |
           conda install -y -c conda-forge -c bioconda cromwell miniwdl 'python>=3.7' pytest pytest-workflow
+          conda clean -a -y
           uname -a && env
       - name: Test ${{ matrix.tag }}
         run: TMPDIR=~ pytest --tag ${{ matrix.tag }}_${{ matrix.engine }} --symlink --kwdof --color=yes --git-aware
