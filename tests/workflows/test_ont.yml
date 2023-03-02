@@ -208,7 +208,7 @@
     - path: miniwdl_run/call-ncbi_scrub_se/work/r1.fastq.clean
       md5sum: 2cf5f8defc05395fecd10c68865f9ae3
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: dbb8b44b834e08b728c9dc89de3c3b71
+      md5sum: 31d0fad6de95d8c19c087552113fe3fa
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "dataset_tag", "genome_fasta"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -219,13 +219,13 @@
     - path: miniwdl_run/call-nextclade_one_sample/task.log
       contains: ["wdl", "theiacov_ont", "nextclade_one_sample", "done"]
     - path: miniwdl_run/call-nextclade_one_sample/work/NEXTCLADE_VERSION
-      md5sum: c742549fbfacb35776d8908e1b828b82
+      md5sum: 4fb409910709639211b716abe239ecc1
     - path: miniwdl_run/call-nextclade_one_sample/work/_miniwdl_inputs/0/ont.medaka.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.aligned.fasta
       md5sum: 8210832b44151b6c50644e6541e60bec
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.csv
-      md5sum: 58244260d4d8e389ecd0682616516c56
+      md5sum: 926979faaf9455181032dba36dd29911
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.errors.csv
       md5sum: c903ba15cb277fc61f3e5f1d0a359ecb
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.insertions.csv
@@ -270,9 +270,9 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/ont.medaka.consensus.nextclade.auspice.json
     - path: miniwdl_run/call-nextclade_one_sample/work/ont.medaka.consensus.nextclade.json
     - path: miniwdl_run/call-nextclade_one_sample/work/ont.medaka.consensus.nextclade.tsv
-      md5sum: a249e397f604cf59fe38d804d90970ab
+      md5sum: 4478ada8ca8bfce5b429165ea5fbf806
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/command
-      md5sum: 9aa44f805c73bbe782a3c8328a83cefb
+      md5sum: 2d90342b1a96c576312cce1b4c7d6416
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/inputs.json
       contains: ["nextclade_tsv", "tsv"]
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/outputs.json
@@ -291,7 +291,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/ont.medaka.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
-      md5sum: a249e397f604cf59fe38d804d90970ab
+      md5sum: 4478ada8ca8bfce5b429165ea5fbf806
     - path: miniwdl_run/call-pangolin4/command
       md5sum: a39d22f657432d05a5670ce6adc8bf07
     - path: miniwdl_run/call-pangolin4/inputs.json
@@ -494,11 +494,11 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 7c7578f557447b23d3a91cb19a066c10
+      md5sum: 6754daa67e78f8d2497610b9f6005ad5
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 27d436979d253be67940a84696c5b77b
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
-      md5sum: c7912b6c992ff5633c7e72afeb8e7e72
+      md5sum: ebee7984a3c2326d0dff24af80f57665
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_ont", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
