@@ -494,7 +494,7 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 6754daa67e78f8d2497610b9f6005ad5
+      md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 27d436979d253be67940a84696c5b77b
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
