@@ -83,7 +83,7 @@
     - path: miniwdl_run/call-consensus_qc/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: 2d49c11b52b47763fcbee9ee6b5abbc8
+      md5sum: 00d8320c74e760d6281acf5d4764c504
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "genome_fasta", "ERR6319327"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -96,15 +96,15 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/ERR6319327.ivar.consensus.nextclade.auspice.json
     - path: miniwdl_run/call-nextclade_one_sample/work/ERR6319327.ivar.consensus.nextclade.json
     - path: miniwdl_run/call-nextclade_one_sample/work/ERR6319327.ivar.consensus.nextclade.tsv
-      md5sum: 72e5e5425b962adb8a74acb337b104f9
+      md5sum: 6af309a7fc9062418287e99bd1968aaf
     - path: miniwdl_run/call-nextclade_one_sample/work/NEXTCLADE_VERSION
-      md5sum: c742549fbfacb35776d8908e1b828b82
+      md5sum: 4fb409910709639211b716abe239ecc1
     - path: miniwdl_run/call-nextclade_one_sample/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.aligned.fasta
       md5sum: ddab97b3f5a3dda718c107447c90dfaf
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.csv
-      md5sum: 2d2a57de95edb4d738e8141a221645fb
+      md5sum: fc6c6d969435a27ada8a367fe451621b
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.errors.csv
       md5sum: 03237c467785ee9f0574c38264a4f7ed
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade.insertions.csv
@@ -146,7 +146,7 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_gene_S.translation.fasta
       md5sum: 4f62016b75d770a12b3361e794df27be
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/command
-      md5sum: 4c7c3c0bd94e80790ded05dda69bb7f2
+      md5sum: 1280eef219fdf5997a99885dcbccbac5
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/inputs.json
       contains: ["nextclade_tsv", "ERR6319327"]
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/outputs.json
@@ -154,7 +154,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/stderr.txt
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/stderr.txt.offset
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/stdout.txt
-      md5sum: d41d8cd98f00b204e9800998ecf8427e
+      md5sum: 82c21f5e3b50423fc1e06674af26338d
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/task.log
       contains: ["wdl", "theiacov_illumina_se", "nextclade", "done"]
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/NEXTCLADE_AADELS
@@ -166,7 +166,7 @@
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.nextclade.tsv
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_output_parser_one_sample/work/input.tsv
-      md5sum: 72e5e5425b962adb8a74acb337b104f9
+      md5sum: 6af309a7fc9062418287e99bd1968aaf
     - path: miniwdl_run/call-pangolin4/command
       md5sum: 46f28e89ee8bf39282f6ae06cf3ec4a1
     - path: miniwdl_run/call-pangolin4/inputs.json
@@ -512,13 +512,13 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 7c7578f557447b23d3a91cb19a066c10
+      md5sum: 6754daa67e78f8d2497610b9f6005ad5
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
       md5sum: 27d436979d253be67940a84696c5b77b
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim_se.wdl
       md5sum: eb4170a3da9d95720b5403dd3d5e5d87
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_se.wdl
-      md5sum: f671b5892d161d806c72469f82b123fb
+      md5sum: 2ae893ceba2cfa4f579bb086c9ffddd9
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_se", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
