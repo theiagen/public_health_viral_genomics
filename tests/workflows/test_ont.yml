@@ -208,7 +208,7 @@
     - path: miniwdl_run/call-ncbi_scrub_se/work/r1.fastq.clean
       md5sum: 2cf5f8defc05395fecd10c68865f9ae3
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: 31d0fad6de95d8c19c087552113fe3fa
+      md5sum: 60ba5d41705947d7ada8df00dd53d0b9
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "dataset_tag", "genome_fasta"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -235,7 +235,7 @@
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/primers.csv
       md5sum: 5990c3483bf66ce607aeb90a44e7ef2e
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/qc.json
-      md5sum: 518c01e982a20712d67fafb5c5fc953c
+      md5sum: 6587a54553ad565d5f8ea7d214a797d4
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/reference.fasta
       md5sum: c7ce05f28e4ec0322c96f24e064ef55c
     - path: miniwdl_run/call-nextclade_one_sample/work/nextclade_dataset_dir/sequences.fasta
@@ -313,13 +313,13 @@
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_NOTES
       md5sum: 35aa27af5fb90d54561ee9d45a3163d5
     - path: miniwdl_run/call-pangolin4/work/PANGO_ASSIGNMENT_VERSION
-      md5sum: 4e434d75ffecbd1669b89698d0f74d9e
+      md5sum: 983fed7641ec9e1b2d258ee1184dd75c
     - path: miniwdl_run/call-pangolin4/work/VERSION_PANGOLIN_ALL
-      md5sum: 610311d600672ebc0fb9c138cab9945a
+      md5sum: 73197f226b6f9ce6f0090d3eb41a9861
     - path: miniwdl_run/call-pangolin4/work/_miniwdl_inputs/0/ont.medaka.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-pangolin4/work/ont.pangolin_report.csv
-      md5sum: b7b9dcced52783d5153dc469971be4fe
+      md5sum: 65a9cb959d8749684c00bdc65626f4d8
     - path: miniwdl_run/call-read_filtering/command
       md5sum: 5a9e0fdba76808aef9f652244d355675
     - path: miniwdl_run/call-read_filtering/inputs.json
@@ -494,11 +494,11 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 6754daa67e78f8d2497610b9f6005ad5
+      md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: 27d436979d253be67940a84696c5b77b
+      md5sum: ad14ec780a96c09a1f865773395da0f7
     - path: miniwdl_run/wdl/workflows/wf_theiacov_ont.wdl
-      md5sum: ebee7984a3c2326d0dff24af80f57665
+      md5sum: 6a0d307ba69dd3793a1be8d512e99b54
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_ont", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

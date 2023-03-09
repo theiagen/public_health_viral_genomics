@@ -84,7 +84,7 @@
     - path: miniwdl_run/call-consensus_qc/work/_miniwdl_inputs/0/SRR13687078.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_one_sample_run1/command
-      md5sum: 539873fddb3b5b73b99f08d0c7959943
+      md5sum: 68ed04af15a6717e9931950dab49a05d
     - path: miniwdl_run/call-nextclade_one_sample_run1/inputs.json
       contains: ["dataset_name", "genome_fasta", "SRR13687078"]
     - path: miniwdl_run/call-nextclade_one_sample_run1/outputs.json
@@ -186,13 +186,13 @@
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_LINEAGE
       md5sum: 655588ced8f4fc5d312ed152492d6bb0
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_NOTES
-      md5sum: c72695b331cf7d87edfebc08f903b081
+      md5sum: e98d2fc28664c0622f6b490433286e32
     - path: miniwdl_run/call-pangolin4/work/PANGO_ASSIGNMENT_VERSION
-      md5sum: 4e434d75ffecbd1669b89698d0f74d9e
+      md5sum: 983fed7641ec9e1b2d258ee1184dd75c
     - path: miniwdl_run/call-pangolin4/work/SRR13687078.pangolin_report.csv
-      md5sum: 47c00bf9759206ee2867357501bed615
+      md5sum: fe6a37d2d5b9c492e2a0da1a2c90231c
     - path: miniwdl_run/call-pangolin4/work/VERSION_PANGOLIN_ALL
-      md5sum: 610311d600672ebc0fb9c138cab9945a
+      md5sum: 73197f226b6f9ce6f0090d3eb41a9861
     - path: miniwdl_run/call-pangolin4/work/_miniwdl_inputs/0/SRR13687078.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-primer_trim/command
@@ -602,13 +602,13 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 6754daa67e78f8d2497610b9f6005ad5
+      md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: 27d436979d253be67940a84696c5b77b
+      md5sum: ad14ec780a96c09a1f865773395da0f7
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim.wdl
       md5sum: 9769f7ff548537ed7d36c5d0df445416
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_pe.wdl
-      md5sum: 3bdb5271010f30059416aee2ee44dbd5
+      md5sum: e12e61c3c5a9add46a04d0a0c11961e7
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_pe", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

@@ -83,7 +83,7 @@
     - path: miniwdl_run/call-consensus_qc/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: 00d8320c74e760d6281acf5d4764c504
+      md5sum: fd161e7657dabd1b488f1871a4b15b91
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "genome_fasta", "ERR6319327"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -180,7 +180,7 @@
       contains: ["wdl", "theiacov_illumina_se", "pangolin", "done"]
     - path: miniwdl_run/call-pangolin4/work/DATE
     - path: miniwdl_run/call-pangolin4/work/ERR6319327.pangolin_report.csv
-      md5sum: 29a1f778b2387ddb31aedf2627e2c895
+      md5sum: 20ecd592059c5c10695d7c039ace61c9
     - path: miniwdl_run/call-pangolin4/work/EXPANDED_LINEAGE
       md5sum: 2430b919e9b5f418c6a13add9d3c1db8
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_CONFLICTS
@@ -188,11 +188,11 @@
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_LINEAGE
       md5sum: 2430b919e9b5f418c6a13add9d3c1db8
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_NOTES
-      md5sum: 26668c8b0624d99676391b00c9775d2a
+      md5sum: 0b1f8fb5b938fe71631f61234cbf7ab3
     - path: miniwdl_run/call-pangolin4/work/PANGO_ASSIGNMENT_VERSION
-      md5sum: 4e434d75ffecbd1669b89698d0f74d9e
+      md5sum: 983fed7641ec9e1b2d258ee1184dd75c
     - path: miniwdl_run/call-pangolin4/work/VERSION_PANGOLIN_ALL
-      md5sum: 610311d600672ebc0fb9c138cab9945a
+      md5sum: 73197f226b6f9ce6f0090d3eb41a9861
     - path: miniwdl_run/call-pangolin4/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-primer_trim/command
@@ -512,13 +512,13 @@
     - path: miniwdl_run/wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 6754daa67e78f8d2497610b9f6005ad5
+      md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: 27d436979d253be67940a84696c5b77b
+      md5sum: ad14ec780a96c09a1f865773395da0f7
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim_se.wdl
       md5sum: eb4170a3da9d95720b5403dd3d5e5d87
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_se.wdl
-      md5sum: 2ae893ceba2cfa4f579bb086c9ffddd9
+      md5sum: 9a21fa9bcb0c58692e4a5a5b03a0b56c
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_se", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json

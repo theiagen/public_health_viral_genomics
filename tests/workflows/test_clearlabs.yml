@@ -212,7 +212,7 @@
     - path: miniwdl_run/call-ncbi_scrub_se/work/r1.fastq.clean
       md5sum: 033e7bdb8c34ed0df11bf9f604addb54
     - path: miniwdl_run/call-nextclade_one_sample/command
-      md5sum: cbbe0dff285557074640df4d18205e1d
+      md5sum: 2705013ff67c2e6ecf7a9358ee52d3b7
     - path: miniwdl_run/call-nextclade_one_sample/inputs.json
       contains: ["dataset_name", "dataset_tag", "genome_fasta"]
     - path: miniwdl_run/call-nextclade_one_sample/outputs.json
@@ -314,15 +314,15 @@
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_LINEAGE
       md5sum: 717da6cd0df2d2f1d00461f3498aaca9
     - path: miniwdl_run/call-pangolin4/work/PANGOLIN_NOTES
-      md5sum: 0d654329677a43e9626ea3921b924662
+      md5sum: 3cf7fd185fe58af5952d52e91d4805c0
     - path: miniwdl_run/call-pangolin4/work/PANGO_ASSIGNMENT_VERSION
-      md5sum: 4e434d75ffecbd1669b89698d0f74d9e
+      md5sum: 983fed7641ec9e1b2d258ee1184dd75c
     - path: miniwdl_run/call-pangolin4/work/VERSION_PANGOLIN_ALL
-      md5sum: 610311d600672ebc0fb9c138cab9945a
+      md5sum: 73197f226b6f9ce6f0090d3eb41a9861
     - path: miniwdl_run/call-pangolin4/work/_miniwdl_inputs/0/clearlabs.medaka.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-pangolin4/work/clearlabs.pangolin_report.csv
-      md5sum: 8f98ee098c10003b1a04cb13493aec78
+      md5sum: 45841b0ac927345415c485d363bb5f45
     - path: miniwdl_run/call-sc2_gene_coverage/command
       md5sum: 7090d929e3e59de1b4799d44824bf1d3
     - path: miniwdl_run/call-sc2_gene_coverage/inputs.json
@@ -486,11 +486,11 @@
     - path: miniwdl_run//wdl/tasks/task_sc2_gene_coverage.wdl
       md5sum: e8310700d96d98cd16f4859f61dd179f
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
-      md5sum: 6754daa67e78f8d2497610b9f6005ad5
+      md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: 27d436979d253be67940a84696c5b77b
+      md5sum: ad14ec780a96c09a1f865773395da0f7
     - path: miniwdl_run/wdl/workflows/wf_theiacov_clearlabs.wdl
-      md5sum: 07a499e0e363f2cc339618002b98c38a
+      md5sum: aa6d9846fba576a77d270d4d536c4984
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_clearlabs", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
