@@ -173,7 +173,7 @@ task visualize_matrix {
   }
 }
 
-task cluster_report {
+task report_clusters {
   input {
     File r_script = "gs://theiagen-public-files-rp/terra/sars-cov-2-files/assign_clusters.R"
     File matrix
