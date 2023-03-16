@@ -19,7 +19,7 @@ workflow theiacov_distance_tree {
     File? ref_fasta
     Int min_unambig_genome = 27000
     Boolean visualize_snp_matrix = false
-    Boolean cluster_report = false
+    Boolean create_cluster_report = false
   }
   parameter_meta {
     assembly_fastas: {
@@ -125,7 +125,7 @@ workflow theiacov_distance_tree {
         matrix = reorder_matrix.ordered_matrix
     }
   }
-  if (cluster_report) {
+  if (create_cluster_report) {
     call phylo.cluster_report {
       input:
         cluster_name = build_name,
