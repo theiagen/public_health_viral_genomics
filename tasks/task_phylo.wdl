@@ -175,7 +175,7 @@ task visualize_matrix {
 
 task cluster_report {
   input {
-    File r_script 
+    File r_script = "gs://theiagen-public-files-rp/terra/sars-cov-2-files/assign_clusters.R"
     File matrix
     String cluster_name
     File merged_metadata
