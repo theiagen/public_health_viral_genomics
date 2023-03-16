@@ -129,8 +129,8 @@ workflow theiacov_distance_tree {
     call phylo.cluster_report {
       input:
         cluster_name = build_name,
-        alignment = snp_dists.snp_matrix,
-        sample_metadata_tsvs = sample_metadata_tsvs
+        matrix = snp_dists.snp_matrix,
+        merged_metadata = derived_cols.derived_metadata
     }
   }
   call versioning.version_capture{

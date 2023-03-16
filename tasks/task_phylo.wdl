@@ -173,6 +173,33 @@ task visualize_matrix {
   }
 }
 
+task cluster_report {
+  input {
+    File r_script 
+    File matrix
+    String cluster_name
+    File merged_metadata
+    Int disk_size = 100
+  }
+  command <<<
+  
+  Rscript ~{r_script} ~{matrix} ~{merged_metadata}
+  
+  >>>
+  output{
+    File clusters = "cluster_report.csv"
+  }
+  runtime {
+    docker: "rocker/tidyverse:4.2" 
+    memory: "2 GB"
+    cpu: 2
+    disks: "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
+   # maxRetries: 3
+    preemptible: 0
+  }
+}
+
 task iqtree {
   input {
     File alignment
