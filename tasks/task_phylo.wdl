@@ -187,7 +187,7 @@ task cluster_report {
   
   >>>
   output{
-    File clusters = "cluster_report.csv"
+    File cluster_report = "cluster_report.csv"
   }
   runtime {
     docker: "rocker/tidyverse:4.2" 
