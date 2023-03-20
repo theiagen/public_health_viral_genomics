@@ -126,7 +126,7 @@ workflow theiacov_distance_tree {
     }
   }
   if (report_clusters) {
-    call phylo.report_clusters {
+    call phylo.assign_clusters {
       input:
         cluster_name = build_name,
         matrix = snp_dists.snp_matrix,
@@ -156,6 +156,6 @@ workflow theiacov_distance_tree {
     # Visualized SNP Matrix
     File? snp_matrix_plot = visualize_matrix.snp_matrix_plot
     # Cluster report
-    File? cluster_report = report_clusters.cluster_report
+    File? cluster_report = assign_clusters.cluster_report
   }
 }
