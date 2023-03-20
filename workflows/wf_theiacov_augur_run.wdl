@@ -15,6 +15,7 @@ workflow theiacov_augur_run {
     Array[File]+ sample_metadata_tsvs
     String build_name
     Boolean visualize_snp_matrix = false
+    Boolean report_clusters = false
   }
   parameter_meta {
     assembly_fastas: {
@@ -50,6 +51,14 @@ workflow theiacov_augur_run {
         matrix = reorder_matrix.ordered_matrix
     }
   }
+  if (report_clusters) {
+    call phylo.report_clusters {
+      input:
+        cluster_name = build_name,
+        matrix = snp_dists.snp_matrix,
+        merged_metadata = derived_cols.derived_metadata
+    }
+  }
   call versioning.version_capture{
     input:
   }
@@ -72,5 +81,7 @@ workflow theiacov_augur_run {
     File midpoint_rooted_tree = reorder_matrix.midpoint_rooted_tree
     # Visualized SNP Matrix
     File? snp_matrix_plot = visualize_matrix.snp_matrix_plot
+    # Cluster report
+    File? cluster_report = report_clusters.cluster_report
   }
 }
