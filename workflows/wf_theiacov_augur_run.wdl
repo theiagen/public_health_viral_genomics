@@ -56,7 +56,7 @@ workflow theiacov_augur_run {
       input:
         cluster_name = build_name,
         matrix = snp_dists.snp_matrix,
-        merged_metadata = derived_cols.derived_metadata
+        merged_metadata = sarscov2_nextstrain.metadata_merged
     }
   }
   call versioning.version_capture{
