@@ -178,12 +178,13 @@ task assign_clusters {
     File r_script = "gs://theiagen-public-files-rp/terra/sars-cov-2-files/assign_clusters.R"
     File matrix
     String cluster_name
-    File merged_metadata
+    File 
+    Int cluster_snp_threshold = 2
     Int disk_size = 100
   }
   command <<<
   
-  Rscript ~{r_script} ~{matrix} ~{merged_metadata}
+  Rscript ~{r_script} ~{matrix} ~{merged_metadata} ~(cluster_snp_threshold)
   
   >>>
   output{
