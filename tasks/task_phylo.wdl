@@ -179,12 +179,12 @@ task assign_clusters {
     File matrix
     String cluster_name
     File merged_metadata
-    Int cluster_snp_threshold = "0"
+    Int cluster_snp_threshold = 0
     Int disk_size = 100
   }
   command <<<
   
-  Rscript ~{r_script} ~(cluster_snp_threshold) ~{matrix} ~{merged_metadata} 
+  Rscript ~{r_script} ~{cluster_snp_threshold} ~{matrix} ~{merged_metadata} 
   
   >>>
   output{
