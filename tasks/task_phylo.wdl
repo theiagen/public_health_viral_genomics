@@ -179,7 +179,7 @@ task assign_clusters {
     File matrix
     String cluster_name
     File 
-    Int cluster_snp_threshold = 2
+    Int cluster_snp_threshold = "2"
     Int disk_size = 100
   }
   command <<<
