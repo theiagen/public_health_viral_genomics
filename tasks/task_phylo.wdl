@@ -184,7 +184,7 @@ task assign_clusters {
   }
   command <<<
   
-  Rscript ~{r_script} ~{matrix} ~{merged_metadata} ~(cluster_snp_threshold)
+  Rscript ~{r_script} ~(cluster_snp_threshold) ~{matrix} ~{merged_metadata} 
   
   >>>
   output{
