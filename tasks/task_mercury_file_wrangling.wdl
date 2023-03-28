@@ -117,7 +117,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # set all column headers to lowercase 
     table.columns = table.columns.str.lower()
-    print(table["collection_date"])
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
     table["host"] = "Human"
