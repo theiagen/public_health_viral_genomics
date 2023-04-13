@@ -9,8 +9,9 @@ task irma {
     String irma_module = "FLU"
     String read_basename = basename(read1)
     String docker = "quay.io/staphb/irma:1.0.3"
-	Int memory = 8
-	Int cpu = 4
+    Int memory = 8
+    Int cpu = 4
+    Int disk_size = 100
   }
   command <<<
     date | tee DATE
@@ -69,8 +70,11 @@ task irma {
       mv "~{samplename}"_HA*.fasta "~{samplename}"_HA.fasta
     fi
     if compgen -G "~{samplename}_NA*.fasta" && [[ "$(ls ~{samplename}_NA*.fasta)" == *"NA_N"* ]]; then # check if NA segment exists with an N-type identified in header
-       subtype+="$(basename ~{samplename}_NA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)" # grab N-type from last value in under-score-delimited filename
+       subtype+="$(basename ~{samplename}_NA*.fasta | awk -F _ '{print $NF}' | cut -d. -f1)" # grab N-type from last value in under-score-delimited filename 
+       # format NA segment to target output name
+       mv "~{samplename}"_NA*.fasta "~{samplename}"_NA.fasta
     fi
+
     if ! [ -z "${subtype}" ]; then 
       echo "${subtype}" > IRMA_SUBTYPE
     else
@@ -79,7 +83,8 @@ task irma {
   >>>
   output {
     File? irma_assembly_fasta = "~{samplename}.irma.consensus.fasta"
-    File? seg4_ha_assembly = "~{samplename}_HA.fasta"
+    File? seg_ha_assembly = "~{samplename}_HA.fasta"
+    File? seg_na_assembly = "~{samplename}_NA.fasta"
     String irma_type = read_string("IRMA_TYPE")
     String irma_subtype = read_string("IRMA_SUBTYPE")
     Array[File] irma_assemblies = glob("~{samplename}*.fasta")
@@ -92,7 +97,9 @@ task irma {
     docker: "~{docker}"
     memory: "~{memory} GB"
     cpu: cpu
-    disks: "local-disk 100 SSD"
+    disks:  "local-disk " + disk_size + " SSD"
+    disk: disk_size + " GB"
+    maxRetries: 3
     preemptible:  0
   }
 }

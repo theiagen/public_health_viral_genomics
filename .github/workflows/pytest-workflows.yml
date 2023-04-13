@@ -19,7 +19,7 @@ jobs:
       workflows: ${{ steps.filter.outputs.changes }}
     steps:
       # Checkout the repo
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Select workflows with changes
       - uses: dorny/paths-filter@v2
@@ -45,7 +45,7 @@ jobs:
     steps:
       # Checkout the repo
       - name: Checkout theiagen/public_health_viral_genomics
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Setup Miniconda3
       - name: Setup miniconda
@@ -54,17 +54,21 @@ jobs:
           activate-environment: actions
           auto-activate-base: false
 
-      # Depends and env info (mostly for debug)
+      # Install dependencies; clean up conda garbage; and print env info (mostly for debug)
+      # rm -rf commands as recommended here: https://github.com/actions/runner-images/issues/2840#issuecomment-1284059930
       - name: Install Dependencies
         run: |
           conda install -y -c conda-forge -c bioconda cromwell miniwdl 'python>=3.7' pytest pytest-workflow
+          conda clean -a -y
           uname -a && env
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
       - name: Test ${{ matrix.tag }}
-        run: TMPDIR=~ pytest --tag ${{ matrix.tag }}_${{ matrix.engine }} --symlink --kwdof --color=yes
+        run: TMPDIR=~ pytest --tag ${{ matrix.tag }}_${{ matrix.engine }} --symlink --kwdof --color=yes --git-aware
 
       - name: Upload logs on failure
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: logs-${{ matrix.engine }}
           path: |

@@ -21,7 +21,7 @@ workflow theiacov_clearlabs {
     File primer_bed
     Int normalise = 20000
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
+    String nextclade_dataset_tag = "2023-02-25T12:00:00Z"
     String medaka_docker = "quay.io/staphb/artic-ncov2019:1.3.0-medaka-1.4.3"
     String? nextclade_dataset_name
     File? reference_genome
@@ -60,7 +60,8 @@ workflow theiacov_clearlabs {
       primer_bed = primer_bed,
       normalise = normalise,
       docker = medaka_docker,
-      reference_genome = reference_genome
+      reference_genome = reference_genome,
+      organism = organism
   }
   call assembly_metrics.stats_n_coverage {
     input:
@@ -105,7 +106,8 @@ workflow theiacov_clearlabs {
     }
     call taxon_ID.nextclade_output_parser_one_sample {
       input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv,
+      organism = organism
     }
     call ncbi.vadr {
       input:
@@ -147,7 +149,7 @@ workflow theiacov_clearlabs {
     String primer_bed_name = consensus.primer_bed_name
     File assembly_fasta = consensus.consensus_seq
     String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): ~{consensus.artic_pipeline_version}"
-    File reads_aligned = consensus.reads_aligned
+    File? reads_aligned = consensus.reads_aligned
     # Assembly QC
     Int number_N = consensus_qc.number_N
     Int assembly_length_unambiguous = consensus_qc.number_ATCG

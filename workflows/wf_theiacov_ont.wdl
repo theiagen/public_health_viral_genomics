@@ -9,6 +9,7 @@ import "../tasks/quality_control/task_fastq_scan.wdl" as fastq_scan
 import "../tasks/task_versioning.wdl" as versioning
 import "../tasks/quality_control/task_consensus_qc.wdl" as consensus_qc_task
 import "../tasks/task_sc2_gene_coverage.wdl" as sc2_calculation
+import "../tasks/task_quasitools.wdl" as quasitools
 
 
 workflow theiacov_ont {
@@ -22,7 +23,7 @@ workflow theiacov_ont {
     File demultiplexed_reads
     Int normalise = 200
     String nextclade_dataset_reference = "MN908947"
-    String nextclade_dataset_tag = "2022-09-27T12:00:00Z"
+    String nextclade_dataset_tag = "2023-02-25T12:00:00Z"
     String? nextclade_dataset_name
     File? reference_genome
     Int max_length = 700
@@ -65,6 +66,7 @@ workflow theiacov_ont {
   call medaka.consensus {
     input:
       samplename = samplename,
+      organism = organism,
       filtered_reads = read_filtering.filtered_reads,
       primer_bed = primer_bed,
       normalise = normalise,
@@ -116,7 +118,8 @@ workflow theiacov_ont {
     }
     call taxon_ID.nextclade_output_parser_one_sample {
       input:
-      nextclade_tsv = nextclade_one_sample.nextclade_tsv
+      nextclade_tsv = nextclade_one_sample.nextclade_tsv,
+      organism = organism
     }
    }
   if (organism == "MPXV" || organism == "sars-cov-2" || organism == "WNV"){ 
@@ -125,6 +128,13 @@ workflow theiacov_ont {
       input:
         genome_fasta = consensus.consensus_seq,
         assembly_length_unambiguous = consensus_qc.number_ATCG
+    }
+  }
+  if (organism == "HIV") {
+    call quasitools.quasitools_ont {
+      input:
+        read1 = read_filtering.filtered_reads,
+        samplename = samplename
     }
   }
   call versioning.version_capture{
@@ -161,7 +171,9 @@ workflow theiacov_ont {
     String primer_bed_name = consensus.primer_bed_name
     File assembly_fasta = consensus.consensus_seq
     String assembly_method = "TheiaCoV (~{version_capture.phvg_version}): ~{consensus.artic_pipeline_version}"
-    File reads_aligned = consensus.reads_aligned
+
+    File? reads_aligned = consensus.reads_aligned
+    File? trim_fastq = consensus.trim_fastq
     # Assembly QC
     Int number_N = consensus_qc.number_N
     Int assembly_length_unambiguous = consensus_qc.number_ATCG
@@ -204,5 +216,12 @@ workflow theiacov_ont {
     String? vadr_num_alerts = vadr.num_alerts
     String? vadr_docker = vadr.vadr_docker
     File? vadr_fastas_zip_archive = vadr.vadr_fastas_zip_archive
+    # HIV outputs
+    String? quasitools_version = quasitools_ont.quasitools_version
+    String? quasitools_date = quasitools_ont.quasitools_date
+    File? quasitools_coverage_file = quasitools_ont.coverage_file
+    File? quasitools_dr_report = quasitools_ont.dr_report
+    File? quasitools_hydra_vcf = quasitools_ont.hydra_vcf
+    File? quasitools_mutations_report = quasitools_ont.mutations_report
   }
 }
