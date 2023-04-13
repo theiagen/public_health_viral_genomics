@@ -113,18 +113,28 @@ task variant_call {
 
     # Convert TSV to VCF
     ivar_variants_to_vcf.py ~{samplename}.variants.tsv ~{samplename}.variants.vcf
+    
+    # Variant calculations
 
-    variants_num=$(grep "TRUE" ~{samplename}.variants.tsv | wc -l)
+    # keep only unique nucleotide substitutions:
+    # the same nucleotide substitution can be listed in multiple rows if it is within 
+    # more than one coding region, so remove columns with coding region information 
+    # then keep only unique rows
+    cut -f 1-14 ~{samplename}.variants.tsv | awk '!seen[$0]++ {print}' > unique_variants.tsv
+
+    # filter variants that pass fisher's exact test
+    grep "TRUE" unique_variants.tsv > passed_variants.tsv
+
+    # calculate total number of variants
+    variants_num=$(cat passed_variants.tsv | wc -l)
     if [ -z "$variants_num" ] ; then variants_num="0" ; fi
     echo $variants_num | tee VARIANT_NUM
 
-    # # calculate proportion of variants with allele frequencies between 0.6 and 0.9
-    # filter variants that pass fisher's exact test
-    grep "TRUE" ~{samplename}.variants.tsv > passed_variants.tsv
-
+    # calculate proportion of variants with allele frequencies between 0.6 and 0.9
     # find number of variants at intermediate frequencies 
     awk -F "\t" '{ if(($11 >= 0.6) && ($11 <= 0.9)) {print }}' passed_variants.tsv > intermediate_variants.tsv
     intermediates_num=$(cat intermediate_variants.tsv | wc -l)
+    if [ -z "$intermediates_num" ] ; then intermediates_num="0" ; fi
 
     # if number of total variants is not zero, divide number of intermediate variants by total number of variants
     if [[ "$variants_num" -eq "0" ]]; then
