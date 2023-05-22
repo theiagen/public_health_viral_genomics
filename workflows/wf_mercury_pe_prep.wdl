@@ -53,6 +53,7 @@ workflow mercury_pe_prep {
     String? purpose_of_sequencing
     String? submitter_email
     String? treatment
+    String? consortium
     # Optional User-Defined Thresholds for Generating Submission Files
     Int number_N_threshold = 5000
   }
@@ -119,7 +120,8 @@ workflow mercury_pe_prep {
         patient_gender = patient_gender,
         patient_age = patient_age,
         purpose_of_sequencing = purpose_of_sequencing,
-        treatment = treatment
+        treatment = treatment,
+        consortium = consortium
     }
   }
   call versioning.version_capture{
