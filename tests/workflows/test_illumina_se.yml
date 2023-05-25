@@ -468,7 +468,7 @@
     - path: miniwdl_run/call-vadr/work/_miniwdl_inputs/0/ERR6319327.ivar.consensus.fasta
       md5sum: d41d8cd98f00b204e9800998ecf8427e
     - path: miniwdl_run/call-variant_call/command
-      md5sum: 57f2fd35a5d79dc4f2145a250a9ca5a0
+      md5sum: 1515ab7ce8bbd4a7ba7387d3b4ec56be
     - path: miniwdl_run/call-variant_call/inputs.json
       contains: ["bamfile", "samplename", "ERR6319327"]
     - path: miniwdl_run/call-variant_call/outputs.json
@@ -488,7 +488,7 @@
     - path: miniwdl_run/call-variant_call/work/SAMTOOLS_VERSION
       md5sum: 03c5ecf22fdfdb6b240ac3880281a056
     - path: miniwdl_run/call-variant_call/work/VARIANT_NUM
-      md5sum: 6eb5cefde6fcb8463cea70880a44eb98
+      md5sum: 50a2fabfdd276f573ff97ace8b11c5f4
     - path: miniwdl_run/call-variant_call/work/_miniwdl_inputs/0/ERR6319327.primertrim.sorted.bam
     - path: miniwdl_run/call-version_capture/inputs.json
     - path: miniwdl_run/call-version_capture/outputs.json
@@ -504,7 +504,7 @@
     - path: miniwdl_run/wdl/tasks/task_alignment.wdl
       md5sum: 5da7ac24d4d395f852ca57e89543b368
     - path: miniwdl_run/wdl/tasks/task_consensus_call.wdl
-      md5sum: 4e8eae5f5d24e9d50f41342b0718b40a
+      md5sum: e8425c0db4a9f1af377e4f03e19319d0
     - path: miniwdl_run/wdl/tasks/task_ncbi.wdl
       md5sum: 6ce92b1d9e2ea30352fce2be354a1086
     - path: miniwdl_run/wdl/tasks/task_read_clean.wdl
@@ -518,7 +518,7 @@
     - path: miniwdl_run/wdl/workflows/wf_read_QC_trim_se.wdl
       md5sum: eb4170a3da9d95720b5403dd3d5e5d87
     - path: miniwdl_run/wdl/workflows/wf_theiacov_illumina_se.wdl
-      md5sum: 9a21fa9bcb0c58692e4a5a5b03a0b56c
+      md5sum: 980e3d26b106ae33fb078a195c29b4a7
     - path: miniwdl_run/inputs.json
       contains: ["theiacov_illumina_se", "samplename", "primer_bed"]
     - path: miniwdl_run/outputs.json
