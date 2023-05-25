@@ -488,7 +488,7 @@
     - path: miniwdl_run/wdl/tasks/task_taxonID.wdl
       md5sum: d7db51677d9904efb480993f64dc4410
     - path: miniwdl_run/wdl/tasks/task_versioning.wdl
-      md5sum: ad14ec780a96c09a1f865773395da0f7
+      md5sum: f749898087eb2e706904a412f30c2e1b
     - path: miniwdl_run/wdl/workflows/wf_theiacov_clearlabs.wdl
       md5sum: aa6d9846fba576a77d270d4d536c4984
     - path: miniwdl_run/inputs.json
