@@ -74,9 +74,11 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     # set a function to grab only the year from the date
     def year_getter(date):
       r = re.compile('^\d{4}-\d{2}-\d{2}')
-      if r.match(date) is None:
-        print("Incorrect collection date format; collection date must be in YYYY-MM-DD format. Invalid date was: " + date)
-        sys.exit(1)  
+      if pd.isna(date):
+        print("Incorrect collection date format; collection date must be in YYYY-MM-DD format. Invalid date was: NaN")
+      elif r.match(date) is None:
+        print("Incorrect collection date format; collection date must be in YYYY-MM-DD format. Invalid date was: " + str(date))
+        return np.nan 
       else:
         return date.split("-")[0]
 
@@ -107,7 +109,6 @@ task sm_metadata_wrangling { # the sm stands for supermassive
     if (os.environ["using_reads_dehosted"] == "true"):
       read1_column_name = "reads_dehosted"
 
-
     # read exported Terra table into pandas
     tablename = "~{table_name}-data.tsv" 
     table = pd.read_csv(tablename, delimiter='\t', header=0, dtype={"~{table_name}_id": 'str'}) # ensure sample_id is always a string
@@ -116,11 +117,10 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
     # set all column headers to lowercase 
     table.columns = table.columns.str.lower()
-
     # make some standard variables that are used multiple times
     table["year"] = table["collection_date"].apply(lambda x: year_getter(x))
     table["host"] = "Human"
-    
+
     # create NCBI specific variables
     if (os.environ["skip_ncbi"] == "false"):
       table["host_sci_name"] = "Homo sapiens"
@@ -147,15 +147,18 @@ task sm_metadata_wrangling { # the sm stands for supermassive
         elif int(row["number_n"]) > ~{number_N_threshold}:
           notification="Number of Ns was too high: " + str(row["number_n"]) + " greater than limit of " + str(~{number_N_threshold})
           quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
+        if pd.isna(row["year"]):
+          notification="The collection date format was incorrect"
+          quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
       
       with open("~{output_name}_excluded_samples.tsv", "w") as exclusions:
         exclusions.write("Samples excluded for quality thresholds:\n")
       quality_exclusion.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t', index=False)
        
-
       table.drop(table.index[table["vadr_num_alerts"].astype(str).str.contains("VADR skipped due to poor assembly")], inplace=True)
       table.drop(table.index[table["vadr_num_alerts"].astype(int) > ~{vadr_alert_limit}], inplace=True)
       table.drop(table.index[table["number_n"].astype(int) > ~{number_N_threshold}], inplace=True)
+      table.drop(table.index[table["year"].isna()], inplace=True)
 
       # set default values
       table["gisaid_organism"] = "hCoV-19"
@@ -339,6 +342,19 @@ task sm_metadata_wrangling { # the sm stands for supermassive
       table["gisaid_organism"] = "mpx/A"
       table["gisaid_virus_name"] = (table["organism"] + "/" + table["country"] + "/" + table["submission_id"] + "/" + table["year"])
 
+      # remove samples with invalid dates
+      quality_exclusion = pd.DataFrame()
+      for index, row in table.iterrows():
+        if pd.isna(row["year"]):
+          notification="The collection date format was incorrect."
+          quality_exclusion = quality_exclusion.append({"sample_name": row["~{table_name}_id".lower()], "message": notification}, ignore_index=True)
+      
+      with open("~{output_name}_excluded_samples.tsv", "w") as exclusions:
+        exclusions.write("Samples excluded for bad collection_date format:\n")
+      quality_exclusion.to_csv("~{output_name}_excluded_samples.tsv", mode='a', sep='\t', index=False)
+
+      table.drop(table.index[table["year"].isna()], inplace=True)
+
       # set required and optional variables
       if (os.environ["skip_ncbi"] == "false"):
         biosample_required = ["submission_id", "organism", "collecting_lab", "collection_date",  "country", "state", "host_sci_name", "host_disease", "isolation_source", "lat_lon", "bioproject_accession", "isolation_type"]
@@ -362,7 +378,7 @@ task sm_metadata_wrangling { # the sm stands for supermassive
 
       print("DEBUG: removing rows with NAs in required columns...")
       # remove all rows with NAs in required columns and capture which rows and columns have those NAs
-      required_metadata = biosample_required + sra_required + bankit_required + gisaid_required
+      required_metadata = biosample_required + sra_required + bankit_required + gisaid_required 
       table, excluded_samples = remove_nas(table, required_metadata)
       
       with open("~{output_name}_excluded_samples.tsv", "a") as exclusions:
