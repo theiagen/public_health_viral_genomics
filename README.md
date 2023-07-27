@@ -1,4 +1,9 @@
 # Public Health Viral Genomics (PHVG)
+
+**<p align="center">NOTE: WORKFLOWS FROM THIS REPOSITORY HAVE BEEN MIGRATED TO THE PUBLIC HEALTH BIOINFORMATICS (PHB) REPOSITORY. FUTURE DEVELOPMENTS AND UPDATES FOR THESE WORKFLOWS WILL OCCUR IN [https://github.com/theiagen/public_health_bioinformatics](https://github.com/theiagen/public_health_bioinformatics).</p>**
+
+----
+
 Bioinformatics workflows for characterization, epidemiology and sharing of viral pathogen genomes. More information about the steps undertaken in these workflows is available via the [Theiagen Public Resources Documentation](https://theiagen.notion.site/Theiagen-Public-Health-Resources-a4bd134b0c5c4fe39870e21029a30566). 
 
 Support for running these workflows can be sought by raising a [GitHub issue](https://github.com/theiagen/public_health_viral_genomics/issues/new) or by contacting Theiagen at support@theiagen.com.
