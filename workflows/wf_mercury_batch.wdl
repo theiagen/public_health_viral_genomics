@@ -9,7 +9,7 @@ workflow mercury_batch {
     Array[File] genbank_modifier
     Array[File] gisaid_assembly
     Array[File] gisaid_metadata
-    Array[File]? gisaid_covCLI_metadata
+    Array[File] gisaid_covCLI_metadata
     Array[File] sra_metadata
     Array[String] sra_reads
     Array[File] biosample_attributes
