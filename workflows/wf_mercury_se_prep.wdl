@@ -138,5 +138,6 @@ workflow mercury_se_prep {
     # GISAID Submission Files
     File? gisaid_assembly = gisaid_prep_one_sample.gisaid_assembly
     File? gisaid_metadata = gisaid_prep_one_sample.gisaid_metadata
+    File? gisaid_covCLI_metadata = gisaid_prep_one_sample.gisaid_covCLI_metadata
   }
 }
