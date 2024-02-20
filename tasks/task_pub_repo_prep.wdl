@@ -293,7 +293,7 @@ task gisaid_prep_one_sample {
 
     echo "submitter,virus_name,type,passage,collection_date,location,add_location,host,add_host_info,sampling_strategy,gender,patient_age,patient_status,specimen,outbreak,last_vaccinated,treatment,seq_technology,assembly_method,coverage,orig_lab,orig_lab_addr,provider_sample_id,subm_lab,subm_lab_addr,subm_sample_id,authors,comment,comment_type" >  ~{submission_id}_gisaid_covCLI_metadata.csv
 
-    echo "\"~{gisaid_submitter}\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",,,," >> ~{submission_id}_gisaid_covCLI_metadata.csv
+    echo "\"~{gisaid_submitter}\",\"~{organism}/~{country}/~{submission_id}/$year\",\"~{type}\",\"~{passage_details}\",\"~{collection_date}\",\"~{continent}/~{country}/~{state}/~{county}\",,\"~{host}\",,\"~{purpose_of_sequencing}\",\"~{patient_gender}\",\"~{patient_age}\",\"~{patient_status}\",\"~{specimen_source}\",\"~{outbreak}\",\"~{last_vaccinated}\",\"~{treatment}\",\"~{seq_platform}\",\"~{assembly_method}\",\"~{assembly_mean_coverage}\",\"~{collecting_lab}\",\"~{collecting_lab_address}\",,\"~{submitting_lab}\",\"~{submitting_lab_address}\",,\"~{authors}\",," >> ~{submission_id}_gisaid_covCLI_metadata.csv
     
   >>>
   output {
